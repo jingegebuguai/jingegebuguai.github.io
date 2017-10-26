@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="huiHui" />
+
+
+
+<meta name="description" content="单例singleton（题号204）问题描述单例 是最为最常见的设计模式之一。对于任何时刻，如果某个类只存在且最多存在一个具体的实例，那么我们称这种设计模式为单例。例如，对于 class Mouse (不是动物的mouse哦)，我们应将其设计为 singleton 模式。 你的任务是设计一个 getInstance 方法，对于给定的类，每次调用 getInstance 时，都可得到同一个实例。 样">
+<meta name="keywords" content="LintCode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LintCode题解（一）">
+<meta property="og:url" content="http://huihui.kim/2017/09/30/LintCode题解（一）/index.html">
+<meta property="og:site_name" content="huiHui&#39;s blogs">
+<meta property="og:description" content="单例singleton（题号204）问题描述单例 是最为最常见的设计模式之一。对于任何时刻，如果某个类只存在且最多存在一个具体的实例，那么我们称这种设计模式为单例。例如，对于 class Mouse (不是动物的mouse哦)，我们应将其设计为 singleton 模式。 你的任务是设计一个 getInstance 方法，对于给定的类，每次调用 getInstance 时，都可得到同一个实例。 样">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-19T12:24:24.112Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LintCode题解（一）">
+<meta name="twitter:description" content="单例singleton（题号204）问题描述单例 是最为最常见的设计模式之一。对于任何时刻，如果某个类只存在且最多存在一个具体的实例，那么我们称这种设计模式为单例。例如，对于 class Mouse (不是动物的mouse哦)，我们应将其设计为 singleton 模式。 你的任务是设计一个 getInstance 方法，对于给定的类，每次调用 getInstance 时，都可得到同一个实例。 样">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="huiHui&#39;s blogs" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>LintCode题解（一） | huiHui&#39;s blogs</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">huiHui</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于前端</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">huiHui</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">huiHui</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" target="_blank" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-LintCode题解（一）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/30/LintCode题解（一）/" class="article-date">
+      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      LintCode题解（一）
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="单例singleton（题号204）"><a href="#单例singleton（题号204）" class="headerlink" title="单例singleton（题号204）"></a>单例singleton（题号204）</h2><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>单例 是最为最常见的设计模式之一。对于任何时刻，如果某个类只存在且最多存在一个具体的实例，那么我们称这种设计模式为单例。例如，对于 class Mouse (不是动物的mouse哦)，我们应将其设计为 singleton 模式。</p>
+<p>你的任务是设计一个 getInstance 方法，对于给定的类，每次调用 getInstance 时，都可得到同一个实例。</p>
+<p>样例（Java中）：</p>
+<pre><code>A a = A.getInstance();
+A b = A.getInstance();
+</code></pre><p>a应等于b。</p>
+<h3 id="解答过程"><a href="#解答过程" class="headerlink" title="解答过程"></a>解答过程</h3><p>若是看过设计模式的应该都清楚，单例是一种创建型模式。并且单例类只能有一个实例，必须自己创建自己的唯一实例，必须给其他对象提供这一实例。一般有如下几种实现方式：</p>
+<p>懒汉式，线程不安全：</p>
+<pre><code>public class Singleton{
+    private static Singleton instance;
+    private Singletion(){}
+    public static Singleton getInstance(){
+        if(instance==null){
+            instance = new Singletan();
+        }
+    } 
+}
+</code></pre><p>懒汉式，线程安全：</p>
+<pre><code>public class Singleton{
+    private static Singleton instance;
+    private Singletion(){}
+    public static synchronized Singleton getInstance(){
+        if(instance==null){
+            instance = new Singletan();
+        }
+    } 
+}    
+</code></pre><p>饿汉式(最常用)：</p>
+<pre><code>public class Singleton{
+    private static Singleton instance = new Singleton();
+    private Singletion(){}
+    public static Singleton getInstance(){
+        return instance;
+    } 
+}    
+</code></pre><p>双重锁（DCL）：</p>
+<pre><code>public class Singleton{
+    private volatile static Singleton singleton;
+    private Singletion(){}
+    public static Singleton getInstance(){
+        if(singleton==null){
+            synchronized(Singleton.class){
+                if(singleton == null){
+                    singleton = new Singleton();
+                }
+            }
+        }
+        return singleton;
+    } 
+}    
+</code></pre><h2 id="二叉树的路径和（题号376）"><a href="#二叉树的路径和（题号376）" class="headerlink" title="二叉树的路径和（题号376）"></a>二叉树的路径和（题号376）</h2><h3 id="问题描述-1"><a href="#问题描述-1" class="headerlink" title="问题描述"></a>问题描述</h3><p>给定一个二叉树，找出所有路径中各节点相加总和等于给定 目标值 的路径。</p>
+<p>一个有效的路径，指的是从根节点到叶节点的路径。<br>    1<br>    / \<br>   2   4<br>  / \<br> 2   3<br>返回：<br> [<br>  [1, 2, 2],<br>  [1, 4]<br>]</p>
+<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>读取树的路径最先想到的应该是树的遍历，这里的遍历方式是先序遍历，其次，最简单的就是使用DFS（深度优先遍历）。<br>DFS的遍历顺序为1-&gt;2-&gt;2-&gt;3-&gt;4,逻辑自然明了。<br>下面给出邻接矩阵模型类AMWGraph.java，其中depthFirstSearch(),broadFirstSearch<br>()分别代表深度优先和广度优先遍历。</p>
+<pre><code>import java.util.ArrayList;
+import java.util.LinkedList;
+/**
+ * @description 邻接矩阵模型类
+ * @author beanlam
+ * @time 2015.4.17 
+ */
+public class AMWGraph {
+    private ArrayList vertexList;//存储点的链表
+    private int[][] edges;//邻接矩阵，用来存储边
+    private int numOfEdges;//边的数目
+
+    public AMWGraph(int n) {
+        //初始化矩阵，一维数组，和边的数目
+        edges=new int[n][n];
+        vertexList=new ArrayList(n);
+        numOfEdges=0;
+    }
+
+    //得到结点的个数
+    public int getNumOfVertex() {
+        return vertexList.size();
+    }
+
+    //得到边的数目
+    public int getNumOfEdges() {
+        return numOfEdges;
+    }
+
+    //返回结点i的数据
+    public Object getValueByIndex(int i) {
+        return vertexList.get(i);
+    }
+
+    //返回v1,v2的权值
+    public int getWeight(int v1,int v2) {
+        return edges[v1][v2];
+    }
+
+    //插入结点
+    public void insertVertex(Object vertex) {
+        vertexList.add(vertexList.size(),vertex);
+    }
+
+    //插入结点
+    public void insertEdge(int v1,int v2,int weight) {
+        edges[v1][v2]=weight;
+        numOfEdges++;
+    }
+
+    //删除结点
+    public void deleteEdge(int v1,int v2) {
+        edges[v1][v2]=0;
+        numOfEdges--;
+    }
+
+    //得到第一个邻接结点的下标
+    public int getFirstNeighbor(int index) {
+        for(int j=0;j&lt;vertexList.size();j++) {
+            if (edges[index][j]&gt;0) {
+                return j;
+            }
+        }
+        return -1;
+    }
+
+    //根据前一个邻接结点的下标来取得下一个邻接结点
+    public int getNextNeighbor(int v1,int v2) {
+        for (int j=v2+1;j&lt;vertexList.size();j++) {
+            if (edges[v1][j]&gt;0) {
+                return j;
+            }
+        }
+        return -1;
+    }
+
+    //私有函数，深度优先遍历
+    private void depthFirstSearch(boolean[] isVisited,int  i) {
+        //首先访问该结点，在控制台打印出来
+        System.out.print(getValueByIndex(i)+&quot;  &quot;);
+        //置该结点为已访问
+        isVisited[i]=true;
+
+        int w=getFirstNeighbor(i);//
+        while (w!=-1) {
+            if (!isVisited[w]) {
+                depthFirstSearch(isVisited,w);
+            }
+            w=getNextNeighbor(i, w);
+        }
+    }
+
+    //对外公开函数，深度优先遍历，与其同名私有函数属于方法重载
+    public void depthFirstSearch() {
+        for(int i=0;i&lt;getNumOfVertex();i++) {
+            //因为对于非连通图来说，并不是通过一个结点就一定可以遍历所有结点的。
+            if (!isVisited[i]) {
+                depthFirstSearch(isVisited,i);
+            }
+        }
+    }
+
+    //私有函数，广度优先遍历
+    private void broadFirstSearch(boolean[] isVisited,int i) {
+        int u,w;
+        LinkedList queue=new LinkedList();
+
+        //访问结点i
+        System.out.print(getValueByIndex(i)+&quot;  &quot;);
+        isVisited[i]=true;
+        //结点入队列
+        queue.addlast(i);
+        while (!queue.isEmpty()) {
+            u=((Integer)queue.removeFirst()).intValue();
+            w=getFirstNeighbor(u);
+            while(w!=-1) {
+                if(!isVisited[w]) {
+                    //访问该结点
+                    System.out.print(getValueByIndex(w)+&quot;  &quot;);
+                    //标记已被访问
+                    isVisited[w]=true;
+                    //入队列
+                    queue.addLast(w);
+                }
+                //寻找下一个邻接结点
+                w=getNextNeighbor(u, w);
+            }
+        }
+    }
+
+    //对外公开函数，广度优先遍历
+    public void broadFirstSearch() {
+        for(int i=0;i&lt;getNumOfVertex();i++) {
+            if(!isVisited[i]) {
+                broadFirstSearch(isVisited, i);
+            }
+        }
+    }
+}
+</code></pre><p>这里给出另一种解法：</p>
+<pre><code>/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+public class Solution {
+    /**
+     * @param root the root of binary tree
+     * @param target an integer
+     * @return all valid paths
+     */
+    public List&lt;List&lt;Integer&gt;&gt; binaryTreePathSum(TreeNode root, int target) {
+        // Write your code here
+        List&lt;List&lt;Integer&gt;&gt; list = new ArrayList&lt;List&lt;Integer&gt;&gt;();
+        if(root==null)
+            return list;
+        if(root.left==null&amp;&amp;root.right==null){
+            if(root.val==target){
+                 List&lt;Integer&gt; _list = new ArrayList&lt;Integer&gt;();
+                 _list.add(root.val);
+                 list.add(_list);
+            }
+            return list;
+       }
+       list.addAll(binaryTreePathSum(root.left,target-root.val));
+       list.addAll(binaryTreePathSum(root.right,target-root.val));
+        for(List&lt;Integer&gt; i :list)
+            i.add(0,root.val);
+           return list;    
+    }
+ }
+</code></pre><h2 id="字符串置换（题号211）"><a href="#字符串置换（题号211）" class="headerlink" title="字符串置换（题号211）"></a>字符串置换（题号211）</h2><p>给定两个字符串，请设计一个方法来判定其中一个字符串是否为另一个字符串的置换。</p>
+<p>置换的意思是，通过改变顺序可以使得两个字符串相等。<br>“abc” 为 “cba” 的置换。</p>
+<p>“aabc” 不是 “abcc” 的置换。</p>
+<pre><code>public class Solution {
+/*
+ * @param A: a string
+ * @param B: a string
+ * @return: a boolean
+ */
+    public boolean Permutation(String A, String B) {
+        // write your code here
+        int index =0;
+        if(A.length()==0&amp;&amp;B.length()==0)
+            return true;
+        if(A.length() == B.length()){
+        String _A[] = A.split(&quot;&quot;);
+        String _B[] = B.split(&quot;&quot;);
+        Map&lt;String,Integer&gt; mapA = new TreeMap&lt;String,Integer&gt;();
+        Map&lt;String,Integer&gt; mapB = new TreeMap&lt;String,Integer&gt;();
+        for(int i = 0;i&lt;_A.length;i++){
+            Integer num_A = mapA.get(_A[i]);
+            Integer num_B = mapB.get(_B[i]);
+            mapA.put(_A[i],num_A==null?1:num_A+1);
+            mapB.put(_B[i],num_B==null?1:num_B+1);      
+        }
+        Iterator&lt;String&gt; iter = mapA.keySet().iterator();
+        while(iter.hasNext()){
+            String key = (String)iter.next();
+            if(!mapA.get(key).equals(mapB.get(key)))
+                break;
+            else
+                index++;
+        }
+        if(index==mapA.keySet().size())
+            return true;
+        else
+            return false;
+    }else
+        return false;
+    }
+}
+</code></pre><h2 id="回文数（题号491）"><a href="#回文数（题号491）" class="headerlink" title="回文数（题号491）"></a>回文数（题号491）</h2><p>判断一个正整数是不是回文数。</p>
+<p>回文数的定义是，将这个数反转之后，得到的数仍然是同一个数。<br>11, 121, 1, 12321 这些是回文数。</p>
+<p>23, 32, 1232 这些不是回文数。</p>
+<p>很简单，思想也很多，这里贴出其中一种算法：</p>
+<pre><code>public class Solution {
+/*
+ * @param num: a positive number
+ * @return: true if it&apos;s a palindrome or false
+ */
+    public boolean isPalindrome(int num) {
+        // write your code here
+        LinkedList&lt;String&gt; list = new LinkedList&lt;String&gt;();
+        String s = Integer.toString(num);
+        String _s[] = s.split(&quot;&quot;);
+        list.addAll(Arrays.asList(_s));
+        while(list.size()&gt;1){
+            if(list.getFirst().equals(list.getLast())){
+                    list.removeFirst();
+                    list.removeLast();
+                }else
+                    break;;
+        }
+        if(list.size()&gt;1)
+            return false;
+        else
+            return true;
+}
+}
+</code></pre>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/09/30/LintCode题解（一）/">LintCode题解（一）</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">huiHui</a></p>
+        <p><span>发布时间:</span>2017-09-30, 10:14:00</p>
+        <p><span>最后更新:</span>2017-09-19, 20:24:24</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/30/LintCode题解（一）/" title="LintCode题解（一）">http://huihui.kim/2017/09/30/LintCode题解（一）/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/09/30/LintCode题解（一）/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/09/30/LintCode题解（六）/">
+                    LintCode题解（六）
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/29/springMVC基础/">
+                    SpringMVC中@RequestMapping等基础知识
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#单例singleton（题号204）"><span class="toc-number">1.</span> <span class="toc-text">单例singleton（题号204）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题描述"><span class="toc-number">1.1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解答过程"><span class="toc-number">1.2.</span> <span class="toc-text">解答过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二叉树的路径和（题号376）"><span class="toc-number">2.</span> <span class="toc-text">二叉树的路径和（题号376）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题描述-1"><span class="toc-number">2.1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法解答"><span class="toc-number">2.2.</span> <span class="toc-text">算法解答</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符串置换（题号211）"><span class="toc-number">3.</span> <span class="toc-text">字符串置换（题号211）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#回文数（题号491）"><span class="toc-number">4.</span> <span class="toc-text">回文数（题号491）</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"LintCode题解（一）　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://huihui.kim/2017/09/30/LintCode题解（一）/';
+            this.page.identifier = '2017/09/30/LintCode题解（一）/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/09/30/LintCode题解（六）/" title="上一篇: LintCode题解（六）">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/29/springMVC基础/" title="下一篇: SpringMVC中@RequestMapping等基础知识">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/走近Java并发—ThreadLocal/">认识Java并发艺术——ThreadLocal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/24/走近Java并发—Lock/">Java并发——Lock</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Django前端页面相关处理/">Django html相关配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Spring基于注解的配置/">Spring基于注解的配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/SSM项目知识点总结/">SSM小项目知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Spring AOP切面/">Spring AOP切面编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Mybatis-generator详细配置demo/">Mybatis-generator相关配置demo</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/LintCode题解（二）/">LintCode题解（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/01/LintCode题解（七）/">LintCode题解（七）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（一）/">LintCode题解（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/springMVC基础/">SpringMVC中@RequestMapping等基础知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/走近Java并发/">认识Java并发艺术——基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java数据库与事务处理机制/">java数据库处理与事务机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/Spring属性配置细节/">Spring Bean配置细节</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/LintCode题解（四）/">LintCode题解（四）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/LintCode题解（三）/">LintCode题解（三）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/31/Java容器/">Java容器(集合)，持有对象总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/27/servlet实现网页重定向/">Servlet实现网页重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/servlet实现文件上传下载/">Servlet文件上传下载类</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/CSS预处理器比较/">有关CSS预处理器的比较选择(Sass&Less&Stylus)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/js内置对象——string&array/">Js内置对象进阶（一）——String&Array</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">Vue仿饿了么知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/web开发者必备http知识/">Web开发者必备Http基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/python中pip install中utf-8错误的解决方法/">pip install中utf-8编码问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/我们仍未知道那天所看见的list/">我们仍未知道那些天所看见的list</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/01/jquery实现樱花坠落插件/">jquery实现web页面樱花坠落的特效</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/16/Angular2.0开发/">Angular2.0仿今日头条应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/24/后端学习angular--组件篇/">后端学angular2.0的痛苦历程--组件篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的mysql数据库优化操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/python进阶学习--参数/">python进阶学习--*arg、**kw和装饰器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/mysql自连接/">mysql自连接与join关联</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/10/用IIFE与let方法改写循环闭包/">用IIFE与let命令改写循环闭包</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/19/WEB-CSS布局/">WEB前端--CSS布局必备知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/16/JS回调函数/">JS回调函数详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/Hexo&Gituhub博客搭建/">Hexo&Github博客搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/smarty模板引擎/">smarty模板引擎</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 huiHui
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
