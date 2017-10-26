@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="huiHui" />
+
+
+
+<meta name="description" content="对于前端学习来说，CSS是必不可缺的一部分。所以选择器、布局、属性和值对于前端学习者可谓重中之重。无论是初学者还是老手都会有一些帮助的。下面详细罗列一些十分重要的布局知识。 margin: 0 auto在现代浏览器中，如果要把一些东西水平居中，使用 display:flex; justify-content: center; .然而, 在一些老的浏览器，如IE8-9, 这些是不可用的. 想要把一个">
+<meta name="keywords" content="JS学习笔记,CSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WEB前端--CSS布局必备知识">
+<meta property="og:url" content="http://huihui.kim/2017/03/19/WEB-CSS布局/index.html">
+<meta property="og:site_name" content="huiHui&#39;s blogs">
+<meta property="og:description" content="对于前端学习来说，CSS是必不可缺的一部分。所以选择器、布局、属性和值对于前端学习者可谓重中之重。无论是初学者还是老手都会有一些帮助的。下面详细罗列一些十分重要的布局知识。 margin: 0 auto在现代浏览器中，如果要把一些东西水平居中，使用 display:flex; justify-content: center; .然而, 在一些老的浏览器，如IE8-9, 这些是不可用的. 想要把一个">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://chuantu.biz/t5/50/1489896190x2728279020.png">
+<meta property="og:image" content="http://chuantu.biz/t5/50/1489903400x2890149451.png">
+<meta property="og:image" content="http://chuantu.biz/t5/50/1489903995x2728292215.png">
+<meta property="og:updated_time" content="2017-04-10T10:13:47.676Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="WEB前端--CSS布局必备知识">
+<meta name="twitter:description" content="对于前端学习来说，CSS是必不可缺的一部分。所以选择器、布局、属性和值对于前端学习者可谓重中之重。无论是初学者还是老手都会有一些帮助的。下面详细罗列一些十分重要的布局知识。 margin: 0 auto在现代浏览器中，如果要把一些东西水平居中，使用 display:flex; justify-content: center; .然而, 在一些老的浏览器，如IE8-9, 这些是不可用的. 想要把一个">
+<meta name="twitter:image" content="http://chuantu.biz/t5/50/1489896190x2728279020.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="huiHui&#39;s blogs" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>WEB前端--CSS布局必备知识 | huiHui&#39;s blogs</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">huiHui</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于前端</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">huiHui</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">huiHui</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" target="_blank" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-WEB-CSS布局" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/19/WEB-CSS布局/" class="article-date">
+      <time datetime="2017-03-19T12:00:00.000Z" itemprop="datePublished">2017-03-19</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      WEB前端--CSS布局必备知识
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>对于前端学习来说，CSS是必不可缺的一部分。所以选择器、布局、属性和值对于前端学习者可谓重中之重。无论是初学者还是老手都会有一些帮助的。下面详细罗列一些十分<font color="red">重要的布局知识</font>。</p>
+<h2 id="margin-0-auto"><a href="#margin-0-auto" class="headerlink" title="margin: 0 auto"></a>margin: 0 auto</h2><p>在现代浏览器中，如果要把一些东西水平居中，使用 display:flex; justify-content: center; .<br>然而, 在一些老的浏览器，如IE8-9, 这些是不可用的. 想要把一个元素在其父元素中居中, 使用 margin: 0 auto;我们margin定义如下：</p>
+<pre><code>margin: 10px 5px 10px 5px   //margin: top left buttom right
+ margin: 10px 5px 10px        //margin: top (left right) buttom
+margin: 10px 5px            //margin: (top buttom) (right left)
+margin: 10px                //margin: (top left buttom right)
+</code></pre><p>margin: 0 auto 中auto对应的就是左右边框，所以它的作用就是水平对齐。</p>
+<h2 id="max-width"><a href="#max-width" class="headerlink" title="max-width"></a>max-width</h2><p>这是一个系列，其他还有max-height、min-width、min-height，感觉这个还是应该要提倡多用的。在这种情况下使用 max-width 替代 width 可以使浏览器更好地处理小窗口的情况。这点在移动设备上显得尤为重要。</p>
+<h2 id="display"><a href="#display" class="headerlink" title="display"></a>display</h2><p>这部分内容很多，不可能把每个知识点说清楚，针对display部分内容会推荐一些优质博客。</p>
+<h3 id="display-none"><a href="#display-none" class="headerlink" title="display:none"></a>display:none</h3><p>另一个常用的display值是 none 。一些特殊元素的默认 display 值是它，例如 script 。 display:none 通常被 JavaScript 用来在不删除元素的情况下隐藏或显示元素。<br>它和 visibility 属性不一样。把 display 设置成 none 元素不会占据它本来应该显示的空间，但是设置成 visibility: hidden; 还会占据空间。</p>
+<pre><code>&lt;div class=&quot;test1&quot; style=&quot;display:none&quot;&gt;
+    这是一个测试用例
+&lt;/div&gt;
+</code></pre><h3 id="display-block、display-inline、display-block-inline"><a href="#display-block、display-inline、display-block-inline" class="headerlink" title="display:block、display:inline、display:block-inline"></a>display:block、display:inline、display:block-inline</h3><p>display:block生成<font color="red">块级框</font>。除特殊声明外，所有的块级元素<font color="red">开始于新的一行，延展到其容器的宽度</font>。<br>display:inline生成一个或多个<font color="red">行内框</font>。就如名字般，行内级元素所占具的空间就是他的标签所定义的大小。<br>display:block-inline生成一个<font color="red">块级别框</font>，但是整个框的行为就像是一个内联元素。并且会<font color="red">调节窗口大小</font>,在很多情况下如果元素无法对齐，推荐使用display:block-inline,然后再来个高度自适应vertical-align:top。</p>
+<pre><code>&lt;div class=&quot;test2&quot;&gt;
+&lt;section class=&quot;block&quot;&gt;
+    &lt;header&gt;Block&lt;/header&gt;
+    &lt;p&gt;this is a test example,this is a test example&lt;/p&gt;
+    &lt;p&gt;this is a test example,this is a test example&lt;/p&gt;
+&lt;/section&gt;
+&lt;section class=&quot;inline-block&quot;&gt;
+    &lt;header&gt;Inline-block&lt;/header&gt;
+    &lt;p&gt;this is a test example,this is a test example&lt;/p&gt;
+    &lt;p&gt;this is a test example,this is a test example&lt;/p&gt;
+&lt;/section&gt;
+&lt;section class=&quot;inline&quot;&gt;
+    &lt;header&gt;Inline&lt;/header&gt;
+    &lt;p&gt;this is a test example,this is a test example&lt;/p&gt;
+    &lt;p&gt;this is a test example,this is a test example&lt;/p&gt;
+&lt;/section&gt;
+&lt;/div&gt;
+&lt;style&gt;
+.test2 {
+    font-family: &quot;Happy Monkey&quot;;
+    line-height: 1.5;
+    max-width: 600px;
+}
+section {
+    padding: 1em;
+}
+header {
+    font-family: &quot;Lemon&quot;;
+    margin-bottom: 1em;
+}
+.block {
+    background: #EEE;
+}
+.block p{
+    border: 1px dashed chocolate;
+}
+.inline-block {
+    background: yellowgreen;
+}
+.inline-block p{
+    display: inline-block;
+    border: 1px dashed firebrick;
+}
+.inline{
+    background: #EEE;
+}
+.inline p {
+    display: inline;
+    border: 1px dashed darkgreen;
+}
+&lt;/style&gt;
+</code></pre><p>结果如下所示：<br><img src="http://chuantu.biz/t5/50/1489896190x2728279020.png" alt=""></p>
+<h3 id="display-flex"><a href="#display-flex" class="headerlink" title="display:flex"></a>display:flex</h3><p>传统的display+position+float的盒状布局带来的限制比较多，而利用弹性布局：flex,可以创造更大灵活性。在使用了flex后，css中的float，clear，以及vertical-align都将无法使用。个人摘录的内容很粗略，推荐博客,讲的很好：<a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="external">Flex 布局教程：语法篇</a><br><a href="http://www.ruanyifeng.com/blog/2015/07/flex-examples.html" target="_blank" rel="external">Flex 布局教程：实例篇</a></p>
+<pre><code>Flex 布局教程：语法篇http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html
+Flex 布局教程：实例篇http://www.ruanyifeng.com/blog/2015/07/flex-examples.html
+</code></pre><h4 id="flex容器属性"><a href="#flex容器属性" class="headerlink" title="flex容器属性"></a>flex容器属性</h4><p>flex-direction的作用是主轴的方向,使用方式如下：</p>
+<pre><code>.box {
+      flex-direction: row | row-reverse | column | column-reverse;
+}
+row（默认值）：主轴为水平方向，起点在左端。
+row-reverse：主轴为水平方向，起点在右端。
+column：主轴为垂直方向，起点在上沿。
+column-reverse：主轴为垂直方向，起点在下沿。
+</code></pre><p>flex-wrap作用是如果一条轴线排不下，决定如何换行</p>
+<pre><code>.box{
+    flex-wrap: nowrap | wrap |wrap-reverse
+}
+nowrap:默认不换行
+wrap:换行，但是第一行在上方
+wrap-reverse:换行，但是第一行在下方
+</code></pre><p>flex-flow属性则是flex-direction和flex-wrap的结合体<br>    .box{<br>        flex-flow:(flex-direction)||(flex-wrap)<br>    }<br>justify-content属性定义了项目在主轴上的对齐方式。</p>
+<pre><code>.box {
+  justify-content: flex-start | flex-end | center | space-between | space-around;
+}
+</code></pre><p>align-items属性定义项目在交叉轴上如何对齐。</p>
+<pre><code>.box {
+  align-items: flex-start | flex-end | center | baseline | stretch;
+}
+flex-start（默认值）：左对齐
+flex-end：右对齐
+center： 居中
+space-between：两端对齐，项目之间的间隔都相等。
+space-around：每个项目两侧的间隔相等。所以，项目之间的间隔比项目与边框的间隔大一倍。
+</code></pre><p>align-items属性定义项目在交叉轴上如何对齐。</p>
+<pre><code>.box {
+  align-items: flex-start | flex-end | center | baseline | stretch;
+}
+flex-start：交叉轴的起点对齐。
+flex-end：交叉轴的终点对齐。
+center：交叉轴的中点对齐。
+baseline: 项目的第一行文字的基线对齐。
+stretch（默认值）：如果项目未设置高度或设为auto，将占满整个容器的高度。
+
+.box {
+  align-content: flex-start | flex-end | center | space-between | space-around | stretch;
+}
+</code></pre><p>align-content属性定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用。</p>
+<pre><code>.box {
+  align-content: flex-start | flex-end | center | space-between | space-around | stretch;
+}
+flex-start：与交叉轴的起点对齐。
+flex-end：与交叉轴的终点对齐。
+center：与交叉轴的中点对齐。
+space-between：与交叉轴两端对齐，轴线之间的间隔平均分布。
+space-around：每根轴线两侧的间隔都相等。所以，轴线之间的间隔比轴线与边框的间隔大一倍。
+stretch（默认值）：轴线占满整个交叉轴。
+</code></pre><h3 id="display-grid"><a href="#display-grid" class="headerlink" title="display:grid"></a>display:grid</h3><p>其实grid和flex的内容很多，学精不易，推荐几篇感觉不错的grid博客–<li><a href="https://www.w3cplus.com/css3/things-ive-learned-css-grid-layout.html" target="_blank" rel="external">原生CSS网格布局学习笔记</a><a href="https://www.w3cplus.com/css3/things-ive-learned-css-grid-layout.html" target="_blank" rel="external">https://www.w3cplus.com/css3/things-ive-learned-css-grid-layout.html</a></li></p>
+<li><br><a href="https://www.w3cplus.com/css3/solving-problems-with-css-grid-and-flexbox-the-card-ui.html" target="_blank" rel="external">使用CSS Grid和Flexbox制作Card</a><a href="https://www.w3cplus.com/css3/solving-problems-with-css-grid-and-flexbox-the-card-ui.html" target="_blank" rel="external">https://www.w3cplus.com/css3/solving-problems-with-css-grid-and-flexbox-the-card-ui.html</a></li>
+
+<h2 id="position"><a href="#position" class="headerlink" title="position"></a>position</h2><h3 id="static"><a href="#static" class="headerlink" title="static"></a>static</h3><p>static 是默认值。任意 position: static; 的元素不会被特殊的定位。一个 static 元素表示它不会被“positioned”，一个 position 属性被设置为其他值的元素表示它会被“positioned”。</p>
+<h3 id="relative"><a href="#relative" class="headerlink" title="relative"></a>relative</h3><p>在一个<font color="red">相对(相对于正常位置)</font>定位（position属性的值为relative）的元素上设置 top 、 right 、 bottom 和 left 属性会使其偏离其正常位置。其他的元素的位置则不会受该元素的影响发生位置改变来弥补它偏离后剩下的空隙。</p>
+<h3 id="fixed"><a href="#fixed" class="headerlink" title="fixed"></a>fixed</h3><p>一个固定定位（position属性的值为fixed）元素会相对于<font color="red">视窗(浏览器)</font>来定位，这意味着即便页面滚动，它还是会停留在相同的位置。和 relative 一样， top 、 right 、 bottom 和 left 属性都可用。</p>
+<h3 id="absolute"><a href="#absolute" class="headerlink" title="absolute"></a>absolute</h3><p>absolute 是最棘手的position值。 absolute 与 fixed 的表现类似，但是它不是相对于视窗而是相对于最近的“positioned”祖先元素。如果绝对定位（position属性的值为absolute）的元素没有“positioned”祖先元素，那么它是相对于文档的 body 元素，并且它会随着页面滚动而移动。生成绝对定位的元素，相对于<font color="red"> static 定位以外的第一个父元素</font>进行定位。<br>元素的位置通过 “left”, “top”, “right” 以及 “bottom” 属性进行规定。<br>如果对position有了一定的了解，可以自己改写代码分析其中原理。<br><img src="http://chuantu.biz/t5/50/1489903400x2890149451.png" alt=""></p>
+<pre><code>&lt;body class=&quot;test3&quot;&gt;
+&lt;p class=&quot;&quot;&gt;this is test example&lt;/p&gt;
+&lt;p class=&quot;relative1&quot;&gt;this is a text examle&lt;/p&gt;
+&lt;p class=&quot;relative2&quot;&gt;this is a text examle&lt;/p&gt;
+&lt;p class=&quot;static&quot;&gt;this is test example&lt;/p&gt;
+&lt;p class=&quot;fixed&quot;&gt;this is test example&lt;/p&gt;
+&lt;p class=&quot;absolute&quot;&gt;this is test example&lt;/p&gt;
+&lt;/body&gt;
+
+&lt;style&gt;
+    .test3{
+        margin-left: 50px;
+        max-width: 500px;
+        background: #EEE;
+    }
+    .relative1 {
+        color:red;
+        position:relative;
+        left:-20px
+    }
+    .relative2 {
+        color: blue;
+        position:relative;
+        left:20px;
+    }
+    .static{
+        color:greenyellow;
+        position: static;
+    }
+    .fixed{
+        color:blueviolet;
+        position: fixed;
+        left:150px;
+        top:100px;
+    }
+    .absolute{
+        color:orange;
+        position: absolute;
+        right:100px;
+        top: 0;
+    }
+&lt;/style&gt;
+</code></pre><h2 id="盒模型"><a href="#盒模型" class="headerlink" title="盒模型"></a>盒模型</h2><p>十分简单的一个布局模型，理解下图原理，此处不罗嗦，实在不理解自己多查阅资料。<br><img src="http://chuantu.biz/t5/50/1489903995x2728292215.png" alt=""></p>
+<h2 id="box-sizing"><a href="#box-sizing" class="headerlink" title="box-sizing"></a>box-sizing</h2><p>因为传统的盒模型不够直接，新增了一个叫做 box-sizing 的CSS属性。当你设置一个元素为 box-sizing: border-box; 时，此元素的内边距和边框不再会增加它的宽度。这里有一个与前一页相同的例子，唯一的区别是两个元素都设置了 box-sizing: border-box; </p>
+<pre><code>.box {
+  width: 500px;
+  margin: 20px auto;
+  padding: 50px;
+  border: solid blue 10px;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+        box-sizing: border-box;
+}
+</code></pre><p>box-sizing 是个很新的属性，目前还应该像上面例子中那样使用 -webkit- 和 -moz- 前缀。</p>
+<h2 id="float-浮动-、clear"><a href="#float-浮动-、clear" class="headerlink" title="float(浮动)、clear"></a>float(浮动)、clear</h2><p>这部分内容依然推荐几篇博客，都是精品。</p>
+<p><li><a href="http://www.cnblogs.com/iyangyuan/archive/2013/03/27/2983813.html" target="_blank" rel="external">CSS浮动通俗讲解</a></li></p>
+<p><li><a href="http://www.zhangxinxu.com/wordpress/2010/01/css-float%E6%B5%AE%E5%8A%A8%E7%9A%84%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%E3%80%81%E8%AF%A6%E8%A7%A3%E5%8F%8A%E6%8B%93%E5%B1%95%E4%B8%80/" target="_blank" rel="external">CSS float浮动的深入研究、详解及拓展(一)</a></li></p>
+<p><li><a href="http://www.zhangxinxu.com/wordpress/2010/01/css-float%E6%B5%AE%E5%8A%A8%E7%9A%84%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%E3%80%81%E8%AF%A6%E8%A7%A3%E5%8F%8A%E6%8B%93%E5%B1%95%E4%BA%8C/" target="_blank" rel="external">CSS float浮动的深入研究、详解及拓展(二)</a></li></p>
+<p><li><a href="http://www.iyunlu.com/view/css-xhtml/55.html" target="_blank" rel="external">那些年我们一起清除过的浮动</a></li></p>
+<h2 id="媒体查询"><a href="#媒体查询" class="headerlink" title="媒体查询"></a>媒体查询</h2><p>“响应式设计（Responsive Design” 是一种让网站针对不同的浏览器和设备“呈现”不同显示效果的策略，这样可以让网站在任何情况下显示的很棒！<br>媒体查询是做此事所需的最强大的工具。让我们使用百分比宽度来布局，然后在浏览器变窄到无法容纳侧边栏中的菜单时，把布局显示成一列。<br>可以使用 not，and 和 only 等逻辑操作符构建复杂的媒体查询。and 操作符用来把多个 媒体属性 组合成一条媒体查询。只有当每个属性都为真时，结果才为真。not 操作符用来对一条媒体查询的结果进行取反。only 操作符表示仅在媒体查询匹配成功的情况下应用指定样式。可以通过它让选中的样式在老式浏览器中不被应用。若使用了 not 或 only 操作符，必须明确指定一个媒体类型。<br>下面规定在媒体查询仅在浏览器屏幕，并且可视区域不小于600宽时有效。    </p>
+<pre><code>@media only screen and (min-width:600px) {
+  nav {
+    float: left;
+    width: 25%;
+  }
+  section {
+    margin-left: 25%;
+  }
+</code></pre>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/03/19/WEB-CSS布局/">WEB前端--CSS布局必备知识</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">huiHui</a></p>
+        <p><span>发布时间:</span>2017-03-19, 20:00:00</p>
+        <p><span>最后更新:</span>2017-04-10, 18:13:47</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/03/19/WEB-CSS布局/" title="WEB前端--CSS布局必备知识">http://huihui.kim/2017/03/19/WEB-CSS布局/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/03/19/WEB-CSS布局/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/04/10/用IIFE与let方法改写循环闭包/">
+                    用IIFE与let命令改写循环闭包
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/03/16/JS回调函数/">
+                    JS回调函数详解
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#margin-0-auto"><span class="toc-number">1.</span> <span class="toc-text">margin: 0 auto</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#max-width"><span class="toc-number">2.</span> <span class="toc-text">max-width</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#display"><span class="toc-number">3.</span> <span class="toc-text">display</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#display-none"><span class="toc-number">3.1.</span> <span class="toc-text">display:none</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#display-block、display-inline、display-block-inline"><span class="toc-number">3.2.</span> <span class="toc-text">display:block、display:inline、display:block-inline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#display-flex"><span class="toc-number">3.3.</span> <span class="toc-text">display:flex</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#flex容器属性"><span class="toc-number">3.3.1.</span> <span class="toc-text">flex容器属性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#display-grid"><span class="toc-number">3.4.</span> <span class="toc-text">display:grid</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#position"><span class="toc-number">4.</span> <span class="toc-text">position</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#static"><span class="toc-number">4.1.</span> <span class="toc-text">static</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#relative"><span class="toc-number">4.2.</span> <span class="toc-text">relative</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fixed"><span class="toc-number">4.3.</span> <span class="toc-text">fixed</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#absolute"><span class="toc-number">4.4.</span> <span class="toc-text">absolute</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#盒模型"><span class="toc-number">5.</span> <span class="toc-text">盒模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#box-sizing"><span class="toc-number">6.</span> <span class="toc-text">box-sizing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#float-浮动-、clear"><span class="toc-number">7.</span> <span class="toc-text">float(浮动)、clear</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#媒体查询"><span class="toc-number">8.</span> <span class="toc-text">媒体查询</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"WEB前端--CSS布局必备知识　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://huihui.kim/2017/03/19/WEB-CSS布局/';
+            this.page.identifier = '2017/03/19/WEB-CSS布局/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/04/10/用IIFE与let方法改写循环闭包/" title="上一篇: 用IIFE与let命令改写循环闭包">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/03/16/JS回调函数/" title="下一篇: JS回调函数详解">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/走近Java并发—ThreadLocal/">认识Java并发艺术——ThreadLocal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/24/走近Java并发—Lock/">Java并发——Lock</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Django前端页面相关处理/">Django html相关配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Spring基于注解的配置/">Spring基于注解的配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/SSM项目知识点总结/">SSM小项目知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Spring AOP切面/">Spring AOP切面编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Mybatis-generator详细配置demo/">Mybatis-generator相关配置demo</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/LintCode题解（二）/">LintCode题解（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/01/LintCode题解（七）/">LintCode题解（七）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（一）/">LintCode题解（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/springMVC基础/">SpringMVC中@RequestMapping等基础知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/走近Java并发/">认识Java并发艺术——基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java数据库与事务处理机制/">java数据库处理与事务机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/Spring属性配置细节/">Spring Bean配置细节</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/LintCode题解（四）/">LintCode题解（四）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/LintCode题解（三）/">LintCode题解（三）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/31/Java容器/">Java容器(集合)，持有对象总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/27/servlet实现网页重定向/">Servlet实现网页重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/servlet实现文件上传下载/">Servlet文件上传下载类</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/CSS预处理器比较/">有关CSS预处理器的比较选择(Sass&Less&Stylus)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/js内置对象——string&array/">Js内置对象进阶（一）——String&Array</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">Vue仿饿了么知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/web开发者必备http知识/">Web开发者必备Http基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/python中pip install中utf-8错误的解决方法/">pip install中utf-8编码问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/我们仍未知道那天所看见的list/">我们仍未知道那些天所看见的list</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/01/jquery实现樱花坠落插件/">jquery实现web页面樱花坠落的特效</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/16/Angular2.0开发/">Angular2.0仿今日头条应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/24/后端学习angular--组件篇/">后端学angular2.0的痛苦历程--组件篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的mysql数据库优化操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/python进阶学习--参数/">python进阶学习--*arg、**kw和装饰器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/mysql自连接/">mysql自连接与join关联</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/10/用IIFE与let方法改写循环闭包/">用IIFE与let命令改写循环闭包</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/19/WEB-CSS布局/">WEB前端--CSS布局必备知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/16/JS回调函数/">JS回调函数详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/Hexo&Gituhub博客搭建/">Hexo&Github博客搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/smarty模板引擎/">smarty模板引擎</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 huiHui
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

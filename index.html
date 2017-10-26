@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html >
+<html lang="zh-Hans">
 <head>
 
     <!--[if lt IE 9]>
@@ -11,24 +11,28 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="format-detection" content="telephone=no" />
-<meta name="author" content="John Doe" />
+<meta name="author" content="huiHui" />
 
 
     
     
 
 
+<meta name="description" content="不屈于他人之下，技术永远没有尽头，不断进步才能生存">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:title" content="huiHui&#39;s blogs">
+<meta property="og:url" content="http://huihui.kim/index.html">
+<meta property="og:site_name" content="huiHui&#39;s blogs">
+<meta property="og:description" content="不屈于他人之下，技术永远没有尽头，不断进步才能生存">
+<meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="huiHui&#39;s blogs">
+<meta name="twitter:description" content="不屈于他人之下，技术永远没有尽头，不断进步才能生存">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
 
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="huiHui&#39;s blogs" type="application/atom+xml">
 
 
 
@@ -57,7 +61,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Hexo</title>
+<title>huiHui&#39;s blogs</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -73,7 +77,7 @@
         isCategory: false,
         fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
         scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
-        search: 
+        search: true
     }
 </script>
 
@@ -100,11 +104,20 @@
             <img src="/img/avatar.png" class="animated zoomIn">
         </a>
         <hgroup>
-          <h1 class="header-author"><a href="/">John Doe</a></h1>
+          <h1 class="header-author"><a href="/">huiHui</a></h1>
         </hgroup>
 
         
+        <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+        
 
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
         
 
 
@@ -169,11 +182,13 @@
                     <nav class="header-nav">
                         <ul class="social">
                             
-                                <a class="fa Email" href="mailto:123@123.com" title="Email"></a>
+                                <a class="fa Email" href="/975715385@qq.com" title="Email"></a>
                             
-                                <a class="fa GitHub" href="#" title="GitHub"></a>
+                                <a class="fa GitHub" href="https://github.com/jingegebuguai" title="GitHub"></a>
                             
                                 <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" href="http://bilibili.com" title="bilibili"></a>
                             
                         </ul>
                     </nav>
@@ -182,7 +197,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
                     </div>
                 </section>
                 
@@ -195,7 +210,7 @@
                     
                       <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
                     
-                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                      <a class="main-nav-link switch-friends-link" href="/">MOxFIVE</a>
                     
                     </div>
                 </section>
@@ -217,7 +232,7 @@
       <nav id="mobile-nav">
       <div class="overlay">
           <div class="slider-trigger"></div>
-          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">John Doe</a></h1>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">huiHui</a></h1>
       </div>
     <div class="intrude-less">
         <header id="header" class="inner">
@@ -225,8 +240,10 @@
                 <img src="/img/avatar.png" class="animated zoomIn">
             </a>
             <hgroup>
-              <h1 class="header-author"><a href="/" title="回到主页">John Doe</a></h1>
+              <h1 class="header-author"><a href="/" title="回到主页">huiHui</a></h1>
             </hgroup>
+            
+            <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
             
             <nav class="header-menu">
                 <ul>
@@ -245,11 +262,13 @@
             <nav class="header-nav">
                         <ul class="social">
                             
-                                <a class="fa Email" target="_blank" href="mailto:123@123.com" title="Email"></a>
+                                <a class="fa Email" target="_blank" href="/975715385@qq.com" title="Email"></a>
                             
-                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
+                                <a class="fa GitHub" target="_blank" href="https://github.com/jingegebuguai" title="GitHub"></a>
                             
                                 <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" target="_blank" href="http://bilibili.com" title="bilibili"></a>
                             
                         </ul>
             </nav>
@@ -259,13 +278,22 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-走近Java并发—ThreadLocal" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/26/hello-world/" class="article-date">
-      <time datetime="2017-10-26T12:35:34.889Z" itemprop="datePublished">2017-10-26</time>
+      <a href="/2017/10/26/走近Java并发—ThreadLocal/" class="article-date">
+      <time datetime="2017-10-26T12:00:00.000Z" itemprop="datePublished">2017-10-26</time>
 </a>
 
+ 
+    <a href="/2017/10/26/走近Java并发—ThreadLocal/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/26/走近Java并发—ThreadLocal/"></span>
+        
+    </a>
 
     </div>
   
@@ -278,7 +306,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/26/hello-world/">Hello World</a>
+      <a class="article-title" href="/2017/10/26/走近Java并发—ThreadLocal/">认识Java并发艺术——ThreadLocal</a>
     </h1>
   
 
@@ -288,15 +316,442 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+              <p>Java中的ThreadLocal类允许我们创建只能被同一个线程读写的变量。因此，如果一段代码含有一个ThreadLocal变量的引用，即使两个线程同时执行这段代码，它们也无法访问到对方的ThreadLocal变量。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/26/走近Java并发—ThreadLocal/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-走近Java并发—Lock" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/24/走近Java并发—Lock/" class="article-date">
+      <time datetime="2017-10-24T12:00:00.000Z" itemprop="datePublished">2017-10-24</time>
+</a>
+
+ 
+    <a href="/2017/10/24/走近Java并发—Lock/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/24/走近Java并发—Lock/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/24/走近Java并发—Lock/">Java并发——Lock</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h2 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h2><h3 id="Lock与Synchronized区别"><a href="#Lock与Synchronized区别" class="headerlink" title="Lock与Synchronized区别"></a>Lock与Synchronized区别</h3><ul>
+<li>Lock非Java内置特性，而Synchronized是Java语言的关键字，因此是内置特性。Lock是一个接口，通过这个接口可以实现同步访问。</li>
+<li>Synchronized不需要手动释放锁，当Synchronized方法或代码块执行完成后，系统会自动让线程释放对锁的占用；Lock需要用户手动释放锁，如果没有释放锁，会导致死锁现象。</li>
+</ul>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/24/走近Java并发—Lock/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Django图片相关处理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/20/Django图片相关处理/" class="article-date">
+      <time datetime="2017-10-20T02:14:00.000Z" itemprop="datePublished">2017-10-20</time>
+</a>
+
+ 
+    <a href="/2017/10/20/Django图片相关处理/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/20/Django图片相关处理/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="前台访问后台图片"><a href="#前台访问后台图片" class="headerlink" title="前台访问后台图片"></a>前台访问后台图片</h3><p>对于ImageField类型的字段，需要进行特殊处理，相关处理配置如下所示：</p>
+<p>1、setting中配置MEDIA_URL和MEDIA_ROOT</p>
+<pre><code>MEDIA_URL=&quot;media&quot;
+#配置图片文件夹路径
+MEDIA_ROOT=(
+        os.path.join(BASE_DIR, &apos;&apos;media)
+    )
+</code></pre><p>2、如果使用加载，需要在setting的TEMPLATES中加上下面</p>
+<pre><code>&apos;django.template.context_processors.madia&apos;
+</code></pre><p>3、设置url</p>
+<pre><code>from django.views.static improt serve
+from project.setting import MEDIA_ROOT
+url(r&apos;^media/(?P&lt;path&gt;.*)&apos;, serve,{&apos;document_root&apos;:settings.MEDIA_ROOT}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Django前端页面相关处理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/19/Django前端页面相关处理/" class="article-date">
+      <time datetime="2017-10-19T02:14:00.000Z" itemprop="datePublished">2017-10-19</time>
+</a>
+
+ 
+    <a href="/2017/10/19/Django前端页面相关处理/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/19/Django前端页面相关处理/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/19/Django前端页面相关处理/">Django html相关配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="静态文件加载"><a href="#静态文件加载" class="headerlink" title="静态文件加载"></a>静态文件加载</h2><p>html文件头要加上下面代码，意思要预加载配置文件中的staticfiles文件</p>
+<pre><code>{% load staticfiles %}
+</code></pre><h3 id="css，js，img文件配置"><a href="#css，js，img文件配置" class="headerlink" title="css，js，img文件配置"></a>css，js，img文件配置</h3><p>其中，static为配置文件目录</p>
+<pre><code>&lt;script scr={% static 'js/example.js' %}&gt;&lt;/script&gt;
+&lt;link rel=&quot;staticsheet&quot; type=&quot;text/css&quot; href={%static 'css/example.css'%}&gt;
+&lt;img src={% static 'images/example.jpg' %} /&gt;
+</code></pre><h3 id="url配置"><a href="#url配置" class="headerlink" title="url配置"></a>url配置</h3><pre><code>&lt;a href={% url 'login' %}&gt; 
+&lt;a href={% url 'register' %}&gt;
+action = /login/
+action = /register/
+</code></pre><h2 id="网站模板配置"><a href="#网站模板配置" class="headerlink" title="网站模板配置"></a>网站模板配置</h2><p>为了节省代码，导航，底部，访问统计等地方需要使用共同的html。<br>使用base.html来包含通用的文件</p>
+<pre><code>&lt;!DOCTYPE html5&gt;
+&lt;html&gt;
+    &lt;head&gt;&lt;title&gt;&lt;% block title %&gt;标题&lt;% endtitle %&gt;&lt;/title&gt;&lt;/head&gt;
+    &lt;body&gt;
+        &lt;% include &apos;nav.html&apos; %&gt;
+        &lt;% block main %&gt;
+        &lt;main-section /&gt;
+        &lt;% endblock %&gt;
+        &lt;% include &apos;foot.html&apos; %&gt;    
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>其中block为使继承的模板可以随意重写该部分，include作用是加载其他html文件。<br>我们可以通过继承或者说是扩展<br>extends原来的base.html文件，这样可以重写减少工作量</p>
+<pre><code>&lt;% extends &apos;base.html&apos; %&gt;
+&lt;% block title %&gt;new title&lt;% endblock %&gt;
+
+&lt;% block main %&gt;new main content&lt;% endblock %&gt;    
+</code></pre><p>一般模板放在app下的templates中，django会自动查找，我们一般使用类里加载html文件的形式.</p>
+<pre><code>return render(request, &apos;index.html&apos;)
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Spring基于注解的配置" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/19/Spring基于注解的配置/" class="article-date">
+      <time datetime="2017-10-19T02:14:00.000Z" itemprop="datePublished">2017-10-19</time>
+</a>
+
+ 
+    <a href="/2017/10/19/Spring基于注解的配置/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/19/Spring基于注解的配置/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/19/Spring基于注解的配置/">Spring基于注解的配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Annotation-注解"><a href="#Annotation-注解" class="headerlink" title="Annotation(注解)"></a>Annotation(注解)</h2><h3 id="标注Spring-Bean的Annotation"><a href="#标注Spring-Bean的Annotation" class="headerlink" title="标注Spring Bean的Annotation"></a>标注Spring Bean的Annotation</h3><ul>
+<li>@Component：标注一个普通的Spring Bean类</li>
+<li>@Service：标注一个控制器组件</li>
+<li>@Controller：标注一个业务逻辑组件类</li>
+<li>@Repository：标注一个DAO组件类</li>
+</ul>
+<p>下面为@Component的注解</p>
+<pre><code>package annotation;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class UserObject {
+
+    public void getUser(){
+        System.out.println(&quot;component  getUser...&quot;);
+    }
+}
+</code></pre><p>其在XML中配置方式很简单，只需加上下面</p>
+<pre><code>&lt;context:component-scan base-package=&quot;package(包路径)&quot;&gt;&lt;/context:component-scan&gt;
+</code></pre><p>可以添加<context:include-filter>和<context:exclude-filter>子元素更详细的指定Annotation标注。使用时需要添加type属性和expression.</context:exclude-filter></context:include-filter></p>
+<p>其中type可以指定下面四种过滤器</p>
+<ul>
+<li><p>annotation: 需要指定一个注解名，如下org.springframework.stereotype.Repository，过滤DAO注解</p>
+<p>  <context:component-scan base-package="annotation" use-default-filters="false"></context:component-scan></p>
+<pre><code>&lt;!--&lt;context:include-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Repository&quot;&gt;&lt;/context:include-filter&gt;
+</code></pre><p>  </p>
+</li>
+<li><p>regex：正则过滤器 ，指定正则表达式</p>
+</li>
+<li>assignable：类名过滤器，指定java类</li>
+<li><p>aspextJ:AspextJ过滤器</p>
+<p>其中annotaion和assignable最常用</p>
+<h3 id="Bean作用域的注解（annotation）"><a href="#Bean作用域的注解（annotation）" class="headerlink" title="Bean作用域的注解（annotation）"></a>Bean作用域的注解（annotation）</h3><p>没有指定Bean的Scope默认为singleton</p>
+<p>  @Scope(“prototype”)<br>  //为Bean实例指定person名<br>  @Component(“person”)<br>  public class Person(){…}</p>
+</li>
+</ul>
+<h3 id="Resource配置Bean依赖"><a href="#Resource配置Bean依赖" class="headerlink" title="@Resource配置Bean依赖"></a>@Resource配置Bean依赖</h3><p>一般XML的依赖配置：</p>
+<pre><code>&lt;bean id=&quot;person&quot; class=&quot;autowire.Person&quot; p:name=&quot;huihui&quot; p:address-ref=&quot;address2&quot; &gt;&lt;/bean&gt;
+</code></pre><p>注解的依赖配置        </p>
+<pre><code>@Component
+public Class Person{
+    private String name;
+    private Address address;
+    public void setName(String name){
+        this.name = name;
+    }
+    @resource(name=&quot;address&quot;)
+    public void setAddress(Address address){
+        this.address = address;
+    }
+    public void toString(){...}
+}
+</code></pre><p>将指定容器中的Bean作为参数传入，一般setter在XML方法是必须的，但是在注解中，@Resource可以修饰Field，可以省略name属性。在使用@Resource修饰Field时，Spring会直接使用java ee的Field注入。可以不使用setter方法。<br>@Resource修饰setter方法，省略name属性，则name属性是setter方法去掉前面set字串，首字母小写得到的字串。</p>
+<p>@PostConstruct，@PreDestroy定制生命周期行为<br>init-method（@PostConstruct）在Bean依赖关系注入完成后回调该方法，destroy-method（@PreDestroy）在销毁Bean之前回调该方法。</p>
+<pre><code>@Component
+public class Person{
+    private String name;
+    private Car car;
+    public void setName(String name){
+        this.name = name;
+    }
+    @Resource
+    public void setCar(Car car){
+        this.car = car
+    }
+    @PostConstruct
+    public void init(){...}
+    @PreDestriy
+    public void destroy(){...}
+    public void toString(){...}
+}
+</code></pre><h3 id="DependsOn-Lazy"><a href="#DependsOn-Lazy" class="headerlink" title="@DependsOn,@Lazy"></a>@DependsOn,@Lazy</h3><p>@Depends（depends-on）用于强制初始化其他Bean，@Lazy(lazy-init)用于指定该Bean是否取消预初始化.</p>
+<pre><code>@Lazy(true)
+@DependsOn({&apos;car&apos;, &apos;address&apos;})
+@Conponent
+public class Person{...}
+</code></pre><p>上面代码使用@DependsOn修饰Person类，强制初始化car和address两个Bean,使用@Lazy实现懒初始化。</p>
+<h3 id="Autowired"><a href="#Autowired" class="headerlink" title="@Autowired"></a>@Autowired</h3><p>实现自动装配，标注setter方法，普通方法，Field和构造器，个人倾向显式指定依赖。<br>@QUALIfier根据Bean标识zhiding自动装配。</p>
+<h3 id="Value"><a href="#Value" class="headerlink" title="@Value"></a>@Value</h3><p>Spring提供了注解@Value，用于在程序中获取properties配置文件属性值。例如：</p>
+<ol>
+<li><p>applicationContext.xml中指定配置文件。</p>
+ <context:property-placeholder location="classpath:xxx.properties" ignore-unresolvable="true">
+
+<ol>
+<li><p>Spring bean中使用@Value注解获取指定参数。</p>
+<p>// xxx.properties配置项：<br>// server.ip=192.168.1.1<br>// server.port=8080</p>
+<p>@Value(“${server.ip}”)<br>private String ip;</p>
+<p>@Value(“${server.port}”)<br>private int port;</p>
+</li>
+</ol>
+</context:property-placeholder></li>
+</ol>
 
       
     </div>
@@ -304,8 +759,701 @@
     <div class="article-info article-info-index">
       
       
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
 
       
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-SSM项目知识点总结" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/13/SSM项目知识点总结/" class="article-date">
+      <time datetime="2017-10-13T02:14:00.000Z" itemprop="datePublished">2017-10-13</time>
+</a>
+
+ 
+    <a href="/2017/10/13/SSM项目知识点总结/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/13/SSM项目知识点总结/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/13/SSM项目知识点总结/">SSM小项目知识点总结</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="读取Java配置文件——Properties类"><a href="#读取Java配置文件——Properties类" class="headerlink" title="读取Java配置文件——Properties类"></a>读取Java配置文件——Properties类</h2><p>Java中Java.Util.Properties类主要用于读取Java的配置文件，在项目中若要读取resouce文件下的配置，这是非常方便的。</p>
+<h3 id="Properties的继承关系"><a href="#Properties的继承关系" class="headerlink" title="Properties的继承关系"></a>Properties的继承关系</h3><pre><code>Java.lang.Object--&gt;java.util.Dictionary--&gt;java.util.Hashtable&lt;Object, Object&gt;--&gt;java.util.Properties
+</code></pre><p>主要方法：</p>
+<ul>
+<li>getProperty(String Key):用指定的键在属性列表中搜索属性</li>
+<li>load(InputStream inStream):从输入流中读取属性列表，通过指定文件进行装载获取文件的键值对</li>
+<li>setProperty(String key, String value):调用Hashtable的方法put，设置键值对</li>
+<li>store(OutputStream, String comments):将Properties表中属性写入输出流，与load方法相反</li>
+<li>close():清除所有装载的键值对</li>
+</ul>
+<h3 id="读取Properties文件"><a href="#读取Properties文件" class="headerlink" title="读取Properties文件"></a>读取Properties文件</h3><p>最常用的方法是通过java.lang.Class类的getResouceAsStream(String name)读取文件。</p>
+<pre><code>static{
+    InputStreamRead inputRead = new InputStreamRead(PropertiesUtil.Class.getResourceAsStream(fileName));
+    //做异常处理
+    props = new Properties();
+    props.load(inputRead);
+}
+public static String getProperty(String key, String defaultValue){
+    String value = props.getProperty(key.trim());
+    if(StringUtils.isBlank(value))
+        value = defaultValue;
+    return value.trim();    
+}
+</code></pre><h2 id="Java日期和字符串相互转换——joda-Time的使用"><a href="#Java日期和字符串相互转换——joda-Time的使用" class="headerlink" title="Java日期和字符串相互转换——joda-Time的使用"></a>Java日期和字符串相互转换——joda-Time的使用</h2><p>需要Maven导入</p>
+<ul>
+<li>DateTime():无参构造函数会创建当前系统所在时区的时间</li>
+<li>DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute)：这个构造方法方便快速地构造一个指定的时间</li>
+<li>DateTime(long instant)：这个构造方法创建出来的实例，是通过一个long类型的时间戳，它表示这个时间戳距1970-01-01T00:00:00Z的毫秒数</li>
+<li>DateTime(Object instant)：这个构造方法可以通过一个Object对象构造一个实例。这个Object对象可以是这些类型：ReadableInstant, String, Calendar和Date。</li>
+</ul>
+<h3 id="str-lt-–-gt-date"><a href="#str-lt-–-gt-date" class="headerlink" title="str&lt;–&gt;date"></a>str&lt;–&gt;date</h3><pre><code>DateTimeFormatter format = DateTimeFormat .forPattern(&quot;yyyy-MM-dd HH:mm:ss&quot;);  
+//时间解析  
+DateTime dateTime = DateTime.parseDateTime(&quot;2012-12-21 23:22:45&quot;, format);  
+System.out.println(dateTime.toDate());
+//时间格式化，输出==&gt; 2012/12/21 23:22:45 Fri  
+String string_u = dateTime.toString(&quot;yyyy/MM/dd HH:mm:ss EE&quot;);  
+System.out.println(string_u);  
+//格式化带Locale，输出==&gt; 2012年12月21日 23:22:45 星期五  
+String string_c = dateTime.toString(&quot;yyyy年MM月dd日 HH:mm:ss EE&quot;,Locale.CHINESE);  
+System.out.println(string_c); 
+</code></pre><h2 id="VO-PO-BO-JO-POJO-DTO-QO-DAO概念"><a href="#VO-PO-BO-JO-POJO-DTO-QO-DAO概念" class="headerlink" title="VO,PO,BO,JO,POJO,DTO,QO,DAO概念"></a>VO,PO,BO,JO,POJO,DTO,QO,DAO概念</h2><h3 id="PO-persistant-object-持久对象"><a href="#PO-persistant-object-持久对象" class="headerlink" title="PO(persistant object) 持久对象"></a>PO(persistant object) 持久对象</h3><p>在 o/r 映射的时候出现的概念，如果没有 o/r 映射，没有这个概念存在了。通常对应数据模型 ( 数据库 ), 本身还有部分业务逻辑的处理。可以看成是与数据库中的表相映射的 java 对象。最简单的 PO 就是对应数据库中某个表中的一条记录，多个记录可以用 PO 的集合。 PO 中应该不包含任何对数据库的操作。</p>
+<h3 id="DO（Domain-Object）领域对象"><a href="#DO（Domain-Object）领域对象" class="headerlink" title="DO（Domain Object）领域对象"></a>DO（Domain Object）领域对象</h3><p>就是从现实世界中抽象出来的有形或无形的业务实体。一般和数据中的表结构对应。</p>
+<h3 id="TO-Transfer-Object-，数据传输对象"><a href="#TO-Transfer-Object-，数据传输对象" class="headerlink" title="TO(Transfer Object) ，数据传输对象"></a>TO(Transfer Object) ，数据传输对象</h3><p>在应用程序不同 tie( 关系 ) 之间传输的对象</p>
+<h3 id="DTO（Data-Transfer-Object）数据传输对象"><a href="#DTO（Data-Transfer-Object）数据传输对象" class="headerlink" title="DTO（Data Transfer Object）数据传输对象"></a>DTO（Data Transfer Object）数据传输对象</h3><p>这个概念来源于J2EE的设计模式，原来的目的是为了EJB的分布式应用提供粗粒度的数据实体，以减少分布式调用的次数，从而提高分布式调用的性能和降低网络负载，但在这里，我泛指用于展示层与服务层之间的数据传输对象。<br>比如我们一张表有100个字段，那么对应的PO就有100个属性。<br>但是我们界面上只要显示10个字段，<br>客户端用WEB service来获取数据，没有必要把整个PO对象传递到客户端，<br>这时我们就可以用只有这10个属性的DTO来传递结果到客户端，这样也不会暴露服务端表结构.到达客户端以后，如果用这个对象来对应界面显示，那此时它的身份就转为VO</p>
+<h3 id="VO-value-object-值对象-ViewObject-视图对象"><a href="#VO-value-object-值对象-ViewObject-视图对象" class="headerlink" title="VO(value object) 值对象(ViewObject)视图对象"></a>VO(value object) 值对象(ViewObject)视图对象</h3><p>视图对象，用于展示层，它的作用是把某个指定页面（或组件）的所有数据封装起来。</p>
+<h3 id="BO-business-object-业务对象"><a href="#BO-business-object-业务对象" class="headerlink" title="BO(business object) 业务对象"></a>BO(business object) 业务对象</h3><p>从业务模型的角度看 , 见 UML 元件领域模型中的领域对象。封装业务逻辑的 java 对象 , 通过调用 DAO 方法 , 结合 PO,VO 进行业务操作。 business object: 业务对象 主要作用是把业务逻辑封装为一个对象。这个对象可以包括一个或多个其它的对象。 比如一个简历，有教育经历、工作经历、社会关系等等。 我们可以把教育经历对应一个 PO ，工作经历对应一个 PO ，社会关系对应一个 PO 。 建立一个对应简历的 BO 对象处理简历，每个 BO 包含这些 PO 。 这样处理业务逻辑时，我们就可以针对 BO 去处理。</p>
+<h3 id="POJO-plain-ordinary-java-object-简单无规则-java-对象"><a href="#POJO-plain-ordinary-java-object-简单无规则-java-对象" class="headerlink" title="POJO(plain ordinary java object) 简单无规则 java 对象"></a>POJO(plain ordinary java object) 简单无规则 java 对象</h3><p>纯的传统意义的 java 对象。就是说在一些 Object/Relation Mapping 工具中，能够做到维护数据库表记录的 persisent object 完全是一个符合 Java Bean 规范的纯 Java 对象，没有增加别的属性和方法。我的理解就是最基本的 Java Bean ，只有属性字段及 setter 和 getter 方法！。</p>
+<p>DAO(data access object) 数据访问对象</p>
+<p>是一个 sun 的一个标准 j2ee 设计模式， 这个模式中有个接口就是 DAO ，它负持久层的操作。为业务层提供接口。此对象用于访问数据库。通常和 PO 结合使用， DAO 中包含了各种数据库的操作方法。通过它的方法 , 结合 PO 对数据库进行相关的操作。夹在业务逻辑与数据库资源中间。配合 VO, 提供数据库的 CRUD 操作</p>
+<h2 id="文件上传基础"><a href="#文件上传基础" class="headerlink" title="文件上传基础"></a>文件上传基础</h2><p>SpringMVC配置如下:</p>
+<pre><code>&lt;!-- 上传文件 --&gt;  
+&lt;bean id=&quot;multipartResolver&quot; class=&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;&gt;  
+    &lt;property name=&quot;defaultEncoding&quot; value=&quot;utf-8&quot;/&gt;  
+    &lt;!-- 最大内存大小 --&gt;  
+    &lt;property name=&quot;maxInMemorySize&quot; value=&quot;10240&quot;/&gt;  
+    &lt;!-- 最大文件大小，-1为不限制大小 --&gt;  
+    &lt;property name=&quot;maxUploadSize&quot; value=&quot;-1&quot;/&gt;  
+&lt;/bean&gt;
+</code></pre><p>Maven配置如下：</p>
+<pre><code>&lt;dependency&gt;  
+    &lt;groupId&gt;commons-fileupload&lt;/groupId&gt;  
+    &lt;artifactId&gt;commons-fileupload&lt;/artifactId&gt;  
+    &lt;version&gt;1.3.1&lt;/version&gt;  
+&lt;/dependency&gt;  
+&lt;dependency&gt;  
+    &lt;groupId&gt;commons-io&lt;/groupId&gt;  
+    &lt;artifactId&gt;commons-io&lt;/artifactId&gt;  
+    &lt;version&gt;2.4&lt;/version&gt;  
+&lt;/dependency&gt;
+</code></pre><p>图片上传核心代码如下</p>
+<pre><code>@RequestMapping(value=&quot;uploadImage&quot;, method=RequestMethod.POST)
+@ResponseBody
+private String findUpload(User user, @RequestParam(value=&quot;file&quot;, requires=false) MultipartFile file, HttpServletRequest request){
+    //获取物理路径WEB-APP的路径
+    String pathRoot = request.getSession().getServletContext().getRealPath(&quot;&quot;);
+    String Path = &quot;&quot;;
+    if(file!=null){
+        //生成UUID作为文件名称
+        String uuid = UUID.randomUUID.toString().replace(&quot;-&quot;, &quot;&quot;);
+        //获取文件类型
+        String contentType = file.getContentType();
+        //获取文件后缀名称
+        String imageName = contentType.subString(contentType.indexOf(&quot;/&quot;)+1);
+        path = &quot;/upload/&quot;+uuid+imageName;
+        file.transferTo(new File(pathRoot+path));
+    }
+    request.setAttribute(&quot;imagesPath&quot;, path);
+}
+</code></pre><p>若是多文件上传：</p>
+<pre><code>String pathRoot = request.getSession().getServletContext().getRealPath(&quot;&quot;);  
+String path=&quot;&quot;;  
+List&lt;String&gt; listImagePath=new ArrayList&lt;String&gt;();  
+    for (MultipartFile mf : file) {  
+        if(!mf.isEmpty()){  
+            //生成uuid作为文件名称  
+            String uuid = UUID.randomUUID().toString().replaceAll(&quot;-&quot;,&quot;&quot;);  
+            //获得文件类型（可以判断如果不是图片，禁止上传）  
+            String contentType=mf.getContentType();  
+            //获得文件后缀名称  
+            String imageName=contentType.substring(contentType.indexOf(&quot;/&quot;)+1);  
+            path=&quot;/static/images/&quot;+uuid+&quot;.&quot;+imageName;  
+            mf.transferTo(new File(pathRoot+path));  
+            listImagePath.add(path);  
+        }  
+    }  
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Spring AOP切面" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/11/Spring AOP切面/" class="article-date">
+      <time datetime="2017-10-11T02:14:00.000Z" itemprop="datePublished">2017-10-11</time>
+</a>
+
+ 
+    <a href="/2017/10/11/Spring AOP切面/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/11/Spring AOP切面/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/Spring AOP切面/">Spring AOP切面编程</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <a id="more"></a>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><h3 id="AOP术语"><a href="#AOP术语" class="headerlink" title="AOP术语"></a>AOP术语</h3><p>作用：保证各步骤之间的良好隔离性，保证源代码的无关性。<br>AOP处理具有横切性质的系统级服务，如事务管理、安全检查、缓存、对象池管理</p>
+<ul>
+<li>切面（Aspect）：业务流程运行的某个特定步骤，应用运行过程的关注点，通常称为横切关注点</li>
+<li>连接点（JoinPoint）：程序执行过程中明确的点，如方法的调用，异常的抛出<br>-增强处理（Advice）：AOP特点切入点执行的增强处理，如before、around等</li>
+<li>切入点（PointCut）：可以插入增强处理的连接点</li>
+</ul>
+<h3 id="Annotation方式的AOP"><a href="#Annotation方式的AOP" class="headerlink" title="Annotation方式的AOP"></a>Annotation方式的AOP</h3><p>首先保证XML配置文件有下面一句来启动AspectJ支持：</p>
+<pre><code>&lt;aop:aspectj-autoproxy/&gt;
+</code></pre><p>或者不在XML中配置，但要在配置文件中加上</p>
+<pre><code>&lt;bean class=&quot;org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator&quot;&gt;
+</code></pre><h4 id="Aspect"><a href="#Aspect" class="headerlink" title="Aspect"></a>Aspect</h4><p>使用@Aspect注解即可</p>
+<h4 id="增强处理"><a href="#增强处理" class="headerlink" title="增强处理"></a>增强处理</h4><h6 id="Before"><a href="#Before" class="headerlink" title="Before"></a>Before</h6><p>使用Before时需要指定Value值，表示切入点</p>
+<pre><code>@Aspect
+public class BeforeAdvice{
+    @Before(&quot;execution(* org.crazyint.app.service.impl.*.*(...))&quot;)
+    public void before(){...}
+}
+</code></pre><p>@Before会在程序执行前加入增强…一切都是在主程序无知条件下进行的</p>
+<h5 id="AfterReturning"><a href="#AfterReturning" class="headerlink" title="AfterReturning"></a>AfterReturning</h5><p>在目标方法正常完成后被加入,依然要指定value(PointCut),可以指定returning，可通过该形参访问目标方法返回值</p>
+<pre><code>@Aspect
+public class AfterReturningAdvice{
+    @AfterReturing(returning=&quot;rvt&quot;,pointcut=execution(org.crazyint.app.service.impl.*.*(...))&quot;)
+    public void log(Object rvt){
+        System.out.println(rvt);
+    }
+</code></pre><h5 id="AfterThrowing"><a href="#AfterThrowing" class="headerlink" title="AfterThrowing"></a>AfterThrowing</h5><p>用于处理程序中未处理的异常，也需要指定value，并需要指定throwing，用来访问目标方法所抛出的异常</p>
+<pre><code>@Aspect
+public class AfterThrowingAdvice{
+    @AfterThrowing(throwing=&quot;ex&quot;,pointcut=&quot;exectution(..)&quot;)
+    public void Throwing(Throwable ex){System.out.println(ex)}
+}
+</code></pre><h5 id="After"><a href="#After" class="headerlink" title="After"></a>After</h5><p>用于目标方法成功完成后加入，和Before相似，不叙述</p>
+<h5 id="Around"><a href="#Around" class="headerlink" title="Around"></a>Around</h5><p>功能十分强大，近似于Before和AfterThrowing，但是需要在线程安全的环境中使用，没有必要使用Around增强处理<br>使用Around时，需要将第一个参数定义为ProceedingJoinPoint，为JoinPoint的子类</p>
+<h4 id="访问目标方法参数"><a href="#访问目标方法参数" class="headerlink" title="访问目标方法参数"></a>访问目标方法参数</h4><p>访问目标方法需要将定义增强处理方法时将第一个参数定义为JoinPoint类型<br>，JointPoint有如下常用方法</p>
+<ul>
+<li>Object[] getArgs():返回执行目标方法时的参数</li>
+<li>Signature getSignature():返回被增强的方法的相关信息</li>
+<li>Object getTarget(): 返回被加入增强处理的目标对象</li>
+<li>Object getThis():返回AOP框架为目标对象生成的代理对象</li>
+</ul>
+<h4 id="定义切入点"><a href="#定义切入点" class="headerlink" title="定义切入点"></a>定义切入点</h4><pre><code>@Aspect 
+public class SystemArchitecture{
+    @PointCut(&quot;exectution(* org.crazyint.app.service.impl.Chain*.say(...))&quot;)
+    public void myPoint(){
+
+    }
+}
+</code></pre><p>引用切入点</p>
+<pre><code>@Aspect
+public class usePoint{
+    @before(pointcut=&quot;SystemArchitecture.myPoint()&quot;)
+    public void example(){...}
+}
+</code></pre><h4 id="切入点指示符"><a href="#切入点指示符" class="headerlink" title="切入点指示符"></a>切入点指示符</h4><ul>
+<li>execution    :匹配执行方法的连接点，用于表达式开头</li>
+<li>modifiers-pattern :指定方法修饰符，支持通配符，可以省略</li>
+<li>ret-type-pattern :指定方法返回值类型，可以用*表示</li>
+<li>declare-type-pattern :指定方法所属的类，可以省略</li>
+<li>name-pattern :指定匹配的方法名，用*匹配所有方法</li>
+<li>param-pattern ：指定方法声明的形参列表，支持两个通配符，*和…</li>
+<li>throws-pattern :指定方法抛出的异常</li>
+<li>within ：限定匹配类型的连接点</li>
+<li>this ：用于限定AOP代理必须是指定类型的实例，匹配对象所有连接点</li>
+<li>target ：限定目标对象必须是指定类型的实例，匹配对象所有的连接点</li>
+<li>args ：要求参数类型是指定类型的实例</li>
+<li>&amp;&amp; ：要求连接点同时匹配两个切入点表达式</li>
+<li>||：要求连接点匹配任意一个切入点表达式</li>
+<li>！：要求连接点不匹配指定切入点表达式</li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Mybatis-generator详细配置demo" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/08/Mybatis-generator详细配置demo/" class="article-date">
+      <time datetime="2017-10-08T02:14:00.000Z" itemprop="datePublished">2017-10-08</time>
+</a>
+
+ 
+    <a href="/2017/10/08/Mybatis-generator详细配置demo/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/08/Mybatis-generator详细配置demo/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/08/Mybatis-generator详细配置demo/">Mybatis-generator相关配置demo</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="generatorConfig-xml配置信息"><a href="#generatorConfig-xml配置信息" class="headerlink" title="generatorConfig.xml配置信息"></a>generatorConfig.xml配置信息</h2><p>首先在resource中配置好datasource.propertise文件,包括数据库信息和mysql-connector的jar包位置。</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE generatorConfiguration
+        PUBLIC &quot;-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN&quot;
+        &quot;http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd&quot;&gt;
+
+&lt;generatorConfiguration&gt;
+    &lt;!--导入属性配置--&gt;
+    &lt;properties resource=&quot;datasource.properties&quot;&gt;&lt;/properties&gt;
+
+    &lt;!--指定特定数据库的jdbc驱动jar包的位置--&gt;
+    &lt;classPathEntry location=&quot;${db.driverLocation}&quot;/&gt;
+
+    &lt;context id=&quot;default&quot; targetRuntime=&quot;MyBatis3&quot;&gt;
+
+        &lt;!-- optional，旨在创建class时，对注释进行控制 --&gt;
+        &lt;commentGenerator&gt;
+            &lt;property name=&quot;suppressDate&quot; value=&quot;true&quot;/&gt;
+            &lt;property name=&quot;suppressAllComments&quot; value=&quot;true&quot;/&gt;
+        &lt;/commentGenerator&gt;
+
+        &lt;!--jdbc的数据库连接 --&gt;
+        &lt;jdbcConnection
+                driverClass=&quot;${db.driverClassName}&quot;
+                connectionURL=&quot;${db.url}&quot;
+                userId=&quot;${db.username}&quot;
+                password=&quot;${db.password}&quot;&gt;
+        &lt;/jdbcConnection&gt;
+
+
+        &lt;!-- 非必需，类型处理器，在数据库类型和java类型之间的转换控制--&gt;
+        &lt;javaTypeResolver&gt;
+            &lt;property name=&quot;forceBigDecimals&quot; value=&quot;false&quot;/&gt;
+        &lt;/javaTypeResolver&gt;
+
+
+        &lt;!-- Model模型生成器,用来生成含有主键key的类，记录类 以及查询Example类
+            targetPackage     指定生成的model生成所在的包名
+            targetProject     指定在该项目下所在的路径
+        --&gt;
+        &lt;!--&lt;javaModelGenerator targetPackage=&quot;com.huihui.pojo&quot; targetProject=&quot;.\src\main\java&quot;&gt;--&gt;
+        &lt;javaModelGenerator targetPackage=&quot;com.huihui.pojo&quot; targetProject=&quot;./src/main/java&quot;&gt;
+            &lt;!-- 是否允许子包，即targetPackage.schemaName.tableName --&gt;
+            &lt;property name=&quot;enableSubPackages&quot; value=&quot;false&quot;/&gt;
+            &lt;!-- 是否对model添加 构造函数 --&gt;
+            &lt;property name=&quot;constructorBased&quot; value=&quot;true&quot;/&gt;
+            &lt;!-- 是否对类CHAR类型的列的数据进行trim操作 --&gt;
+            &lt;property name=&quot;trimStrings&quot; value=&quot;true&quot;/&gt;
+            &lt;!-- 建立的Model对象是否 不可改变  即生成的Model对象不会有 setter方法，只有构造方法 --&gt;
+            &lt;property name=&quot;immutable&quot; value=&quot;false&quot;/&gt;
+        &lt;/javaModelGenerator&gt;
+
+        &lt;!--mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 --&gt;
+        &lt;!--&lt;sqlMapGenerator targetPackage=&quot;mappers&quot; targetProject=&quot;.\src\main\resources&quot;&gt;--&gt;
+        &lt;sqlMapGenerator targetPackage=&quot;mappers&quot; targetProject=&quot;./src/main/resources&quot;&gt;
+            &lt;property name=&quot;enableSubPackages&quot; value=&quot;false&quot;/&gt;
+        &lt;/sqlMapGenerator&gt;
+
+        &lt;!-- 客户端代码，生成易于使用的针对Model对象和XML配置文件 的代码
+                type=&quot;ANNOTATEDMAPPER&quot;,生成Java Model 和基于注解的Mapper对象
+                type=&quot;MIXEDMAPPER&quot;,生成基于注解的Java Model 和相应的Mapper对象
+                type=&quot;XMLMAPPER&quot;,生成SQLMap XML文件和独立的Mapper接口
+        --&gt;
+
+        &lt;!-- targetPackage：mapper接口dao生成的位置 --&gt;
+        &lt;!--&lt;javaClientGenerator type=&quot;XMLMAPPER&quot; targetPackage=&quot;com.mmall.dao&quot; targetProject=&quot;.\src\main\java&quot;&gt;--&gt;
+        &lt;javaClientGenerator type=&quot;XMLMAPPER&quot; targetPackage=&quot;com.mmall.dao&quot; targetProject=&quot;./src/main/java&quot;&gt;
+            &lt;!-- enableSubPackages:是否让schema作为包的后缀 --&gt;
+            &lt;property name=&quot;enableSubPackages&quot; value=&quot;false&quot; /&gt;
+        &lt;/javaClientGenerator&gt;
+
+        &lt;!--配置数据库表相关信息，注意一定要和原表名相同--&gt;
+        &lt;table tableName=&quot;shipping&quot; domainObjectName=&quot;Shipping&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;cart&quot; domainObjectName=&quot;Cart&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;cart_item&quot; domainObjectName=&quot;CartItem&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;category&quot; domainObjectName=&quot;Category&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;order&quot; domainObjectName=&quot;Order&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;order_item&quot; domainObjectName=&quot;OrderItem&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;pay_info&quot; domainObjectName=&quot;PayInfo&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;product&quot; domainObjectName=&quot;Product&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;
+            &lt;columnOverride column=&quot;detail&quot; jdbcType=&quot;VARCHAR&quot; /&gt;
+            &lt;columnOverride column=&quot;sub_images&quot; jdbcType=&quot;VARCHAR&quot; /&gt;
+        &lt;/table&gt;
+        &lt;table tableName=&quot;user&quot; domainObjectName=&quot;User&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+
+
+        &lt;!-- geelynote mybatis插件的搭建 --&gt;
+    &lt;/context&gt;
+&lt;/generatorConfiguration&gt;
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-CentOS下nginx的安装配置" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/06/CentOS下nginx的安装配置/" class="article-date">
+      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+
+ 
+    <a href="/2017/10/06/CentOS下nginx的安装配置/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下nginx的安装配置/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Nginx是一款轻量级Web服务器，也是反向代理服务器</p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ul>
+<li>直接支持Rails和PHP的程序</li>
+<li>作为Http反向代理服务器</li>
+<li>作为负载均衡服务器</li>
+<li>作为邮件代理服务器</li>
+<li>帮助实现前端动静分离</li>
+</ul>
+<h2 id="安装Nginx依赖"><a href="#安装Nginx依赖" class="headerlink" title="安装Nginx依赖"></a>安装Nginx依赖</h2><p>1、安装cc</p>
+<pre><code># 输入gcc -v查询版本信息，看系统是否自带安装
+yum install gcc
+</code></pre><p>2、安装pcre</p>
+<pre><code>yum install pcre-devel
+</code></pre><p>3、安装zlib</p>
+<pre><code>yum install zlib zlib-devel    
+</code></pre><p>4、选择安装openssl</p>
+<pre><code>yum install openssl openssl-devel
+</code></pre><p>5、一键综合安装</p>
+<pre><code>yum -y install gcc zlib zlib-devel pcre-devel openssl openssl-devel
+</code></pre><h2 id="下载源码包解压缩"><a href="#下载源码包解压缩" class="headerlink" title="下载源码包解压缩"></a>下载源码包解压缩</h2><p><a href="http://www/nginx.org/" target="_blank" rel="external">http://www/nginx.org/</a></p>
+<pre><code>tar -zxvf nginx-*.tar.gz
+</code></pre><h2 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a>nginx安装</h2><p>进入nginx目录执行./configure</p>
+<ul>
+<li>也可以制定安装目录，增加参数–prefix=/usr/nginx</li>
+<li>如果不指定路径，也可以通过whereis nginx进行查询</li>
+<li>默认安装在/usr/local/nginx</li>
+</ul>
+<p>继续执行make，续集执行make install</p>
+<h2 id="nginx常用命令"><a href="#nginx常用命令" class="headerlink" title="nginx常用命令"></a>nginx常用命令</h2><p>测试配置文件</p>
+<pre><code>安装路径下的/nginx/sbin/nginx -t
+</code></pre><p>启动命令</p>
+<pre><code>安装路径下的/nginx/sbin/nginx
+</code></pre><p>停止命令</p>
+<pre><code>安装路径下的/nginx/sbin/nginx -s stop
+或者是 nginx -s quit
+</code></pre><p>重启命令</p>
+<pre><code>安装路径下的/nginx/sbin/nginx -s reload
+</code></pre><p>查看进程命令</p>
+<pre><code>ps -ef | grep nginx
+</code></pre><p>平滑重启</p>
+<pre><code>kill -HUP 【nginx主进程号(即查看进程命令查到的PID)】
+</code></pre><h2 id="增加防火墙访问权限"><a href="#增加防火墙访问权限" class="headerlink" title="增加防火墙访问权限"></a>增加防火墙访问权限</h2><p>1、sudo vim /etc.sysconfig/iptables-config<br>2、- A INPUT -p tcp -m state –state NEW<br>   -m tcp –dport 80 -j ACCEPT<br>3、重启防火墙</p>
+<h2 id="虚拟域名配置测试验证"><a href="#虚拟域名配置测试验证" class="headerlink" title="虚拟域名配置测试验证"></a>虚拟域名配置测试验证</h2><p>1、编辑sudo vim /usr/local/nginx/conf/nginx.conf<br>增加include vhost/*.conf<br>2、在/usr/local/nginx/conf目录创建vhost文件夹<br>3、配置<br>sudo vim /etc/hosts所对应的域名.conf<br>如：sudo vim /usr/local/nginx/conf/vhost www.huihui.com.conf<br>将如下配置写入到该文件下</p>
+<pre><code>server {
+     listen 80;
+     autoindex on;
+     server_name www.huihui.com;
+     access_log /usr/local/nginx/logs/access.log combined; 
+     index index.html index.htm index.jsp index.php; 
+     #error_page 404 /404.html;
+     if ( $query_string ~* &quot;.*[\;&apos;\&lt;\&gt;].*&quot; )
+            { 
+                    return 404;
+            }
+     location / {
+            proxy_pass http://172.0.0.1:8080;
+            add_header Access-Control-Allow-Origin *;
+            }
+ }
+</code></pre><p>4、重启验证<br>启动${nginx}/sbin/nginx<br>重启${nginx}/sbin/nginx -s reload,如sudo ./nginx -s reload<br>${nginx}为安装在系统中的路径，如/usr/local/nginx<br>5、访问验证<br>使用默认80端口访问验证<a href="http://localhost:80" target="_blank" rel="external">http://localhost:80</a></p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>可以配置域名转发，但是请一定要配置host，并且host生效之后才可以，设置完成后腰重启浏览器<br>1、linux<br>sudo vim /etc/hosts<br>添加好对应的域名及ip<br>保存退出</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-CentOS下安装配置mysql" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/06/CentOS下安装配置mysql/" class="article-date">
+      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+
+ 
+    <a href="/2017/10/06/CentOS下安装配置mysql/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下安装配置mysql/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
+    </div>
+
       
       <div class="clearfix"></div>
     </div>
@@ -324,13 +1472,17 @@
 
   
   
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
+  
 </div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">
             <div class="footer-left">
                 <i class="fa fa-copyright"></i> 
-                2016-2017 John Doe
+                2016-2017 huiHui
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
@@ -378,7 +1530,48 @@
     </script>
 
 
+    
 
+    
+        <script id="dsq-count-scr" src="//.disqus.com/count.js" async></script>
+        <script>
+            if ($(".left-col").is(":visible")) {
+                var $disqusCount = $(".disqus-comment-count");
+                $disqusCount.bind("DOMNodeInserted", function(e) {
+                    var num = $(this).text().replace(/[^0-9]/ig,"");
+                    if (num > 0) {
+                        $(this).siblings(".count-comment").text(num);
+                    }
+                    $(this).remove();
+                })
+            } else {
+                $(".disqus-comment-count").remove();
+            }
+        </script>
+     
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
 <div class="scroll" id="scroll">

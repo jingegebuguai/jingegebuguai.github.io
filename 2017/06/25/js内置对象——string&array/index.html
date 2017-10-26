@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="huiHui" />
+
+
+
+<meta name="description" content="JavaScript有一些常见的内置对象，如String，Array，Boolean，Date，Regexp，Object，Number，Function等。这些内置对象看起来简单，实际关系异常复杂。这些内置对象从表现形式来说很像其他语言中的类型（type）或者类（class），比如Java中的String 类。有时候说js是比java更加面向对象的语言，一点不为过。 String对象String">
+<meta name="keywords" content="JS学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Js内置对象进阶（一）——String&amp;Array">
+<meta property="og:url" content="http://huihui.kim/2017/06/25/js内置对象——string&array/index.html">
+<meta property="og:site_name" content="huiHui&#39;s blogs">
+<meta property="og:description" content="JavaScript有一些常见的内置对象，如String，Array，Boolean，Date，Regexp，Object，Number，Function等。这些内置对象看起来简单，实际关系异常复杂。这些内置对象从表现形式来说很像其他语言中的类型（type）或者类（class），比如Java中的String 类。有时候说js是比java更加面向对象的语言，一点不为过。 String对象String">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-06-26T07:29:00.980Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Js内置对象进阶（一）——String&amp;Array">
+<meta name="twitter:description" content="JavaScript有一些常见的内置对象，如String，Array，Boolean，Date，Regexp，Object，Number，Function等。这些内置对象看起来简单，实际关系异常复杂。这些内置对象从表现形式来说很像其他语言中的类型（type）或者类（class），比如Java中的String 类。有时候说js是比java更加面向对象的语言，一点不为过。 String对象String">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="huiHui&#39;s blogs" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Js内置对象进阶（一）——String&amp;Array | huiHui&#39;s blogs</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">huiHui</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于前端</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">huiHui</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">huiHui</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" target="_blank" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-js内置对象——string&amp;array" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/06/25/js内置对象——string&array/" class="article-date">
+      <time datetime="2017-06-25T14:30:00.000Z" itemprop="datePublished">2017-06-25</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Js内置对象进阶（一）——String&amp;Array
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/未闻花名/">未闻花名</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>JavaScript有一些常见的内置对象，如String，Array，Boolean，Date，Regexp，Object，Number，Function等。这些内置对象看起来简单，实际关系异常复杂。<br>这些内置对象从表现形式来说很像其他语言中的类型（type）或者类（class），比如Java中的String 类。有时候说js是比java更加面向对象的语言，一点不为过。</p>
+<h2 id="String对象"><a href="#String对象" class="headerlink" title="String对象"></a>String对象</h2><p>String对象是JavaScript原生提供的三个包装对象之一，用来生成字符串的包装对象实例。<br>平时我们经常使用的String对象属性方法有：</p>
+<ul>
+<li>length属性：返回字符串长度</li>
+<li>concat：用来连接两个字符串</li>
+<li>substr和slice：用来截取字符串，不过截取方式不同</li>
+<li>indexOf：确定一个字符串在另一个字符串中的位置</li>
+<li>trim：用于去除字符串两端的空格</li>
+<li>toLowerCase 和 toUpperCase ：改变字符串大小写</li>
+<li>repalce：用于替换匹配的子字符串，一般情况下只替换第一个匹配</li>
+<li>split：分割字符串，返回一个由分割出来的各部分组成的新数组。</li>
+</ul>
+<p>下面分析一段代码</p>
+<pre><code>var str1 = &apos;a test string&apos;
+var str2 = new String(&apos;a test string&apos;)
+str1.length                    //13
+str1.indexOf(&apos;t&apos;)              //2
+console.log(typeof str1)       //string
+console.log(typeof str2)       //object
+str1 instanceof String         //false
+str2 instanceof String         //true
+</code></pre><p>原始值str1 并不是一个对象，它只是一个字面量，并且是一个不可变的值。如果要在这个字面量上执行一些操作，比如获取长度、访问其中某个字符等，那需要将其转换为String 对象。在必要时语言会自动把字符串字面量转换成一个 String 对象，也就是说你并不需要 显式创建一个对象。<br>以上的内容用下面这段代码解释再好不过。</p>
+<pre><code>String instanceof Object
+new String(&apos;foo&apos;) instanceof String; // true
+new String(&apos;foo&apos;) instanceof Object; // true
+
+&apos;foo&apos; instanceof String; // false
+&apos;foo&apos; instanceof Object; // false
+</code></pre><h3 id="String对象调用Array对象方法"><a href="#String对象调用Array对象方法" class="headerlink" title="String对象调用Array对象方法"></a>String对象调用Array对象方法</h3><p>许多数组函数用来处理字符串很方便。虽然字符串没有这些函数，但可以通过“借用”数组的非变更方法来处理字符串：</p>
+<pre><code>var a = &apos;feiyan&apos;
+a.join; // undefined
+a.map; // undefined
+var c = Array.prototype.join.call( a, &quot;-&quot; );
+var d = Array.prototype.map.call( a, function(v){
+    return v.toUpperCase() + &quot;.&quot;;
+    } ).join( &quot;&quot; );
+c;            //f-e-i-y-a-n
+d;            //F.E.I.Y.A.N.
+</code></pre><p>其中的join方法和map方法都是数组对象的方法，这里字符串对象可以通过原型调用先把字符串对象转化为数字对象，然后再通过join方法变为字符串。而很多时候我们可以用[]代替Array.prototype:</p>
+<pre><code>Array.prototype === [].__proto__   //true
+</code></pre><p>在许多方面，字符串表现的好像字符数组，许多Javascript array相关方法也可以使用在String类型上，但是并不是所有的方法都可以。看下面示例：</p>
+<pre><code>var name = &apos;feiyan&apos;
+a = [].push.call(name, &apos;is a lovely girl&apos;)
+</code></pre><p>报错：提示Javascript中字符串是只读的，因此任何方法想改变字符串都将失败，因此可以排除掉数组的push、pop、shift、unshift、splice、reverse方法。如果真要实现这个功能，这样这么做：</p>
+<pre><code>var name = &apos;feiyan&apos;
+name.concat(&apos; is a lovely girl&apos;).split()
+</code></pre><p>其他一些不改变原字符串的方法（如一些遍历方法）可以随意使用：</p>
+<pre><code>var str1 = &apos;a lovely girl&apos;
+var a = [].forEach.call(str1,function(ele,index,arr){
+    console.log(ele)
+    })
+</code></pre><h3 id="ES6常用字符串特性"><a href="#ES6常用字符串特性" class="headerlink" title="ES6常用字符串特性"></a>ES6常用字符串特性</h3><p>ES6为字符串添加了遍历器接口，使得字符串可以被for…of循环遍历。</p>
+<pre><code>for(var i of &apos;string&apos;){
+    console.log(i)
+}
+</code></pre><p>ES6引入了一种新型的字符串字面量语法，我们称之为模板字符串（template strings）。除了使用反撇号字符 ` 代替普通字符串的引号 ‘ 或 “ 外，它们看起来与普通字符串并无二致。在最简单的情况下，它们与普通字符串的表现一致。<br>现在，我们看到了一个比 + 运算符更优雅的语法，下面是一些你期待的特性：</p>
+<ul>
+<li>模板占位符可以是任何 JavaScript 表达式，所以函数调用和四则运算等都是合法的。（甚至你还可以在一个模板字符串中嵌套另一个模板字符串。）</li>
+<li>如果一个值不是字符串，它将被转换为字符串。例如，如果 action 是一个对象，那么该对象的 .toString() 将被调用，来将其转换为字符串。</li>
+<li>如果你想在模板字符串中使用反引号，你需要使用反斜杠 \ 将其转义。</li>
+<li>同样地，如果想在模板字符串中输出 \${，也需要使用反斜杠将其转义：\${ 或 ${。</li>
+<li>模板字符串可以跨越多行：</li>
+</ul>
+<pre><code>$(&quot;#warning&quot;).html(`
+      &lt;h1&gt;Warning Title!&lt;/h1&gt;
+      &lt;p&gt;This is some information,it is ${warning}&lt;/p&gt;
+`);
+</code></pre><h2 id="Array对象"><a href="#Array对象" class="headerlink" title="Array对象"></a>Array对象</h2><p>Array是JavaScript的内置对象，同时也是一个构造函数，可以用它生成新的数组。<br>作为构造函数时，Array可以接受参数，但是不同的参数，会使得Array产生不同的行为。<br>数组对象的常用方法如下：</p>
+<ul>
+<li>isArray：判断一个值是否为数组</li>
+<li>toString：返回数组的字符串形式</li>
+<li>push方法，pop方法：push方法用于在数组的末端添加一个或多个元素，并返回添加后的数组的长度，pop方法用于删除数组的最后一个元素，并返回该元素</li>
+<li>join：以参数作为分隔符，将所有数组成员组成一个字符串返回</li>
+<li>concat：将新数组的成员，添加到原数组的尾部，然后返回一个新数组，常用于连接多个数组</li>
+<li>shift方法，unshift方法： shift方法用于删除数组的第一个元素，并返回该元素，unshift方法用于在数组的第一个位置添加元素，并返回添加新元素后的数组长度</li>
+<li>reverse：用于颠倒数组中元素的顺序</li>
+<li>slice返回指定位置的数组成员组成的新数组，原数组不变。它的第一个参数为起始位置（从0开始），第二个参数为终止位置（但该位置的元素本身不包括在内）。如果省略第二个参数，则一直返回到原数组的最后一个成员</li>
+<li>sort：对数组元素进行排序，默认是按照字典顺序排序</li>
+<li>map：对数组的所有成员依次调用一个函数，根据函数结果返回一个新数组</li>
+<li>forEach：遍历数组的所有成员</li>
+<li>filter：依次对所有数组成员调用一个测试函数</li>
+<li>indexOf：返回给定元素在数组中第一次出现的位置，如果没有出现则返回-1</li>
+</ul>
+<h3 id="Array-from"><a href="#Array-from" class="headerlink" title="Array.from"></a>Array.from</h3><p>有时需要将类数组（一组通过数字索引的值）转换为真正的数组，这一般通过数组工具函数（如indexOf(..)、concat(..)、forEach(..) 等）来实现。类数组如下：<br>例如，一些DOM 查询操作会返回DOM 元素列表，它们并非真正意义上的数组，但十分<br>类似。另一个例子是通过arguments 对象（类数组）将函数的参数当作列表来访问（从<br>ES6 开始已废止）。</p>
+<pre><code>function foo() {
+    var arr = Array.prototype.slice.call( arguments );
+    arr.push( &quot;bam&quot; );
+    console.log( arr );
+}
+foo( &quot;bar&quot;, &quot;baz&quot; ); // [&quot;bar&quot;,&quot;baz&quot;,&quot;bam&quot;]
+</code></pre><p>如上所示，slice() 返回参数列表（上例中是一个类数组）的一个数组复本。<br>用ES6 中的内置工具函数Array.from(..) 也能实现同样的功能：</p>
+<pre><code>function f() {
+      return Array.from(arguments);
+}
+</code></pre><p>Array.from() 方法从一个类似数组或可迭代的对象中创建一个新的数组实例。</p>
+<pre><code>Array.from(&apos;foo&apos;); 
+// [&quot;f&quot;, &quot;o&quot;, &quot;o&quot;]
+</code></pre><p>Array.from方法还支持类似数组的对象。所谓类似数组的对象，本质特征只有一点，即必须有length属性。因此，任何有length属性的对象，都可以通过Array.from方法转为数组，而此时扩展运算符就无法转换。</p>
+<pre><code>Array.from({ length: 3 });
+// [ undefined, undefined, undefined ]
+</code></pre><p>Array.from还可以接受第二个参数，作用类似于数组的map方法，用来对每个元素进行处理，将处理后的值放入返回的数组。</p>
+<pre><code>Array.from([1, 2, 3], (x) =&gt; x * x)
+// [1, 4, 9]
+Array.from([1,2,3].map((x) =&gt; x * x))
+// [1, 4, 9]
+</code></pre><h3 id="find方法"><a href="#find方法" class="headerlink" title="find方法"></a>find方法</h3><p>数组实例的find方法，用于找出第一个符合条件的数组成员。它的参数是一个回调函数，所有数组成员依次执行该回调函数，直到找出第一个返回值为true的成员，然后返回该成员。如果没有符合条件的成员，则返回undefined。</p>
+<pre><code>[1, 5, 10, 15].find(function(value, index, arr) {
+      return value &gt; 9;
+}) // 10
+</code></pre><p>数组实例的findIndex方法的用法与find方法非常类似，返回第一个符合条件的数组成员的位置，如果所有成员都不符合条件，则返回-1。</p>
+<h3 id="fill方法"><a href="#fill方法" class="headerlink" title="fill方法"></a>fill方法</h3><p>fill方法使用给定值，填充一个数组。fill方法还可以接受第二个和第三个参数，用于指定填充的起始位置和结束位置。</p>
+<pre><code>[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;].fill(7)
+// [7, 7, 7]
+new Array(3).fill(7)
+// [7, 7, 7]
+[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;].fill(7, 1, 2)
+// [&apos;a&apos;, 7, &apos;c&apos;]
+</code></pre><h3 id="includes方法"><a href="#includes方法" class="headerlink" title="includes方法"></a>includes方法</h3><p>includes方法返回一个布尔值，表示某个数组是否包含给定的值，与字符串的includes方法类似</p>
+<h3 id="空位的处理"><a href="#空位的处理" class="headerlink" title="空位的处理"></a>空位的处理</h3><p>数组的空位指，数组的某一个位置没有任何值。比如，Array构造函数返回的数组都是空位。<br>ES5 对空位的处理，大多数情况下会忽略空位。</p>
+<ul>
+<li>forEach(), filter(), every() 和some()都会跳过空位。</li>
+<li>map()会跳过空位，但会保留这个值</li>
+<li>join()和toString()会将空位视为undefined，而undefined和null会被处理成空字符串。</li>
+</ul>
+<pre><code>// forEach方法
+[,&apos;a&apos;].forEach((x,i) =&gt; console.log(i)); // 1
+
+// filter方法
+[&apos;a&apos;,,&apos;b&apos;].filter(x =&gt; true) // [&apos;a&apos;,&apos;b&apos;]
+
+// every方法
+[,&apos;a&apos;].every(x =&gt; x===&apos;a&apos;) // true
+
+// some方法
+[,&apos;a&apos;].some(x =&gt; x !== &apos;a&apos;) // false
+
+// map方法
+[,&apos;a&apos;].map(x =&gt; 1) // [,1]
+
+// join方法
+[,&apos;a&apos;,undefined,null].join(&apos;#&apos;) // &quot;#a##&quot;
+
+// toString方法
+[,&apos;a&apos;,undefined,null].toString() // &quot;,a,,&quot;
+</code></pre><p>ES6 则是明确将空位转为undefined。Array.from方法会将数组的空位，转为undefined，也就是说，这个方法不会忽略空位。for…of循环也会遍历空位。</p>
+<pre><code>Array.from([&apos;a&apos;,,&apos;b&apos;])
+// [ &quot;a&quot;, undefined, &quot;b&quot; ]
+let arr = [, ,];
+for (let i of arr) {
+  console.log(1);
+}
+// 1
+// 1
+</code></pre><p>数组arr有两个空位，for…of并没有忽略它们。如果改成map方法遍历，空位是会跳过的。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/06/25/js内置对象——string&array/">Js内置对象进阶（一）——String&amp;Array</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">huiHui</a></p>
+        <p><span>发布时间:</span>2017-06-25, 22:30:00</p>
+        <p><span>最后更新:</span>2017-06-26, 15:29:00</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/06/25/js内置对象——string&array/" title="Js内置对象进阶（一）——String&amp;Array">http://huihui.kim/2017/06/25/js内置对象——string&amp;array/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/06/25/js内置对象——string&amp;array/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/07/01/CSS预处理器比较/">
+                    有关CSS预处理器的比较选择(Sass&amp;Less&amp;Stylus)
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">
+                    Vue仿饿了么知识点总结
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#String对象"><span class="toc-number">1.</span> <span class="toc-text">String对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#String对象调用Array对象方法"><span class="toc-number">1.1.</span> <span class="toc-text">String对象调用Array对象方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ES6常用字符串特性"><span class="toc-number">1.2.</span> <span class="toc-text">ES6常用字符串特性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Array对象"><span class="toc-number">2.</span> <span class="toc-text">Array对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Array-from"><span class="toc-number">2.1.</span> <span class="toc-text">Array.from</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#find方法"><span class="toc-number">2.2.</span> <span class="toc-text">find方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fill方法"><span class="toc-number">2.3.</span> <span class="toc-text">fill方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#includes方法"><span class="toc-number">2.4.</span> <span class="toc-text">includes方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#空位的处理"><span class="toc-number">2.5.</span> <span class="toc-text">空位的处理</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Js内置对象进阶（一）——String&Array　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://huihui.kim/2017/06/25/js内置对象——string&amp;array/';
+            this.page.identifier = '2017/06/25/js内置对象——string&amp;array/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/07/01/CSS预处理器比较/" title="上一篇: 有关CSS预处理器的比较选择(Sass&amp;Less&amp;Stylus)">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/" title="下一篇: Vue仿饿了么知识点总结">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/走近Java并发—ThreadLocal/">认识Java并发艺术——ThreadLocal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/24/走近Java并发—Lock/">Java并发——Lock</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Django前端页面相关处理/">Django html相关配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Spring基于注解的配置/">Spring基于注解的配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/SSM项目知识点总结/">SSM小项目知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Spring AOP切面/">Spring AOP切面编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Mybatis-generator详细配置demo/">Mybatis-generator相关配置demo</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/LintCode题解（二）/">LintCode题解（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/01/LintCode题解（七）/">LintCode题解（七）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（一）/">LintCode题解（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/springMVC基础/">SpringMVC中@RequestMapping等基础知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/走近Java并发/">认识Java并发艺术——基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java数据库与事务处理机制/">java数据库处理与事务机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/Spring属性配置细节/">Spring Bean配置细节</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/LintCode题解（四）/">LintCode题解（四）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/LintCode题解（三）/">LintCode题解（三）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/31/Java容器/">Java容器(集合)，持有对象总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/27/servlet实现网页重定向/">Servlet实现网页重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/servlet实现文件上传下载/">Servlet文件上传下载类</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/CSS预处理器比较/">有关CSS预处理器的比较选择(Sass&Less&Stylus)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/js内置对象——string&array/">Js内置对象进阶（一）——String&Array</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">Vue仿饿了么知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/web开发者必备http知识/">Web开发者必备Http基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/python中pip install中utf-8错误的解决方法/">pip install中utf-8编码问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/我们仍未知道那天所看见的list/">我们仍未知道那些天所看见的list</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/01/jquery实现樱花坠落插件/">jquery实现web页面樱花坠落的特效</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/16/Angular2.0开发/">Angular2.0仿今日头条应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/24/后端学习angular--组件篇/">后端学angular2.0的痛苦历程--组件篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的mysql数据库优化操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/python进阶学习--参数/">python进阶学习--*arg、**kw和装饰器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/mysql自连接/">mysql自连接与join关联</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/10/用IIFE与let方法改写循环闭包/">用IIFE与let命令改写循环闭包</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/19/WEB-CSS布局/">WEB前端--CSS布局必备知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/16/JS回调函数/">JS回调函数详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/Hexo&Gituhub博客搭建/">Hexo&Github博客搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/smarty模板引擎/">smarty模板引擎</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 huiHui
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

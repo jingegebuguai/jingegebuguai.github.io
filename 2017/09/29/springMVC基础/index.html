@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="huiHui" />
+
+
+
+<meta name="description" content="Spring MVC使用@RequestMApping注解为控制器指定可以处理哪些URL请求在控制器的类定义及方法定义处都可标注@RequestMapping  类定义处：提供初步的请求映射信息。相对于WEB应用的根目录 方法处：提供进一步的细分映射信息，相对于类定义处的URL。若类定义处标注@RequestMapping,则方法处标记的URL相对于WEB应用的根目录  DispatcherSer">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC中@RequestMapping等基础知识">
+<meta property="og:url" content="http://huihui.kim/2017/09/29/springMVC基础/index.html">
+<meta property="og:site_name" content="huiHui&#39;s blogs">
+<meta property="og:description" content="Spring MVC使用@RequestMApping注解为控制器指定可以处理哪些URL请求在控制器的类定义及方法定义处都可标注@RequestMapping  类定义处：提供初步的请求映射信息。相对于WEB应用的根目录 方法处：提供进一步的细分映射信息，相对于类定义处的URL。若类定义处标注@RequestMapping,则方法处标记的URL相对于WEB应用的根目录  DispatcherSer">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-26T13:46:15.313Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC中@RequestMapping等基础知识">
+<meta name="twitter:description" content="Spring MVC使用@RequestMApping注解为控制器指定可以处理哪些URL请求在控制器的类定义及方法定义处都可标注@RequestMapping  类定义处：提供初步的请求映射信息。相对于WEB应用的根目录 方法处：提供进一步的细分映射信息，相对于类定义处的URL。若类定义处标注@RequestMapping,则方法处标记的URL相对于WEB应用的根目录  DispatcherSer">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="huiHui&#39;s blogs" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>SpringMVC中@RequestMapping等基础知识 | huiHui&#39;s blogs</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">huiHui</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于前端</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">huiHui</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">huiHui</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" target="_blank" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-springMVC基础" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/29/springMVC基础/" class="article-date">
+      <time datetime="2017-09-29T12:00:00.000Z" itemprop="datePublished">2017-09-29</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SpringMVC中@RequestMapping等基础知识
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>Spring MVC使用@RequestMApping注解为控制器指定可以处理哪些URL请求<br>在控制器的类定义及方法定义处都可标注<br>@RequestMapping</p>
+<ul>
+<li>类定义处：提供初步的请求映射信息。相对于WEB应用的根目录</li>
+<li>方法处：提供进一步的细分映射信息，相对于类定义处的URL。若类定义处标注@RequestMapping,则方法处标记的URL相对于WEB应用的根目录</li>
+</ul>
+<p>DispatcherServlet截获请求后，就通过控制器上@RequestMapping提供的映射信息确定请求所对应的处理方法。</p>
+<h3 id="请求参数，方法，请求头"><a href="#请求参数，方法，请求头" class="headerlink" title="请求参数，方法，请求头"></a>请求参数，方法，请求头</h3><p>@RequestMapping除了可以使用请求URL映射请求外…<br>@RequestMapping的value，method，params及heads分别表示请求url，请求方法，请求参数和请求头的映射条件，他们之间是与的关系，联合使用可以更加精确化。</p>
+<h4 id="params和heads"><a href="#params和heads" class="headerlink" title="params和heads"></a>params和heads</h4><ul>
+<li>param1：表示请求必须包含名为params1的请求参数</li>
+<li>!param1：表示请求不能包含名为param1的请求参数</li>
+<li>param1!=value1:表示请求包含名为param1的请求参数，但其值不能为value1</li>
+<li><p>{“param1=value1”, “param2”}:请求必须包含名为param1和param2的两个请求参数，且param1的参数的值必须为value1</p>
+<p>  @RequestMapping(value = “method”, method = RequestMethod.POST)<br>  public String method(){</p>
+<pre><code>System.out.println(&quot;method_POST&quot;);
+return SUCCESS;
+</code></pre><p>  }</p>
+</li>
+</ul>
+<h3 id="Ant风格资源地址通配符"><a href="#Ant风格资源地址通配符" class="headerlink" title="Ant风格资源地址通配符"></a>Ant风格资源地址通配符</h3><ul>
+<li>？：匹配文件名中的一个字符</li>
+<li>*：匹配文件名中的任意字符</li>
+<li><strong>:</strong>：匹配多层路径</li>
+</ul>
+<p>Ant风格的URL</p>
+<ul>
+<li>/user/*/createUser：匹配/user/aaa/createUser、/user/bbb/createUser等URL</li>
+<li>/user/**/createUser:匹配/user/createUser、/user/aaa/bbb/createUser等URL</li>
+<li>/user/createUser??:匹配/user/createUseraa、/user/createUserbb等URL</li>
+</ul>
+<h3 id="PathVariable映射URL绑定的占位符"><a href="#PathVariable映射URL绑定的占位符" class="headerlink" title="@PathVariable映射URL绑定的占位符"></a>@PathVariable映射URL绑定的占位符</h3><p>带占位符的URL是spring3.0新增的功能，该功能在SpringMVC向REST目标挺进发展过程中具有里程碑的意义<br>通过@PathVariable可以将URL中占位符参数绑定到控制器处理方法的入参中：URL的{XXX}占位符可以通过@PathVariable(“XXX”)绑定到操作方法的入参中</p>
+<p>示例代码如下</p>
+<pre><code>@RequestMapping(value=&quot;/variable/{id}&quot;)
+public String testVariable(@PathVariable(&quot;id&quot;) Integer id){
+    System.out.println(&quot;PathVariable:&quot;+id);
+    return SUCCESS;
+}
+&lt;a href=&quot;/springMVC/variable/1&quot;&gt;pathVariable&lt;/a&gt;
+</code></pre><h3 id="REST处理"><a href="#REST处理" class="headerlink" title="REST处理"></a>REST处理</h3><p>GET:获取数据<br>POST:添加数据<br>PUT:新增数据<br>DELETE:删除数据<br>需要在web.xml加上配置</p>
+<pre><code>&lt;filter&gt;
+    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;
+&lt;/filter&gt;
+&lt;filter-mapping&gt;
+    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+</code></pre><p>简单示例</p>
+<pre><code>@RequestMapping(value = &quot;testRest/{id}&quot;, method = RequestMethod.PUT)
+public String testRestDelete(@PathVariable(&quot;id&quot;) Integer id){
+    System.out.println(&quot;testRest PUT：&quot;+id);
+    return SUCCESS;
+ }    
+</code></pre><h3 id="RequestParam绑定请求参数值"><a href="#RequestParam绑定请求参数值" class="headerlink" title="@RequestParam绑定请求参数值"></a>@RequestParam绑定请求参数值</h3><p> 在处理方法入参处使用@RequestParam可以把请求参数传递给请求方法</p>
+<ul>
+<li>val  ue： 参数名</li>
+<li><p>required： 不是必须，默认为true，表示请求参数中必须包含对应的参数，若不存在，将抛出异常</p>
+<p>   @RequestMapping(“/testRequestParam”)<br> public String testRequestParam(@RequestParam(value = “username”) String str, @RequestParam(value = “age”, required = false, defaultValue = “18”) Integer age){</p>
+<pre><code>System.out.println(&quot;RequestParam: username:&quot;+str+&quot;age:&quot;+age);
+return SUCCESS;
+</code></pre><p> }</p>
+</li>
+</ul>
+<h3 id="CookieValue"><a href="#CookieValue" class="headerlink" title="@CookieValue"></a>@CookieValue</h3><p>@CookieValue可以让处理方法入参绑定某个Cookie值</p>
+<pre><code>@requestMapping(&quot;/handle6&quot;)
+public String handle6(@CookieValue(value=&quot;sessionId&quot;, required=false)String sessionId, @RequestParam(&quot;age&quot;) int age)
+return &quot;...&quot;;
+</code></pre><h3 id="使用POJO对象绑定顶请求参数值"><a href="#使用POJO对象绑定顶请求参数值" class="headerlink" title="使用POJO对象绑定顶请求参数值"></a>使用POJO对象绑定顶请求参数值</h3><p>Spring MVC会按请求参数名和POJO属性名进行自动匹配，自动为该对象填充属性值，支持级联属性。</p>
+<h3 id="MVC的Handler方法接受ServletAPI类型的参数"><a href="#MVC的Handler方法接受ServletAPI类型的参数" class="headerlink" title="MVC的Handler方法接受ServletAPI类型的参数"></a>MVC的Handler方法接受ServletAPI类型的参数</h3><pre><code>HttpServletRequest
+HttpServletResponse
+HttpSeession
+java.security.Principal
+Lacale
+InputStream
+OutPutStream
+Reader
+Writer
+</code></pre><h3 id="处理模型数据"><a href="#处理模型数据" class="headerlink" title="处理模型数据"></a>处理模型数据</h3><p>Spring MVC提供以下几种途径输出模型数据：</p>
+<ul>
+<li>ModelAndView：处理方法返回值类型为ModelAndView时，方法体即可通过该对象添加模型数据</li>
+<li>Mao及Model：入参为org.springframework.ui.Model、org.springfreamework.ui.ModelMap或java.uti.Map时，处理方法返回时，Map中的数据会自动添加到模型中。</li>
+<li>@SessionAttributes：将模型中的某个属性暂存到HttpSession中，以便多个请求之间可以共享这个属性</li>
+<li>@modelAttribute：方法入参标注注解后，入参的对象会放到数据模型中</li>
+</ul>
+<h4 id="ModelAndView"><a href="#ModelAndView" class="headerlink" title="ModelAndView"></a>ModelAndView</h4><p>控制器处理方法返回值如果为ModelAndView，则即包含视图信息，也包含模型数据信息<br>添加模型数据：</p>
+<ul>
+<li>ModelAndView addObject(String attributeName, Object attributeValue)</li>
+<li>ModelAndView addAllObject(Map<string, ?=""> modelMap)</string,></li>
+</ul>
+<p>设置视图：</p>
+<ul>
+<li>void setView(View view)</li>
+<li>void setViewName(String viewName)</li>
+</ul>
+<p>目标方法返回值可以是ModelAndView类型<br>其中可以包含视图和模型信息<br>SpringMVC会把模型ModelAndView的Model中数据放到request域对象。</p>
+<pre><code>@RequestMapping(&quot;/testModelAndView&quot;)
+public ModelAndView testModelAndView(){
+    String viewName = SUCCESS;
+    ModelAndView modelAndView = new ModelAndView(viewName);
+    modelAndView.addObject(&quot;time&quot;, new Date());
+    return modelAndView;
+}
+</code></pre><h3 id="SessionAttributes"><a href="#SessionAttributes" class="headerlink" title="@SessionAttributes"></a>@SessionAttributes</h3><p>若希望在多个请求之间共用某个模型属性数据，则可以在控制器类上标注一个@SessionAttributes，SpringMVC将在模型中对应的属性暂存到HttpSession中。<br>@SessionAttributes除了可以通过属性名制定需要放到会话的属性外（value），还可以通过模型属性的对象类型制定那些模型需要放到会话中（type）</p>
+<ul>
+<li>SessionAttributes(types=User.class)会将隐含模型中所有类型为User.class的属性添加到会话中。</li>
+<li>@SessionAttributes(value={“user1”, “User2”})</li>
+<li>@SessionAttributes(types={User.class, Dept.class})</li>
+<li>@SessionAttribute(value={“user1”, “user2”}, types={Dept.class})</li>
+</ul>
+<h3 id="ModelAttribute"><a href="#ModelAttribute" class="headerlink" title="@ModelAttribute"></a>@ModelAttribute</h3><p>可被应用在方法或方法参数上<br>标注在方法上的@ModelAttribute说明方法是用于添加一个或多个属性到model上。这样的方法能接受与@RequestMapping标注相同的参数类型，只不过不能直接被映射到具体的请求<br>在同一个控制器中，标注了@ModelAttribute的方法实际上会在@RequestMapping方法之前被调用。</p>
+<pre><code>// Add one attribute
+// The return value of the method is added to the model under the name &quot;account&quot;
+// You can customize the name via @ModelAttribute(&quot;myAccount&quot;)
+
+@ModelAttribute
+public Account addAccount(@RequestParam String number) {
+    return accountManager.findAccount(number);
+}
+
+// Add multiple attributes
+
+@ModelAttribute
+public void populateModel(@RequestParam String number, Model model) {
+    model.addAttribute(accountManager.findAccount(number));
+    // add more ...
+}
+</code></pre><p>@ModelAttribute标注方法有两种风格：</p>
+<ul>
+<li>在第一种写法中，方法通过返回值的方式默认地将添加一个属性；</li>
+<li>在第二种写法中，方法接收一个Model对象，然后可以向其中添加任意数量的属性。<br>可以在根据需要，在两种风格中选择合适的一种。</li>
+</ul>
+<p>一个控制器可以拥有多个@ModelAttribute方法。同个控制器内的所有这些方法，都会在@RequestMapping方法之前被调用。</p>
+<pre><code>@Controller
+public class HelloModelController{
+    @ModelAttribute
+    public void populateModel(@RequestParam String abc, Model){
+        model.addAttribute(&quot;attributeName&quot;, abc);
+    }
+
+    @RequestMapping(&quot;/helloWorld&quot;)
+    public String helloWorld(){
+        return &quot;helloWorld.jsp&quot;;
+    }
+}
+</code></pre><p>@ModelAttribute的作用如下：</p>
+<ul>
+<li>绑定请求参数到命令对象：放到功能处理方法的入参上时，用于将多个请求参数绑定到一个命令对象，从而简化绑定流程，而且自动暴露为模型数据用于视图页面展示时使用</li>
+</ul>
+<pre><code>public String test(@ModelAttribute(&quot;user&quot;) UserModel user)
+</code></pre><p>我们可以在视图页面使用${user.username}来绑定的命令对象的属性</p>
+<ul>
+<li><p>暴露@RequestMapping方法返回值为模型数据：放到功能处理方法的返回值上，是暴露功能处理方法返回值为模型数据，用于视图页面展示时使用</p>
+<p>  public @ModelAttribute(“user2”) UserModel test3(@ModelAttribute(“user2”) UserModel user)     </p>
+</li>
+</ul>
+<h3 id="视图解析流程"><a href="#视图解析流程" class="headerlink" title="视图解析流程"></a>视图解析流程</h3><p>请求处理方法执行完成后，最终返回一个ModelAndView对象。对于那些返回String，View或者ModelMap等类型的处理方法，Spring MVC也会在内部将她们装配成一个ModelAndVIew对象，它包含了逻辑名和模型对象的视图<br>Spring MVC借助视图解析器（ViewResolver）得到最终的视图对象（View），最终的视图是jsp，也可能是其他形式的视图<br>处理器工作重点聚焦在生产模型数据的工作上，从而实现MVC的充分解耦。<br>视图不存在线程安全问题<br>实现类：</p>
+<ul>
+<li>InternalResourceView:将JSP或其他资源封装成一个视图，是InternalResourceViewResolver默认使用的视图实现类    </li>
+<li>JstlView：jsp使用Jstl国际化标签功能，需要使用高视图类</li>
+<li>AbstrctExcelView：Excel文档视图的抽象类 </li>
+<li>MappingJacksonJsonView:将模型数据jackson开源框架的ObjectMapper以JSON方式输出</li>
+<li>报表试图若干</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/09/29/springMVC基础/">SpringMVC中@RequestMapping等基础知识</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">huiHui</a></p>
+        <p><span>发布时间:</span>2017-09-29, 20:00:00</p>
+        <p><span>最后更新:</span>2017-10-26, 21:46:15</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/29/springMVC基础/" title="SpringMVC中@RequestMapping等基础知识">http://huihui.kim/2017/09/29/springMVC基础/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/09/29/springMVC基础/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/09/30/LintCode题解（一）/">
+                    LintCode题解（一）
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/29/走近Java并发/">
+                    认识Java并发艺术——基础
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#请求参数，方法，请求头"><span class="toc-number">1.</span> <span class="toc-text">请求参数，方法，请求头</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#params和heads"><span class="toc-number">1.1.</span> <span class="toc-text">params和heads</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ant风格资源地址通配符"><span class="toc-number">2.</span> <span class="toc-text">Ant风格资源地址通配符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PathVariable映射URL绑定的占位符"><span class="toc-number">3.</span> <span class="toc-text">@PathVariable映射URL绑定的占位符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#REST处理"><span class="toc-number">4.</span> <span class="toc-text">REST处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RequestParam绑定请求参数值"><span class="toc-number">5.</span> <span class="toc-text">@RequestParam绑定请求参数值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CookieValue"><span class="toc-number">6.</span> <span class="toc-text">@CookieValue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用POJO对象绑定顶请求参数值"><span class="toc-number">7.</span> <span class="toc-text">使用POJO对象绑定顶请求参数值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MVC的Handler方法接受ServletAPI类型的参数"><span class="toc-number">8.</span> <span class="toc-text">MVC的Handler方法接受ServletAPI类型的参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#处理模型数据"><span class="toc-number">9.</span> <span class="toc-text">处理模型数据</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ModelAndView"><span class="toc-number">9.1.</span> <span class="toc-text">ModelAndView</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SessionAttributes"><span class="toc-number">10.</span> <span class="toc-text">@SessionAttributes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ModelAttribute"><span class="toc-number">11.</span> <span class="toc-text">@ModelAttribute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#视图解析流程"><span class="toc-number">12.</span> <span class="toc-text">视图解析流程</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"SpringMVC中@RequestMapping等基础知识　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://huihui.kim/2017/09/29/springMVC基础/';
+            this.page.identifier = '2017/09/29/springMVC基础/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/09/30/LintCode题解（一）/" title="上一篇: LintCode题解（一）">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/29/走近Java并发/" title="下一篇: 认识Java并发艺术——基础">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/走近Java并发—ThreadLocal/">认识Java并发艺术——ThreadLocal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/24/走近Java并发—Lock/">Java并发——Lock</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Django前端页面相关处理/">Django html相关配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Spring基于注解的配置/">Spring基于注解的配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/SSM项目知识点总结/">SSM小项目知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Spring AOP切面/">Spring AOP切面编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Mybatis-generator详细配置demo/">Mybatis-generator相关配置demo</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/LintCode题解（二）/">LintCode题解（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/01/LintCode题解（七）/">LintCode题解（七）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（一）/">LintCode题解（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/springMVC基础/">SpringMVC中@RequestMapping等基础知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/走近Java并发/">认识Java并发艺术——基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java数据库与事务处理机制/">java数据库处理与事务机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/Spring属性配置细节/">Spring Bean配置细节</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/LintCode题解（四）/">LintCode题解（四）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/LintCode题解（三）/">LintCode题解（三）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/31/Java容器/">Java容器(集合)，持有对象总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/27/servlet实现网页重定向/">Servlet实现网页重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/servlet实现文件上传下载/">Servlet文件上传下载类</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/CSS预处理器比较/">有关CSS预处理器的比较选择(Sass&Less&Stylus)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/js内置对象——string&array/">Js内置对象进阶（一）——String&Array</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">Vue仿饿了么知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/web开发者必备http知识/">Web开发者必备Http基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/python中pip install中utf-8错误的解决方法/">pip install中utf-8编码问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/我们仍未知道那天所看见的list/">我们仍未知道那些天所看见的list</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/01/jquery实现樱花坠落插件/">jquery实现web页面樱花坠落的特效</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/16/Angular2.0开发/">Angular2.0仿今日头条应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/24/后端学习angular--组件篇/">后端学angular2.0的痛苦历程--组件篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的mysql数据库优化操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/python进阶学习--参数/">python进阶学习--*arg、**kw和装饰器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/mysql自连接/">mysql自连接与join关联</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/10/用IIFE与let方法改写循环闭包/">用IIFE与let命令改写循环闭包</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/19/WEB-CSS布局/">WEB前端--CSS布局必备知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/16/JS回调函数/">JS回调函数详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/Hexo&Gituhub博客搭建/">Hexo&Github博客搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/smarty模板引擎/">smarty模板引擎</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 huiHui
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
