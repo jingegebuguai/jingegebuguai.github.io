@@ -520,107 +520,6 @@ url(r&apos;^media/(?P&lt;path&gt;.*)&apos;, serve,{&apos;document_root&apos;:set
 
 
   
-    <article id="post-Django前端页面相关处理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/19/Django前端页面相关处理/" class="article-date">
-      <time datetime="2017-10-19T02:14:00.000Z" itemprop="datePublished">2017-10-19</time>
-</a>
-
- 
-    <a href="/2017/10/19/Django前端页面相关处理/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/19/Django前端页面相关处理/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/19/Django前端页面相关处理/">Django Html相关配置</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="静态文件加载"><a href="#静态文件加载" class="headerlink" title="静态文件加载"></a>静态文件加载</h2><p>html文件头要加上下面代码，意思要预加载配置文件中的staticfiles文件</p>
-<pre><code>{% load staticfiles %}
-</code></pre><h3 id="css，js，img文件配置"><a href="#css，js，img文件配置" class="headerlink" title="css，js，img文件配置"></a>css，js，img文件配置</h3><p>其中，static为配置文件目录</p>
-<pre><code>&lt;script scr={% static 'js/example.js' %}&gt;&lt;/script&gt;
-&lt;link rel=&quot;staticsheet&quot; type=&quot;text/css&quot; href={%static 'css/example.css'%}&gt;
-&lt;img src={% static 'images/example.jpg' %} /&gt;
-</code></pre><h3 id="url配置"><a href="#url配置" class="headerlink" title="url配置"></a>url配置</h3><pre><code>&lt;a href={% url 'login' %}&gt; 
-&lt;a href={% url 'register' %}&gt;
-action = /login/
-action = /register/
-</code></pre><h2 id="网站模板配置"><a href="#网站模板配置" class="headerlink" title="网站模板配置"></a>网站模板配置</h2><p>为了节省代码，导航，底部，访问统计等地方需要使用共同的html。<br>使用base.html来包含通用的文件</p>
-<pre><code>&lt;!DOCTYPE html5&gt;
-&lt;html&gt;
-    &lt;head&gt;&lt;title&gt;&lt;% block title %&gt;标题&lt;% endtitle %&gt;&lt;/title&gt;&lt;/head&gt;
-    &lt;body&gt;
-        &lt;% include &apos;nav.html&apos; %&gt;
-        &lt;% block main %&gt;
-        &lt;main-section /&gt;
-        &lt;% endblock %&gt;
-        &lt;% include &apos;foot.html&apos; %&gt;    
-    &lt;/body&gt;
-&lt;/html&gt;
-</code></pre><p>其中block为使继承的模板可以随意重写该部分，include作用是加载其他html文件。<br>我们可以通过继承或者说是扩展<br>extends原来的base.html文件，这样可以重写减少工作量</p>
-<pre><code>&lt;% extends &apos;base.html&apos; %&gt;
-&lt;% block title %&gt;new title&lt;% endblock %&gt;
-
-&lt;% block main %&gt;new main content&lt;% endblock %&gt;    
-</code></pre><p>一般模板放在app下的templates中，django会自动查找，我们一般使用类里加载html文件的形式.</p>
-<pre><code>return render(request, &apos;index.html&apos;)
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-Spring基于注解的配置" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -767,6 +666,107 @@ public class Person{...}
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Django前端页面相关处理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/19/Django前端页面相关处理/" class="article-date">
+      <time datetime="2017-10-19T02:14:00.000Z" itemprop="datePublished">2017-10-19</time>
+</a>
+
+ 
+    <a href="/2017/10/19/Django前端页面相关处理/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/19/Django前端页面相关处理/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/19/Django前端页面相关处理/">Django Html相关配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="静态文件加载"><a href="#静态文件加载" class="headerlink" title="静态文件加载"></a>静态文件加载</h2><p>html文件头要加上下面代码，意思要预加载配置文件中的staticfiles文件</p>
+<pre><code>{% load staticfiles %}
+</code></pre><h3 id="css，js，img文件配置"><a href="#css，js，img文件配置" class="headerlink" title="css，js，img文件配置"></a>css，js，img文件配置</h3><p>其中，static为配置文件目录</p>
+<pre><code>&lt;script scr={% static 'js/example.js' %}&gt;&lt;/script&gt;
+&lt;link rel=&quot;staticsheet&quot; type=&quot;text/css&quot; href={%static 'css/example.css'%}&gt;
+&lt;img src={% static 'images/example.jpg' %} /&gt;
+</code></pre><h3 id="url配置"><a href="#url配置" class="headerlink" title="url配置"></a>url配置</h3><pre><code>&lt;a href={% url 'login' %}&gt; 
+&lt;a href={% url 'register' %}&gt;
+action = /login/
+action = /register/
+</code></pre><h2 id="网站模板配置"><a href="#网站模板配置" class="headerlink" title="网站模板配置"></a>网站模板配置</h2><p>为了节省代码，导航，底部，访问统计等地方需要使用共同的html。<br>使用base.html来包含通用的文件</p>
+<pre><code>&lt;!DOCTYPE html5&gt;
+&lt;html&gt;
+    &lt;head&gt;&lt;title&gt;&lt;% block title %&gt;标题&lt;% endtitle %&gt;&lt;/title&gt;&lt;/head&gt;
+    &lt;body&gt;
+        &lt;% include &apos;nav.html&apos; %&gt;
+        &lt;% block main %&gt;
+        &lt;main-section /&gt;
+        &lt;% endblock %&gt;
+        &lt;% include &apos;foot.html&apos; %&gt;    
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>其中block为使继承的模板可以随意重写该部分，include作用是加载其他html文件。<br>我们可以通过继承或者说是扩展<br>extends原来的base.html文件，这样可以重写减少工作量</p>
+<pre><code>&lt;% extends &apos;base.html&apos; %&gt;
+&lt;% block title %&gt;new title&lt;% endblock %&gt;
+
+&lt;% block main %&gt;new main content&lt;% endblock %&gt;    
+</code></pre><p>一般模板放在app下的templates中，django会自动查找，我们一般使用类里加载html文件的形式.</p>
+<pre><code>return render(request, &apos;index.html&apos;)
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
     </div>
 
       
@@ -1399,20 +1399,20 @@ yum install gcc
 
 
   
-    <article id="post-CentOS下安装配置mysql" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-CentOS下jdk、tomcat配置" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/06/CentOS下安装配置mysql/" class="article-date">
+      <a href="/2017/10/06/CentOS下jdk、tomcat配置/" class="article-date">
       <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
 </a>
 
  
-    <a href="/2017/10/06/CentOS下安装配置mysql/#comments" title="查看评论">
+    <a href="/2017/10/06/CentOS下jdk、tomcat配置/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下安装配置mysql/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下jdk、tomcat配置/"></span>
         
     </a>
 
@@ -1427,7 +1427,7 @@ yum install gcc
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a>
+      <a class="article-title" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a>
     </h1>
   
 
@@ -1437,7 +1437,97 @@ yum install gcc
     <div class="article-entry" itemprop="articleBody">
       
           
-        
+        <h2 id="Centos下jdk安装配置"><a href="#Centos下jdk安装配置" class="headerlink" title="Centos下jdk安装配置"></a>Centos下jdk安装配置</h2><h3 id="查看jdk版本"><a href="#查看jdk版本" class="headerlink" title="查看jdk版本"></a>查看jdk版本</h3><pre><code>java -version
+</code></pre><h3 id="查看jdk信息"><a href="#查看jdk信息" class="headerlink" title="查看jdk信息"></a>查看jdk信息</h3><pre><code>[root@localhost ~]#  rpm -qa | grep java
+javapackages-tools-3.4.1-6.el7_0.noarch
+tzdata-java-2014i-1.el7.noarch
+java-1.7.0-openjdk-headless-1.7.0.71-2.5.3.1.el7_0.x86_64
+java-1.7.0-openjdk-1.7.0.71-2.5.3.1.el7_0.x86_64
+python-javapackages-3.4.1-6.el7_0.noarch
+</code></pre><h3 id="卸载OpenJDK"><a href="#卸载OpenJDK" class="headerlink" title="卸载OpenJDK"></a>卸载OpenJDK</h3><p>执行以下操作：</p>
+<pre><code>[root@localhost ~]# rpm -e --nodeps tzdata-java-2014i-1.el7.noarch
+[root@localhost ~]# rpm -e --nodeps java-1.7.0-openjdk-headless-1.7.0.71-2.5.3.1.el7_0.x86_64
+[root@localhost ~]# rpm -e --nodeps java-1.7.0-openjdk-1.7.0.71-2.5.3.1.el7_0.x86_64
+</code></pre><h3 id="安装jdk"><a href="#安装jdk" class="headerlink" title="安装jdk"></a>安装jdk</h3><pre><code>[root@zck local]# rpm -ivh jdk-8u25-linux-x64.rpm    
+</code></pre><p>默认安装在/usr/java目录下。</p>
+<h3 id="查看jdk路径"><a href="#查看jdk路径" class="headerlink" title="查看jdk路径"></a>查看jdk路径</h3><pre><code>whereis java
+which java    
+echo $JAVA_HOME
+echo $PATH
+</code></pre><h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><p>vim下进入/etc/profile<br>在profile文件最后加入如下：</p>
+<pre><code>export JAVA_HOME=/usr/bin/java
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar                    
+</code></pre><p>具体配置还需根据各自对应的版本而变动</p>
+<h2 id="CentOS下Tomacat安装"><a href="#CentOS下Tomacat安装" class="headerlink" title="CentOS下Tomacat安装"></a>CentOS下Tomacat安装</h2><p>安装tomcat之前需要配置好jdk</p>
+<h3 id="下载tomcat-9-0"><a href="#下载tomcat-9-0" class="headerlink" title="下载tomcat 9.0"></a>下载tomcat 9.0</h3><p>前往<a href="https://tomcat.apache.org/download-90.cgi进行复制tar.gz链接地址，在centos中进行下载，并且解压缩" target="_blank" rel="external">https://tomcat.apache.org/download-90.cgi进行复制tar.gz链接地址，在centos中进行下载，并且解压缩</a></p>
+<pre><code>tar -zxvf apache-tomcat-9.0.1.tar.gz
+</code></pre><h3 id="配置UTF-8字符集"><a href="#配置UTF-8字符集" class="headerlink" title="配置UTF-8字符集"></a>配置UTF-8字符集</h3><p>进入tomcat安装的conf文件夹，编辑server.xml</p>
+<pre><code>sudo vim server.xml
+</code></pre><p>找到配置8080默认端口的位置，在xml节点末尾增加URIEncoding=”UTF-8”.</p>
+<h3 id="tomcat验证"><a href="#tomcat验证" class="headerlink" title="tomcat验证"></a>tomcat验证</h3><p>先进入系统解压缩后的tomcat目录，进入bin目录，执行./startup.sh.<br>打开启动tomcat机器的ip地址和默认8080端口，如果是其他机器访问，找到此机器的ip地址，进行访问</p>
+<h2 id="Maven安装配置"><a href="#Maven安装配置" class="headerlink" title="Maven安装配置"></a>Maven安装配置</h2><p>安装版本为3.0.5，安装之前需要确保电脑上配置好tomcat，用以下镜像下载</p>
+<pre><code>https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.0.5/binaries
+</code></pre><h3 id="解压缩Maven"><a href="#解压缩Maven" class="headerlink" title="解压缩Maven"></a>解压缩Maven</h3><pre><code>tar-zxvf apache-maven-3.0.5-bin.tar.gz
+</code></pre><h3 id="配置环境变量-1"><a href="#配置环境变量-1" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><pre><code>sudo vim /etc/profile
+//在最下面增加Maven环境变量
+export MAVEN_HOME=/developer/apache-maven-3.0.5
+export PATH=$PATH:$JAVA_HOME/bin:$MAVEN_HOME/bin
+//执行source /etc/profile
+</code></pre><h3 id="进行验证"><a href="#进行验证" class="headerlink" title="进行验证"></a>进行验证</h3><pre><code>mvn -version
+</code></pre><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><p>清除命令</p>
+<pre><code>mvn clean
+</code></pre><p>编译命令</p>
+<pre><code>mvn compile
+</code></pre><p>打包命令</p>
+<pre><code>mvn package
+</code></pre><p>跳过单元测试</p>
+<pre><code>mvn clean package -Dmaven.test.skip=true 
+</code></pre><h2 id="vsftpd安装"><a href="#vsftpd安装" class="headerlink" title="vsftpd安装"></a>vsftpd安装</h2><p>执行yum -y install vsftpd<br>注意：</p>
+<ul>
+<li>是否使用sudo权限执行请根据就环境决定</li>
+<li>rpm -qa | grep vsftpd可通过这个检查是否已经安装vsftpd</li>
+<li>默认配置文件在/etc/vsftpd/vsftpd.conf</li>
+</ul>
+<h3 id="创建虚拟用户"><a href="#创建虚拟用户" class="headerlink" title="创建虚拟用户"></a>创建虚拟用户</h3><ul>
+<li>选择在根或者用户目录下创建ftp文件夹：mkdir ftpfile,如/ftpfile</li>
+<li>添加匿名用户：useradd ftpuser -d /ftpfile -s /sbin/nologin</li>
+<li>修改ftpfile权限：chown -R ftpuser.ftpuser /ftpfile</li>
+<li>重设ftpuser密码：passwd ftpuser</li>
+</ul>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><pre><code>cd /etc/vsftpd
+sudo vim chroot_list
+</code></pre><p>将刚才新增的虚拟用户添加到此配置文件，后续引用</p>
+<pre><code>sudo vim /etc/selinux/config
+</code></pre><p>修改为SELINUX=disabledu<br>如果验证的时候出现550拒绝访问执行</p>
+<pre><code>sudo setsebool -P ftp_home_dir 1
+</code></pre><p>重启linux服务器，执行reboot命令</p>
+<pre><code>sudo vim /etc/vsftpd/vsftpd.conf
+</code></pre><h3 id="防火墙配置"><a href="#防火墙配置" class="headerlink" title="防火墙配置"></a>防火墙配置</h3><pre><code>sudo vim /etc/sysconfig/iptables-config
+</code></pre><p>将以下配置添加到防火墙配置中</p>
+<pre><code>-A INPUT -p TCP --dport 61001:62000 -j ACCEPT
+-A OUTPUT -p TCP --sport 61001:62000 -j ACCEPT
+-A INPUT -p TCP --dport 20 -j ACCEPT
+-A OUTPUT -p TCP --sport 20 -j ACCEPT
+-A INPUT -p TCP --dport 21 -j ACCEPT
+-A OUTPUT -p TCP --sport 21 -j ACCEPT
+</code></pre><p>重启防火墙<br>centos7以下版本</p>
+<pre><code>sudo service iptables restart
+</code></pre><p>centos7</p>
+<pre><code>systemctl start filewalld.service #开启防火墙
+firewall-cmd --reload #重启firewall
+systemctl stop firewalld.service #停止firewall
+systemctl disable firewalld.service #禁止firewall开机启动
+</code></pre><h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><pre><code>sudo service vsftpd restart
+//cebtos7
+sudo systemctl restart vsftpd.service
+</code></pre><p>第一次启动时shutting down vsftpd是failed没关系，这是重启命令，保证starting vsftpd是ok即可</p>
+<h3 id="设置selinux"><a href="#设置selinux" class="headerlink" title="设置selinux"></a>设置selinux</h3><pre><code># sudo vim /etc/selinux/config
+# 注释SELINUX=enforcing
+SELINUX=disable
+# 保存退出
+setenforce 0
+</code></pre>
       
     </div>
     

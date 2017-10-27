@@ -868,6 +868,116 @@ export class ChildComponent{
 
 
   
+    <article id="post-python进阶学习--参数" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/04/20/python进阶学习--参数/" class="article-date">
+      <time datetime="2017-04-20T12:00:00.000Z" itemprop="datePublished">2017-04-20</time>
+</a>
+
+ 
+    <a href="/2017/04/20/python进阶学习--参数/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/04/20/python进阶学习--参数/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/20/python进阶学习--参数/">Python进阶学习--*Arg、**kw和装饰器</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="arg（可变参数）"><a href="#arg（可变参数）" class="headerlink" title="*arg（可变参数）"></a>*arg（可变参数）</h2><p>主要用于预先并不知道, 函数使用者会传递多少个参数给你, 所以在这个场景下使用这两个关键字。 *args 是用来发送一个非键值对的可变数量的参数列表给一个函数.</p>
+<pre><code>def _abs(*arg):
+    sum = 0 
+    for i in arg:
+        sum = sum + i
+    return sum 
+
+print(_abs(1,2,3))    //6
+</code></pre><h2 id="kw-关键字参数"><a href="#kw-关键字参数" class="headerlink" title="**kw(关键字参数)"></a>**kw(关键字参数)</h2><p><strong>kwargs 允许你将不定长度的键值对, 作为参数传递给一个函数。 如果你想要在一个函数里处理带名字的参数, 你应该使用</strong>kwargs</p>
+<pre><code>def bian_li(**kwargs):
+for key, value in kwargs.items():
+    print(&quot;{0} == {1}&quot;.format(key, value))
+
+print(bian_li(name=&apos;huihi&apos;, age=10))
+// name == huihui
+// age == 10
+</code></pre><h2 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h2><h3 id="原函数"><a href="#原函数" class="headerlink" title="原函数"></a>原函数</h3><pre><code>def dec(func):
+    print(&quot;execute this program&quot;)
+    func()
+    print(&quot;func&apos;s name is %s()&quot; % func.__name__)
+    return func
+
+
+def fun():
+    print(&quot;my name is func()&quot;)
+
+
+_func = dec(fun)
+</code></pre><h3 id="语法糖-装饰原函数"><a href="#语法糖-装饰原函数" class="headerlink" title="语法糖@装饰原函数"></a>语法糖@装饰原函数</h3><pre><code>def dec(func):
+    print(&quot;execute this program&quot;)
+    func()
+    print(&quot;func&apos;s name is %s()&quot; % func.__name__)
+    return func
+
+
+@dec
+    def fun():
+    print(&quot;my name is func()&quot;)
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/未闻花名/">未闻花名</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-总结常见MYSQL数据库优化操作" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -965,116 +1075,6 @@ select id from t where Name = &apos;admin&apos;
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-python进阶学习--参数" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/04/20/python进阶学习--参数/" class="article-date">
-      <time datetime="2017-04-20T12:00:00.000Z" itemprop="datePublished">2017-04-20</time>
-</a>
-
- 
-    <a href="/2017/04/20/python进阶学习--参数/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/04/20/python进阶学习--参数/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/20/python进阶学习--参数/">Python进阶学习--*Arg、**kw和装饰器</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="arg（可变参数）"><a href="#arg（可变参数）" class="headerlink" title="*arg（可变参数）"></a>*arg（可变参数）</h2><p>主要用于预先并不知道, 函数使用者会传递多少个参数给你, 所以在这个场景下使用这两个关键字。 *args 是用来发送一个非键值对的可变数量的参数列表给一个函数.</p>
-<pre><code>def _abs(*arg):
-    sum = 0 
-    for i in arg:
-        sum = sum + i
-    return sum 
-
-print(_abs(1,2,3))    //6
-</code></pre><h2 id="kw-关键字参数"><a href="#kw-关键字参数" class="headerlink" title="**kw(关键字参数)"></a>**kw(关键字参数)</h2><p><strong>kwargs 允许你将不定长度的键值对, 作为参数传递给一个函数。 如果你想要在一个函数里处理带名字的参数, 你应该使用</strong>kwargs</p>
-<pre><code>def bian_li(**kwargs):
-for key, value in kwargs.items():
-    print(&quot;{0} == {1}&quot;.format(key, value))
-
-print(bian_li(name=&apos;huihi&apos;, age=10))
-// name == huihui
-// age == 10
-</code></pre><h2 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h2><h3 id="原函数"><a href="#原函数" class="headerlink" title="原函数"></a>原函数</h3><pre><code>def dec(func):
-    print(&quot;execute this program&quot;)
-    func()
-    print(&quot;func&apos;s name is %s()&quot; % func.__name__)
-    return func
-
-
-def fun():
-    print(&quot;my name is func()&quot;)
-
-
-_func = dec(fun)
-</code></pre><h3 id="语法糖-装饰原函数"><a href="#语法糖-装饰原函数" class="headerlink" title="语法糖@装饰原函数"></a>语法糖@装饰原函数</h3><pre><code>def dec(func):
-    print(&quot;execute this program&quot;)
-    func()
-    print(&quot;func&apos;s name is %s()&quot; % func.__name__)
-    return func
-
-
-@dec
-    def fun():
-    print(&quot;my name is func()&quot;)
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/未闻花名/">未闻花名</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
     </div>
 
       

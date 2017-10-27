@@ -234,7 +234,7 @@ a {
   background: rgba(255,255,255,0.85);
   width: 300px;
   position: fixed;
-  opacity: 1;
+  opacity: 0.3;
   -webkit-transition: all 0.2s ease-in;
   -moz-transition: all 0.2s ease-in;
   -ms-transition: all 0.2s ease-in;
@@ -247,7 +247,7 @@ a {
   height: 180px;
   background-color: #000;
   position: absolute;
-  opacity: 0.7;
+  opacity: 0.3;
 }
 #container .left-col .intrude-less {
   width: 76%;
@@ -1014,7 +1014,7 @@ a {
   background: rgba(215,216,215,0.4);
 }
 .scroll a .fa {
-  color: rgba(255,255,255,0.8);
+  color: rgba(255,255,255,0.5);
 }
 .scroll a:hover {
   background: rgba(147,181,224,0.3) !important;
@@ -1044,7 +1044,7 @@ a {
 }
 .hide-labels:hover {
   color: #88acdb;
-  opacity: 1;
+  opacity: 0.5;
 }
 #post-nav-button {
   left: 300px;
@@ -1080,8 +1080,8 @@ color
 }
 .pace .pace-progress {
   background: #77b6ff;
-  -webkit-box-shadow: 0 0 10px rgba(119,182,255,0.7);
-  box-shadow: 0 0 10px rgba(119,182,255,0.7);
+  -webkit-box-shadow: 0 0 10px rgba(119,182,255,0.4);
+  box-shadow: 0 0 10px rgba(119,182,255,0.4);
 }
 .article-entry ul > li,
 .share,
@@ -1598,7 +1598,7 @@ color
 }
 .article-more-link a:hover {
   background: #9c9;
-  opacity: 1;
+  opacity: 0.5;
 }
 .article-more-link a.hidden {
   visibility: hidden;
@@ -2413,7 +2413,7 @@ pre .javascript .function {
   color: #5e5e5e;
 }
 #page-nav:hover .extend {
-  opacity: 1;
+  opacity: 0.8;
 }
 #post-instagram {
   padding: 30px;
