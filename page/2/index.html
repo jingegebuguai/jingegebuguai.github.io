@@ -882,523 +882,6 @@ public class Solution {
 
 
   
-    <article id="post-LintCode题解（五）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/30/LintCode题解（五）/" class="article-date">
-      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
-</a>
-
- 
-    <a href="/2017/09/30/LintCode题解（五）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（五）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="岛屿个数"><a href="#岛屿个数" class="headerlink" title="岛屿个数"></a>岛屿个数</h2><p>给一个01矩阵，求不同的岛屿的个数。</p>
-<p>0代表海，1代表岛，如果两个1相邻，那么这两个1属于同一个岛。我们只考虑上下左右为相邻。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><pre><code>[
-  [1, 1, 0, 0, 0],
-  [0, 1, 0, 0, 1],
-  [0, 0, 0, 1, 1],
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1]
-]
-</code></pre><p>如上矩阵有3个岛屿。</p>
-<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>这题比较复杂，需要使用到深度遍历，使用递归将已确定的岛屿由true转化为false。并且递归他的四周其他岛屿。</p>
-<pre><code>public class Solution {
-/**
- * @param grid a boolean 2D matrix
- * @return an integer
- */
-    public int numIslands(boolean[][] grid) {
-        // Write your code here
-        if(grid.length==0)
-            return 0;
-        int row = grid.length;
-        int column = grid[0].length;
-        int count = 0;
-
-        for(int i = 0;i &lt; row;i++){
-            for(int j  = 0;j &lt; column;j++){
-                if(grid[i][j]==true){
-                    dfs_Islands(grid,i,j);
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-    private void dfs_Islands(boolean[][] grid, int i, int j){
-        if(i&lt;0||j&lt;0||i&gt;=grid.length||j&gt;=grid[0].length)
-            return; 
-        if(grid[i][j]==true){
-            grid[i][j]=false;
-            dfs_Islands(grid, i-1, j);
-            dfs_Islands(grid, i+1, j);
-            dfs_Islands(grid, i, j-1);
-            dfs_Islands(grid, i, j+1);
-        }    
-    }
-}
-</code></pre><h2 id="有效回文串"><a href="#有效回文串" class="headerlink" title="有效回文串"></a>有效回文串</h2><p>给定一个字符串，判断其是否为一个回文串。只包含字母和数字，忽略大小写。</p>
-<p> 注意事项</p>
-<p>你是否考虑过，字符串有可能是空字符串？这是面试过程中，面试官常常会问的问题。</p>
-<p>在这个题目中，我们将空字符串判定为有效回文。</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>“A man, a plan, a canal: Panama” 是一个回文。</p>
-<p>“race a car” 不是一个回文。</p>
-<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
-/*
- * @param s: A string
- * @return: Whether the string is a valid palindrome
- */
-    public static boolean isPalindrome(String s) {
-        // write your code here
-        boolean index = true;
-        if(s.length()==0)
-            return index;
-        String[] str = s。toLowerCase.split(&quot;&quot;);
-        int low = 0;
-        int high = s.length()-1;
-        while(low&lt;high){
-            if(str[low].matches(&quot;\\w&quot;)&amp;&amp;str[high].matches(&quot;\\w&quot;)){
-                if(str[low].equals(str[high])&amp;&amp;low==high-1)
-                    low = low+1;
-                else if(str[low].equals(str[high])&amp;&amp;low!=high+1){
-                    low = low+1;    
-                    high = high-1;
-                }
-                else if(!str[low].equals(str[high]))
-                    break;
-            }else{
-                if(!str[low].matches(&quot;\\w&quot;))
-                    low = low+1;
-                else if(!str[high].matches(&quot;\\w&quot;))
-                    high = high-1;
-            }
-        }
-        if(low==high)
-            index=true;
-        else
-            index=false;
-        return index;    
-    }
-}
-</code></pre><p>上面的算法完全是我凑出来的，汗颜啊。<br>下面是别人写的，给予参考：</p>
-<pre><code>public class Solution {
-/**
- * @param s A string
- * @return Whether the string is a valid palindrome
- */
-    public boolean isPalindrome(String s) {
-        // Write your code here
-        if(s.equals(&quot;&quot;)) return true;
-        int len = s.length();
-        int left = 0;
-        int right = len - 1;
-        s = s.toLowerCase();
-        while(left &lt; right){
-            char leftchar = s.charAt( left );
-            char rightchar = s.charAt( right );
-            while(!isValid(leftchar)){
-                left ++;
-                leftchar = s.charAt( left );
-                if(left&gt;=right) return true;
-            }
-            while(!isValid(rightchar)){
-                right --;
-                rightchar = s.charAt( right );
-                if(right&lt;=left) return true;
-            }
-            if(leftchar != rightchar)
-                return false;
-            left ++;
-            right --;
-        }
-
-        return true;
-
-    }
-    public boolean isValid(char ch){
-        if(ch&gt;=&apos;a&apos; &amp;&amp; ch &lt;= &apos;z&apos;)
-            return true;
-        if(ch &gt;=&apos;0&apos; &amp;&amp; ch &lt;= &apos;9&apos;)
-            return true;
-        return false;
-    }
-}    
-</code></pre><h2 id="最长上升子序列"><a href="#最长上升子序列" class="headerlink" title="最长上升子序列"></a>最长上升子序列</h2><p>给定一个整数数组（下标从 0 到 n-1， n 表示整个数组的规模），请找出该数组中的最长上升连续子序列。（最长上升连续子序列可以定义为从右到左或从左到右的序列。）</p>
-<p> 注意事项</p>
-<p>time</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 [5, 4, 2, 1, 3], 其最长上升连续子序列（LICS）为 [5, 4, 2, 1], 返回 4.</p>
-<p>给定 [5, 1, 2, 3, 4], 其最长上升连续子序列（LICS）为 [1, 2, 3, 4], 返回 4.</p>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
-    /*
-     * @param A: An array of Integer
-     * @return: an integer
-     */
-    public int longestIncreasingContinuousSubsequence(int[] A) {
-        // write your code here
-        if(A.length==0)
-            return 0;
-        int up = 1;
-        int _up =1;
-        int _down=1;
-        int down=1;
-        for(int i=1;i&lt;A.length;i++){
-            if(A[i]&gt;A[i-1]){
-                _up = _up+1;
-                if(_down&gt;=down){
-                    down = _down;
-                    _down = 1;
-                }else
-                    _down =1;
-            }
-            if(A[i]&lt;A[i-1]){
-                _down = _down+1;
-                if(_up&gt;=up){
-                    up = _up;
-                    _up = 1;
-                }else
-                    _up=1;
-            }
-        }
-        if(_up&gt;=up)
-            up = _up;
-        if(_down&gt;=down)
-            down = _down;
-        if(down&gt;=up)
-            return down;
-        else
-            return up;
-    }
-}    
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-LintCode题解（六）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/30/LintCode题解（六）/" class="article-date">
-      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
-</a>
-
- 
-    <a href="/2017/09/30/LintCode题解（六）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（六）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="奇偶分割数组"><a href="#奇偶分割数组" class="headerlink" title="奇偶分割数组"></a>奇偶分割数组</h2><p>分割一个整数数组，使得奇数在前偶数在后。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>给定 [1, 2, 3, 4]，返回 [1, 3, 2, 4]。</p>
-<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>这题还是比较简单的，方法很多很多，我们将数组循环遍历，将遍历中的偶数和奇数相互交换就ok了。</p>
-<pre><code>public class Solution {
-/*
- * @param nums: an array of integers
- * @return: nothing
- */
-    public void partitionArray(int[] nums) {
-        // write your code here
-        int length = nums.length;
-        int temp = 0;
-        int index = 0;
-        if(length==0)
-            return;
-        for(int i=0;i&lt;length;i++){
-            if(nums[i]%2==0){
-                index = i;
-                while(nums[index]%2==0){
-                    if(index!=length-1)
-                        index=index+1;
-                    else
-                        break;
-                }
-                temp = nums[i];
-                nums[i] = nums[index];
-                nums[index] = temp;
-            }
-        }
-    }
-}
-</code></pre><h2 id="二进制中1个数"><a href="#二进制中1个数" class="headerlink" title="二进制中1个数"></a>二进制中1个数</h2><p>计算在一个 32 位的整数的二进制表示中有多少个 1.</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给定 32 (100000)，返回 1</p>
-<p>给定 5 (101)，返回 2</p>
-<p>给定 1023 (111111111)，返回 9    </p>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p>按与计算<br>1&amp;1==1，1&amp;0==0，0&amp;&amp;0==0；下面是很巧妙的一个方法。</p>
-<pre><code>public class Solution {
-/*
- * @param num: An integer
- * @return: An integer
- */
-    public int countOnes(int num) {
-        // write your code here
-        int count = 0;
-        while(num!=0){
-            num = num &amp; (num-1);
-            count++;
-        }
-        return count;       
-    }
-}
-</code></pre><h2 id="反转整数"><a href="#反转整数" class="headerlink" title="反转整数"></a>反转整数</h2><p>将一个整数中的数字进行颠倒，当颠倒后的整数溢出时，返回 0 (标记为 32 位整数)。</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 x = 123，返回 321</p>
-<p>给定 x = -123，返回 -321</p>
-<h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><p>反转很简单，难点在于颠倒后证书溢出判断，int32位范围是-2^31~2^31-1,这里使用temp/10与reversed_n进行判断，当temp溢出时，/10不等于reversed_n，所以可判断溢出成立。</p>
-<pre><code>public class Solution {
-    /*
-     * @param n: the integer to be reversed
-     * @return: the reversed integer
-     */
-    public int reverseInteger(int n) {
-        // Write your code here
-        int reversed_n = 0;
-
-        while (n != 0) {
-            int temp = reversed_n * 10 + n % 10;
-            n = n / 10;
-            if (temp / 10 != reversed_n) {
-                reversed_n = 0;
-                break;
-            }
-            reversed_n = temp;
-        }
-        return reversed_n;
-    }
-}
-</code></pre><h2 id="加一"><a href="#加一" class="headerlink" title="加一"></a>加一</h2><p>给定一个非负数，表示一个数字数组，在该数的基础上+1，返回一个新的数组。</p>
-<p>该数字按照大小进行排列，最大的数在列表的最前面。</p>
-<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>给定 [1,2,3] 表示 123, 返回 [1,2,4].</p>
-<p>给定 [9,9,9] 表示 999, 返回 [1,0,0,0].</p>
-<h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p>google的题，哪道没有陷阱，第一次被坑了。<br>注意不要把数组转为int型整数，因为不确定数组大小会导致溢出。<br>本题思想是，若数组值都为9，则增加数组length，首位设为1，其他位为0；否则，末位加1，结束返回。</p>
-<pre><code>public class Solution {
-    /*
-     * @param digits: a number represented as an array of digits
-     * @return: the result
-     */
-    public static int[] plusOne(int[] digits) {
-        // write your code here
-        boolean index = true;
-        for(int n=0; n&lt;digits.length;n++){
-            if(digits[n]!=9)
-                index = false;
-        }
-        if(index==true){
-            int[] num = new int[digits.length+1];
-            num[0] = 1;
-            for(int m=1;m&lt;digits.length+1;m++)
-                num[m] = 0;
-            return num;
-        }
-        for(int i=digits.length-1;i&gt;=0;i--){
-            if(digits[i]!=9){
-                digits[i] = digits[i]+1;
-                break;
-            }else{
-                digits[i] = 0;
-            }
-        }
-        return digits;
-    }
-}
-</code></pre><h2 id="把排序数组转换为高度最小的二叉搜索树"><a href="#把排序数组转换为高度最小的二叉搜索树" class="headerlink" title="把排序数组转换为高度最小的二叉搜索树"></a>把排序数组转换为高度最小的二叉搜索树</h2><p>给一个排序数组（从小到大），将其转换为一棵高度最小的排序二叉树。</p>
-<h3 id="样例-4"><a href="#样例-4" class="headerlink" title="样例"></a>样例</h3><p>给出数组 [1,2,3,4,5,6,7], 返回</p>
-<pre><code>     4
-   /   \
-  2     6
- / \    / \
-1   3  5   7
-</code></pre><h2 id="算法-4"><a href="#算法-4" class="headerlink" title="算法"></a>算法</h2><pre><code>/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */ 
-public class Solution(){
-    /**
-     * @param nums: an integer array
-     * @return: a tree node
-     */
-    public TreeNode sortArrayToBST(int[] A){
-        if(A==null)
-            return null;
-        return bulidTree(A, 0, A.length-1);    
-    }
-
-    public void buildTree(int[] A, int start, int end){
-        if(start&gt;end)
-            return null;
-        int middle = (start+end)/2;
-        TreeNode root = new TreeNode(A[middle]);
-        A.left = buildTree(A, start, middle-1);
-        A.right = buildTree(A, middle+1, end);     
-    }
-}
-</code></pre><h2 id="二进制求和"><a href="#二进制求和" class="headerlink" title="二进制求和"></a>二进制求和</h2><p>给定两个二进制字符串，返回他们的和（用二进制表示）。</p>
-<h2 id="样例-5"><a href="#样例-5" class="headerlink" title="样例"></a>样例</h2><p>a = 11</p>
-<p>b = 1</p>
-<p>返回 100</p>
-<h2 id="算法-5"><a href="#算法-5" class="headerlink" title="算法"></a>算法</h2><p>这种题千万不要将二进制转化为整数，这样转化复杂度将提高几何倍数。<br>注意如果相应位相加结果为2（1+1），则结果设为1，这时要设一个哨兵，相应位溢出时，哨兵设为1；结果为3（1+1+哨兵）时，相同道理。</p>
-<pre><code>public class Solution {
-    /*
-     * @param a: a number
-     * @param b: a number
-     * @return: the result
-     */
-    public String addBinary(String a, String b) {
-        // write your code here
-        if(b.length()==0&amp;&amp;a.length()==0)
-            return null;
-        String str = &quot;&quot;;
-        int index = 0;
-        int i = 0;
-        int middle = 0;
-        String[] A = a.split(&quot;&quot;);
-        String[] B = b.split(&quot;&quot;);
-        while(i&lt;A.length||i&lt;B.length) {
-            if (i &gt;= A.length &amp;&amp; i &lt; B.length)
-                middle = Integer.valueOf(B[B.length-1-i]) + index;
-            else if (i &gt;= B.length &amp;&amp; i &lt; A.length)
-                middle = Integer.valueOf(A[A.length-1-i]) + index;
-            else if (i &lt; A.length &amp;&amp; i &lt; B.length)
-                middle = Integer.valueOf(A[A.length-1-i]) + Integer.valueOf(B[B.length-1-i]) + index;
-            if (middle == 3) {
-                str = 1 + str;
-                index = 1;
-                //i=i+1;
-            } else if (middle == 2) {
-                str = 0 + str;
-                index = 1;
-            } else if (middle == 0 || middle == 1) {
-                str = middle + str;
-                index = 0;
-            }
-            i = i + 1;
-        }
-        if(index==1)
-            str = index+str;
-        return str;
-    }
-}    
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-LintCode题解（一）" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1736,6 +1219,523 @@ public class Solution {
             return true;
 }
 }
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-LintCode题解（六）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/30/LintCode题解（六）/" class="article-date">
+      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
+</a>
+
+ 
+    <a href="/2017/09/30/LintCode题解（六）/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（六）/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="奇偶分割数组"><a href="#奇偶分割数组" class="headerlink" title="奇偶分割数组"></a>奇偶分割数组</h2><p>分割一个整数数组，使得奇数在前偶数在后。</p>
+<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>给定 [1, 2, 3, 4]，返回 [1, 3, 2, 4]。</p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>这题还是比较简单的，方法很多很多，我们将数组循环遍历，将遍历中的偶数和奇数相互交换就ok了。</p>
+<pre><code>public class Solution {
+/*
+ * @param nums: an array of integers
+ * @return: nothing
+ */
+    public void partitionArray(int[] nums) {
+        // write your code here
+        int length = nums.length;
+        int temp = 0;
+        int index = 0;
+        if(length==0)
+            return;
+        for(int i=0;i&lt;length;i++){
+            if(nums[i]%2==0){
+                index = i;
+                while(nums[index]%2==0){
+                    if(index!=length-1)
+                        index=index+1;
+                    else
+                        break;
+                }
+                temp = nums[i];
+                nums[i] = nums[index];
+                nums[index] = temp;
+            }
+        }
+    }
+}
+</code></pre><h2 id="二进制中1个数"><a href="#二进制中1个数" class="headerlink" title="二进制中1个数"></a>二进制中1个数</h2><p>计算在一个 32 位的整数的二进制表示中有多少个 1.</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给定 32 (100000)，返回 1</p>
+<p>给定 5 (101)，返回 2</p>
+<p>给定 1023 (111111111)，返回 9    </p>
+<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p>按与计算<br>1&amp;1==1，1&amp;0==0，0&amp;&amp;0==0；下面是很巧妙的一个方法。</p>
+<pre><code>public class Solution {
+/*
+ * @param num: An integer
+ * @return: An integer
+ */
+    public int countOnes(int num) {
+        // write your code here
+        int count = 0;
+        while(num!=0){
+            num = num &amp; (num-1);
+            count++;
+        }
+        return count;       
+    }
+}
+</code></pre><h2 id="反转整数"><a href="#反转整数" class="headerlink" title="反转整数"></a>反转整数</h2><p>将一个整数中的数字进行颠倒，当颠倒后的整数溢出时，返回 0 (标记为 32 位整数)。</p>
+<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 x = 123，返回 321</p>
+<p>给定 x = -123，返回 -321</p>
+<h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><p>反转很简单，难点在于颠倒后证书溢出判断，int32位范围是-2^31~2^31-1,这里使用temp/10与reversed_n进行判断，当temp溢出时，/10不等于reversed_n，所以可判断溢出成立。</p>
+<pre><code>public class Solution {
+    /*
+     * @param n: the integer to be reversed
+     * @return: the reversed integer
+     */
+    public int reverseInteger(int n) {
+        // Write your code here
+        int reversed_n = 0;
+
+        while (n != 0) {
+            int temp = reversed_n * 10 + n % 10;
+            n = n / 10;
+            if (temp / 10 != reversed_n) {
+                reversed_n = 0;
+                break;
+            }
+            reversed_n = temp;
+        }
+        return reversed_n;
+    }
+}
+</code></pre><h2 id="加一"><a href="#加一" class="headerlink" title="加一"></a>加一</h2><p>给定一个非负数，表示一个数字数组，在该数的基础上+1，返回一个新的数组。</p>
+<p>该数字按照大小进行排列，最大的数在列表的最前面。</p>
+<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>给定 [1,2,3] 表示 123, 返回 [1,2,4].</p>
+<p>给定 [9,9,9] 表示 999, 返回 [1,0,0,0].</p>
+<h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p>google的题，哪道没有陷阱，第一次被坑了。<br>注意不要把数组转为int型整数，因为不确定数组大小会导致溢出。<br>本题思想是，若数组值都为9，则增加数组length，首位设为1，其他位为0；否则，末位加1，结束返回。</p>
+<pre><code>public class Solution {
+    /*
+     * @param digits: a number represented as an array of digits
+     * @return: the result
+     */
+    public static int[] plusOne(int[] digits) {
+        // write your code here
+        boolean index = true;
+        for(int n=0; n&lt;digits.length;n++){
+            if(digits[n]!=9)
+                index = false;
+        }
+        if(index==true){
+            int[] num = new int[digits.length+1];
+            num[0] = 1;
+            for(int m=1;m&lt;digits.length+1;m++)
+                num[m] = 0;
+            return num;
+        }
+        for(int i=digits.length-1;i&gt;=0;i--){
+            if(digits[i]!=9){
+                digits[i] = digits[i]+1;
+                break;
+            }else{
+                digits[i] = 0;
+            }
+        }
+        return digits;
+    }
+}
+</code></pre><h2 id="把排序数组转换为高度最小的二叉搜索树"><a href="#把排序数组转换为高度最小的二叉搜索树" class="headerlink" title="把排序数组转换为高度最小的二叉搜索树"></a>把排序数组转换为高度最小的二叉搜索树</h2><p>给一个排序数组（从小到大），将其转换为一棵高度最小的排序二叉树。</p>
+<h3 id="样例-4"><a href="#样例-4" class="headerlink" title="样例"></a>样例</h3><p>给出数组 [1,2,3,4,5,6,7], 返回</p>
+<pre><code>     4
+   /   \
+  2     6
+ / \    / \
+1   3  5   7
+</code></pre><h2 id="算法-4"><a href="#算法-4" class="headerlink" title="算法"></a>算法</h2><pre><code>/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */ 
+public class Solution(){
+    /**
+     * @param nums: an integer array
+     * @return: a tree node
+     */
+    public TreeNode sortArrayToBST(int[] A){
+        if(A==null)
+            return null;
+        return bulidTree(A, 0, A.length-1);    
+    }
+
+    public void buildTree(int[] A, int start, int end){
+        if(start&gt;end)
+            return null;
+        int middle = (start+end)/2;
+        TreeNode root = new TreeNode(A[middle]);
+        A.left = buildTree(A, start, middle-1);
+        A.right = buildTree(A, middle+1, end);     
+    }
+}
+</code></pre><h2 id="二进制求和"><a href="#二进制求和" class="headerlink" title="二进制求和"></a>二进制求和</h2><p>给定两个二进制字符串，返回他们的和（用二进制表示）。</p>
+<h2 id="样例-5"><a href="#样例-5" class="headerlink" title="样例"></a>样例</h2><p>a = 11</p>
+<p>b = 1</p>
+<p>返回 100</p>
+<h2 id="算法-5"><a href="#算法-5" class="headerlink" title="算法"></a>算法</h2><p>这种题千万不要将二进制转化为整数，这样转化复杂度将提高几何倍数。<br>注意如果相应位相加结果为2（1+1），则结果设为1，这时要设一个哨兵，相应位溢出时，哨兵设为1；结果为3（1+1+哨兵）时，相同道理。</p>
+<pre><code>public class Solution {
+    /*
+     * @param a: a number
+     * @param b: a number
+     * @return: the result
+     */
+    public String addBinary(String a, String b) {
+        // write your code here
+        if(b.length()==0&amp;&amp;a.length()==0)
+            return null;
+        String str = &quot;&quot;;
+        int index = 0;
+        int i = 0;
+        int middle = 0;
+        String[] A = a.split(&quot;&quot;);
+        String[] B = b.split(&quot;&quot;);
+        while(i&lt;A.length||i&lt;B.length) {
+            if (i &gt;= A.length &amp;&amp; i &lt; B.length)
+                middle = Integer.valueOf(B[B.length-1-i]) + index;
+            else if (i &gt;= B.length &amp;&amp; i &lt; A.length)
+                middle = Integer.valueOf(A[A.length-1-i]) + index;
+            else if (i &lt; A.length &amp;&amp; i &lt; B.length)
+                middle = Integer.valueOf(A[A.length-1-i]) + Integer.valueOf(B[B.length-1-i]) + index;
+            if (middle == 3) {
+                str = 1 + str;
+                index = 1;
+                //i=i+1;
+            } else if (middle == 2) {
+                str = 0 + str;
+                index = 1;
+            } else if (middle == 0 || middle == 1) {
+                str = middle + str;
+                index = 0;
+            }
+            i = i + 1;
+        }
+        if(index==1)
+            str = index+str;
+        return str;
+    }
+}    
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-LintCode题解（五）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/30/LintCode题解（五）/" class="article-date">
+      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
+</a>
+
+ 
+    <a href="/2017/09/30/LintCode题解（五）/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（五）/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="岛屿个数"><a href="#岛屿个数" class="headerlink" title="岛屿个数"></a>岛屿个数</h2><p>给一个01矩阵，求不同的岛屿的个数。</p>
+<p>0代表海，1代表岛，如果两个1相邻，那么这两个1属于同一个岛。我们只考虑上下左右为相邻。</p>
+<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><pre><code>[
+  [1, 1, 0, 0, 0],
+  [0, 1, 0, 0, 1],
+  [0, 0, 0, 1, 1],
+  [0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1]
+]
+</code></pre><p>如上矩阵有3个岛屿。</p>
+<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>这题比较复杂，需要使用到深度遍历，使用递归将已确定的岛屿由true转化为false。并且递归他的四周其他岛屿。</p>
+<pre><code>public class Solution {
+/**
+ * @param grid a boolean 2D matrix
+ * @return an integer
+ */
+    public int numIslands(boolean[][] grid) {
+        // Write your code here
+        if(grid.length==0)
+            return 0;
+        int row = grid.length;
+        int column = grid[0].length;
+        int count = 0;
+
+        for(int i = 0;i &lt; row;i++){
+            for(int j  = 0;j &lt; column;j++){
+                if(grid[i][j]==true){
+                    dfs_Islands(grid,i,j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    private void dfs_Islands(boolean[][] grid, int i, int j){
+        if(i&lt;0||j&lt;0||i&gt;=grid.length||j&gt;=grid[0].length)
+            return; 
+        if(grid[i][j]==true){
+            grid[i][j]=false;
+            dfs_Islands(grid, i-1, j);
+            dfs_Islands(grid, i+1, j);
+            dfs_Islands(grid, i, j-1);
+            dfs_Islands(grid, i, j+1);
+        }    
+    }
+}
+</code></pre><h2 id="有效回文串"><a href="#有效回文串" class="headerlink" title="有效回文串"></a>有效回文串</h2><p>给定一个字符串，判断其是否为一个回文串。只包含字母和数字，忽略大小写。</p>
+<p> 注意事项</p>
+<p>你是否考虑过，字符串有可能是空字符串？这是面试过程中，面试官常常会问的问题。</p>
+<p>在这个题目中，我们将空字符串判定为有效回文。</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>“A man, a plan, a canal: Panama” 是一个回文。</p>
+<p>“race a car” 不是一个回文。</p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
+/*
+ * @param s: A string
+ * @return: Whether the string is a valid palindrome
+ */
+    public static boolean isPalindrome(String s) {
+        // write your code here
+        boolean index = true;
+        if(s.length()==0)
+            return index;
+        String[] str = s。toLowerCase.split(&quot;&quot;);
+        int low = 0;
+        int high = s.length()-1;
+        while(low&lt;high){
+            if(str[low].matches(&quot;\\w&quot;)&amp;&amp;str[high].matches(&quot;\\w&quot;)){
+                if(str[low].equals(str[high])&amp;&amp;low==high-1)
+                    low = low+1;
+                else if(str[low].equals(str[high])&amp;&amp;low!=high+1){
+                    low = low+1;    
+                    high = high-1;
+                }
+                else if(!str[low].equals(str[high]))
+                    break;
+            }else{
+                if(!str[low].matches(&quot;\\w&quot;))
+                    low = low+1;
+                else if(!str[high].matches(&quot;\\w&quot;))
+                    high = high-1;
+            }
+        }
+        if(low==high)
+            index=true;
+        else
+            index=false;
+        return index;    
+    }
+}
+</code></pre><p>上面的算法完全是我凑出来的，汗颜啊。<br>下面是别人写的，给予参考：</p>
+<pre><code>public class Solution {
+/**
+ * @param s A string
+ * @return Whether the string is a valid palindrome
+ */
+    public boolean isPalindrome(String s) {
+        // Write your code here
+        if(s.equals(&quot;&quot;)) return true;
+        int len = s.length();
+        int left = 0;
+        int right = len - 1;
+        s = s.toLowerCase();
+        while(left &lt; right){
+            char leftchar = s.charAt( left );
+            char rightchar = s.charAt( right );
+            while(!isValid(leftchar)){
+                left ++;
+                leftchar = s.charAt( left );
+                if(left&gt;=right) return true;
+            }
+            while(!isValid(rightchar)){
+                right --;
+                rightchar = s.charAt( right );
+                if(right&lt;=left) return true;
+            }
+            if(leftchar != rightchar)
+                return false;
+            left ++;
+            right --;
+        }
+
+        return true;
+
+    }
+    public boolean isValid(char ch){
+        if(ch&gt;=&apos;a&apos; &amp;&amp; ch &lt;= &apos;z&apos;)
+            return true;
+        if(ch &gt;=&apos;0&apos; &amp;&amp; ch &lt;= &apos;9&apos;)
+            return true;
+        return false;
+    }
+}    
+</code></pre><h2 id="最长上升子序列"><a href="#最长上升子序列" class="headerlink" title="最长上升子序列"></a>最长上升子序列</h2><p>给定一个整数数组（下标从 0 到 n-1， n 表示整个数组的规模），请找出该数组中的最长上升连续子序列。（最长上升连续子序列可以定义为从右到左或从左到右的序列。）</p>
+<p> 注意事项</p>
+<p>time</p>
+<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 [5, 4, 2, 1, 3], 其最长上升连续子序列（LICS）为 [5, 4, 2, 1], 返回 4.</p>
+<p>给定 [5, 1, 2, 3, 4], 其最长上升连续子序列（LICS）为 [1, 2, 3, 4], 返回 4.</p>
+<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
+    /*
+     * @param A: An array of Integer
+     * @return: an integer
+     */
+    public int longestIncreasingContinuousSubsequence(int[] A) {
+        // write your code here
+        if(A.length==0)
+            return 0;
+        int up = 1;
+        int _up =1;
+        int _down=1;
+        int down=1;
+        for(int i=1;i&lt;A.length;i++){
+            if(A[i]&gt;A[i-1]){
+                _up = _up+1;
+                if(_down&gt;=down){
+                    down = _down;
+                    _down = 1;
+                }else
+                    _down =1;
+            }
+            if(A[i]&lt;A[i-1]){
+                _down = _down+1;
+                if(_up&gt;=up){
+                    up = _up;
+                    _up = 1;
+                }else
+                    _up=1;
+            }
+        }
+        if(_up&gt;=up)
+            up = _up;
+        if(_down&gt;=down)
+            down = _down;
+        if(down&gt;=up)
+            return down;
+        else
+            return up;
+    }
+}    
 </code></pre>
       
     </div>
@@ -2109,7 +2109,7 @@ public class HelloModelController{
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/29/Java数据库与事务处理机制/">java数据库处理与事务机制</a>
+      <a class="article-title" href="/2017/09/29/Java数据库与事务处理机制/">Java数据库处理与事务机制</a>
     </h1>
   
 
