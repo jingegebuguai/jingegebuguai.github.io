@@ -208,9 +208,7 @@
                     
                       <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
                     
-                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
-                    
-                      <a class="main-nav-link switch-friends-link" href="/">MOxFIVE</a>
+                      <a class="main-nav-link switch-friends-link" href="https://jingegebuguai.github.com/">GitHub</a>
                     
                     </div>
                 </section>
@@ -220,7 +218,7 @@
                 
                 <section class="switch-part switch-part4">
                 
-                    <div id="js-aboutme">专注于前端</div>
+                    <div id="js-aboutme">专注于全栈</div>
                 </section>
                 
             </div>
@@ -306,7 +304,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/21/python中pip install中utf-8错误的解决方法/">pip install中utf-8编码问题</a>
+      <a class="article-title" href="/2017/06/21/python中pip install中utf-8错误的解决方法/">Pip Install中utf-8编码问题</a>
     </h1>
   
 
@@ -382,7 +380,7 @@ chcp 437    //换成美国英语
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/20/我们仍未知道那天所看见的list/">我们仍未知道那些天所看见的list</a>
+      <a class="article-title" href="/2017/06/20/我们仍未知道那天所看见的list/">我们仍未知道那些天所看见的List</a>
     </h1>
   
 
@@ -537,7 +535,7 @@ chcp 437    //换成美国英语
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/01/jquery实现樱花坠落插件/">jquery实现web页面樱花坠落的特效</a>
+      <a class="article-title" href="/2017/06/01/jquery实现樱花坠落插件/">Jquery实现web页面樱花坠落的特效</a>
     </h1>
   
 
@@ -556,12 +554,12 @@ chcp 437    //换成美国英语
 <h2 id="效果演示"><a href="#效果演示" class="headerlink" title="效果演示"></a>效果演示</h2><p>为了更加显眼，背景换成了黑色,gif图有些卡顿，实际效果比较流畅<br>效果详见<a href="https://github.com/jingegebuguai/Cherry_Blossoms" target="_blank" rel="external">Github</a></p>
 <h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><ul>
 <li><p>在需要加入效果的页面加入html代码,位置最好放在body元素下第一个标签</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;cherry&quot;&gt;</div><div class="line">  &lt;img id=&quot;yinghua&quot; src=&quot;../image/yinghua.png&quot; alt=&quot;&quot; &gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"cherry"</span>&gt;</div><div class="line">  &lt;img id=<span class="string">"yinghua"</span> src=<span class="string">"../image/yinghua.png"</span> alt=<span class="string">""</span> &gt;</div><div class="line">&lt;<span class="regexp">/div&gt;</span></div></pre></td></tr></table></figure>
 </li>
 </ul>
 <ul>
 <li><p>导入一下js代码其中各变量可根据需要改变</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$(function()&#123;</div><div class="line">        $(&apos;.cherry&apos;).Cherry_Blossoms(&#123;</div><div class="line">            is_Cherry:true,//是否生成樱花</div><div class="line">            image_min:10,//花瓣最小宽度和高度</div><div class="line">            image_max:50,//花瓣最大宽度和高度</div><div class="line">            time_min:10000,//花瓣最快下坠时间</div><div class="line">            time_max:20000,//花瓣最慢下坠时间</div><div class="line">            interval:500//花瓣生成时间间隔</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">        $(<span class="string">'.cherry'</span>).Cherry_Blossoms(&#123;</div><div class="line">            is_Cherry:<span class="literal">true</span>,<span class="comment">//是否生成樱花</span></div><div class="line">            image_min:<span class="number">10</span>,<span class="comment">//花瓣最小宽度和高度</span></div><div class="line">            image_max:<span class="number">50</span>,<span class="comment">//花瓣最大宽度和高度</span></div><div class="line">            time_min:<span class="number">10000</span>,<span class="comment">//花瓣最快下坠时间</span></div><div class="line">            time_max:<span class="number">20000</span>,<span class="comment">//花瓣最慢下坠时间</span></div><div class="line">            interval:<span class="number">500</span><span class="comment">//花瓣生成时间间隔</span></div><div class="line">        &#125;)</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="js插件"><a href="#js插件" class="headerlink" title="js插件"></a>js插件</h2><ul>
@@ -868,6 +866,116 @@ export class ChildComponent{
 
 
   
+    <article id="post-python进阶学习--参数" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/04/20/python进阶学习--参数/" class="article-date">
+      <time datetime="2017-04-20T12:00:00.000Z" itemprop="datePublished">2017-04-20</time>
+</a>
+
+ 
+    <a href="/2017/04/20/python进阶学习--参数/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/04/20/python进阶学习--参数/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/20/python进阶学习--参数/">Python进阶学习--*Arg、**kw和装饰器</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="arg（可变参数）"><a href="#arg（可变参数）" class="headerlink" title="*arg（可变参数）"></a>*arg（可变参数）</h2><p>主要用于预先并不知道, 函数使用者会传递多少个参数给你, 所以在这个场景下使用这两个关键字。 *args 是用来发送一个非键值对的可变数量的参数列表给一个函数.</p>
+<pre><code>def _abs(*arg):
+    sum = 0 
+    for i in arg:
+        sum = sum + i
+    return sum 
+
+print(_abs(1,2,3))    //6
+</code></pre><h2 id="kw-关键字参数"><a href="#kw-关键字参数" class="headerlink" title="**kw(关键字参数)"></a>**kw(关键字参数)</h2><p><strong>kwargs 允许你将不定长度的键值对, 作为参数传递给一个函数。 如果你想要在一个函数里处理带名字的参数, 你应该使用</strong>kwargs</p>
+<pre><code>def bian_li(**kwargs):
+for key, value in kwargs.items():
+    print(&quot;{0} == {1}&quot;.format(key, value))
+
+print(bian_li(name=&apos;huihi&apos;, age=10))
+// name == huihui
+// age == 10
+</code></pre><h2 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h2><h3 id="原函数"><a href="#原函数" class="headerlink" title="原函数"></a>原函数</h3><pre><code>def dec(func):
+    print(&quot;execute this program&quot;)
+    func()
+    print(&quot;func&apos;s name is %s()&quot; % func.__name__)
+    return func
+
+
+def fun():
+    print(&quot;my name is func()&quot;)
+
+
+_func = dec(fun)
+</code></pre><h3 id="语法糖-装饰原函数"><a href="#语法糖-装饰原函数" class="headerlink" title="语法糖@装饰原函数"></a>语法糖@装饰原函数</h3><pre><code>def dec(func):
+    print(&quot;execute this program&quot;)
+    func()
+    print(&quot;func&apos;s name is %s()&quot; % func.__name__)
+    return func
+
+
+@dec
+    def fun():
+    print(&quot;my name is func()&quot;)
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/未闻花名/">未闻花名</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-总结常见MYSQL数据库优化操作" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -896,7 +1004,7 @@ export class ChildComponent{
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的mysql数据库优化操作</a>
+      <a class="article-title" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的Mysql数据库优化操作</a>
     </h1>
   
 
@@ -984,116 +1092,6 @@ select id from t where Name = &apos;admin&apos;
 
 
   
-    <article id="post-python进阶学习--参数" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/04/20/python进阶学习--参数/" class="article-date">
-      <time datetime="2017-04-20T12:00:00.000Z" itemprop="datePublished">2017-04-20</time>
-</a>
-
- 
-    <a href="/2017/04/20/python进阶学习--参数/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/04/20/python进阶学习--参数/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/20/python进阶学习--参数/">python进阶学习--*arg、**kw和装饰器</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="arg（可变参数）"><a href="#arg（可变参数）" class="headerlink" title="*arg（可变参数）"></a>*arg（可变参数）</h2><p>主要用于预先并不知道, 函数使用者会传递多少个参数给你, 所以在这个场景下使用这两个关键字。 *args 是用来发送一个非键值对的可变数量的参数列表给一个函数.</p>
-<pre><code>def _abs(*arg):
-    sum = 0 
-    for i in arg:
-        sum = sum + i
-    return sum 
-
-print(_abs(1,2,3))    //6
-</code></pre><h2 id="kw-关键字参数"><a href="#kw-关键字参数" class="headerlink" title="**kw(关键字参数)"></a>**kw(关键字参数)</h2><p><strong>kwargs 允许你将不定长度的键值对, 作为参数传递给一个函数。 如果你想要在一个函数里处理带名字的参数, 你应该使用</strong>kwargs</p>
-<pre><code>def bian_li(**kwargs):
-for key, value in kwargs.items():
-    print(&quot;{0} == {1}&quot;.format(key, value))
-
-print(bian_li(name=&apos;huihi&apos;, age=10))
-// name == huihui
-// age == 10
-</code></pre><h2 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h2><h3 id="原函数"><a href="#原函数" class="headerlink" title="原函数"></a>原函数</h3><pre><code>def dec(func):
-    print(&quot;execute this program&quot;)
-    func()
-    print(&quot;func&apos;s name is %s()&quot; % func.__name__)
-    return func
-
-
-def fun():
-    print(&quot;my name is func()&quot;)
-
-
-_func = dec(fun)
-</code></pre><h3 id="语法糖-装饰原函数"><a href="#语法糖-装饰原函数" class="headerlink" title="语法糖@装饰原函数"></a>语法糖@装饰原函数</h3><pre><code>def dec(func):
-    print(&quot;execute this program&quot;)
-    func()
-    print(&quot;func&apos;s name is %s()&quot; % func.__name__)
-    return func
-
-
-@dec
-    def fun():
-    print(&quot;my name is func()&quot;)
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/未闻花名/">未闻花名</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-mysql自连接" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1122,7 +1120,7 @@ _func = dec(fun)
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/18/mysql自连接/">mysql自连接与join关联</a>
+      <a class="article-title" href="/2017/04/18/mysql自连接/">Mysql自连接与join关联</a>
     </h1>
   
 
