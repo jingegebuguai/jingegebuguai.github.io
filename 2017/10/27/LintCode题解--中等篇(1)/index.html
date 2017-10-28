@@ -15,18 +15,18 @@
 
 
 
-<meta name="description" content="前台访问后台图片对于ImageField类型的字段，需要进行特殊处理，相关处理配置如下所示： 1、setting中配置MEDIA_URL和MEDIA_ROOT MEDIA_URL=&amp;quot;media&amp;quot; #配置图片文件夹路径 MEDIA_ROOT=(         os.path.join(BASE_DIR, &amp;apos;&amp;apos;media)     ) 2、如果使用加载，需要在">
-<meta name="keywords" content="Python">
+<meta name="description" content="容易题刷烂了，略感无趣 三角形计数给定一个整数数组，在该数组中，寻找三个数，分别代表三角形三条边的长度，问，可以寻找到多少组这样的三个数来组成三角形？ 样例例如，给定数组 S = {3,4,6,7}，返回 3 其中我们可以找到的三个三角形为： {3,4,6} {3,6,7} {4,6,7} 给定数组 S = {4,4,4,4}, 返回 4 其中我们可以找到的三个三角形为： {4(1),4(2),4">
+<meta name="keywords" content="LintCode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Django图片相关处理方法">
-<meta property="og:url" content="http://huihui.kim/2017/10/20/Django图片相关处理/index.html">
+<meta property="og:title" content="LintCode题解——中等篇（一）">
+<meta property="og:url" content="http://huihui.kim/2017/10/27/LintCode题解--中等篇(1)/index.html">
 <meta property="og:site_name" content="huiHui&#39;s blogs">
-<meta property="og:description" content="前台访问后台图片对于ImageField类型的字段，需要进行特殊处理，相关处理配置如下所示： 1、setting中配置MEDIA_URL和MEDIA_ROOT MEDIA_URL=&amp;quot;media&amp;quot; #配置图片文件夹路径 MEDIA_ROOT=(         os.path.join(BASE_DIR, &amp;apos;&amp;apos;media)     ) 2、如果使用加载，需要在">
+<meta property="og:description" content="容易题刷烂了，略感无趣 三角形计数给定一个整数数组，在该数组中，寻找三个数，分别代表三角形三条边的长度，问，可以寻找到多少组这样的三个数来组成三角形？ 样例例如，给定数组 S = {3,4,6,7}，返回 3 其中我们可以找到的三个三角形为： {3,4,6} {3,6,7} {4,6,7} 给定数组 S = {4,4,4,4}, 返回 4 其中我们可以找到的三个三角形为： {4(1),4(2),4">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-20T12:26:48.124Z">
+<meta property="og:updated_time" content="2017-10-28T07:15:44.632Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Django图片相关处理方法">
-<meta name="twitter:description" content="前台访问后台图片对于ImageField类型的字段，需要进行特殊处理，相关处理配置如下所示： 1、setting中配置MEDIA_URL和MEDIA_ROOT MEDIA_URL=&amp;quot;media&amp;quot; #配置图片文件夹路径 MEDIA_ROOT=(         os.path.join(BASE_DIR, &amp;apos;&amp;apos;media)     ) 2、如果使用加载，需要在">
+<meta name="twitter:title" content="LintCode题解——中等篇（一）">
+<meta name="twitter:description" content="容易题刷烂了，略感无趣 三角形计数给定一个整数数组，在该数组中，寻找三个数，分别代表三角形三条边的长度，问，可以寻找到多少组这样的三个数来组成三角形？ 样例例如，给定数组 S = {3,4,6,7}，返回 3 其中我们可以找到的三个三角形为： {3,4,6} {3,6,7} {4,6,7} 给定数组 S = {4,4,4,4}, 返回 4 其中我们可以找到的三个三角形为： {4(1),4(2),4">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -58,7 +58,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Django图片相关处理方法 | huiHui&#39;s blogs</title>
+<title>LintCode题解——中等篇（一） | huiHui&#39;s blogs</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -271,11 +271,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-Django图片相关处理" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-LintCode题解--中等篇(1)" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/20/Django图片相关处理/" class="article-date">
-      <time datetime="2017-10-20T02:14:00.000Z" itemprop="datePublished">2017-10-20</time>
+      <a href="/2017/10/27/LintCode题解--中等篇(1)/" class="article-date">
+      <time datetime="2017-10-27T06:14:00.000Z" itemprop="datePublished">2017-10-27</time>
 </a>
 
 
@@ -290,7 +290,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Django图片相关处理方法
+      LintCode题解——中等篇（一）
     </h1>
   
 
@@ -305,7 +305,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -315,19 +315,219 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h3 id="前台访问后台图片"><a href="#前台访问后台图片" class="headerlink" title="前台访问后台图片"></a>前台访问后台图片</h3><p>对于ImageField类型的字段，需要进行特殊处理，相关处理配置如下所示：</p>
-<p>1、setting中配置MEDIA_URL和MEDIA_ROOT</p>
-<pre><code>MEDIA_URL=&quot;media&quot;
-#配置图片文件夹路径
-MEDIA_ROOT=(
-        os.path.join(BASE_DIR, &apos;&apos;media)
-    )
-</code></pre><p>2、如果使用加载，需要在setting的TEMPLATES中加上下面</p>
-<pre><code>&apos;django.template.context_processors.madia&apos;
-</code></pre><p>3、设置url</p>
-<pre><code>from django.views.static improt serve
-from project.setting import MEDIA_ROOT
-url(r&apos;^media/(?P&lt;path&gt;.*)&apos;, serve,{&apos;document_root&apos;:settings.MEDIA_ROOT}
+        <p>容易题刷烂了，略感无趣</p>
+<h2 id="三角形计数"><a href="#三角形计数" class="headerlink" title="三角形计数"></a>三角形计数</h2><p>给定一个整数数组，在该数组中，寻找三个数，分别代表三角形三条边的长度，问，可以寻找到多少组这样的三个数来组成三角形？</p>
+<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>例如，给定数组 S = {3,4,6,7}，返回 3</p>
+<p>其中我们可以找到的三个三角形为：</p>
+<pre><code>{3,4,6}
+{3,6,7}
+{4,6,7}
+</code></pre><p>给定数组 S = {4,4,4,4}, 返回 4</p>
+<p>其中我们可以找到的三个三角形为：</p>
+<pre><code>{4(1),4(2),4(3)}
+{4(1),4(2),4(4)}
+{4(1),4(3),4(4)}
+{4(2),4(3),4(4)}
+</code></pre><h3 id="算法详解"><a href="#算法详解" class="headerlink" title="算法详解"></a>算法详解</h3><p>这题按道理算不上是中等题，其实最暴力的方法就是来个三重for循环，每次取三个数，把所有数的组合都尝试一遍，判断每个组合是否符合三角形的定义。</p>
+<pre><code>public class Solution {
+    /*
+     * @param S: A list of integers
+     * @return: An integer
+     */
+    public int triangleCount(int[] S) {
+        // write your code here
+        int index = 0;
+        for(int i=0; i&lt;S.length-2; i++){
+            for(int j=i+1; j&lt;S.length-1;j++){
+                for(int k=j+1;k&lt;S.length;k++){
+                    if(isTriangle(S[i],S[j],S[k]))
+                        index++;
+                }
+            }
+        }
+        return index;
+    }
+
+    public static boolean isTriangle(int a, int b, int c){
+        if(a+b&gt;c&amp;&amp;a+c&gt;b&amp;&amp;b+c&gt;a)
+            return true;
+        else
+            return false;
+    }
+}
+</code></pre><p>解法二：<br>三角形两边之和大于第三边，先将数组排序，然后定位最长边与最短边，然后寻找第三条边的数量，第三条边满足：</p>
+<p>最长边 &gt;= 第三条边 &gt; 最长边 - 最短边<br>可以利用二分查找寻找最短的第三条边的下标，然后和最长边下标之差就是第三条边的数量<br>最后继续定位定位最长边与最短边</p>
+<pre><code>class Solution {
+public:
+    /*
+     * @param : A list of integers
+     * @return: An integer
+     */
+    int triangleCount(vector&lt;int&gt; S) {
+        // write your code here
+        int size = S.size();
+        if (size &lt;= 0) {
+            return 0;
+        }
+
+        int result = 0;
+        sort(S.begin(), S.end());
+        for (int i = 0; i &lt; size - 1; i++) {
+            for (int j = i + 1; j &lt; size; j++) {
+                int third = S[j] - S[i];
+                int low = i + 1, high = j;
+                while (low &lt; high) {
+                    int mid = low + (high - low) / 2;
+                    if (S[mid] &gt; third) {
+                        high = mid;
+                    }
+                    else {
+                        low = mid + 1;
+                    }
+                }
+                result += (j - low);
+            }
+        }
+        return result;
+    }
+};
+</code></pre><h2 id="计算最大值"><a href="#计算最大值" class="headerlink" title="计算最大值"></a>计算最大值</h2><p>给一个字符串类型的数字, 写一个方法去找到最大值, 你可以在任意两个数字间加 + 或 *</p>
+<p>您在真实的面试中是否遇到过这个题？ Yes</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给出 str = 01231, 返回 10 ((((0 + 1) + 2) <em> 3) + 1) = 10 我们得到了最大值 10<br>给出 str = 891, 返回 73 因为 8 </em> 9 <em> 1 = 72 和 8 </em> 9 + 1 = 73, 所以73是最大值</p>
+<pre><code>public class Solution {
+    /*
+     * @param : the given string
+     * @return: the maximum value
+     */
+    public int calcMaxValue(String str) {
+        // write your code here
+        if(str.equals(&quot;&quot;))
+            return 0;
+        String[] array = str.split(&quot;&quot;);
+        int max_result = Integer.parseInt(array[0]);
+        for(int i=0;i&lt;array.length-1;i++){
+            int add = max_result+Integer.parseInt(array[i+1]);
+            int multify = max_result*Integer.parseInt(array[i+1]);
+            if(add&gt;=max_result&amp;&amp;add&gt;=multify)
+                max_result = add;
+            if(multify&gt;=max_result&amp;&amp;multify&gt;add)
+                max_result = multify;
+        }
+        return max_result;
+    }
+};
+</code></pre><h2 id="重复子串"><a href="#重复子串" class="headerlink" title="重复子串"></a>重复子串</h2><p>写一个方法, 给一个由 N 个字符构成的字符串 A和一个由 M 个字符构成的字符串 B, 返回 A 必须重复的次数，使得 B 是重复字符串的子串.如果 B 不可能为重复字符串的子串, 则返回 -1.</p>
+<p> 注意事项</p>
+<p>Assume that 0 &lt;= N &lt;= 1000, 1 &lt;= M &lt;= 1000</p>
+<p>您在真实的面试中是否遇到过这个题？ Yes</p>
+<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给出 A = abcd, B = cdabcdab<br>你的方法需要返回 3, 因为在重复字符串 A 3次之后我们得到了字串 abcdabcdabcd. 字符串B是这个字符串的一个子串.</p>
+<h3 id="算法详解-1"><a href="#算法详解-1" class="headerlink" title="算法详解"></a>算法详解</h3><p>先把B中间包含A的部分全部去除，看两端剩下几个字符串，如果大于两个则return -1，若是两个或一个，则再判断这两个或一个字串是否能被包含在A中。</p>
+<pre><code>import java.util.LinkedList;
+import java.util.List;
+
+public class Solution {
+    /*
+     * @param : string A to be repeated
+     * @param : string B
+     * @return: the minimum number of times A has to be repeated
+     */
+    public static int repeatedString(String A, String B) {
+        // write your code here
+        if(A.length()==0)
+            return -1;
+        if(A.length()&gt;=B.length())
+            if(A.contains(B))
+                return 1;
+        String[] b = B.split(A);
+        int index = -1;
+        List&lt;String&gt; list = new LinkedList&lt;&gt;();
+        for(int i=0;i&lt;b.length;i++) {
+            if (!b[i].equals(&quot;&quot;))
+                list.add(b[i]);
+        }
+        if(A.length()&lt;B.length()){
+            if(list.size()&gt;2)
+                return -1;
+            else {
+                if (list.size() == 1)
+                    if (B.substring(0, 4).equals(A) || B.substring(B.length() - 4, B.length()).equals(A)) {
+                        if(!B.substring(0,4).equals(A)){
+                            if(A.substring(A.length()-list.get(0).length(),A.length()).equals(list.get(0)))
+                                index = 1 + (B.length() - list.get(0).length()) / A.length();
+                        }
+                        if(!B.substring(B.length() - 4, B.length()).equals(A)){
+                            if(A.substring(0, list.get(0).length()).equals(list.get(0)))
+                                index = 1 + (B.length() - list.get(0).length()) / A.length();
+                        }
+                    }
+                if (list.size() == 2)
+                    if (!B.substring(0, 4).equals(A) &amp;&amp; !B.substring(B.length() - 4, B.length()).equals(A)) {
+                        if(A.substring(A.length()-list.get(0).length(),A.length()).equals(list.get(0))&amp;&amp;A.substring(0, list.get(1).length()).equals(list.get(1)))
+                            index = 2 + (B.length() - list.get(0).length() - list.get(1).length()) / A.length();
+                    }
+                if(list.size() == 0)
+                    index = B.length()/A.length();
+            }
+        }
+        return index;
+    }
+}
+</code></pre><h2 id="二进制时间"><a href="#二进制时间" class="headerlink" title="二进制时间"></a>二进制时间</h2><p>给了一个二进制显示时间的手表和一个非负整数 n, n 代表在给定时间表上 1 的数量, 返回所有可能的时间</p>
+<p> 注意事项</p>
+<p>输出的顺序没有要求.<br>小时不能包含前导零, 比如 “01:00” 是不允许的, 应该为 “1:00”.<br>分钟必须由两位数组成, 可能包含前导零, 比如 “10:2” 是无效的, 应该为 “10:02”.</p>
+<p>您在真实的面试中是否遇到过这个题？ Yes</p>
+<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>给出 n = 1<br>返回 [“1:00”, “2:00”, “4:00”, “8:00”, “0:01”, “0:02”, “0:04”, “0:08”, “0:16”, “0:32”]</p>
+<h3 id="算法详解-2"><a href="#算法详解-2" class="headerlink" title="算法详解"></a>算法详解</h3><p>这是一道非常有意思的题目，当然给出一个数，分别把这个数分到时和分里再细分，形成组合。这里给出两个附带的静态函数，具体代码实现很容易懂：</p>
+<pre><code>import java.util.LinkedList;
+import java.util.List;
+
+public class Solution {
+    /*
+     * @param : the number of &quot;1&quot;s on a given timetable
+     * @return: all possible time
+     */
+    public static List&lt;String&gt; binaryTime(int num) {
+        // Write your code here
+        List&lt;String&gt; list = new LinkedList&lt;&gt;();
+        for(int i=0;i&lt;=num;i++){
+            List&lt;String&gt; list1 = binarylist(i, true);
+            List&lt;String&gt; list2 = binarylist(num-i, false);
+            for(String _list1 : list1){
+                for(String _list2 : list2){
+                    list.add(_list1+&quot;:&quot;+_list2);
+                }
+            }
+        }
+        return list;
+    }
+
+    public static List&lt;String&gt; binarylist(int _num, boolean index) {
+        List&lt;String&gt; list = new LinkedList&lt;&gt;();
+        if(index == false)
+            for(int k=0;k&lt;60;k++){
+                if(_num==binaryOneNum(k)&amp;&amp;k&lt;10)
+                    list.add(&quot;0&quot;+k);
+                if(_num==binaryOneNum(k)&amp;&amp;k&gt;=10)
+                    list.add(String.valueOf(k));
+            }
+        else
+            for(int j=0;j&lt;12;j++){
+                if(_num==binaryOneNum(j))
+                    list.add(String.valueOf(j));
+            }
+        return list;
+    }
+
+    public static int binaryOneNum(int timeNum) {
+        int num = 0;
+        while (timeNum != 0) {
+            if (timeNum % 2 == 1)
+                num = num + 1;
+             timeNum = timeNum/2;
+        }
+        return num;
+    }
+};
 </code></pre>
       
     </div>
@@ -336,13 +536,13 @@ url(r&apos;^media/(?P&lt;path&gt;.*)&apos;, serve,{&apos;document_root&apos;:set
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a></p>
+        <p><span>本文标题:</span><a href="/2017/10/27/LintCode题解--中等篇(1)/">LintCode题解——中等篇（一）</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">huiHui</a></p>
-        <p><span>发布时间:</span>2017-10-20, 10:14:00</p>
-        <p><span>最后更新:</span>2017-09-20, 20:26:48</p>
+        <p><span>发布时间:</span>2017-10-27, 14:14:00</p>
+        <p><span>最后更新:</span>2017-10-28, 15:15:44</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/10/20/Django图片相关处理/" title="Django图片相关处理方法">http://huihui.kim/2017/10/20/Django图片相关处理/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/10/20/Django图片相关处理/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/27/LintCode题解--中等篇(1)/" title="LintCode题解——中等篇（一）">http://huihui.kim/2017/10/27/LintCode题解--中等篇(1)/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/10/27/LintCode题解--中等篇(1)/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -354,16 +554,10 @@ url(r&apos;^media/(?P&lt;path&gt;.*)&apos;, serve,{&apos;document_root&apos;:set
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/10/24/走近Java并发—Lock/">
-                    Java并发——Lock
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/10/19/Spring基于注解的配置/">
-                    Spring基于注解的配置
+                <a href="/2017/10/26/走近Java并发—ThreadLocal/">
+                    认识Java并发艺术——ThreadLocal
                 </a>
             </div>
         
@@ -375,7 +569,7 @@ url(r&apos;^media/(?P&lt;path&gt;.*)&apos;, serve,{&apos;document_root&apos;:set
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前台访问后台图片"><span class="toc-number">1.</span> <span class="toc-text">前台访问后台图片</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#三角形计数"><span class="toc-number">1.</span> <span class="toc-text">三角形计数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#样例"><span class="toc-number">1.1.</span> <span class="toc-text">样例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法详解"><span class="toc-number">1.2.</span> <span class="toc-text">算法详解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计算最大值"><span class="toc-number">2.</span> <span class="toc-text">计算最大值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#样例-1"><span class="toc-number">2.1.</span> <span class="toc-text">样例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#重复子串"><span class="toc-number">3.</span> <span class="toc-text">重复子串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#样例-2"><span class="toc-number">3.1.</span> <span class="toc-text">样例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法详解-1"><span class="toc-number">3.2.</span> <span class="toc-text">算法详解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二进制时间"><span class="toc-number">4.</span> <span class="toc-text">二进制时间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#样例-3"><span class="toc-number">4.1.</span> <span class="toc-text">样例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法详解-2"><span class="toc-number">4.2.</span> <span class="toc-text">算法详解</span></a></li></ol></li></ol>
         
     </div>
     <style>
@@ -411,7 +605,7 @@ url(r&apos;^media/(?P&lt;path&gt;.*)&apos;, serve,{&apos;document_root&apos;:set
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"Django图片相关处理方法　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"LintCode题解——中等篇（一）　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -430,8 +624,8 @@ url(r&apos;^media/(?P&lt;path&gt;.*)&apos;, serve,{&apos;document_root&apos;:set
     <div id="disqus_thread"></div>
     <script>
         var disqus_config = function(){
-            this.page.url = 'http://huihui.kim/2017/10/20/Django图片相关处理/';
-            this.page.identifier = '2017/10/20/Django图片相关处理/';
+            this.page.url = 'http://huihui.kim/2017/10/27/LintCode题解--中等篇(1)/';
+            this.page.identifier = '2017/10/27/LintCode题解--中等篇(1)/';
         };
         var loadComment = function(){
             var d = document, s = d.createElement('script');
@@ -453,15 +647,13 @@ url(r&apos;^media/(?P&lt;path&gt;.*)&apos;, serve,{&apos;document_root&apos;:set
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/10/24/走近Java并发—Lock/" title="上一篇: Java并发——Lock">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/10/19/Spring基于注解的配置/" title="下一篇: Spring基于注解的配置">
+            <a href="/2017/10/26/走近Java并发—ThreadLocal/" title="下一篇: 认识Java并发艺术——ThreadLocal">
                 <i class="fa fa-angle-right"></i>
             </a>
         

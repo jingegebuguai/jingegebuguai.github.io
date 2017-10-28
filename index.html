@@ -276,6 +276,291 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-LintCode题解--中等篇(1)" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/27/LintCode题解--中等篇(1)/" class="article-date">
+      <time datetime="2017-10-27T06:14:00.000Z" itemprop="datePublished">2017-10-27</time>
+</a>
+
+ 
+    <a href="/2017/10/27/LintCode题解--中等篇(1)/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/27/LintCode题解--中等篇(1)/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/27/LintCode题解--中等篇(1)/">LintCode题解——中等篇（一）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>容易题刷烂了，略感无趣</p>
+<h2 id="三角形计数"><a href="#三角形计数" class="headerlink" title="三角形计数"></a>三角形计数</h2><p>给定一个整数数组，在该数组中，寻找三个数，分别代表三角形三条边的长度，问，可以寻找到多少组这样的三个数来组成三角形？</p>
+<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>例如，给定数组 S = {3,4,6,7}，返回 3</p>
+<p>其中我们可以找到的三个三角形为：</p>
+<pre><code>{3,4,6}
+{3,6,7}
+{4,6,7}
+</code></pre><p>给定数组 S = {4,4,4,4}, 返回 4</p>
+<p>其中我们可以找到的三个三角形为：</p>
+<pre><code>{4(1),4(2),4(3)}
+{4(1),4(2),4(4)}
+{4(1),4(3),4(4)}
+{4(2),4(3),4(4)}
+</code></pre><h3 id="算法详解"><a href="#算法详解" class="headerlink" title="算法详解"></a>算法详解</h3><p>这题按道理算不上是中等题，其实最暴力的方法就是来个三重for循环，每次取三个数，把所有数的组合都尝试一遍，判断每个组合是否符合三角形的定义。</p>
+<pre><code>public class Solution {
+    /*
+     * @param S: A list of integers
+     * @return: An integer
+     */
+    public int triangleCount(int[] S) {
+        // write your code here
+        int index = 0;
+        for(int i=0; i&lt;S.length-2; i++){
+            for(int j=i+1; j&lt;S.length-1;j++){
+                for(int k=j+1;k&lt;S.length;k++){
+                    if(isTriangle(S[i],S[j],S[k]))
+                        index++;
+                }
+            }
+        }
+        return index;
+    }
+
+    public static boolean isTriangle(int a, int b, int c){
+        if(a+b&gt;c&amp;&amp;a+c&gt;b&amp;&amp;b+c&gt;a)
+            return true;
+        else
+            return false;
+    }
+}
+</code></pre><p>解法二：<br>三角形两边之和大于第三边，先将数组排序，然后定位最长边与最短边，然后寻找第三条边的数量，第三条边满足：</p>
+<p>最长边 &gt;= 第三条边 &gt; 最长边 - 最短边<br>可以利用二分查找寻找最短的第三条边的下标，然后和最长边下标之差就是第三条边的数量<br>最后继续定位定位最长边与最短边</p>
+<pre><code>class Solution {
+public:
+    /*
+     * @param : A list of integers
+     * @return: An integer
+     */
+    int triangleCount(vector&lt;int&gt; S) {
+        // write your code here
+        int size = S.size();
+        if (size &lt;= 0) {
+            return 0;
+        }
+
+        int result = 0;
+        sort(S.begin(), S.end());
+        for (int i = 0; i &lt; size - 1; i++) {
+            for (int j = i + 1; j &lt; size; j++) {
+                int third = S[j] - S[i];
+                int low = i + 1, high = j;
+                while (low &lt; high) {
+                    int mid = low + (high - low) / 2;
+                    if (S[mid] &gt; third) {
+                        high = mid;
+                    }
+                    else {
+                        low = mid + 1;
+                    }
+                }
+                result += (j - low);
+            }
+        }
+        return result;
+    }
+};
+</code></pre><h2 id="计算最大值"><a href="#计算最大值" class="headerlink" title="计算最大值"></a>计算最大值</h2><p>给一个字符串类型的数字, 写一个方法去找到最大值, 你可以在任意两个数字间加 + 或 *</p>
+<p>您在真实的面试中是否遇到过这个题？ Yes</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给出 str = 01231, 返回 10 ((((0 + 1) + 2) <em> 3) + 1) = 10 我们得到了最大值 10<br>给出 str = 891, 返回 73 因为 8 </em> 9 <em> 1 = 72 和 8 </em> 9 + 1 = 73, 所以73是最大值</p>
+<pre><code>public class Solution {
+    /*
+     * @param : the given string
+     * @return: the maximum value
+     */
+    public int calcMaxValue(String str) {
+        // write your code here
+        if(str.equals(&quot;&quot;))
+            return 0;
+        String[] array = str.split(&quot;&quot;);
+        int max_result = Integer.parseInt(array[0]);
+        for(int i=0;i&lt;array.length-1;i++){
+            int add = max_result+Integer.parseInt(array[i+1]);
+            int multify = max_result*Integer.parseInt(array[i+1]);
+            if(add&gt;=max_result&amp;&amp;add&gt;=multify)
+                max_result = add;
+            if(multify&gt;=max_result&amp;&amp;multify&gt;add)
+                max_result = multify;
+        }
+        return max_result;
+    }
+};
+</code></pre><h2 id="重复子串"><a href="#重复子串" class="headerlink" title="重复子串"></a>重复子串</h2><p>写一个方法, 给一个由 N 个字符构成的字符串 A和一个由 M 个字符构成的字符串 B, 返回 A 必须重复的次数，使得 B 是重复字符串的子串.如果 B 不可能为重复字符串的子串, 则返回 -1.</p>
+<p> 注意事项</p>
+<p>Assume that 0 &lt;= N &lt;= 1000, 1 &lt;= M &lt;= 1000</p>
+<p>您在真实的面试中是否遇到过这个题？ Yes</p>
+<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给出 A = abcd, B = cdabcdab<br>你的方法需要返回 3, 因为在重复字符串 A 3次之后我们得到了字串 abcdabcdabcd. 字符串B是这个字符串的一个子串.</p>
+<h3 id="算法详解-1"><a href="#算法详解-1" class="headerlink" title="算法详解"></a>算法详解</h3><p>先把B中间包含A的部分全部去除，看两端剩下几个字符串，如果大于两个则return -1，若是两个或一个，则再判断这两个或一个字串是否能被包含在A中。</p>
+<pre><code>import java.util.LinkedList;
+import java.util.List;
+
+public class Solution {
+    /*
+     * @param : string A to be repeated
+     * @param : string B
+     * @return: the minimum number of times A has to be repeated
+     */
+    public static int repeatedString(String A, String B) {
+        // write your code here
+        if(A.length()==0)
+            return -1;
+        if(A.length()&gt;=B.length())
+            if(A.contains(B))
+                return 1;
+        String[] b = B.split(A);
+        int index = -1;
+        List&lt;String&gt; list = new LinkedList&lt;&gt;();
+        for(int i=0;i&lt;b.length;i++) {
+            if (!b[i].equals(&quot;&quot;))
+                list.add(b[i]);
+        }
+        if(A.length()&lt;B.length()){
+            if(list.size()&gt;2)
+                return -1;
+            else {
+                if (list.size() == 1)
+                    if (B.substring(0, 4).equals(A) || B.substring(B.length() - 4, B.length()).equals(A)) {
+                        if(!B.substring(0,4).equals(A)){
+                            if(A.substring(A.length()-list.get(0).length(),A.length()).equals(list.get(0)))
+                                index = 1 + (B.length() - list.get(0).length()) / A.length();
+                        }
+                        if(!B.substring(B.length() - 4, B.length()).equals(A)){
+                            if(A.substring(0, list.get(0).length()).equals(list.get(0)))
+                                index = 1 + (B.length() - list.get(0).length()) / A.length();
+                        }
+                    }
+                if (list.size() == 2)
+                    if (!B.substring(0, 4).equals(A) &amp;&amp; !B.substring(B.length() - 4, B.length()).equals(A)) {
+                        if(A.substring(A.length()-list.get(0).length(),A.length()).equals(list.get(0))&amp;&amp;A.substring(0, list.get(1).length()).equals(list.get(1)))
+                            index = 2 + (B.length() - list.get(0).length() - list.get(1).length()) / A.length();
+                    }
+                if(list.size() == 0)
+                    index = B.length()/A.length();
+            }
+        }
+        return index;
+    }
+}
+</code></pre><h2 id="二进制时间"><a href="#二进制时间" class="headerlink" title="二进制时间"></a>二进制时间</h2><p>给了一个二进制显示时间的手表和一个非负整数 n, n 代表在给定时间表上 1 的数量, 返回所有可能的时间</p>
+<p> 注意事项</p>
+<p>输出的顺序没有要求.<br>小时不能包含前导零, 比如 “01:00” 是不允许的, 应该为 “1:00”.<br>分钟必须由两位数组成, 可能包含前导零, 比如 “10:2” 是无效的, 应该为 “10:02”.</p>
+<p>您在真实的面试中是否遇到过这个题？ Yes</p>
+<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>给出 n = 1<br>返回 [“1:00”, “2:00”, “4:00”, “8:00”, “0:01”, “0:02”, “0:04”, “0:08”, “0:16”, “0:32”]</p>
+<h3 id="算法详解-2"><a href="#算法详解-2" class="headerlink" title="算法详解"></a>算法详解</h3><p>这是一道非常有意思的题目，当然给出一个数，分别把这个数分到时和分里再细分，形成组合。这里给出两个附带的静态函数，具体代码实现很容易懂：</p>
+<pre><code>import java.util.LinkedList;
+import java.util.List;
+
+public class Solution {
+    /*
+     * @param : the number of &quot;1&quot;s on a given timetable
+     * @return: all possible time
+     */
+    public static List&lt;String&gt; binaryTime(int num) {
+        // Write your code here
+        List&lt;String&gt; list = new LinkedList&lt;&gt;();
+        for(int i=0;i&lt;=num;i++){
+            List&lt;String&gt; list1 = binarylist(i, true);
+            List&lt;String&gt; list2 = binarylist(num-i, false);
+            for(String _list1 : list1){
+                for(String _list2 : list2){
+                    list.add(_list1+&quot;:&quot;+_list2);
+                }
+            }
+        }
+        return list;
+    }
+
+    public static List&lt;String&gt; binarylist(int _num, boolean index) {
+        List&lt;String&gt; list = new LinkedList&lt;&gt;();
+        if(index == false)
+            for(int k=0;k&lt;60;k++){
+                if(_num==binaryOneNum(k)&amp;&amp;k&lt;10)
+                    list.add(&quot;0&quot;+k);
+                if(_num==binaryOneNum(k)&amp;&amp;k&gt;=10)
+                    list.add(String.valueOf(k));
+            }
+        else
+            for(int j=0;j&lt;12;j++){
+                if(_num==binaryOneNum(j))
+                    list.add(String.valueOf(j));
+            }
+        return list;
+    }
+
+    public static int binaryOneNum(int timeNum) {
+        int num = 0;
+        while (timeNum != 0) {
+            if (timeNum % 2 == 1)
+                num = num + 1;
+             timeNum = timeNum/2;
+        }
+        return num;
+    }
+};
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-走近Java并发—ThreadLocal" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1364,168 +1649,6 @@ yum install gcc
 </code></pre><p>4、重启验证<br>启动${nginx}/sbin/nginx<br>重启${nginx}/sbin/nginx -s reload,如sudo ./nginx -s reload<br>${nginx}为安装在系统中的路径，如/usr/local/nginx<br>5、访问验证<br>使用默认80端口访问验证<a href="http://localhost:80" target="_blank" rel="external">http://localhost:80</a></p>
 <h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>可以配置域名转发，但是请一定要配置host，并且host生效之后才可以，设置完成后腰重启浏览器<br>1、linux<br>sudo vim /etc/hosts<br>添加好对应的域名及ip<br>保存退出</p>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-CentOS下jdk、tomcat配置" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/06/CentOS下jdk、tomcat配置/" class="article-date">
-      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
-</a>
-
- 
-    <a href="/2017/10/06/CentOS下jdk、tomcat配置/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下jdk、tomcat配置/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="Centos下jdk安装配置"><a href="#Centos下jdk安装配置" class="headerlink" title="Centos下jdk安装配置"></a>Centos下jdk安装配置</h2><h3 id="查看jdk版本"><a href="#查看jdk版本" class="headerlink" title="查看jdk版本"></a>查看jdk版本</h3><pre><code>java -version
-</code></pre><h3 id="查看jdk信息"><a href="#查看jdk信息" class="headerlink" title="查看jdk信息"></a>查看jdk信息</h3><pre><code>[root@localhost ~]#  rpm -qa | grep java
-javapackages-tools-3.4.1-6.el7_0.noarch
-tzdata-java-2014i-1.el7.noarch
-java-1.7.0-openjdk-headless-1.7.0.71-2.5.3.1.el7_0.x86_64
-java-1.7.0-openjdk-1.7.0.71-2.5.3.1.el7_0.x86_64
-python-javapackages-3.4.1-6.el7_0.noarch
-</code></pre><h3 id="卸载OpenJDK"><a href="#卸载OpenJDK" class="headerlink" title="卸载OpenJDK"></a>卸载OpenJDK</h3><p>执行以下操作：</p>
-<pre><code>[root@localhost ~]# rpm -e --nodeps tzdata-java-2014i-1.el7.noarch
-[root@localhost ~]# rpm -e --nodeps java-1.7.0-openjdk-headless-1.7.0.71-2.5.3.1.el7_0.x86_64
-[root@localhost ~]# rpm -e --nodeps java-1.7.0-openjdk-1.7.0.71-2.5.3.1.el7_0.x86_64
-</code></pre><h3 id="安装jdk"><a href="#安装jdk" class="headerlink" title="安装jdk"></a>安装jdk</h3><pre><code>[root@zck local]# rpm -ivh jdk-8u25-linux-x64.rpm    
-</code></pre><p>默认安装在/usr/java目录下。</p>
-<h3 id="查看jdk路径"><a href="#查看jdk路径" class="headerlink" title="查看jdk路径"></a>查看jdk路径</h3><pre><code>whereis java
-which java    
-echo $JAVA_HOME
-echo $PATH
-</code></pre><h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><p>vim下进入/etc/profile<br>在profile文件最后加入如下：</p>
-<pre><code>export JAVA_HOME=/usr/bin/java
-export PATH=$JAVA_HOME/bin:$PATH
-export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar                    
-</code></pre><p>具体配置还需根据各自对应的版本而变动</p>
-<h2 id="CentOS下Tomacat安装"><a href="#CentOS下Tomacat安装" class="headerlink" title="CentOS下Tomacat安装"></a>CentOS下Tomacat安装</h2><p>安装tomcat之前需要配置好jdk</p>
-<h3 id="下载tomcat-9-0"><a href="#下载tomcat-9-0" class="headerlink" title="下载tomcat 9.0"></a>下载tomcat 9.0</h3><p>前往<a href="https://tomcat.apache.org/download-90.cgi进行复制tar.gz链接地址，在centos中进行下载，并且解压缩" target="_blank" rel="external">https://tomcat.apache.org/download-90.cgi进行复制tar.gz链接地址，在centos中进行下载，并且解压缩</a></p>
-<pre><code>tar -zxvf apache-tomcat-9.0.1.tar.gz
-</code></pre><h3 id="配置UTF-8字符集"><a href="#配置UTF-8字符集" class="headerlink" title="配置UTF-8字符集"></a>配置UTF-8字符集</h3><p>进入tomcat安装的conf文件夹，编辑server.xml</p>
-<pre><code>sudo vim server.xml
-</code></pre><p>找到配置8080默认端口的位置，在xml节点末尾增加URIEncoding=”UTF-8”.</p>
-<h3 id="tomcat验证"><a href="#tomcat验证" class="headerlink" title="tomcat验证"></a>tomcat验证</h3><p>先进入系统解压缩后的tomcat目录，进入bin目录，执行./startup.sh.<br>打开启动tomcat机器的ip地址和默认8080端口，如果是其他机器访问，找到此机器的ip地址，进行访问</p>
-<h2 id="Maven安装配置"><a href="#Maven安装配置" class="headerlink" title="Maven安装配置"></a>Maven安装配置</h2><p>安装版本为3.0.5，安装之前需要确保电脑上配置好tomcat，用以下镜像下载</p>
-<pre><code>https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.0.5/binaries
-</code></pre><h3 id="解压缩Maven"><a href="#解压缩Maven" class="headerlink" title="解压缩Maven"></a>解压缩Maven</h3><pre><code>tar-zxvf apache-maven-3.0.5-bin.tar.gz
-</code></pre><h3 id="配置环境变量-1"><a href="#配置环境变量-1" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><pre><code>sudo vim /etc/profile
-//在最下面增加Maven环境变量
-export MAVEN_HOME=/developer/apache-maven-3.0.5
-export PATH=$PATH:$JAVA_HOME/bin:$MAVEN_HOME/bin
-//执行source /etc/profile
-</code></pre><h3 id="进行验证"><a href="#进行验证" class="headerlink" title="进行验证"></a>进行验证</h3><pre><code>mvn -version
-</code></pre><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><p>清除命令</p>
-<pre><code>mvn clean
-</code></pre><p>编译命令</p>
-<pre><code>mvn compile
-</code></pre><p>打包命令</p>
-<pre><code>mvn package
-</code></pre><p>跳过单元测试</p>
-<pre><code>mvn clean package -Dmaven.test.skip=true 
-</code></pre><h2 id="vsftpd安装"><a href="#vsftpd安装" class="headerlink" title="vsftpd安装"></a>vsftpd安装</h2><p>执行yum -y install vsftpd<br>注意：</p>
-<ul>
-<li>是否使用sudo权限执行请根据就环境决定</li>
-<li>rpm -qa | grep vsftpd可通过这个检查是否已经安装vsftpd</li>
-<li>默认配置文件在/etc/vsftpd/vsftpd.conf</li>
-</ul>
-<h3 id="创建虚拟用户"><a href="#创建虚拟用户" class="headerlink" title="创建虚拟用户"></a>创建虚拟用户</h3><ul>
-<li>选择在根或者用户目录下创建ftp文件夹：mkdir ftpfile,如/ftpfile</li>
-<li>添加匿名用户：useradd ftpuser -d /ftpfile -s /sbin/nologin</li>
-<li>修改ftpfile权限：chown -R ftpuser.ftpuser /ftpfile</li>
-<li>重设ftpuser密码：passwd ftpuser</li>
-</ul>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><pre><code>cd /etc/vsftpd
-sudo vim chroot_list
-</code></pre><p>将刚才新增的虚拟用户添加到此配置文件，后续引用</p>
-<pre><code>sudo vim /etc/selinux/config
-</code></pre><p>修改为SELINUX=disabledu<br>如果验证的时候出现550拒绝访问执行</p>
-<pre><code>sudo setsebool -P ftp_home_dir 1
-</code></pre><p>重启linux服务器，执行reboot命令</p>
-<pre><code>sudo vim /etc/vsftpd/vsftpd.conf
-</code></pre><h3 id="防火墙配置"><a href="#防火墙配置" class="headerlink" title="防火墙配置"></a>防火墙配置</h3><pre><code>sudo vim /etc/sysconfig/iptables-config
-</code></pre><p>将以下配置添加到防火墙配置中</p>
-<pre><code>-A INPUT -p TCP --dport 61001:62000 -j ACCEPT
--A OUTPUT -p TCP --sport 61001:62000 -j ACCEPT
--A INPUT -p TCP --dport 20 -j ACCEPT
--A OUTPUT -p TCP --sport 20 -j ACCEPT
--A INPUT -p TCP --dport 21 -j ACCEPT
--A OUTPUT -p TCP --sport 21 -j ACCEPT
-</code></pre><p>重启防火墙<br>centos7以下版本</p>
-<pre><code>sudo service iptables restart
-</code></pre><p>centos7</p>
-<pre><code>systemctl start filewalld.service #开启防火墙
-firewall-cmd --reload #重启firewall
-systemctl stop firewalld.service #停止firewall
-systemctl disable firewalld.service #禁止firewall开机启动
-</code></pre><h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><pre><code>sudo service vsftpd restart
-//cebtos7
-sudo systemctl restart vsftpd.service
-</code></pre><p>第一次启动时shutting down vsftpd是failed没关系，这是重启命令，保证starting vsftpd是ok即可</p>
-<h3 id="设置selinux"><a href="#设置selinux" class="headerlink" title="设置selinux"></a>设置selinux</h3><pre><code># sudo vim /etc/selinux/config
-# 注释SELINUX=enforcing
-SELINUX=disable
-# 保存退出
-setenforce 0
-</code></pre>
       
     </div>
     

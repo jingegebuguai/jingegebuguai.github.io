@@ -348,6 +348,168 @@
 
 
   
+    <article id="post-CentOS下jdk、tomcat配置" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/06/CentOS下jdk、tomcat配置/" class="article-date">
+      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+
+ 
+    <a href="/2017/10/06/CentOS下jdk、tomcat配置/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下jdk、tomcat配置/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Centos下jdk安装配置"><a href="#Centos下jdk安装配置" class="headerlink" title="Centos下jdk安装配置"></a>Centos下jdk安装配置</h2><h3 id="查看jdk版本"><a href="#查看jdk版本" class="headerlink" title="查看jdk版本"></a>查看jdk版本</h3><pre><code>java -version
+</code></pre><h3 id="查看jdk信息"><a href="#查看jdk信息" class="headerlink" title="查看jdk信息"></a>查看jdk信息</h3><pre><code>[root@localhost ~]#  rpm -qa | grep java
+javapackages-tools-3.4.1-6.el7_0.noarch
+tzdata-java-2014i-1.el7.noarch
+java-1.7.0-openjdk-headless-1.7.0.71-2.5.3.1.el7_0.x86_64
+java-1.7.0-openjdk-1.7.0.71-2.5.3.1.el7_0.x86_64
+python-javapackages-3.4.1-6.el7_0.noarch
+</code></pre><h3 id="卸载OpenJDK"><a href="#卸载OpenJDK" class="headerlink" title="卸载OpenJDK"></a>卸载OpenJDK</h3><p>执行以下操作：</p>
+<pre><code>[root@localhost ~]# rpm -e --nodeps tzdata-java-2014i-1.el7.noarch
+[root@localhost ~]# rpm -e --nodeps java-1.7.0-openjdk-headless-1.7.0.71-2.5.3.1.el7_0.x86_64
+[root@localhost ~]# rpm -e --nodeps java-1.7.0-openjdk-1.7.0.71-2.5.3.1.el7_0.x86_64
+</code></pre><h3 id="安装jdk"><a href="#安装jdk" class="headerlink" title="安装jdk"></a>安装jdk</h3><pre><code>[root@zck local]# rpm -ivh jdk-8u25-linux-x64.rpm    
+</code></pre><p>默认安装在/usr/java目录下。</p>
+<h3 id="查看jdk路径"><a href="#查看jdk路径" class="headerlink" title="查看jdk路径"></a>查看jdk路径</h3><pre><code>whereis java
+which java    
+echo $JAVA_HOME
+echo $PATH
+</code></pre><h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><p>vim下进入/etc/profile<br>在profile文件最后加入如下：</p>
+<pre><code>export JAVA_HOME=/usr/bin/java
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar                    
+</code></pre><p>具体配置还需根据各自对应的版本而变动</p>
+<h2 id="CentOS下Tomacat安装"><a href="#CentOS下Tomacat安装" class="headerlink" title="CentOS下Tomacat安装"></a>CentOS下Tomacat安装</h2><p>安装tomcat之前需要配置好jdk</p>
+<h3 id="下载tomcat-9-0"><a href="#下载tomcat-9-0" class="headerlink" title="下载tomcat 9.0"></a>下载tomcat 9.0</h3><p>前往<a href="https://tomcat.apache.org/download-90.cgi进行复制tar.gz链接地址，在centos中进行下载，并且解压缩" target="_blank" rel="external">https://tomcat.apache.org/download-90.cgi进行复制tar.gz链接地址，在centos中进行下载，并且解压缩</a></p>
+<pre><code>tar -zxvf apache-tomcat-9.0.1.tar.gz
+</code></pre><h3 id="配置UTF-8字符集"><a href="#配置UTF-8字符集" class="headerlink" title="配置UTF-8字符集"></a>配置UTF-8字符集</h3><p>进入tomcat安装的conf文件夹，编辑server.xml</p>
+<pre><code>sudo vim server.xml
+</code></pre><p>找到配置8080默认端口的位置，在xml节点末尾增加URIEncoding=”UTF-8”.</p>
+<h3 id="tomcat验证"><a href="#tomcat验证" class="headerlink" title="tomcat验证"></a>tomcat验证</h3><p>先进入系统解压缩后的tomcat目录，进入bin目录，执行./startup.sh.<br>打开启动tomcat机器的ip地址和默认8080端口，如果是其他机器访问，找到此机器的ip地址，进行访问</p>
+<h2 id="Maven安装配置"><a href="#Maven安装配置" class="headerlink" title="Maven安装配置"></a>Maven安装配置</h2><p>安装版本为3.0.5，安装之前需要确保电脑上配置好tomcat，用以下镜像下载</p>
+<pre><code>https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.0.5/binaries
+</code></pre><h3 id="解压缩Maven"><a href="#解压缩Maven" class="headerlink" title="解压缩Maven"></a>解压缩Maven</h3><pre><code>tar-zxvf apache-maven-3.0.5-bin.tar.gz
+</code></pre><h3 id="配置环境变量-1"><a href="#配置环境变量-1" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><pre><code>sudo vim /etc/profile
+//在最下面增加Maven环境变量
+export MAVEN_HOME=/developer/apache-maven-3.0.5
+export PATH=$PATH:$JAVA_HOME/bin:$MAVEN_HOME/bin
+//执行source /etc/profile
+</code></pre><h3 id="进行验证"><a href="#进行验证" class="headerlink" title="进行验证"></a>进行验证</h3><pre><code>mvn -version
+</code></pre><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><p>清除命令</p>
+<pre><code>mvn clean
+</code></pre><p>编译命令</p>
+<pre><code>mvn compile
+</code></pre><p>打包命令</p>
+<pre><code>mvn package
+</code></pre><p>跳过单元测试</p>
+<pre><code>mvn clean package -Dmaven.test.skip=true 
+</code></pre><h2 id="vsftpd安装"><a href="#vsftpd安装" class="headerlink" title="vsftpd安装"></a>vsftpd安装</h2><p>执行yum -y install vsftpd<br>注意：</p>
+<ul>
+<li>是否使用sudo权限执行请根据就环境决定</li>
+<li>rpm -qa | grep vsftpd可通过这个检查是否已经安装vsftpd</li>
+<li>默认配置文件在/etc/vsftpd/vsftpd.conf</li>
+</ul>
+<h3 id="创建虚拟用户"><a href="#创建虚拟用户" class="headerlink" title="创建虚拟用户"></a>创建虚拟用户</h3><ul>
+<li>选择在根或者用户目录下创建ftp文件夹：mkdir ftpfile,如/ftpfile</li>
+<li>添加匿名用户：useradd ftpuser -d /ftpfile -s /sbin/nologin</li>
+<li>修改ftpfile权限：chown -R ftpuser.ftpuser /ftpfile</li>
+<li>重设ftpuser密码：passwd ftpuser</li>
+</ul>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><pre><code>cd /etc/vsftpd
+sudo vim chroot_list
+</code></pre><p>将刚才新增的虚拟用户添加到此配置文件，后续引用</p>
+<pre><code>sudo vim /etc/selinux/config
+</code></pre><p>修改为SELINUX=disabledu<br>如果验证的时候出现550拒绝访问执行</p>
+<pre><code>sudo setsebool -P ftp_home_dir 1
+</code></pre><p>重启linux服务器，执行reboot命令</p>
+<pre><code>sudo vim /etc/vsftpd/vsftpd.conf
+</code></pre><h3 id="防火墙配置"><a href="#防火墙配置" class="headerlink" title="防火墙配置"></a>防火墙配置</h3><pre><code>sudo vim /etc/sysconfig/iptables-config
+</code></pre><p>将以下配置添加到防火墙配置中</p>
+<pre><code>-A INPUT -p TCP --dport 61001:62000 -j ACCEPT
+-A OUTPUT -p TCP --sport 61001:62000 -j ACCEPT
+-A INPUT -p TCP --dport 20 -j ACCEPT
+-A OUTPUT -p TCP --sport 20 -j ACCEPT
+-A INPUT -p TCP --dport 21 -j ACCEPT
+-A OUTPUT -p TCP --sport 21 -j ACCEPT
+</code></pre><p>重启防火墙<br>centos7以下版本</p>
+<pre><code>sudo service iptables restart
+</code></pre><p>centos7</p>
+<pre><code>systemctl start filewalld.service #开启防火墙
+firewall-cmd --reload #重启firewall
+systemctl stop firewalld.service #停止firewall
+systemctl disable firewalld.service #禁止firewall开机启动
+</code></pre><h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><pre><code>sudo service vsftpd restart
+//cebtos7
+sudo systemctl restart vsftpd.service
+</code></pre><p>第一次启动时shutting down vsftpd是failed没关系，这是重启命令，保证starting vsftpd是ok即可</p>
+<h3 id="设置selinux"><a href="#设置selinux" class="headerlink" title="设置selinux"></a>设置selinux</h3><pre><code># sudo vim /etc/selinux/config
+# 注释SELINUX=enforcing
+SELINUX=disable
+# 保存退出
+setenforce 0
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-LintCode题解（二）" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1040,273 +1202,6 @@ public class Solution {
 
 
   
-    <article id="post-LintCode题解（六）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/30/LintCode题解（六）/" class="article-date">
-      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
-</a>
-
- 
-    <a href="/2017/09/30/LintCode题解（六）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（六）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="奇偶分割数组"><a href="#奇偶分割数组" class="headerlink" title="奇偶分割数组"></a>奇偶分割数组</h2><p>分割一个整数数组，使得奇数在前偶数在后。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>给定 [1, 2, 3, 4]，返回 [1, 3, 2, 4]。</p>
-<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>这题还是比较简单的，方法很多很多，我们将数组循环遍历，将遍历中的偶数和奇数相互交换就ok了。</p>
-<pre><code>public class Solution {
-/*
- * @param nums: an array of integers
- * @return: nothing
- */
-    public void partitionArray(int[] nums) {
-        // write your code here
-        int length = nums.length;
-        int temp = 0;
-        int index = 0;
-        if(length==0)
-            return;
-        for(int i=0;i&lt;length;i++){
-            if(nums[i]%2==0){
-                index = i;
-                while(nums[index]%2==0){
-                    if(index!=length-1)
-                        index=index+1;
-                    else
-                        break;
-                }
-                temp = nums[i];
-                nums[i] = nums[index];
-                nums[index] = temp;
-            }
-        }
-    }
-}
-</code></pre><h2 id="二进制中1个数"><a href="#二进制中1个数" class="headerlink" title="二进制中1个数"></a>二进制中1个数</h2><p>计算在一个 32 位的整数的二进制表示中有多少个 1.</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给定 32 (100000)，返回 1</p>
-<p>给定 5 (101)，返回 2</p>
-<p>给定 1023 (111111111)，返回 9    </p>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p>按与计算<br>1&amp;1==1，1&amp;0==0，0&amp;&amp;0==0；下面是很巧妙的一个方法。</p>
-<pre><code>public class Solution {
-/*
- * @param num: An integer
- * @return: An integer
- */
-    public int countOnes(int num) {
-        // write your code here
-        int count = 0;
-        while(num!=0){
-            num = num &amp; (num-1);
-            count++;
-        }
-        return count;       
-    }
-}
-</code></pre><h2 id="反转整数"><a href="#反转整数" class="headerlink" title="反转整数"></a>反转整数</h2><p>将一个整数中的数字进行颠倒，当颠倒后的整数溢出时，返回 0 (标记为 32 位整数)。</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 x = 123，返回 321</p>
-<p>给定 x = -123，返回 -321</p>
-<h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><p>反转很简单，难点在于颠倒后证书溢出判断，int32位范围是-2^31~2^31-1,这里使用temp/10与reversed_n进行判断，当temp溢出时，/10不等于reversed_n，所以可判断溢出成立。</p>
-<pre><code>public class Solution {
-    /*
-     * @param n: the integer to be reversed
-     * @return: the reversed integer
-     */
-    public int reverseInteger(int n) {
-        // Write your code here
-        int reversed_n = 0;
-
-        while (n != 0) {
-            int temp = reversed_n * 10 + n % 10;
-            n = n / 10;
-            if (temp / 10 != reversed_n) {
-                reversed_n = 0;
-                break;
-            }
-            reversed_n = temp;
-        }
-        return reversed_n;
-    }
-}
-</code></pre><h2 id="加一"><a href="#加一" class="headerlink" title="加一"></a>加一</h2><p>给定一个非负数，表示一个数字数组，在该数的基础上+1，返回一个新的数组。</p>
-<p>该数字按照大小进行排列，最大的数在列表的最前面。</p>
-<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>给定 [1,2,3] 表示 123, 返回 [1,2,4].</p>
-<p>给定 [9,9,9] 表示 999, 返回 [1,0,0,0].</p>
-<h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p>google的题，哪道没有陷阱，第一次被坑了。<br>注意不要把数组转为int型整数，因为不确定数组大小会导致溢出。<br>本题思想是，若数组值都为9，则增加数组length，首位设为1，其他位为0；否则，末位加1，结束返回。</p>
-<pre><code>public class Solution {
-    /*
-     * @param digits: a number represented as an array of digits
-     * @return: the result
-     */
-    public static int[] plusOne(int[] digits) {
-        // write your code here
-        boolean index = true;
-        for(int n=0; n&lt;digits.length;n++){
-            if(digits[n]!=9)
-                index = false;
-        }
-        if(index==true){
-            int[] num = new int[digits.length+1];
-            num[0] = 1;
-            for(int m=1;m&lt;digits.length+1;m++)
-                num[m] = 0;
-            return num;
-        }
-        for(int i=digits.length-1;i&gt;=0;i--){
-            if(digits[i]!=9){
-                digits[i] = digits[i]+1;
-                break;
-            }else{
-                digits[i] = 0;
-            }
-        }
-        return digits;
-    }
-}
-</code></pre><h2 id="把排序数组转换为高度最小的二叉搜索树"><a href="#把排序数组转换为高度最小的二叉搜索树" class="headerlink" title="把排序数组转换为高度最小的二叉搜索树"></a>把排序数组转换为高度最小的二叉搜索树</h2><p>给一个排序数组（从小到大），将其转换为一棵高度最小的排序二叉树。</p>
-<h3 id="样例-4"><a href="#样例-4" class="headerlink" title="样例"></a>样例</h3><p>给出数组 [1,2,3,4,5,6,7], 返回</p>
-<pre><code>     4
-   /   \
-  2     6
- / \    / \
-1   3  5   7
-</code></pre><h2 id="算法-4"><a href="#算法-4" class="headerlink" title="算法"></a>算法</h2><pre><code>/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */ 
-public class Solution(){
-    /**
-     * @param nums: an integer array
-     * @return: a tree node
-     */
-    public TreeNode sortArrayToBST(int[] A){
-        if(A==null)
-            return null;
-        return bulidTree(A, 0, A.length-1);    
-    }
-
-    public void buildTree(int[] A, int start, int end){
-        if(start&gt;end)
-            return null;
-        int middle = (start+end)/2;
-        TreeNode root = new TreeNode(A[middle]);
-        A.left = buildTree(A, start, middle-1);
-        A.right = buildTree(A, middle+1, end);     
-    }
-}
-</code></pre><h2 id="二进制求和"><a href="#二进制求和" class="headerlink" title="二进制求和"></a>二进制求和</h2><p>给定两个二进制字符串，返回他们的和（用二进制表示）。</p>
-<h2 id="样例-5"><a href="#样例-5" class="headerlink" title="样例"></a>样例</h2><p>a = 11</p>
-<p>b = 1</p>
-<p>返回 100</p>
-<h2 id="算法-5"><a href="#算法-5" class="headerlink" title="算法"></a>算法</h2><p>这种题千万不要将二进制转化为整数，这样转化复杂度将提高几何倍数。<br>注意如果相应位相加结果为2（1+1），则结果设为1，这时要设一个哨兵，相应位溢出时，哨兵设为1；结果为3（1+1+哨兵）时，相同道理。</p>
-<pre><code>public class Solution {
-    /*
-     * @param a: a number
-     * @param b: a number
-     * @return: the result
-     */
-    public String addBinary(String a, String b) {
-        // write your code here
-        if(b.length()==0&amp;&amp;a.length()==0)
-            return null;
-        String str = &quot;&quot;;
-        int index = 0;
-        int i = 0;
-        int middle = 0;
-        String[] A = a.split(&quot;&quot;);
-        String[] B = b.split(&quot;&quot;);
-        while(i&lt;A.length||i&lt;B.length) {
-            if (i &gt;= A.length &amp;&amp; i &lt; B.length)
-                middle = Integer.valueOf(B[B.length-1-i]) + index;
-            else if (i &gt;= B.length &amp;&amp; i &lt; A.length)
-                middle = Integer.valueOf(A[A.length-1-i]) + index;
-            else if (i &lt; A.length &amp;&amp; i &lt; B.length)
-                middle = Integer.valueOf(A[A.length-1-i]) + Integer.valueOf(B[B.length-1-i]) + index;
-            if (middle == 3) {
-                str = 1 + str;
-                index = 1;
-                //i=i+1;
-            } else if (middle == 2) {
-                str = 0 + str;
-                index = 1;
-            } else if (middle == 0 || middle == 1) {
-                str = middle + str;
-                index = 0;
-            }
-            i = i + 1;
-        }
-        if(index==1)
-            str = index+str;
-        return str;
-    }
-}    
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-LintCode题解（一）" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1644,6 +1539,273 @@ public class Solution {
             return true;
 }
 }
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-LintCode题解（六）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/30/LintCode题解（六）/" class="article-date">
+      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
+</a>
+
+ 
+    <a href="/2017/09/30/LintCode题解（六）/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（六）/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="奇偶分割数组"><a href="#奇偶分割数组" class="headerlink" title="奇偶分割数组"></a>奇偶分割数组</h2><p>分割一个整数数组，使得奇数在前偶数在后。</p>
+<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>给定 [1, 2, 3, 4]，返回 [1, 3, 2, 4]。</p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>这题还是比较简单的，方法很多很多，我们将数组循环遍历，将遍历中的偶数和奇数相互交换就ok了。</p>
+<pre><code>public class Solution {
+/*
+ * @param nums: an array of integers
+ * @return: nothing
+ */
+    public void partitionArray(int[] nums) {
+        // write your code here
+        int length = nums.length;
+        int temp = 0;
+        int index = 0;
+        if(length==0)
+            return;
+        for(int i=0;i&lt;length;i++){
+            if(nums[i]%2==0){
+                index = i;
+                while(nums[index]%2==0){
+                    if(index!=length-1)
+                        index=index+1;
+                    else
+                        break;
+                }
+                temp = nums[i];
+                nums[i] = nums[index];
+                nums[index] = temp;
+            }
+        }
+    }
+}
+</code></pre><h2 id="二进制中1个数"><a href="#二进制中1个数" class="headerlink" title="二进制中1个数"></a>二进制中1个数</h2><p>计算在一个 32 位的整数的二进制表示中有多少个 1.</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给定 32 (100000)，返回 1</p>
+<p>给定 5 (101)，返回 2</p>
+<p>给定 1023 (111111111)，返回 9    </p>
+<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p>按与计算<br>1&amp;1==1，1&amp;0==0，0&amp;&amp;0==0；下面是很巧妙的一个方法。</p>
+<pre><code>public class Solution {
+/*
+ * @param num: An integer
+ * @return: An integer
+ */
+    public int countOnes(int num) {
+        // write your code here
+        int count = 0;
+        while(num!=0){
+            num = num &amp; (num-1);
+            count++;
+        }
+        return count;       
+    }
+}
+</code></pre><h2 id="反转整数"><a href="#反转整数" class="headerlink" title="反转整数"></a>反转整数</h2><p>将一个整数中的数字进行颠倒，当颠倒后的整数溢出时，返回 0 (标记为 32 位整数)。</p>
+<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 x = 123，返回 321</p>
+<p>给定 x = -123，返回 -321</p>
+<h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><p>反转很简单，难点在于颠倒后证书溢出判断，int32位范围是-2^31~2^31-1,这里使用temp/10与reversed_n进行判断，当temp溢出时，/10不等于reversed_n，所以可判断溢出成立。</p>
+<pre><code>public class Solution {
+    /*
+     * @param n: the integer to be reversed
+     * @return: the reversed integer
+     */
+    public int reverseInteger(int n) {
+        // Write your code here
+        int reversed_n = 0;
+
+        while (n != 0) {
+            int temp = reversed_n * 10 + n % 10;
+            n = n / 10;
+            if (temp / 10 != reversed_n) {
+                reversed_n = 0;
+                break;
+            }
+            reversed_n = temp;
+        }
+        return reversed_n;
+    }
+}
+</code></pre><h2 id="加一"><a href="#加一" class="headerlink" title="加一"></a>加一</h2><p>给定一个非负数，表示一个数字数组，在该数的基础上+1，返回一个新的数组。</p>
+<p>该数字按照大小进行排列，最大的数在列表的最前面。</p>
+<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>给定 [1,2,3] 表示 123, 返回 [1,2,4].</p>
+<p>给定 [9,9,9] 表示 999, 返回 [1,0,0,0].</p>
+<h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p>google的题，哪道没有陷阱，第一次被坑了。<br>注意不要把数组转为int型整数，因为不确定数组大小会导致溢出。<br>本题思想是，若数组值都为9，则增加数组length，首位设为1，其他位为0；否则，末位加1，结束返回。</p>
+<pre><code>public class Solution {
+    /*
+     * @param digits: a number represented as an array of digits
+     * @return: the result
+     */
+    public static int[] plusOne(int[] digits) {
+        // write your code here
+        boolean index = true;
+        for(int n=0; n&lt;digits.length;n++){
+            if(digits[n]!=9)
+                index = false;
+        }
+        if(index==true){
+            int[] num = new int[digits.length+1];
+            num[0] = 1;
+            for(int m=1;m&lt;digits.length+1;m++)
+                num[m] = 0;
+            return num;
+        }
+        for(int i=digits.length-1;i&gt;=0;i--){
+            if(digits[i]!=9){
+                digits[i] = digits[i]+1;
+                break;
+            }else{
+                digits[i] = 0;
+            }
+        }
+        return digits;
+    }
+}
+</code></pre><h2 id="把排序数组转换为高度最小的二叉搜索树"><a href="#把排序数组转换为高度最小的二叉搜索树" class="headerlink" title="把排序数组转换为高度最小的二叉搜索树"></a>把排序数组转换为高度最小的二叉搜索树</h2><p>给一个排序数组（从小到大），将其转换为一棵高度最小的排序二叉树。</p>
+<h3 id="样例-4"><a href="#样例-4" class="headerlink" title="样例"></a>样例</h3><p>给出数组 [1,2,3,4,5,6,7], 返回</p>
+<pre><code>     4
+   /   \
+  2     6
+ / \    / \
+1   3  5   7
+</code></pre><h2 id="算法-4"><a href="#算法-4" class="headerlink" title="算法"></a>算法</h2><pre><code>/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */ 
+public class Solution(){
+    /**
+     * @param nums: an integer array
+     * @return: a tree node
+     */
+    public TreeNode sortArrayToBST(int[] A){
+        if(A==null)
+            return null;
+        return bulidTree(A, 0, A.length-1);    
+    }
+
+    public void buildTree(int[] A, int start, int end){
+        if(start&gt;end)
+            return null;
+        int middle = (start+end)/2;
+        TreeNode root = new TreeNode(A[middle]);
+        A.left = buildTree(A, start, middle-1);
+        A.right = buildTree(A, middle+1, end);     
+    }
+}
+</code></pre><h2 id="二进制求和"><a href="#二进制求和" class="headerlink" title="二进制求和"></a>二进制求和</h2><p>给定两个二进制字符串，返回他们的和（用二进制表示）。</p>
+<h2 id="样例-5"><a href="#样例-5" class="headerlink" title="样例"></a>样例</h2><p>a = 11</p>
+<p>b = 1</p>
+<p>返回 100</p>
+<h2 id="算法-5"><a href="#算法-5" class="headerlink" title="算法"></a>算法</h2><p>这种题千万不要将二进制转化为整数，这样转化复杂度将提高几何倍数。<br>注意如果相应位相加结果为2（1+1），则结果设为1，这时要设一个哨兵，相应位溢出时，哨兵设为1；结果为3（1+1+哨兵）时，相同道理。</p>
+<pre><code>public class Solution {
+    /*
+     * @param a: a number
+     * @param b: a number
+     * @return: the result
+     */
+    public String addBinary(String a, String b) {
+        // write your code here
+        if(b.length()==0&amp;&amp;a.length()==0)
+            return null;
+        String str = &quot;&quot;;
+        int index = 0;
+        int i = 0;
+        int middle = 0;
+        String[] A = a.split(&quot;&quot;);
+        String[] B = b.split(&quot;&quot;);
+        while(i&lt;A.length||i&lt;B.length) {
+            if (i &gt;= A.length &amp;&amp; i &lt; B.length)
+                middle = Integer.valueOf(B[B.length-1-i]) + index;
+            else if (i &gt;= B.length &amp;&amp; i &lt; A.length)
+                middle = Integer.valueOf(A[A.length-1-i]) + index;
+            else if (i &lt; A.length &amp;&amp; i &lt; B.length)
+                middle = Integer.valueOf(A[A.length-1-i]) + Integer.valueOf(B[B.length-1-i]) + index;
+            if (middle == 3) {
+                str = 1 + str;
+                index = 1;
+                //i=i+1;
+            } else if (middle == 2) {
+                str = 0 + str;
+                index = 1;
+            } else if (middle == 0 || middle == 1) {
+                str = middle + str;
+                index = 0;
+            }
+            i = i + 1;
+        }
+        if(index==1)
+            str = index+str;
+        return str;
+    }
+}    
 </code></pre>
       
     </div>
@@ -2174,180 +2336,6 @@ try{
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/" class="article-date">
-      <time datetime="2017-09-28T02:14:00.000Z" itemprop="datePublished">2017-09-28</time>
-</a>
-
- 
-    <a href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="Spring’s-Annotations区别"><a href="#Spring’s-Annotations区别" class="headerlink" title="Spring’s Annotations区别"></a>Spring’s Annotations区别</h2><ul>
-<li>Component泛指组件，如果组件无法分类，可以使用该组件</li>
-<li>Service用于标注业务层组件</li>
-<li>Repository用于标注持久层组件，DAO组件</li>
-<li>Controller用于标注控制层组件</li>
-</ul>
-<p>配置<br>我们需要在component-scan标签默认情况下自动扫描指定路径下的包（含所有的包），将@Component、@Service、@Repository、@Controller注入到spring容器。</p>
-<pre><code>&lt;context:component-scan base-package=&quot;com.spring.package&quot; /&gt;
-</code></pre><h2 id="Autowired和-Resource"><a href="#Autowired和-Resource" class="headerlink" title="@Autowired和@Resource"></a>@Autowired和@Resource</h2><p>我们可以通过注解@Autowired和@Resource完成注入依赖，二者具有一定的差别。</p>
-<ul>
-<li>@Resource默认是按照名称来装配注入的，只有当找不到与名称匹配的bean才会按照类型来装配注入；</li>
-<li>@Autowired默认是按照类型装配注入的，如果想按照名称来转配注入，则需要结合@Qualifier一起使用；</li>
-<li>@Resource注解是又J2EE提供，而@Autowired是由Spring提供，故减少系统对spring的依赖建议使用  @Resource的方式；</li>
-<li>@Resource和@Autowired都可以书写标注在字段或者该字段的setter方法之上</li>
-</ul>
-<p>我们可以发现我们实际开发中，使用最多的还是@Autowired</p>
-<h3 id="AutoWired"><a href="#AutoWired" class="headerlink" title="@AutoWired"></a>@AutoWired</h3><p>首先看看xml配置方式下是如何注入依赖的</p>
-<pre><code>&lt;bean id=&quot;Person&quot; class=&quot;Test.Person&quot;&gt;
-    &lt;property name=&quot;car&quot; ref=&quot;car&quot; /&gt;
-    &lt;property name=&quot;address&quot; ref=&quot;address&quot; /&gt;
-&lt;/bean&gt;
-&lt;bean id=&quot;car&quot; class=&quot;Test.Car&quot;&gt;
-    &lt;propery name=&quot;price&quot; value=&quot;30000&quot; /&gt;
-&lt;/bean&gt;
-&lt;bean id=&quot;address&quot; class=&quot;Test.Address&quot;&gt;
-    &lt;property name=&quot;street&quot; value=&quot;XianLin&quot; /&gt;
-&lt;/bean&gt;        
-</code></pre><p>一般，@AutoWired可以对类成员变量、方法和构造函数进行自动装配工作，如下所示对成员变量进行自动装配</p>
-<pre><code>import org.springframework.beans.factory.annotation.Autowired; 
-@Component
-public class Person{
-    @AutoWired
-    private Car car;
-    @AutoWired
-    private Address address;
-
-    ...
-}
-</code></pre><p>此外，还可以将@AutoWired标注在setter方法上</p>
-<pre><code>import org.springframework.beans.factory.annotation.Autowired; 
-@Component
-public class Person{
-    private Car car;
-    private Address address;
-
-    @Autowired
-    public void setCar(Car car){
-        this.car = car;
-    }
-    @Autowired
-    public void setAddress(Address address){
-        this.Address = address;
-    }
-    ...
-}        
-</code></pre><p>@AutoWired标注在构造函数上</p>
-<pre><code>import org.springframework.beans.factory.annotation.Autowired; 
-@Component
-public class Person{
-    private Car car;
-    private Address address;
-
-    @Autowired
-    public Person(Car car, Address address){
-        super();
-        this.car = car;
-        this.address = address;
-    }
-    ...
-}
-</code></pre><p>如果我们在容器中配置了两个类型相同的Bean时，我们需要加上@Qulifier进行识别具体是哪个bean被需求，比如有下面两个Bean。<br>第一个Bean：</p>
-<pre><code>@Component(&quot;car1&quot;)
-public class Car{
-    @value(&quot;${Car.price1}&quot;)
-    private double price;
-
-    ...
-}
-</code></pre><p>第二个Bean：</p>
-<pre><code>@Component(&quot;car2&quot;)
-public class Car{
-    @value(&quot;${Car.price2}&quot;)
-    private double price;
-
-    ...
-}
-</code></pre><p>此时我们需要在要使用Car这个Bean时，加上@Qulifier</p>
-<pre><code>public Class Person{
-    private Car car;
-    private Address address;
-
-
-    @AutoWired
-    public void setCar(@qulifier(&quot;car1&quot;) Car car){
-        this.car = car;
-    }
-
-    public void setAddress(Address address){
-        this.address = address;
-    }
-}
-</code></pre><p>成员变量和构造函数的注入依赖方式与setter基本相似。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
     </div>
 
       
