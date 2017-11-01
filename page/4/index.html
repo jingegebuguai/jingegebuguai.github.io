@@ -276,6 +276,1014 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-servlet实现文件上传下载" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/08/26/servlet实现文件上传下载/" class="article-date">
+      <time datetime="2017-08-26T02:14:00.000Z" itemprop="datePublished">2017-08-26</time>
+</a>
+
+ 
+    <a href="/2017/08/26/servlet实现文件上传下载/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/08/26/servlet实现文件上传下载/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/26/servlet实现文件上传下载/">Servlet文件上传下载类</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Servlet文件上传"><a href="#Servlet文件上传" class="headerlink" title="Servlet文件上传"></a>Servlet文件上传</h2><p>Servlet 可以与 HTML form 标签一起使用，来允许用户上传文件到服务器。上传的文件可以是文本文件或图像文件或任何文档。<br>本文使用到的文件有：</p>
+<ul>
+<li>upload.jsp : 文件上传表单。</li>
+<li>message.jsp : 上传成功后跳转页面。</li>
+<li>UploadServlet.java : 上传处理 Servlet。<br>需要引入的 jar 文件：commons-fileupload-1.3.2、commons-io-2.5.jar。</li>
+</ul>
+<p>下面的 HTML 代码创建了一个文件上传表单。以下几点需要注意：</p>
+<ul>
+<li>表单 method 属性应该设置为 POST 方法，不能使用 GET 方法。</li>
+<li>表单 enctype 属性应该设置为 multipart/form-data.</li>
+<li>表单 action 属性应该设置为在后端服务器上处理文件上传的 Servlet 文件。下面的实例使用了 UploadServlet Servlet 来上传文件。</li>
+<li>上传单个文件，您应该使用单个带有属性 type=”file” 的 <input ...=""> 标签。为了允许多个文件上传，请包含多个 name 属性值不同的 input 标签。输入标签具有不同的名称属性的值。浏览器会为每个 input 标签关联一个浏览按钮。</li>
+</ul>
+<h3 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h3><ul>
+<li>１、创建DiskFileItemFactory对象，设置缓冲区大小和临时文件目录</li>
+<li>２、使用DiskFileItemFactory 对象创建ServletFileUpload对象，并设置上传文件的大小限制。</li>
+<li>３、调用ServletFileUpload.parseRequest方法解析request对象，得到一个保存了所有上传内容的List对象。</li>
+<li>４、对list进行迭代，每迭代一个FileItem对象，调用其isFormField方法判断是否是上传文件</li>
+<li>为普通表单字段，则调用getFieldName、getString方法得到字段名和字段值</li>
+<li>为上传文件，则调用getInputStream方法得到数据输入流，从而读取上传数据。</li>
+</ul>
+<h3 id="ServletContext类"><a href="#ServletContext类" class="headerlink" title="ServletContext类"></a>ServletContext类</h3><p>WEB容器在启动时，它会为每个WEB应用程序都创建一个对应的ServletContext对象，它代表当前web应用。</p>
+<p>ServletConfig对象中维护了ServletContext对象的引用，开发人员在编写servlet时，可以通过ServletConfig.getServletContext方法获得ServletContext对象。</p>
+<p>由于一个WEB应用中的所有Servlet共享同一个ServletContext对象，因此Servlet对象之间可以通过ServletContext对象来实现通讯。ServletContext对象通常也被称之为context域对象。</p>
+<p>1.多个Servlet通过ServletContext对象实现数据共享。</p>
+<p>在InitServlet的Service方法中利用ServletContext对象存入需要共享的数据</p>
+<pre><code>/*获取ServletContext对象*/  
+
+ServletContext context = this.getServletContext();   
+
+//存入共享的数据    
+
+context.setAttribute(&quot;name&quot;, &quot;haha&quot;); 
+</code></pre><p>在其它的Servlet中利用ServletContext对象获取共享的数据   </p>
+<pre><code>/*获取ServletContext对象*/  
+
+ServletContext context = this.getServletContext();   
+
+//获取共享的数据   
+
+String name = context.getAttribute(&quot;name&quot;);   
+
+System.out.println(&quot;共享的内容值是:&quot;+name);  
+</code></pre><p>2.获取WEB应用的初始化参数。</p>
+<p>在web.xml文件中配置需要初始化的参数信息。</p>
+<pre><code>&lt;web-app&gt;   
+
+ &lt;context-param&gt;   
+
+&lt;param-name&gt;url&lt;/param-name&gt;   
+
+&lt;param-value&gt;jdbc:MySQL://localhost:3306/4g&lt;/param-value&gt;   
+
+ &lt;/context-param&gt;   
+
+&lt;context-param&gt;   
+
+ &lt;param-name&gt;password&lt;/param-name&gt;   
+
+ &lt;param-value&gt;1314qr&lt;/param-value&gt;   
+
+ &lt;/context-param&gt;   
+
+ &lt;context-param&gt;   
+
+  &lt;param-name&gt;user&lt;/param-name&gt;   
+
+  &lt;param-value&gt;root&lt;/param-value&gt;   
+
+  &lt;/context-param&gt;   
+
+&lt;/web-app&gt;  
+</code></pre><p>在DemoServlet的doPost方法中测试获取初始化参数的步骤如下:   </p>
+<pre><code>/*获取ServletContext对象*/  
+
+ ServletContext context = this.getServletContext();   
+
+/*获取初始化参数*/  
+
+//获取指定名称的初始化参数   
+
+String url = context.getInitParameter(&quot;url&quot;); 
+
+ //获取web.xml文件中所有的初始化应用参数          
+
+ Enumeration&lt;String&gt; enumer = context.getInitParameterNames();   
+
+while(enumer.hasMoreElements()){   
+
+String name = enumer.nextElement();   
+
+ String value = context.getInitParameter(name);   
+
+ System.out.println(name+&quot;==========&quot;+value);   
+
+    }   
+</code></pre><p>2.实现Servlet的转发：</p>
+<p>在测试的Servlet中实现转发的步骤如下:  </p>
+<pre><code>/*要利用ServletContext对象实现转发获取对象*/  
+
+ServletContext context = this.getServletContext();   
+
+ //在request对象中存入name属性    
+
+request.setAttribute(&quot;name&quot;, &quot;haha&quot;);   
+
+ /*根据转发的地址获取 RequestDispatcher对象*/  
+
+RequestDispatcher  rd  = context.getRequestDispatcher(&quot;/index.jsp&quot;);   
+
+//调用转发方法 以下采用任意方法即可    
+
+rd.forward(request, response);   
+
+  //rd.include(request, response);   
+</code></pre><p>注意：forward与include的区别 </p>
+<p>forward方法是把请求的内容转发到另外的一个servlet.而include是把另一个servlet处理过后的内容拿过来.</p>
+<p>（forward方法调用后在响应中的没有提交的内容被自动消除。将请求转发给其他的Servlet后，由</p>
+<pre><code>被调用的Servlet负责对请求做出响应，而原先Servlet的执行则终止。      
+</code></pre><p>   include方法使原先的Servlet和转发到的Servlet都可以输出响应信息，即原先的Servlet还可以继续输出响应信息）</p>
+<p>3.利用ServletContext对象读取资源文件。  </p>
+<p>读取资源文件(properties文件（属性文件）)的三种方式</p>
+<p>配置的properties的内容如下:   </p>
+<pre><code>url=jdbc\:mysql\://localhost\:3306/3g ; 
+
+user=root;
+
+password=root;  
+</code></pre><p>获取实现的代码如下:   </p>
+<pre><code>/*获取ServletContext对象*/  
+
+ServletContext context = this.getServletContext();     
+
+//第一种方式    
+
+URL url = context.getResource(&quot;WEB-INF/classes/db.properties&quot;);   
+
+InputStream is =  url.openStream();   
+</code></pre><p>//第二种方式   </p>
+<pre><code> /*读取db.properties文件*/  
+
+String path =context.getRealPath(&quot;WEB-INF/classes/db.properties&quot;);   
+
+ /*根据文件的路径 构建文件对象*/  
+
+File file = new File(path);   
+
+ /*根据file文件对象 创建输入流*/  
+
+InputStream is = new FileInputStream(file);   
+</code></pre><p>//第三种方式   </p>
+<pre><code>InputStream is = context.getResourceAsStream(&quot;WEB-INF/classes/db.properties &quot;);    
+</code></pre><p> 以三种方式任意一种可以：    </p>
+<p>  /<em>解析properties的文件</em>/  </p>
+<pre><code>Properties prop = new Properties();   
+
+//从输入流中读取属性列表（键和元素对）。   
+
+ prop.load(is);   
+
+ Set&lt;String&gt; set = prop.stringPropertyNames();   
+
+  //遍历set集合   
+
+  Iterator&lt;String&gt; it = set.iterator();   
+
+  while(it.hasNext()){   
+
+      String key = it.next();   
+
+      String value = prop.getProperty(key);   
+
+      System.out.println(key+&quot;-----&quot;+value);   
+
+         }   
+</code></pre><h3 id="DiskFileItemFactory类"><a href="#DiskFileItemFactory类" class="headerlink" title="DiskFileItemFactory类"></a>DiskFileItemFactory类</h3><p>DiskFIleItemFactory是FileItem对象的工厂，常用方法如下：</p>
+<ul>
+<li>public void setSize Threshold(int sizeThresshold):设置内存缓冲区的大小，默认值为10k。当上传文件大于缓冲区大小，fileupload组件使用临时文件缓存上传文件。由于Java虚拟机默认可以使用的内存空间是有限的，超出限制会抛出“java.lang.OutOfMemory”错误。如果上传文件很大，在内存中将无法临时保存该文件内容，Apache文件上传组件转而采用临时文件来保存这些数据；如果上传的文件很小，保存在内存中将会达到更快的效应。</li>
+<li>public void setRepository(Java.io.File repository) ：指定临时文件目录，默认值为System.getProperty(“Java.io.tmpdir”).</li>
+<li>public DiskFileItemFactory(int sizeThreshold,java.io.File repository) ：构造函数采用参数指定临界值和系统临时文件夹构造文件项工厂对象。</li>
+<li>boolean isMultipartContent(HttpServletRequest request) ：判断上传表单是否为multipart/form-data类型</li>
+<li>List parseRequest(HttpServletRequest request)：解析request对象，并把表单中的每一个输入项包装成一个fileItem 对象，并返回一个保存了所有FileItem的list集合。</li>
+<li>setFileSizeMax(long fileSizeMax) ：设置上传文件的最大值</li>
+<li>setSizeMax(long sizeMax) ：设置上传文件总量的最大值</li>
+<li>setHeaderEncoding(java.lang.String encoding) ：设置编码格式</li>
+<li>setProgressListener(ProgressListener pListener) </li>
+</ul>
+<h3 id="ServletFileUpload类"><a href="#ServletFileUpload类" class="headerlink" title="ServletFileUpload类"></a>ServletFileUpload类</h3><p>该类是文件上传的核心类，在使用ServletFileUpload对象解析请求时要设置DiskFileItemFactory对象属性sizeThreshold（临界值）和repository（临时目录）,所以实现文件上传之前，先构造好DiskFileItemFactory的实例对象，通过ServletFileUpload对象的构造方法或者FileItemFactory（）方法设置ServletFileUpload对象的FileItemFactory对象。</p>
+<h4 id="构造方法："><a href="#构造方法：" class="headerlink" title="构造方法："></a>构造方法：</h4><ul>
+<li><p>public ServletFileUpload()</p>
+<p>   构造一个未初始化的实例，需要在解析请求之前先调用setFileItemFactory()方法设置 fileItemFactory属性。</p>
+</li>
+<li><p>public ServletFileUpload(FileItemFactory fileItemFactory)</p>
+<p>  构造一个实例，并根据参数指定的FileItemFactory 对象，设置 fileItemFactory属性。</p>
+</li>
+</ul>
+<h4 id="ServletFileUpload类常用方法："><a href="#ServletFileUpload类常用方法：" class="headerlink" title="ServletFileUpload类常用方法："></a>ServletFileUpload类常用方法：</h4><ul>
+<li><p>1)  public void setSizeMax(long sizeMax)</p>
+<p>  setSizeMax方法继承自FileUploadBase类，用于设置请求消息实体内容（即所有上传数据）的最大尺寸限制，以防止客户端恶意上传超大文件来浪费服务器端的存储空间。其参数是以字节为单位的long型数字。<br>  在请求解析的过程中，如果请求消息体内容的大小超过了setSizeMax方法的设置值，将会抛出FileUploadBase内部定义的SizeLimitExceededException异常(FileUploadException的子类)。该方法有一个对应的读方法：public long getSizeMax()方法。</p>
+</li>
+<li><p>2) public void setFileSizeMax(long fileSizeMax)</p>
+<p>  setFileSizeMax方法继承自FileUploadBase类，用于设置单个上传文件的最大尺寸限制，以防止客户端恶意上传超大文件来浪费服务器端的存储空间。其参数是以字节为单位的long型数字。该方法有一个对应的读方法：public long geFileSizeMax()方法。<br>  在请求解析的过程中，如果单个上传文件的大小超过了setFileSizeMax方法的设置值，将会抛出FileUploadBase内部定义的FileSizeLimitExceededException异常(FileUploadException的子类)。</p>
+</li>
+<li><p>3) public List parseRequest(javax.servlet.http.HttpServletRequest req)</p>
+<p>  parseRequest 方法是ServletFileUpload类的重要方法，它是对HTTP请求消息体内容进行解析的入口方法。它解析出FORM表单中的每个的数据，并将它们分别包装成独立的FileItem对象，然后将这些FileItem对象加入进一个List类型的集合对象中返回。<br>  该方法抛出FileUploadException异常来处理诸如文件尺寸过大、请求消息中的实体内容的类型不是“multipart/form-data”、IO异常、请求消息体长度信息丢失等各种异常。每一种异常都是FileUploadException的一个子类型。</p>
+</li>
+<li><p>4)  public FileItemIterator getItemIterator(HttpServletRequest request)</p>
+<p>  getItemIterator方法和parseRequest 方法基本相同。但是getItemIterator方法返回的是一个迭代器，该迭代器中保存的不是FileItem对象，而是FileItemStream 对象，如果你希望进一步提高新能，你可以采用getItemIterator方法，直接获得每一个文件项的数据输入流，做底层处理；如果性能不是问题，你希望代码简单，则采用parseRequest方法即可。</p>
+</li>
+<li><p>5) public stiatc boolean isMultipartContent(HttpServletRequest req)</p>
+<pre><code>isMultipartContent方法方法用于判断请求消息中的内容是否是“multipart/form-data”类型，是则返回true，否则返回false。isMultipartContent方法是一个静态方法，不用创建ServletFileUpload类的实例对象即可被调用。
+</code></pre></li>
+<li><p>6) getFileItemFactory()和setFileItemFactory(FileItemFactory)</p>
+<p>   方法继承自FileUpload类，用于设置和读取fileItemFactory属性。</p>
+</li>
+<li><p>7) public void setProgressListener(ProgressListener pListener)</p>
+<p>  设置文件上传进度监听器。该方法有一个对应的读取方法：ProgressListener getProgressListener()。</p>
+</li>
+<li><p>8) public void setHeaderEncoding()</p>
+<p>   在文件上传请求的消息体中，除了普通表单域的值是文本内容以外，文件上传字段中的文件路径名也是文本，在内存中保存的是它们的某种字符集编码的字节数组，Apache文件上传组件在读取这些内容时，必须知道它们所采用的字符集编码，才能将它们转换成正确的字符文本返回。</p>
+<pre><code>setHeaderEncoding方法继承自FileUploadBase类，用于设置上面提到的字符编码。如果没有设置，则对应的读方法getHeaderEncoding()方法返回null，将采用HttpServletRequest设置的字符编码，如果HttpServletRequest的字符编码也为null，则采用系统默认字符编码。可以通过一下语句获得系统默认字符编码：
+ System.getProperty(&quot;file.encoding&quot;));
+</code></pre></li>
+</ul>
+<h3 id="File-separate"><a href="#File-separate" class="headerlink" title="File.separate"></a>File.separate</h3><p>为了跨平台考虑，文件写法如下所示：</p>
+<pre><code>//windows写法
+File file = new File(&quot;C:\tmp\test.txt&quot;);
+//linux写法
+File file new File(&quot;/tmp/test.txt&quot;);
+//跨平台写法
+File myFile = new File(&quot;C:&quot;+File.separate+&quot;tmp&quot;+File.separate+File.seaprate+&quot;test.txt&quot;);
+</code></pre><ul>
+<li>separatorChar为系统默认名称分隔符，此字段被初始化为包含file.seprate值得第一个字符，在Unix系统为“/”，在windows系统为“\”。</li>
+<li>pathsepratorChar为系统路径分隔符，此字段被初始化为包含path.seprate值得第一个字符，在Unix系统为“：”，在windows系统为“；”。</li>
+</ul>
+<h4 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h4><p>1、设置文件上传的MEMORY_THRESHOLD(内存临界值)、MAX_FILE_SIZE(最大上传文件值)、MAX_REEQUEST_SIZE(最大请求值)。</p>
+<pre><code>private static final int MEMORY_THRESHOLD = 1024*1024*3;
+private static final int MAX_FILE_SIZE = 1024*1024*40;
+private static final int MAX_REQUEST_SIZE = 1024*1024*50
+</code></pre><p>2、 设置文件上传服务器的临时目录</p>
+<pre><code>DiskFileItemFactory factory = new DiskFileItemFatory();
+factory.setRepository(MEMRORY_THRESHOLD);
+//设置临时存储目录
+factory.setRepository(new File(System.getProperty(&quot;java.io.tmpdir&quot;)));
+ServletFileUpload upload = new ServletFileUpload(factory);
+//设置最大单文件值
+upload.setFileSizeMax(MAX_FILE_SIZE);
+//设置最大请求值（文件和表单数据）
+upload.setSizeMax(MAX_REQUEST_SIZE);
+//设置编码
+upload.setHeaderEncoding(&quot;utf-8&quot;);
+//构建上传文件临时存储目录路径
+String uploadPath = (this)request.getServletContext().getRealPath(&quot;./&quot;)+file.separate+UPLOAD_DIRECTORY;
+</code></pre><p>3、解析请求内容提取文件数据</p>
+<pre><code>list&lt;FileItem&gt; formItems = upload.parseRequest(request);
+//处理不在表单中的数据
+for(FileItem item : formItems){
+    if(!item.isFormField){
+        String fileName = new File(item.getName()).getName();
+        String filePath = uploadPath +file.separate+fileName;
+        File storeFile = new File(filePath);
+        item.write(storeFile);
+        }
+    }
+</code></pre><p>4、跳转到jsp文件,反馈上传消息结果</p>
+<pre><code>request.getServletContext().getRequestDispatcher(&quot;/../jsp&quot;).forword(request,response);
+</code></pre><h2 id="servlet文件下载"><a href="#servlet文件下载" class="headerlink" title="servlet文件下载"></a>servlet文件下载</h2><h3 id="getParameter和getAttribute区别"><a href="#getParameter和getAttribute区别" class="headerlink" title="getParameter和getAttribute区别"></a>getParameter和getAttribute区别</h3><ul>
+<li>getParameter得到的都是String，用于读取提交表单的值，或是某个表单提交过去的数据。 getAtrribute获取可以是对象Object，需进行转换，可用此设置任意对象，用于获取对象容器的数据值。（主要为SESSION值）</li>
+<li>getParameter()获取POST/GET传递的参数值，用于客户端重定向，用于表单或url重定向传值接收数据。</li>
+<li>getAttribute()用于服务器重定向，在servlet中使用forword函数。</li>
+</ul>
+<h3 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h3><p> 1、获得请求文件名</p>
+<pre><code>String fileName = request.getParameter(&quot;FileName&quot;);
+</code></pre><p>2、设置相关属性</p>
+<pre><code>//设置文件MIME类型
+response.setContentType(getServletContext().getMimeType(filename));    
+//设置Content.Disposition
+response.setHeader(&quot;Content-Disposition&quot;,&quot;attachment;filename=&quot;+filename);
+</code></pre><p>3、获取目标文件绝对路径，读取文件</p>
+<pre><code>String FilePath = getServletContent().getRealPath(&quot;/upload/&quot;+filename);
+//读取文件
+InputStream in = new FileInputStream(FilePath);
+OutputStream out response.getOutputStream();
+//写文件
+out.write(in.read());
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-CSS预处理器比较" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/07/01/CSS预处理器比较/" class="article-date">
+      <time datetime="2017-07-01T08:55:00.000Z" itemprop="datePublished">2017-07-01</time>
+</a>
+
+ 
+    <a href="/2017/07/01/CSS预处理器比较/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/07/01/CSS预处理器比较/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/01/CSS预处理器比较/">有关CSS预处理器的比较选择(Sass&amp;Less&amp;Stylus)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>CSS预处理器定义了一种新的语言，其基本思想是，用一种专门的编程语言，为CSS增加了一些编程的特性，将CSS作为目标生成文件，然后开发者就只要使用这种语言进行编码工作。通俗的说，CSS预处理器用一种专门的编程语言，进行Web页面样式设计，然后再编译成正常的CSS文件，以供项目使用。CSS预处理器为CSS增加一些编程的特性，无需考虑浏览器的兼容性问题，例如你可以在CSS中使用变量、简单的逻辑程序、函数等等在编程语言中的一些基本特性，可以让你的CSS更加简洁、适应性更强、可读性更佳，更易于代码的维护等诸多好处.</p>
+<h2 id="LESS-amp-Sass"><a href="#LESS-amp-Sass" class="headerlink" title="LESS &amp; Sass"></a>LESS &amp; Sass</h2><p>LESS是受Sass启发而开发的工具，它列出了如下开发的理由：“为什么要开发一个Sass的替代品呢？原因很简单：首先是语法。Sass的一个关键特性是缩进式的语法，这种语法可以产生柱式外观的代码。但是你需要花费时间学习一门新的语法以及重新构建你现在的样式表。<br>LESS给CSS带来了很多特性，使得LESS能够和CSS无缝地紧密结合在一起。因此，你可以平滑地由CSS迁移到LESS，如果你只是对使用变量或者操作感兴趣的话，你不需要学习一整门全新的语言。”</p>
+<h2 id="Stylus"><a href="#Stylus" class="headerlink" title="Stylus"></a>Stylus</h2><p>Stylus相对前两者较新，可以看官方文档介绍的功能。</p>
+<ul>
+<li>来自NodeJS社区，所以和NodeJS走得很近，与JavaScript联系非常紧密。还有专门JavaScript API：<a href="http://learnboost.github.io/stylus/docs/js.html" target="_blank" rel="external">http://learnboost.github.io/stylus/docs/js.html</a></li>
+<li>支持Ruby之类等等框架</li>
+<li>更多更强大的支持和功能</li>
+</ul>
+<p>总结：Sass看起来在提供的特性上占有优势，但是LESS能够让开发者平滑地从现存CSS文件过渡到LESS，而不需要像Sass那样需要将CSS文件转换成Sass格式。Stylus功能上更为强壮，和js联系更加紧密。</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p>默认Sass使用“.scss”扩展名。Sass语法规则可以像CSS那样书写：</p>
+<pre><code>h1 {
+    color: #936;
+    background-olor: #333
+}
+</code></pre><p>LESS和Sass一样，都是使用CSS的标准语法，只是LESS的源文件的扩展名是“.less”，其基本语法类似于:</p>
+<pre><code>h1 {
+    color: #936;
+    background-olor: #333
+}
+</code></pre><p>Stylus的语法花样多一些，它的文件扩展名是“.styl”，Stylus也接受标准的CSS语法，但是他也像Sass老的语法规则，使用缩进控制，同时Stylus也接受不带大括号（｛｝）和分号的语法，如下所示：</p>
+<pre><code>h1 {
+  color: #963;
+  background-color:#333;
+}
+/*省略大括号（｛｝）*/
+h1 
+  color: #963;
+  background-color: #333;
+/*省略大括号（｛｝）和分号（;）*/
+h1
+  color #963
+  background-color #333
+</code></pre><h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>变量允许我们单独定义一系列通用的样式，然后在需要的时候去调用。所以在做全局样式调整的时候我们可能只需要修改几行代码就可以了。<br>Sass使用$符号来标识变量：</p>
+<pre><code>$nav-color: #F90;
+nav {
+    $width: 100px;
+    width: $width
+    color: $nav-color;
+}
+</code></pre><p>Less使用@符号来定义标识变量:</p>
+<pre><code>@nav-color: #F90
+nav {
+    @width: 100px;
+    width: @width;
+    color: @nav-color
+}
+</code></pre><p>Stylus变量定义相对没有特殊符号:</p>
+<pre><code>nav-color = #F90
+nav 
+    width 100px
+    color nav-color
+</code></pre><p>三种预处理器编译后的结果为：</p>
+<pre><code>nav{
+    width: 100px;
+    color: #F90;
+}
+</code></pre><p>值得注意的是Stylus还有一个属性查找功能，不需分配变量就可以调用内部属性值：</p>
+<pre><code>nav
+    width 100px
+    height (@width / 2)
+    color #F90
+</code></pre><h2 id="Mixins"><a href="#Mixins" class="headerlink" title="Mixins"></a>Mixins</h2><p>Sass中混合器使用@mixin标识符定义，通过@include使用混合器。混合器传参方式和PHP有点像：</p>
+<pre><code>@mixin rounded-corner($radius, $hover: red) {
+    -moz-boeder-radius: $radius;
+    -webkit-border-radius: $radius;
+    border-radius: $radius;
+    &amp;:hover {
+        color: $hover;
+    }
+}
+#header {
+    @include rounded-corner($radius: 10px)
+}
+</code></pre><p>Less的混合器使用方式，如同Sass的简化版：</p>
+<pre><code>.rounded-corner(@radius, @hover: red) {
+    -moz-boeder-radius: @radius;
+    -webkit-border-radius: @radius;
+    border-radius: @radius;
+    &amp;:hover {
+        color: @hover;
+    }
+}
+#header {
+    .rounded-corner(10px)
+}
+</code></pre><p>Stylus的混合书写方式：</p>
+<pre><code>rounded-corner(radius, hover = red)
+    -moz-boeder-radius: radius;
+    -webkit-border-radius: radius;
+    border-radius: radius;
+    &amp;:hover 
+        color: hover;
+
+#header 
+    rounded-corner(10px)
+</code></pre><p>三种预处理器编译后的结果如下：</p>
+<pre><code>#header {
+    -moz-boeder-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    &amp;:hover 
+        color: red;
+}
+</code></pre><p>注意在Less中@arguments可以传递所有参数， Stylus的arguments具有相似功能，这在某些情况很方便。</p>
+<h2 id="嵌套"><a href="#嵌套" class="headerlink" title="嵌套"></a>嵌套</h2><p>三种预处理器的嵌套思想几乎一致，只是写法上略有不同。而嵌套功能的目的是减少不必要的代码量，使父子节点关系更加明了，优化css。css中重复写选择器是非常恼人的。如果要写一大串指向页面中同一块的样式时，往往需要一遍又一遍地写同一个ID，如果写原生的css是相当的烦人。注意的是写伪元素和伪类时，前面要加上父选择器标识符&amp;。比如有以下一段原生css代码：</p>
+<pre><code>#header h1 {
+  font-size: 26px;
+  font-weight: bold;
+}
+#header p {
+  font-size: 12px;
+}
+#header p a {
+  text-decoration: none;
+}
+#header p a:hover {
+  border-width: 1px;
+}
+</code></pre><p>现在将这段代码转变为Sass或Less:</p>
+<pre><code>#header {
+    h1 {
+        font-size: 26px;
+        font-weight: bold;
+    }
+    p {
+        font-size: 12px;
+        a {
+            text-decoration: none;
+            &amp;:hover {
+                border-width: 1px;
+            }
+        }
+    }
+}
+</code></pre><p>如果用Stylus来写的话，将会缩减更多：</p>
+<pre><code>#header
+    h1
+        font-size 26px
+        font-weight bold
+    p
+        font-size 12px
+        a
+            text-decoration none
+            &amp;:hover
+                border-width 1px    
+</code></pre><h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><p>Stylus的@extend指令受SASS实现的启发，基本一致，除了些轻微差异。此功能大大简化了继承其他语义规则集的语义规则集的维护。目前Stylus与SASS不同之处在于SASS不允许<strong>@extend</strong>嵌套选择器。<br>下面是继承的示例：</p>
+<pre><code>.message {
+  padding: 10px;
+  border: 1px solid #eee;
+}
+.warning {
+  @extend .message;
+  color: #E2E21E;
+}
+
+// 编译后
+.message, .warning {
+  padding: 10px;
+  border: 1px solid #eee;
+}
+.warning {
+  color: #E2E21E;
+}
+</code></pre><p>Less继承方式和Sass，Stylus不同，它在嵌套中继承选择器下的样式，缺点是每个选择器会有重复样式产生：</p>
+<pre><code>.message {
+    padding: 10px;
+    border: 1px solid #eee;
+}
+.warning {
+    .message;
+    color: #E2E21E
+}
+</code></pre><h2 id="颜色函数"><a href="#颜色函数" class="headerlink" title="颜色函数"></a>颜色函数</h2><p>Sass颜色函数</p>
+<pre><code>lighten($color, 10%); /* 返回的颜色在$color基础上变亮10% */
+darken($color, 10%);  /* 返回的颜色在$color基础上变暗10% */
+saturate($color, 10%);   /* 返回的颜色在$color基础上饱和度增加10% */
+desaturate($color, 10%); /* 返回的颜色在$color基础上饱和度减少10% */
+grayscale($color);  /* 返回$color的灰度色*/
+complement($color); /* 返回$color的补色 */
+invert($color);     /* 返回$color的反相色 */
+mix($color1, $color2, 50%); /* $color1 和 $color2 的 50% 混合色*/
+</code></pre><p>Less颜色函数</p>
+<pre><code>lighten(@color, 10%); /* 返回的颜色在@color基础上变亮10% */
+darken(@color, 10%);  /* 返回的颜色在@color基础上变暗10%*/
+saturate(@color, 10%);   /* 返回的颜色在@color基础上饱和度增加10% */
+desaturate(@color, 10%); /* 返回的颜色在@color基础上饱和度降低10%*/
+spin(@color, 10);  /* 返回的颜色在@color基础上色调增加10 */
+spin(@color, -10); /* 返回的颜色在@color基础上色调减少10 */
+mix(@color1, @color2); /* 返回的颜色是@color1和@color2两者的混合色 */    
+</code></pre><p>Stylus颜色函数</p>
+<pre><code>lighten(color, 10%); /* 返回的颜色在&apos;color&apos;基础上变亮10% */
+darken(color, 10%);  /* 返回的颜色在&apos;color&apos;基础上变暗10% */
+saturate(color, 10%);   /* 返回的颜色在&apos;color&apos;基础上饱和度增加10% */
+desaturate(color, 10%); /* 返回的颜色在&apos;color&apos;基础上饱和度降低10% */      
+</code></pre><h2 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h2><p>Sass条件语句中使用@if，@else，@else if：</p>
+<pre><code>$type: monster;
+p {
+  @if $type == ocean {
+    color: blue;
+  } @else if $type == matador {
+    color: red;
+  } @else if $type == monster {
+    color: green;
+  } @else {
+    color: black;
+  }
+}
+</code></pre><p>Stylus的条件语句使用if，else，else if</p>
+<pre><code>overload-padding = true
+
+if overload-padding
+  padding(y, x)
+    margin y x
+
+body
+  padding 5px 10px
+</code></pre><p>Less和Sass，Stylus不同，它使用关键词when，而且提供了很多类型检查函数来辅助条件表达式，例如：iscolor、isnumber、isstring、iskeyword、isurl等等，支持AND，OR，NOT支持表达式。</p>
+<pre><code>.mixin (@a) when (iscolor(@a)) { 
+  background-color: black; 
+ } 
+ .mixin (@a) when (isnumber(@a)) { 
+  background-color: white; 
+ } 
+ .class1 { .mixin(red) } 
+ .class2 { .mixin(6) }    
+// 转译出来的CSS
+
+.class1 { 
+  background-color: black; 
+ } 
+ .class2 { 
+  background-color: white; 
+ }    
+</code></pre><h2 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h2><p>Sass使用@for，通过from，through来实现循环，另外还支持@each，@while的使用。</p>
+<pre><code>@for $i from 1 through 3 {
+      .item-#{$i} { width: 2em * $i; }
+}    
+
+// 编译后
+.item-1 {  width: 2em; }
+.item-2 {  width: 4em; }
+.item-3 {  width: 6em; }
+</code></pre><p>几种循环格式如下：</p>
+<pre><code>@for $var from [start] through [end] {block}
+@each $var in [list] {block}
+@while [condition] {block}
+</code></pre><p>在Stylus样式中通过for/in对表达式进行循环，形式如下：</p>
+<pre><code>for &lt;val-name&gt; [, &lt;key-name&gt;] in &lt;expression&gt;    
+</code></pre><p>示例：</p>
+<pre><code>body
+  fonts = Impact Arial sans-serif
+  for font, i in fonts
+    foo i font    
+// 编译后
+
+body {
+  foo: 0 Impact;
+  foo: 1 Arial;
+  foo: 2 sans-serif;
+}    
+</code></pre><p>Less的循环方式如同它的条件语句，通过when来实现。<br>基本上，Less 的设计思路偏向原生 CSS，而 Sass 和 Stylus更偏向计算机语言（分别是 Ruby 和 JS）。所以，可能，前者更适合前端，后者适合工程师。相对于Sass和Less而言，Stylus更加简洁，拥有更强大的功能，所以我选择Stylus。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/未闻花名/">未闻花名</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-js内置对象——string&amp;array" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/06/25/js内置对象——string&array/" class="article-date">
+      <time datetime="2017-06-25T14:30:00.000Z" itemprop="datePublished">2017-06-25</time>
+</a>
+
+ 
+    <a href="/2017/06/25/js内置对象——string&array/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/06/25/js内置对象——string&amp;array/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/25/js内置对象——string&array/">Js内置对象进阶（一）——String&amp;Array</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>JavaScript有一些常见的内置对象，如String，Array，Boolean，Date，Regexp，Object，Number，Function等。这些内置对象看起来简单，实际关系异常复杂。<br>这些内置对象从表现形式来说很像其他语言中的类型（type）或者类（class），比如Java中的String 类。有时候说js是比java更加面向对象的语言，一点不为过。</p>
+<h2 id="String对象"><a href="#String对象" class="headerlink" title="String对象"></a>String对象</h2><p>String对象是JavaScript原生提供的三个包装对象之一，用来生成字符串的包装对象实例。<br>平时我们经常使用的String对象属性方法有：</p>
+<ul>
+<li>length属性：返回字符串长度</li>
+<li>concat：用来连接两个字符串</li>
+<li>substr和slice：用来截取字符串，不过截取方式不同</li>
+<li>indexOf：确定一个字符串在另一个字符串中的位置</li>
+<li>trim：用于去除字符串两端的空格</li>
+<li>toLowerCase 和 toUpperCase ：改变字符串大小写</li>
+<li>repalce：用于替换匹配的子字符串，一般情况下只替换第一个匹配</li>
+<li>split：分割字符串，返回一个由分割出来的各部分组成的新数组。</li>
+</ul>
+<p>下面分析一段代码</p>
+<pre><code>var str1 = &apos;a test string&apos;
+var str2 = new String(&apos;a test string&apos;)
+str1.length                    //13
+str1.indexOf(&apos;t&apos;)              //2
+console.log(typeof str1)       //string
+console.log(typeof str2)       //object
+str1 instanceof String         //false
+str2 instanceof String         //true
+</code></pre><p>原始值str1 并不是一个对象，它只是一个字面量，并且是一个不可变的值。如果要在这个字面量上执行一些操作，比如获取长度、访问其中某个字符等，那需要将其转换为String 对象。在必要时语言会自动把字符串字面量转换成一个 String 对象，也就是说你并不需要 显式创建一个对象。<br>以上的内容用下面这段代码解释再好不过。</p>
+<pre><code>String instanceof Object
+new String(&apos;foo&apos;) instanceof String; // true
+new String(&apos;foo&apos;) instanceof Object; // true
+
+&apos;foo&apos; instanceof String; // false
+&apos;foo&apos; instanceof Object; // false
+</code></pre><h3 id="String对象调用Array对象方法"><a href="#String对象调用Array对象方法" class="headerlink" title="String对象调用Array对象方法"></a>String对象调用Array对象方法</h3><p>许多数组函数用来处理字符串很方便。虽然字符串没有这些函数，但可以通过“借用”数组的非变更方法来处理字符串：</p>
+<pre><code>var a = &apos;feiyan&apos;
+a.join; // undefined
+a.map; // undefined
+var c = Array.prototype.join.call( a, &quot;-&quot; );
+var d = Array.prototype.map.call( a, function(v){
+    return v.toUpperCase() + &quot;.&quot;;
+    } ).join( &quot;&quot; );
+c;            //f-e-i-y-a-n
+d;            //F.E.I.Y.A.N.
+</code></pre><p>其中的join方法和map方法都是数组对象的方法，这里字符串对象可以通过原型调用先把字符串对象转化为数字对象，然后再通过join方法变为字符串。而很多时候我们可以用[]代替Array.prototype:</p>
+<pre><code>Array.prototype === [].__proto__   //true
+</code></pre><p>在许多方面，字符串表现的好像字符数组，许多Javascript array相关方法也可以使用在String类型上，但是并不是所有的方法都可以。看下面示例：</p>
+<pre><code>var name = &apos;feiyan&apos;
+a = [].push.call(name, &apos;is a lovely girl&apos;)
+</code></pre><p>报错：提示Javascript中字符串是只读的，因此任何方法想改变字符串都将失败，因此可以排除掉数组的push、pop、shift、unshift、splice、reverse方法。如果真要实现这个功能，这样这么做：</p>
+<pre><code>var name = &apos;feiyan&apos;
+name.concat(&apos; is a lovely girl&apos;).split()
+</code></pre><p>其他一些不改变原字符串的方法（如一些遍历方法）可以随意使用：</p>
+<pre><code>var str1 = &apos;a lovely girl&apos;
+var a = [].forEach.call(str1,function(ele,index,arr){
+    console.log(ele)
+    })
+</code></pre><h3 id="ES6常用字符串特性"><a href="#ES6常用字符串特性" class="headerlink" title="ES6常用字符串特性"></a>ES6常用字符串特性</h3><p>ES6为字符串添加了遍历器接口，使得字符串可以被for…of循环遍历。</p>
+<pre><code>for(var i of &apos;string&apos;){
+    console.log(i)
+}
+</code></pre><p>ES6引入了一种新型的字符串字面量语法，我们称之为模板字符串（template strings）。除了使用反撇号字符 ` 代替普通字符串的引号 ‘ 或 “ 外，它们看起来与普通字符串并无二致。在最简单的情况下，它们与普通字符串的表现一致。<br>现在，我们看到了一个比 + 运算符更优雅的语法，下面是一些你期待的特性：</p>
+<ul>
+<li>模板占位符可以是任何 JavaScript 表达式，所以函数调用和四则运算等都是合法的。（甚至你还可以在一个模板字符串中嵌套另一个模板字符串。）</li>
+<li>如果一个值不是字符串，它将被转换为字符串。例如，如果 action 是一个对象，那么该对象的 .toString() 将被调用，来将其转换为字符串。</li>
+<li>如果你想在模板字符串中使用反引号，你需要使用反斜杠 \ 将其转义。</li>
+<li>同样地，如果想在模板字符串中输出 \${，也需要使用反斜杠将其转义：\${ 或 ${。</li>
+<li>模板字符串可以跨越多行：</li>
+</ul>
+<pre><code>$(&quot;#warning&quot;).html(`
+      &lt;h1&gt;Warning Title!&lt;/h1&gt;
+      &lt;p&gt;This is some information,it is ${warning}&lt;/p&gt;
+`);
+</code></pre><h2 id="Array对象"><a href="#Array对象" class="headerlink" title="Array对象"></a>Array对象</h2><p>Array是JavaScript的内置对象，同时也是一个构造函数，可以用它生成新的数组。<br>作为构造函数时，Array可以接受参数，但是不同的参数，会使得Array产生不同的行为。<br>数组对象的常用方法如下：</p>
+<ul>
+<li>isArray：判断一个值是否为数组</li>
+<li>toString：返回数组的字符串形式</li>
+<li>push方法，pop方法：push方法用于在数组的末端添加一个或多个元素，并返回添加后的数组的长度，pop方法用于删除数组的最后一个元素，并返回该元素</li>
+<li>join：以参数作为分隔符，将所有数组成员组成一个字符串返回</li>
+<li>concat：将新数组的成员，添加到原数组的尾部，然后返回一个新数组，常用于连接多个数组</li>
+<li>shift方法，unshift方法： shift方法用于删除数组的第一个元素，并返回该元素，unshift方法用于在数组的第一个位置添加元素，并返回添加新元素后的数组长度</li>
+<li>reverse：用于颠倒数组中元素的顺序</li>
+<li>slice返回指定位置的数组成员组成的新数组，原数组不变。它的第一个参数为起始位置（从0开始），第二个参数为终止位置（但该位置的元素本身不包括在内）。如果省略第二个参数，则一直返回到原数组的最后一个成员</li>
+<li>sort：对数组元素进行排序，默认是按照字典顺序排序</li>
+<li>map：对数组的所有成员依次调用一个函数，根据函数结果返回一个新数组</li>
+<li>forEach：遍历数组的所有成员</li>
+<li>filter：依次对所有数组成员调用一个测试函数</li>
+<li>indexOf：返回给定元素在数组中第一次出现的位置，如果没有出现则返回-1</li>
+</ul>
+<h3 id="Array-from"><a href="#Array-from" class="headerlink" title="Array.from"></a>Array.from</h3><p>有时需要将类数组（一组通过数字索引的值）转换为真正的数组，这一般通过数组工具函数（如indexOf(..)、concat(..)、forEach(..) 等）来实现。类数组如下：<br>例如，一些DOM 查询操作会返回DOM 元素列表，它们并非真正意义上的数组，但十分<br>类似。另一个例子是通过arguments 对象（类数组）将函数的参数当作列表来访问（从<br>ES6 开始已废止）。</p>
+<pre><code>function foo() {
+    var arr = Array.prototype.slice.call( arguments );
+    arr.push( &quot;bam&quot; );
+    console.log( arr );
+}
+foo( &quot;bar&quot;, &quot;baz&quot; ); // [&quot;bar&quot;,&quot;baz&quot;,&quot;bam&quot;]
+</code></pre><p>如上所示，slice() 返回参数列表（上例中是一个类数组）的一个数组复本。<br>用ES6 中的内置工具函数Array.from(..) 也能实现同样的功能：</p>
+<pre><code>function f() {
+      return Array.from(arguments);
+}
+</code></pre><p>Array.from() 方法从一个类似数组或可迭代的对象中创建一个新的数组实例。</p>
+<pre><code>Array.from(&apos;foo&apos;); 
+// [&quot;f&quot;, &quot;o&quot;, &quot;o&quot;]
+</code></pre><p>Array.from方法还支持类似数组的对象。所谓类似数组的对象，本质特征只有一点，即必须有length属性。因此，任何有length属性的对象，都可以通过Array.from方法转为数组，而此时扩展运算符就无法转换。</p>
+<pre><code>Array.from({ length: 3 });
+// [ undefined, undefined, undefined ]
+</code></pre><p>Array.from还可以接受第二个参数，作用类似于数组的map方法，用来对每个元素进行处理，将处理后的值放入返回的数组。</p>
+<pre><code>Array.from([1, 2, 3], (x) =&gt; x * x)
+// [1, 4, 9]
+Array.from([1,2,3].map((x) =&gt; x * x))
+// [1, 4, 9]
+</code></pre><h3 id="find方法"><a href="#find方法" class="headerlink" title="find方法"></a>find方法</h3><p>数组实例的find方法，用于找出第一个符合条件的数组成员。它的参数是一个回调函数，所有数组成员依次执行该回调函数，直到找出第一个返回值为true的成员，然后返回该成员。如果没有符合条件的成员，则返回undefined。</p>
+<pre><code>[1, 5, 10, 15].find(function(value, index, arr) {
+      return value &gt; 9;
+}) // 10
+</code></pre><p>数组实例的findIndex方法的用法与find方法非常类似，返回第一个符合条件的数组成员的位置，如果所有成员都不符合条件，则返回-1。</p>
+<h3 id="fill方法"><a href="#fill方法" class="headerlink" title="fill方法"></a>fill方法</h3><p>fill方法使用给定值，填充一个数组。fill方法还可以接受第二个和第三个参数，用于指定填充的起始位置和结束位置。</p>
+<pre><code>[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;].fill(7)
+// [7, 7, 7]
+new Array(3).fill(7)
+// [7, 7, 7]
+[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;].fill(7, 1, 2)
+// [&apos;a&apos;, 7, &apos;c&apos;]
+</code></pre><h3 id="includes方法"><a href="#includes方法" class="headerlink" title="includes方法"></a>includes方法</h3><p>includes方法返回一个布尔值，表示某个数组是否包含给定的值，与字符串的includes方法类似</p>
+<h3 id="空位的处理"><a href="#空位的处理" class="headerlink" title="空位的处理"></a>空位的处理</h3><p>数组的空位指，数组的某一个位置没有任何值。比如，Array构造函数返回的数组都是空位。<br>ES5 对空位的处理，大多数情况下会忽略空位。</p>
+<ul>
+<li>forEach(), filter(), every() 和some()都会跳过空位。</li>
+<li>map()会跳过空位，但会保留这个值</li>
+<li>join()和toString()会将空位视为undefined，而undefined和null会被处理成空字符串。</li>
+</ul>
+<pre><code>// forEach方法
+[,&apos;a&apos;].forEach((x,i) =&gt; console.log(i)); // 1
+
+// filter方法
+[&apos;a&apos;,,&apos;b&apos;].filter(x =&gt; true) // [&apos;a&apos;,&apos;b&apos;]
+
+// every方法
+[,&apos;a&apos;].every(x =&gt; x===&apos;a&apos;) // true
+
+// some方法
+[,&apos;a&apos;].some(x =&gt; x !== &apos;a&apos;) // false
+
+// map方法
+[,&apos;a&apos;].map(x =&gt; 1) // [,1]
+
+// join方法
+[,&apos;a&apos;,undefined,null].join(&apos;#&apos;) // &quot;#a##&quot;
+
+// toString方法
+[,&apos;a&apos;,undefined,null].toString() // &quot;,a,,&quot;
+</code></pre><p>ES6 则是明确将空位转为undefined。Array.from方法会将数组的空位，转为undefined，也就是说，这个方法不会忽略空位。for…of循环也会遍历空位。</p>
+<pre><code>Array.from([&apos;a&apos;,,&apos;b&apos;])
+// [ &quot;a&quot;, undefined, &quot;b&quot; ]
+let arr = [, ,];
+for (let i of arr) {
+  console.log(1);
+}
+// 1
+// 1
+</code></pre><p>数组arr有两个空位，for…of并没有忽略它们。如果改成map方法遍历，空位是会跳过的。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/未闻花名/">未闻花名</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-vue仿饿了么项目的重要知识点与那些坑" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/" class="article-date">
+      <time datetime="2017-06-25T12:30:00.000Z" itemprop="datePublished">2017-06-25</time>
+</a>
+
+ 
+    <a href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/06/25/vue仿饿了么项目的重要知识点与那些坑/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">Vue仿饿了么知识点总结</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Vue-nextTick-callback-context"><a href="#Vue-nextTick-callback-context" class="headerlink" title="Vue.nextTick([callback,context])"></a>Vue.nextTick([callback,context])</h2><h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。</p>
+<pre><code>vm.msg = &apos;Hello&apos;
+Vue.nextTick(function(){
+    // DOM更新
+</code></pre><h2 id="vm-nextTick-callback"><a href="#vm-nextTick-callback" class="headerlink" title="vm.$nextTick([callback])"></a>vm.$nextTick([callback])</h2><h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><p>{function} [callback]</p>
+<h3 id="用法-1"><a href="#用法-1" class="headerlink" title="用法"></a>用法</h3><p>将回调延迟到下次DOM更新循环后执行。在修改数据之后立即使用它，然后等待DOM更新。它跟全局方法Vue.nextTick一样，不同的是回调的this自动绑定到调用它的实例上。</p>
+<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><pre><code>new Vue({
+    // ...
+    methods: {
+        example: function () {
+            this.msg = &apos;changed&apos;
+            this.$nextTick(function() {
+                this.dosomthingElse()
+                })
+        }
+    }
+})
+</code></pre><h2 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h2><p>简单起见， v-el 和 v-ref 合并为一个 ref属性了，可以在组件实例中通过 $refs 来调用。这意味着 v-el:my-element 将写成这样： ref=”myElement”， v-ref:my-component 变成了这样： ref=”myComponent”。绑定在一般元素上时，ref 指DOM元素，绑定在组件上时，ref 为一组件实例。<br>因为 v-ref 不再是一个指令了而是一个特殊的属性，它也可以被动态定义了。这样在和v-for 结合的时候是很有用的：    </p>
+<pre><code>&lt;p v-for = &quot;item in items&quot; v-bind:ref=&quot;items&quot;&gt;&lt;/p&gt;
+</code></pre><p>和 1.x 中不同， $refs 不是响应的，因为它们在渲染过程中注册/更新。只有监听变化并重复渲染才能使它们响应。<br>另一方面，设计$refs主要是提供给 js 程序访问的，并不建议在模板中过度依赖使用它。因为这意味着在实例之外去访问实例状态，违背了 Vue 数据驱动的思想。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-web开发者必备http知识" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -944,487 +1952,6 @@ export class ChildComponent{
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js-angular/">js,angular</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-总结常见MYSQL数据库优化操作" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/04/20/总结常见MYSQL数据库优化操作/" class="article-date">
-      <time datetime="2017-04-20T12:00:00.000Z" itemprop="datePublished">2017-04-20</time>
-</a>
-
- 
-    <a href="/2017/04/20/总结常见MYSQL数据库优化操作/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/04/20/总结常见MYSQL数据库优化操作/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的Mysql数据库优化操作</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p><img src="" alt=""></p>
-<h2 id="一、Index索引"><a href="#一、Index索引" class="headerlink" title="一、Index索引"></a>一、Index索引</h2><p>将Index放第一位，不用说，这种优化方式我们一直都在悄悄使用，那便是主键索引。有时候我们可能并不在意，如果定义适合的索引，数据库查询性能(速度)将提高几倍甚至几十倍。</p>
-<h3 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h3><p>作用是提高查询速度。</p>
-<h4 id="建表，创建索引"><a href="#建表，创建索引" class="headerlink" title="建表，创建索引"></a>建表，创建索引</h4><pre><code>CREATE TABLE tbl_name(
-字段名称 字段类型 [完整性约束条件],
-~
-index [索引名] (column_name)
-);
-</code></pre><h4 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h4><pre><code>CREATE INDEX index_name ON tab_name (column_name)
-</code></pre><h4 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h4><pre><code>DROP INDEX index_name FROM tab_name 
-</code></pre><h4 id="查看索引"><a href="#查看索引" class="headerlink" title="查看索引"></a>查看索引</h4><pre><code>SHOW index FROM tab_name
-</code></pre><h3 id="主键索引"><a href="#主键索引" class="headerlink" title="主键索引"></a>主键索引</h3><p>作用是加速查询和唯一约束</p>
-<h4 id="建表，创建索引-1"><a href="#建表，创建索引-1" class="headerlink" title="建表，创建索引"></a>建表，创建索引</h4><pre><code>CREATE TABLE tbl_name(
-字段名称 字段类型 [完整性约束条件],
-~
-PRIMARY KEY(column_name)
-);
-</code></pre><h4 id="创建索引-1"><a href="#创建索引-1" class="headerlink" title="创建索引"></a>创建索引</h4><pre><code>ALTER TABLE tab_name ADD PRIMARY KEY(column_name)
-</code></pre><h4 id="删除索引-1"><a href="#删除索引-1" class="headerlink" title="删除索引"></a>删除索引</h4><pre><code>ALTER TABLE tab_name DROP PRIMAY KEY(column_name)
-</code></pre><h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3><p>作用是加速查询和唯一约束</p>
-<h4 id="建表，创建索引-2"><a href="#建表，创建索引-2" class="headerlink" title="建表，创建索引"></a>建表，创建索引</h4><pre><code>CREATE TABLE tbl_name(
-字段名称 字段类型 [完整性约束条件],
-~
-unique [索引名] (column_name)
-);
-</code></pre><h4 id="创建索引-2"><a href="#创建索引-2" class="headerlink" title="创建索引"></a>创建索引</h4><pre><code>CREATE UNIQUE INDEX index_name ON tab_name (column_name)
-</code></pre><h4 id="删除索引-2"><a href="#删除索引-2" class="headerlink" title="删除索引"></a>删除索引</h4><pre><code>DROP UNIQUE INDEX index_name FROM tab_name 
-</code></pre><h2 id="二、少用SELECT"><a href="#二、少用SELECT" class="headerlink" title="二、少用SELECT*"></a>二、少用SELECT*</h2><p>可能有的人查询数据库时，遇到要查询的都会select<em>，这是不恰当的行为。我们应该取我们要用的数据，而不是全取，因为当我们select</em>时，会增加web服务器的负担，增加网络传输的负载，查询速度自然就下降 。</p>
-<h2 id="三、EXPLAIN-SELECT"><a href="#三、EXPLAIN-SELECT" class="headerlink" title="三、EXPLAIN SELECT"></a>三、EXPLAIN SELECT</h2><p>对于这个功能估计很多人都没见过，但是这里强烈推荐使用。explain显示了mysql如何使用索引来处理select语句以及连接表。可以帮助选择更好的索引和写出更优化的查询语句。主要用发就是在select前加上explain即可。</p>
-<pre><code>EXPLAIN SELECT [查找字段名] FROM tab_name ...
-</code></pre><h2 id="四、开启查询缓存"><a href="#四、开启查询缓存" class="headerlink" title="四、开启查询缓存"></a>四、开启查询缓存</h2><p>大多数的MySQL服务器都开启了查询缓存。这是提高性最有效的方法之一，而且这是被MySQL的数据库引擎处理的。当有很多相同的查询被执行了多次的时候，这些查询结果会被放到一个缓存中，这样，后续的相同的查询就不用操作表而直接访问缓存结果了。<br>第一步把query_cache_type设置为ON，然后查询系统变量have_query_cache是否可用：</p>
-<pre><code>show variables like &apos;have_query_cache&apos;
-</code></pre><p>之后，分配内存大小给查询缓存，控制缓存查询结果的最大值。相关操作在配置文件中进行修改。</p>
-<h2 id="五、使用NOT-NULL"><a href="#五、使用NOT-NULL" class="headerlink" title="五、使用NOT NULL"></a>五、使用NOT NULL</h2><p>很多表都包含可为 NULL （空值） 的列，即使应用程序井不需要保存 NULL 也是如此 ，这是因为可为 NULL 是列的默认属性。通常情况下最好指定列为 NOT NULL，除非真 的需要存储 NULL 值。<br>如果查询中包含可为 NULL 的列，对 MySQL 来说更难优化 ，因为可为 NULL 的列使 得索引、索引统计和值比较都更复杂 。可为NULL 的列会使用更多的存储空间 ，在 MySQL 里也需要特殊处理 。当可为NULL 的列被索引肘，每个索引记录需要一个额 外的字节，在 MyISAM 里甚至还可能导致固定大小 的索引 （例如只有一个整数列的 索引） 变成可变大小的索引。<br>通常把可为 NULL 的列改为 NOT NULL 带来的性能提升比较小 ，所以 （调优时） 没有 必要首先在现有schema中查找井修改掉这种情况 ，除非确定这会导致问题。但是， 如果计划在列上建索引 ，就应该尽量避免设计成可为 NULL 的列。当然也有例外 ，例如值得一提的是，InnoDB 使用单独的位 （bit ） 存储 NULL 值 ，所 以对于稀疏数据由有很好的空间效率 。但这一点不适用于MyISAM 。</p>
-<h2 id="六、存储引擎的选择"><a href="#六、存储引擎的选择" class="headerlink" title="六、存储引擎的选择"></a>六、存储引擎的选择</h2><p>对于如何选择MyISAM和InnoDB,如果你需要事务处理或是外键，那么InnoDB可能是比较好的方式。如果你需要全文索引，那么通常来说MyISAM是好的选择，因为这是系统内建的，然而，我们其实并不会经常地去测试两百万行记录。所以，就算是慢一点，我们可以通过使用Sphinx从InnoDB中获得全文索引。<br>数据的大小，是一个影响你选择什么样存储引擎的重要因素，大尺寸的数据集趋向于选择InnoDB方式，因为其支持事务处理和故障恢复。数据库的在小决定了故障恢复的时间长短，InnoDB可以利用事务日志进行数据恢复，这会比较快。而MyISAM可能会需要<br>几个小时甚至几天来干这些事，InnoDB只需要几分钟。<br>您操作数据库表的习惯可能也会是一个对性能影响很大的因素。比如： COUNT() 在 MyISAM表中会非常快，而在InnoDB表下可能会很痛苦。而主键查询则在InnoDB下会相当相当的快，但需要小心的是如果我们的主键太长了也会导致性能问题。大批的inserts语句在MyISAM下会快一些，但是updates在InnoDB 下会更快一些——尤其在并发量大的时候。<br>所以，到底你检使用哪一个呢？根据经验来看，如果是一些小型的应用或项目，那么MyISAM也许会更适合。当然，在大型的环境下使用MyISAM也会有很大成功的时候，但却不总是这样的。如果你正在计划使用一个超大数据量的项目，而且需要事务处理或外键支持，那么你真的应该直接使用InnoDB方式。但需要记住InnoDB的表需要更多的内存和存储，转换100GB的MyISAM 表到InnoDB 表可能会让你有非常坏的体验。 </p>
-<h2 id="七、避免在-where-子句中使用-or-来连接"><a href="#七、避免在-where-子句中使用-or-来连接" class="headerlink" title="七、避免在 where 子句中使用 or 来连接"></a>七、避免在 where 子句中使用 or 来连接</h2><p>如果一个字段有索引，一个字段没有索引，将导致引擎放弃使用索引而进行全表扫描，如：</p>
-<pre><code>select id from t where num=10 or Name = &apos;admin&apos;
-</code></pre><p>可以这样查询：</p>
-<pre><code>select id from t where num = 10
-union all
-select id from t where Name = &apos;admin&apos;
-</code></pre><h2 id="八、多使用varchar-nvarchar"><a href="#八、多使用varchar-nvarchar" class="headerlink" title="八、多使用varchar/nvarchar"></a>八、多使用varchar/nvarchar</h2><p>使用varchar/nvarchar代替 char/nchar ，因为首先变长字段存储空间小，可以节省存储空间，其次对于查询来说，在一个相对较小的字段内搜索效率显然要高些。</p>
-<h2 id="九、避免大数据量返回"><a href="#九、避免大数据量返回" class="headerlink" title="九、避免大数据量返回"></a>九、避免大数据量返回</h2><p>这里要考虑使用limit，来限制返回的数据量，如果每次返回大量自己不需要的数据，也会降低查询速度。</p>
-<h2 id="十、where子句优化"><a href="#十、where子句优化" class="headerlink" title="十、where子句优化"></a>十、where子句优化</h2><p>where 子句中使用参数，会导致全表扫描,因为SQL只有在运行时才会解析局部变量，但优化程序不能将访问计划的选择推迟到运行时；它必须在编译时进行选择。然 而，如果在编译时建立访问计划，变量的值还是未知的，因而无法作为索引选择的输入项。<br>应尽量避免在 where 子句中对字段进行表达式操作，避免在where子句中对字段进行函数操作这将导致引擎放弃使用索引而进行全表扫描。不要在 where 子句中的“=”左边进行函数、算术运算或其他表达式运算，否则系统将可能无法正确使用索引。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-python进阶学习--参数" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/04/20/python进阶学习--参数/" class="article-date">
-      <time datetime="2017-04-20T12:00:00.000Z" itemprop="datePublished">2017-04-20</time>
-</a>
-
- 
-    <a href="/2017/04/20/python进阶学习--参数/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/04/20/python进阶学习--参数/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/20/python进阶学习--参数/">Python进阶学习--*Arg、**kw和装饰器</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="arg（可变参数）"><a href="#arg（可变参数）" class="headerlink" title="*arg（可变参数）"></a>*arg（可变参数）</h2><p>主要用于预先并不知道, 函数使用者会传递多少个参数给你, 所以在这个场景下使用这两个关键字。 *args 是用来发送一个非键值对的可变数量的参数列表给一个函数.</p>
-<pre><code>def _abs(*arg):
-    sum = 0 
-    for i in arg:
-        sum = sum + i
-    return sum 
-
-print(_abs(1,2,3))    //6
-</code></pre><h2 id="kw-关键字参数"><a href="#kw-关键字参数" class="headerlink" title="**kw(关键字参数)"></a>**kw(关键字参数)</h2><p><strong>kwargs 允许你将不定长度的键值对, 作为参数传递给一个函数。 如果你想要在一个函数里处理带名字的参数, 你应该使用</strong>kwargs</p>
-<pre><code>def bian_li(**kwargs):
-for key, value in kwargs.items():
-    print(&quot;{0} == {1}&quot;.format(key, value))
-
-print(bian_li(name=&apos;huihi&apos;, age=10))
-// name == huihui
-// age == 10
-</code></pre><h2 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h2><h3 id="原函数"><a href="#原函数" class="headerlink" title="原函数"></a>原函数</h3><pre><code>def dec(func):
-    print(&quot;execute this program&quot;)
-    func()
-    print(&quot;func&apos;s name is %s()&quot; % func.__name__)
-    return func
-
-
-def fun():
-    print(&quot;my name is func()&quot;)
-
-
-_func = dec(fun)
-</code></pre><h3 id="语法糖-装饰原函数"><a href="#语法糖-装饰原函数" class="headerlink" title="语法糖@装饰原函数"></a>语法糖@装饰原函数</h3><pre><code>def dec(func):
-    print(&quot;execute this program&quot;)
-    func()
-    print(&quot;func&apos;s name is %s()&quot; % func.__name__)
-    return func
-
-
-@dec
-    def fun():
-    print(&quot;my name is func()&quot;)
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/未闻花名/">未闻花名</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-mysql自连接" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/04/18/mysql自连接/" class="article-date">
-      <time datetime="2017-04-18T12:00:00.000Z" itemprop="datePublished">2017-04-18</time>
-</a>
-
- 
-    <a href="/2017/04/18/mysql自连接/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/04/18/mysql自连接/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/18/mysql自连接/">Mysql自连接与join关联</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="mysql自连接"><a href="#mysql自连接" class="headerlink" title="mysql自连接"></a>mysql自连接</h2><p>mysql有时在信息查询时需要进行对自身连接（自连接），所以我们需要为表定义别名。我们举例说明，下面是商品采购表，我们需要找到采购价格比惠惠高的所有信息。<br><img src="http://i4.buimg.com/591295/3f7790a5e853583c.png" alt=""></p>
-<p>一般情况我们看到这张表我们第一时间用语句进行操作：</p>
-<pre><code>SELECT * FROM shoping WHERE price&gt;27
-</code></pre><p>可想而知，这是有多么简单，假设你并不知道数据库表详细数据或者数据量相当庞大呢？作为一个数据库管理员，我们就要用别的方式迅速找出所需要的数据。</p>
-<h3 id="分步查询"><a href="#分步查询" class="headerlink" title="分步查询"></a>分步查询</h3><p>最简单的一种方式，也是最容易想到操作：</p>
-<pre><code>SELECT price FROM shopping WHERE name=&apos;惠惠&apos; //得出price查询结果为27
-SELECT * FROM shopping WHERE price&gt;27
-</code></pre><p>与采用自连接的方式相比，这种方法需要对中间结果进行人工干预，显然不利于程序中的自动处理操作。</p>
-<h3 id="自连接方式："><a href="#自连接方式：" class="headerlink" title="自连接方式："></a>自连接方式：</h3><pre><code>SELECT b.* 
-from shopping as a,shopping as b
-where a.name=&apos;惠惠&apos; 
-and a.price&lt;b.price 
-order by b.id
-</code></pre><p>我们可以获取到如下表信息：<br><img src="http://i4.buimg.com/591295/f09859af7f84cc99.png" alt=""></p>
-<p>注意点：</p>
-<ul>
-<li>别名 a,b虽然名称不同，但是同一个表，定义别名的目的是更方便在自身进行删选。</li>
-<li>执行select通过（中间表）所得到的b.*，，就是最终结果。</li>
-</ul>
-<h3 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h3><p>子查询也是常用的一种方式，就是在select里嵌套select。实现代码如下：</p>
-<pre><code>SELECT * FROM shopping 
-WHERE price&gt;(select price from &apos;shopping&apos; where name=&apos;惠惠&apos;)
-</code></pre><p>所得结果如下所示,可见两种方式所得结果相同：<br><img src="http://i4.buimg.com/591295/f09859af7f84cc99.png" alt=""></p>
-<h2 id="JOIN"><a href="#JOIN" class="headerlink" title="JOIN"></a>JOIN</h2><h3 id="INNER-JOIN"><a href="#INNER-JOIN" class="headerlink" title="INNER JOIN"></a>INNER JOIN</h3><p>内关联的主要作用是在表中存在至少一个匹配时，就返回结果集，这里的inner join和join作用相同，所以一起介绍。<br>下面给出两张表,分别为goods和category表：<br><img src="http://i1.piimg.com/591295/b0cbee9589b9dc4d.png" alt=""><br><img src="http://i1.piimg.com/591295/2e1eb7683642820f.png" alt=""></p>
-<pre><code>SELECT * FROM goods INNER JOIN category 
-ON goods.id=category.goods_id 
-ORDER BY gods.id
-</code></pre><p>结果如下所示：</p>
-<p><img src="http://i4.buimg.com/591295/f47b08e04584e5fd.png" alt=""></p>
-<h3 id="LEFT-JOIN"><a href="#LEFT-JOIN" class="headerlink" title="LEFT JOIN"></a>LEFT JOIN</h3><p>LEFT JOIN 关键字会从左表 (table_name1) 那里返回所有的行，即使在右表 (table_name2) 中没有匹配的行。做项目时建议使用左关联。但是存在很多表关联的，一个表对a是左连接，但同时对b是右连接，这时加上右连接，写起来可能方便一些。<br>套用一开始的两张表，进行左关联查询：</p>
-<pre><code>SELECT goods.*,category.cate_name 
-FROM goods LEFT JOIN category 
-ON goods.id=category.goods_id 
-ORDER BY goods.id
-</code></pre><p><img src="http://i2.muimg.com/591295/827570114f549bab.png" alt=""></p>
-<h3 id="RIGHT-JOIN"><a href="#RIGHT-JOIN" class="headerlink" title="RIGHT JOIN"></a>RIGHT JOIN</h3><p>RIGHT JOIN 关键字会右表 (table_name2) 那里返回所有的行，即使在左表 (table_name1) 中没有匹配的行。套用一开始的两张表进行右关联查询：</p>
-<pre><code>SELECT a.goods_name,a.price,b.*
-FROM goods as a
-RIGHT JOIN category as b
-ON a.id=b.goods_id
-ORDER BY b.id
-</code></pre><p><img src="http://i4.buimg.com/591295/da4f34c3a9aa9326.png" alt=""></p>
-<p>对于多表关联的情况，就是多加几条关联语句。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-用IIFE与let方法改写循环闭包" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/04/10/用IIFE与let方法改写循环闭包/" class="article-date">
-      <time datetime="2017-04-10T06:25:00.000Z" itemprop="datePublished">2017-04-10</time>
-</a>
-
- 
-    <a href="/2017/04/10/用IIFE与let方法改写循环闭包/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/04/10/用IIFE与let方法改写循环闭包/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/10/用IIFE与let方法改写循环闭包/">用IIFE与let命令改写循环闭包</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>根据阮大的解释，闭包就是能够读取其他函数内部变量的函数，闭包的作用有两个，一个是可以读取函数内部的变量，另一个就是让这些变量的值始终保持在内存中。但是有时候变量值都保存在内存中不见得都是好事，所以我们要解决一些循环闭包中变量保存在内存中的问题。主要用到的方法包括IIFE（立即执行匿名函数），ES6中的let命令。</p>
-<h2 id="前言-来自牛客的思考"><a href="#前言-来自牛客的思考" class="headerlink" title="前言-来自牛客的思考"></a>前言-来自牛客的思考</h2><p>现在给出原题（略有改动）：</p>
-<pre><code>for(var i=0;i&lt;5;i++){
-    setTimeout(function (){
-        console.log(i+&apos;&apos;);
-    },100);
-}
-for(var j=0;j&lt;5;j++)
-    console.log(j);
-</code></pre><p>这题涉及到了setTimeout以及闭包的知识，如果掌握很好的的话，一眼就能看出答案是1-&gt;2,3,4-&gt;5-&gt;5,5,5,5(注意时间顺序)。现在我希望第一个for循环按顺序输出，方法主要有立即执行匿名函数和ES6中的let。</p>
-<h2 id="ES6–let"><a href="#ES6–let" class="headerlink" title="ES6–let"></a>ES6–let</h2><p>如果有做angular2的同志对ES6的语法是了解不过了。下面内容可以带过。<br>let的用法类似于var，但是所声明的变量，只在let命令所在的块级作用域内有效。</p>
-<pre><code>function f1() {
-  let n = 5;
-  if (true) {
-      let n = 10;
-      console.log(n); //10
-  }
-  console.log(n); // 5
-}
-</code></pre><p>上面的函数有两个代码块，都声明了变量n，运行后输出5。这表示外层代码块不受内层代码块的影响。如果使用var定义变量n，最后输出的值就是10。<br>下面我们改写之前的程序：</p>
-<pre><code>for(let i=0;i&lt;5;i++){
-    setTimeout(function (){
-        console.log(i+&apos;&apos;);
-    },100);
-}
-</code></pre><p>打开谷歌的控制台会发现结果已经变为0-&gt;1,2,3,4。正是let块级作用域的作用，使每个i变量都仅在对应的作用域内有效果。相应的下面程序也是一样的道理。</p>
-<pre><code>var elems = document.getElementsByTagName(&apos;a&apos;);
-for(let i = 0;i &lt; elems.length; i++ ) {
-    elems[i].addEventListener(&apos;click&apos;,function(e){
-        e.preventDefault();
-        alert(i)
-        },false);
-}
-</code></pre><h2 id="IIFE（立即执行函数表达式）"><a href="#IIFE（立即执行函数表达式）" class="headerlink" title="IIFE（立即执行函数表达式）"></a>IIFE（立即执行函数表达式）</h2><p>由于js中，在括号中进行函数声明无效，所以被括号包起来的函数称之为函数表达式。<br>IIFE的两种形式如下：当圆括号出现在匿名函数的末尾想要调用函数时，它会默认将函数当成是函数声明。当圆括号包裹函数时，它会默认将函数作为表达式去解析，而不是函数声明。</p>
-<pre><code>(function(){}());
-(function(){})();
-</code></pre><p>下面先来用牛客的一道题目来理解一下IIFE：</p>
-<pre><code>var myObject = {   
-    foo: &quot;bar&quot;,   
-    func: function() {     
-        var self = this;     
-          console.log(this.foo);          
-        console.log(self.foo);        
-          (function() {         
-            console.log(this.foo);      
-                console.log(self.foo);        
-          }());   
-}};
-    myObject.func();
-</code></pre><p>因为this指代的是myObject对象，所以第一个肯定输出bar，而self是this的变量，等于是this，所以第二个输出的还是bar，下面出现的就是我们上文定义的第一种IIFE形式，此时必须立即执行匿名函数，它的this指向的是window，所以输出undefined,最后的self在自己的块级作用域没有定义，所以向上找到父级作用域的self，因此第四个输出的还是bar。</p>
-<p>下面我们用两种IIFE的形式来改写最初的代码。</p>
-<pre><code>for(var i=0;i&lt;5;i++){
-    (function(e){
-        setTimeout(function (){
-            console.log(e+&apos;&apos;);
-        },100*i);
-//将i值锁定到e中，再输出相关结果
-    })(i)
-}
-</code></pre><p>在IIFE中，我们想要锁定哪个值就要将该值放在函数表达式的最外面那个括号里。此时就跟正常的for循环相同了。</p>
-<p>第二种方式：</p>
-<pre><code>for(var i=0;i&lt;5;i++){
-    (function(e){
-        setTimeout(function (){
-            console.log(new Date, e+&apos;&apos;);
-        },100*i);
-    }(i))
-}
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li></ul>
     </div>
 
       

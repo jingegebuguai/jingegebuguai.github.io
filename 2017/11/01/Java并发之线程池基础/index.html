@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="huiHui" />
+
+
+
+<meta name="description" content="线程池为什么设计线程池如果不使用线程池，当并发的线程数量很多，并且每个线程执行很短时间就结束，这要频繁创建线程会造成大量资源消，降低系统效率。 作用合理利用线程池能够带来三个好处。第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。第二：提高响应速度。当任务到达时，任务可以不需要的等到线程创建就能立即执行。第三：提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发之线程池基础">
+<meta property="og:url" content="http://huihui.kim/2017/11/01/Java并发之线程池基础/index.html">
+<meta property="og:site_name" content="huiHui&#39;s blogs">
+<meta property="og:description" content="线程池为什么设计线程池如果不使用线程池，当并发的线程数量很多，并且每个线程执行很短时间就结束，这要频繁创建线程会造成大量资源消，降低系统效率。 作用合理利用线程池能够带来三个好处。第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。第二：提高响应速度。当任务到达时，任务可以不需要的等到线程创建就能立即执行。第三：提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://gityuan.com/images/android-process/thread-pool.jpg">
+<meta property="og:updated_time" content="2017-11-01T02:43:48.481Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java并发之线程池基础">
+<meta name="twitter:description" content="线程池为什么设计线程池如果不使用线程池，当并发的线程数量很多，并且每个线程执行很短时间就结束，这要频繁创建线程会造成大量资源消，降低系统效率。 作用合理利用线程池能够带来三个好处。第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。第二：提高响应速度。当任务到达时，任务可以不需要的等到线程创建就能立即执行。第三：提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗">
+<meta name="twitter:image" content="http://gityuan.com/images/android-process/thread-pool.jpg">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="huiHui&#39;s blogs" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Java并发之线程池基础 | huiHui&#39;s blogs</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">huiHui</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://jingegebuguai.github.com/">GitHub</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于全栈</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">huiHui</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">huiHui</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" target="_blank" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Java并发之线程池基础" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/01/Java并发之线程池基础/" class="article-date">
+      <time datetime="2017-11-01T02:35:00.000Z" itemprop="datePublished">2017-11-01</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java并发之线程池基础
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><h3 id="为什么设计线程池"><a href="#为什么设计线程池" class="headerlink" title="为什么设计线程池"></a>为什么设计线程池</h3><p>如果不使用线程池，当并发的线程数量很多，并且每个线程执行很短时间就结束，这要频繁创建线程会造成大量资源消，降低系统效率。</p>
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>合理利用线程池能够带来三个好处。第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。第二：提高响应速度。当任务到达时，任务可以不需要的等到线程创建就能立即执行。第三：提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。但是要做到合理的利用线程池，必须对其原理了如指掌。</p>
+<h3 id="线程池构造函数"><a href="#线程池构造函数" class="headerlink" title="线程池构造函数"></a>线程池构造函数</h3><h4 id="源码构造方式一"><a href="#源码构造方式一" class="headerlink" title="源码构造方式一"></a>源码构造方式一</h4><pre><code>public ThreadPoolExecutor(int corePoolSize,
+                              int maximumPoolSize,
+                              long keepAliveTime,
+                              TimeUnit unit,
+                              BlockingQueue&lt;Runnable&gt; workQueue) {
+        this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+             Executors.defaultThreadFactory(), defaultHandler);
+    }
+</code></pre><h4 id="源码构造方式二"><a href="#源码构造方式二" class="headerlink" title="源码构造方式二"></a>源码构造方式二</h4><pre><code>public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue&lt;Runnable&gt; workQueue,
+                          ThreadFactory threadFactory) {
+    this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+         threadFactory, defaultHandler);
+}
+</code></pre><h4 id="源码构造方式三"><a href="#源码构造方式三" class="headerlink" title="源码构造方式三"></a>源码构造方式三</h4><pre><code>public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue&lt;Runnable&gt; workQueue,
+                          RejectedExecutionHandler handler) {
+    this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+         Executors.defaultThreadFactory(), handler);
+}
+</code></pre><h4 id="源码构造方式四"><a href="#源码构造方式四" class="headerlink" title="源码构造方式四"></a>源码构造方式四</h4><pre><code>public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue&lt;Runnable&gt; workQueue,
+                          ThreadFactory threadFactory,
+                          RejectedExecutionHandler handler) {
+    if (corePoolSize &lt; 0 ||
+        maximumPoolSize &lt;= 0 ||
+        maximumPoolSize &lt; corePoolSize ||
+        keepAliveTime &lt; 0)
+        throw new IllegalArgumentException();
+    if (workQueue == null || threadFactory == null || handler == null)
+        throw new NullPointerException();
+    this.corePoolSize = corePoolSize;
+    this.maximumPoolSize = maximumPoolSize;
+    this.workQueue = workQueue;
+    this.keepAliveTime = unit.toNanos(keepAliveTime);
+    this.threadFactory = threadFactory;
+    this.handler = handler;
+}
+</code></pre><h4 id="源码构造函数分析"><a href="#源码构造函数分析" class="headerlink" title="源码构造函数分析"></a>源码构造函数分析</h4><p>前三个线程池构造函数都使用的this()来调用其他构造函数，而真正初始化作用的构造函数是第四个，所以前三个构造函数是基于第四个构造器初始化的。</p>
+<p>下面详细说明每个参数的含义：</p>
+<ul>
+<li>corePollSize: 核心池的大小，这个参数跟后面讲述的线程池的实现原理有非常大的关系。<span style="color:red">在创建了线程池后，默认情况下，线程池中并没有任何线程，而是等待有任务到来才创建线程去执行任务，除非调用了prestartAllCoreThreads()或者prestartCoreThread()方法，从这2个方法的名字就可以看出，是预创建线程的意思，即在没有任务到来之前就创建corePoolSize个线程或者一个线程。默认情况下，在创建了线程池后，线程池中的线程数为0，当有任务来之后，就会创建一个线程去执行任务，当线程池中的线程数目达到corePoolSize后，就会把到达的任务放到缓存队列当中；</span></li>
+<li>maximumPoolSize: 线程池最大线程数，这个参数也是一个非常重要的参数，它表示在线程池中最多能创建多少个线程；</li>
+<li>keepAliveTime: 线程池的工作线程空闲后，保持存活的时间。所以如果任务很多，并且每个任务执行的时间比较短，可以调大这个时间，提高线程的利用率。<span style="color:red">默认线程池的线程数大于线程池大小时起作用，即当线程池中的线程数大于corePoolSize时，如果一个线程空闲的时间达到keepAliveTime，则会终止，直到线程池中的线程数不超过corePoolSize，但是如果调用了allowCoreThreadTimeOut(boolean)方法，在线程池中的线程数不大于corePoolSize时，keepAliveTime参数也会起作用，直到线程池中的线程数为0；</span></li>
+<li>workQueue: 一个阻塞队列，用来存储等待执行的任务，这个参数的选择也很重要，会对线程池的运行过程产生重大影响.</li>
+</ul>
+<pre><code>ArrayBlockingQueue：是一个基于数组结构的有界阻塞队列，此队列按 FIFO（先进先出）原则对元素进行排序。
+
+LinkedBlockingQueue：一个基于链表结构的阻塞队列，此队列按FIFO （先进先出） 排序元素，吞吐量通常要高于ArrayBlockingQueue。静态工厂方法Executors.newFixedThreadPool()使用了这个队列。
+
+SynchronousQueue：一个不存储元素的阻塞队列。每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于LinkedBlockingQueue，静态工厂方法Executors.newCachedThreadPool使用了这个队列。
+
+PriorityBlockingQueue：一个具有优先级得无限阻塞队列。
+</code></pre><ul>
+<li>unit: 时间单位</li>
+<li>threadFactory: 用于设置创建线程的工厂，可以通过线程工厂给每个创建出来的线程设置更有意义的名字</li>
+<li>handler: 拒绝处理任务时的策略</li>
+</ul>
+<pre><code>ThreadPoolExecutor.AbortPolicy:丢弃任务并抛出RejectedExecutionException异常。 
+ThreadPoolExecutor.DiscardPolicy：也是丢弃任务，但是不抛出异常。 
+ThreadPoolExecutor.DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）
+ThreadPoolExecutor.CallerRunsPolicy：由调用线程处理该任务 
+</code></pre><p>再来看看以上的构造函数，可以发现四个构造函数在对threadFactory和handler的处理不同。</p>
+<h3 id="线程池流程图"><a href="#线程池流程图" class="headerlink" title="线程池流程图"></a>线程池流程图</h3><p><img src="http://gityuan.com/images/android-process/thread-pool.jpg" alt=""></p>
+<ul>
+<li>1、当有新任务时，先判断线程数是否达到corePoolSize，未满的话直接继续创建新线程，满的话进入下一步。</li>
+<li>2、判断工作队列workQueue是否已满，未满则将新任务添加到队列中等待，满的话进入下一步。</li>
+<li>3、判断线程池是否达到maximumPoolSize，是的话按饱和策略处理，无法处理新任务，没有达到的话则继续创建线程。</li>
+</ul>
+<h3 id="AbstractExecutorService"><a href="#AbstractExecutorService" class="headerlink" title="AbstractExecutorService"></a>AbstractExecutorService</h3><p>ExecutorService是JDK并发工具包提供的一个核心接口，相当于一个线程池，提供执行任务和管理生命周期的方法。AbstractExecutorService主要实现了这个接口。<br>处理后的源码如下：</p>
+<pre><code>public abstract class AbstractExecutorService implements ExecutorService {
+    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) {
+        return new FutureTask&lt;T&gt;(runnable, value);
+    }
+    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) {
+        return new FutureTask&lt;T&gt;(callable);
+    }
+    //submit函数1
+    public Future&lt;?&gt; submit(Runnable task) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;Void&gt; ftask = newTaskFor(task, null);
+        execute(ftask);
+        return ftask;
+    }
+    //submit函数2
+    public &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;T&gt; ftask = newTaskFor(task, result);
+        execute(ftask);
+        return ftask;
+    }
+    //submit函数3
+    public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;T&gt; ftask = newTaskFor(task);
+        execute(ftask);
+        return ftask;
+    }
+    private &lt;T&gt; T doInvokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,boolean timed, long nanos) throws InterruptedException, ExecutionException, TimeoutException {······}
+    public &lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException, ExecutionException, TimeoutException {······}
+    public &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException {
+}    
+</code></pre><h3 id="ExecutorService接口"><a href="#ExecutorService接口" class="headerlink" title="ExecutorService接口"></a>ExecutorService接口</h3><p>源码如下所示：</p>
+<pre><code>public interface ExecutorService extends Executor {
+    void shutdown();
+    List&lt;Runnable&gt; shutdownNow();
+    boolean isShutdown();
+    boolean isTerminated();
+    boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException;
+    &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task);
+    &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result);
+    Future&lt;?&gt; submit(Runnable task);
+    &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks) throws InterruptedException;
+    &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit) throws InterruptedException;
+    &lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks) throws InterruptedException, ExecutionException;
+    &lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
+}
+</code></pre><h3 id="Executor接口"><a href="#Executor接口" class="headerlink" title="Executor接口"></a>Executor接口</h3><pre><code>public interface Executor {
+    void execute(Runnable command);
+}
+</code></pre><h3 id="各方法源码分析"><a href="#各方法源码分析" class="headerlink" title="各方法源码分析"></a>各方法源码分析</h3><p>在分析之前先梳理一下各个类和接口的实现继承关系。</p>
+<pre><code>ThreadPoolExector——&gt;(extends)AbstractExecutorService——&gt;(implement)ExectorService——&gt;(implement)Executor
+</code></pre><p>现在我们来依次分析：</p>
+<h3 id="ThreadPoolExecutor类分析"><a href="#ThreadPoolExecutor类分析" class="headerlink" title="ThreadPoolExecutor类分析"></a>ThreadPoolExecutor类分析</h3><p>先看这个类的相关方法的使用与源码</p>
+<h4 id="线程池状态码"><a href="#线程池状态码" class="headerlink" title="线程池状态码"></a>线程池状态码</h4><pre><code>volatile int runState;
+static final int RUNNING    = 0;
+static final int SHUTDOWN   = 1;
+static final int STOP       = 2;
+static final int TERMINATED = 3;
+</code></pre><ul>
+<li>当创建线程池后，初始时，线程池处于RUNNING状态；</li>
+<li>如果调用了shutdown()方法，则线程池处于SHUTDOWN状态，此时线程池不能够接受新的任务，它会等待所有任务执行完毕；</li>
+<li>如果调用了shutdownNow()方法，则线程池处于STOP状态，此时线程池不能接受新的任务，并且会去尝试终止正在执行的任务；</li>
+<li>当线程池处于SHUTDOWN或STOP状态，并且所有工作线程已经销毁，任务缓存队列已经清空或执行结束后，线程池被设置为TERMINATED状态。</li>
+</ul>
+<h4 id="线程池成员变量"><a href="#线程池成员变量" class="headerlink" title="线程池成员变量"></a>线程池成员变量</h4><pre><code>private final BlockingQueue&lt;Runnable&gt; workQueue;              //任务缓存队列，用来存放等待执行的任务
+private final ReentrantLock mainLock = new ReentrantLock();   //线程池的主要状态锁，对线程池状态（runState等）的改变都要使用这个锁
+private final HashSet&lt;Worker&gt; workers = new HashSet&lt;Worker&gt;();  //用来存放工作集
+private volatile long  keepAliveTime;    //线程存货时间   
+private volatile boolean allowCoreThreadTimeOut;   //是否允许为核心线程设置存活时间
+private volatile int   corePoolSize;     //核心池的大小（即线程池中的线程数目大于这个参数时，提交的任务会被放进任务缓存队列）
+private volatile int   maximumPoolSize;   //线程池最大能容忍的线程数
+private volatile int   poolSize;       //线程池中当前的线程数
+private volatile RejectedExecutionHandler handler; //任务拒绝策略
+private volatile ThreadFactory threadFactory;   //线程工厂，用来创建线程
+private int largestPoolSize;   //用来记录线程池中曾经出现过的最大线程数
+private long completedTaskCount;   //用来记录已经执行完毕的任务个数
+</code></pre><h4 id="线程池的线程初始化"><a href="#线程池的线程初始化" class="headerlink" title="线程池的线程初始化"></a>线程池的线程初始化</h4><pre><code>//初始化核心线程池一个线程
+public boolean prestartCoreThread() {
+    return addIfUnderCorePoolSize(null); //注意传进去的参数是null
+}
+//初始化核心线程池所有线程
+public int prestartAllCoreThreads() {
+    int n = 0;
+    while (addIfUnderCorePoolSize(null))//注意传进去的参数是null
+        ++n;
+    return n;
+}
+</code></pre><h4 id="execute-方法分析"><a href="#execute-方法分析" class="headerlink" title="execute()方法分析"></a>execute()方法分析</h4><p>首先是Executor接口中的execute的方法，为核心方法。这个方法主要在ThreadPoolExecutor中实现，这个方法可以向线程池提交一个任务，交由线程池去执行。源码如下：</p>
+<pre><code>public void execute(Runnable command) {
+    if (command == null)
+        throw new NullPointerException();
+    //获取ctl，主线程控制状态ctl是包装两个概念的原子整数，其中workerCount指代有效线程数，runState指代线程是运行还是停止等。
+    int c = ctl.get();
+    //保证增加工作线程时，ctl可以实时更新。
+    if (workerCountOf(c) &lt; corePoolSize) {
+        if (addWorker(command, true))
+            return;
+        c = ctl.get();
+    }
+    //保证任务可以在新线程或合并线程中运行
+    if (isRunning(c) &amp;&amp; workQueue.offer(command)) {
+        int recheck = ctl.get();
+        if (! isRunning(recheck) &amp;&amp; remove(command))
+            reject(command);
+        else if (workerCountOf(recheck) == 0)
+            addWorker(null, false);
+    }
+    else if (!addWorker(command, false))
+        reject(command);
+}    
+</code></pre><p>从传入的参数可知它是执行的实现Runnable接口的线程。  </p>
+<h4 id="shutdown-方法分析"><a href="#shutdown-方法分析" class="headerlink" title="shutdown()方法分析"></a>shutdown()方法分析</h4><p>这个方法主要是有序关闭线程，先前提交的任务将会执行，但不会再接受新任务。一般执行关闭线程池任务主要使用shutdown()方法。</p>
+<pre><code>public void shutdown() {
+    //声明一个重入锁
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    //关闭线程
+    try {
+        //确保有权限关闭线程
+        checkShutdownAccess();
+        //将运行状态转化为跟定目标
+        advanceRunState(SHUTDOWN);
+        //中断线程，等待未执行的任务
+        interruptIdleWorkers();
+        onShutdown();
+    } finally {
+        mainLock.unlock();
+    }
+    tryTerminate();
+}
+</code></pre><h4 id="ShutdownNow-方法分析"><a href="#ShutdownNow-方法分析" class="headerlink" title="ShutdownNow()方法分析"></a>ShutdownNow()方法分析</h4><p>中断所有已经执行的任务，并且不接受新的任务，源码与方法shutdown()类似。不同点是ShutdownNow()遍历线程池中的工作线程，然后逐个调用线程的interrupt方法来中断线程，所以无法响应中断的任务可能永远无法终止。shutdownNow会首先将线程池的状态设置成STOP，然后尝试停止所有的正在执行或暂停任务的线程，并返回等待执行任务的列表。</p>
+<pre><code>public List&lt;Runnable&gt; shutdownNow() {
+    List&lt;Runnable&gt; tasks;
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    try {
+        checkShutdownAccess();
+        advanceRunState(STOP);
+        interruptWorkers();
+        tasks = drainQueue();
+    } finally {
+        mainLock.unlock();
+    }
+    tryTerminate();
+    return tasks;
+}
+</code></pre><h4 id="isShutdown-方法分析"><a href="#isShutdown-方法分析" class="headerlink" title="isShutdown()方法分析"></a>isShutdown()方法分析</h4><p>只要调用了这两个关闭方法的其中一个，isShutdown方法就会返回true。判断是否在关闭线程池。</p>
+<pre><code>public boolean isShutdown() {
+    return ! isRunning(ctl.get());
+}
+</code></pre><h4 id="isTerminated-方法分析"><a href="#isTerminated-方法分析" class="headerlink" title="isTerminated()方法分析"></a>isTerminated()方法分析</h4><p>当所有的任务都已关闭后,才表示线程池关闭成功，这时调用isTerminaed方法会返回true。</p>
+<pre><code>public boolean isTerminated() {
+    return runStateAtLeast(ctl.get(), TERMINATED);
+}
+</code></pre><h4 id="remove-方法分析"><a href="#remove-方法分析" class="headerlink" title="remove()方法分析"></a>remove()方法分析</h4><p>移除线程池中正在执行的任务，线程未执行的话则不执行该方法。</p>
+<pre><code>public boolean remove(Runnable task) {
+    boolean removed = workQueue.remove(task);
+    tryTerminate(); 
+    return removed;
+}
+</code></pre><h4 id="purge-方法分析"><a href="#purge-方法分析" class="headerlink" title="purge()方法分析"></a>purge()方法分析</h4><p>删除线程池中所有已经被取消的任务，用于回收存储回收操作。    </p>
+<pre><code>public void purge() {
+    final BlockingQueue&lt;Runnable&gt; q = workQueue;
+    try {
+        Iterator&lt;Runnable&gt; it = q.iterator();
+        while (it.hasNext()) {
+            Runnable r = it.next();
+            if (r instanceof Future&lt;?&gt; &amp;&amp; ((Future&lt;?&gt;)r).isCancelled())
+                it.remove();
+        }
+    } catch (ConcurrentModificationException fallThrough) {
+        for (Object r : q.toArray())
+            if (r instanceof Future&lt;?&gt; &amp;&amp; ((Future&lt;?&gt;)r).isCancelled())
+                q.remove(r);
+    }
+    tryTerminate(); 
+}
+</code></pre><h4 id="getPoolSize-方法分析"><a href="#getPoolSize-方法分析" class="headerlink" title="getPoolSize()方法分析"></a>getPoolSize()方法分析</h4><p>用于返回当前线程池存在的线程数量</p>
+<pre><code>public int getPoolSize() {
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    try {
+        return runStateAtLeast(ctl.get(), TIDYING) ? 0
+            : workers.size();
+    } finally {
+        mainLock.unlock();
+    }
+}
+</code></pre><h4 id="getActiveCount-方法分析"><a href="#getActiveCount-方法分析" class="headerlink" title="getActiveCount()方法分析"></a>getActiveCount()方法分析</h4><p>返回正在执行任务的线程数量</p>
+<pre><code>  public int getActiveCount() {
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    try {
+        int n = 0;
+        for (Worker w : workers)
+            if (w.isLocked())
+                ++n;
+        return n;
+    } finally {
+        mainLock.unlock();
+    }
+}
+</code></pre><h4 id="getLargestPoolSize-方法分析"><a href="#getLargestPoolSize-方法分析" class="headerlink" title="getLargestPoolSize()方法分析"></a>getLargestPoolSize()方法分析</h4><p>返回线程池中曾经创建过的线程最大数量。通过这个数据可以知道线程池是否满过。如等于线程池的最大大小，则表示线程池曾经满了。</p>
+<pre><code>public int getLargestPoolSize() {
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    try {
+        return largestPoolSize;
+    } finally {
+        mainLock.unlock();
+    }
+}
+</code></pre><h4 id="getTaskCount-方法分析"><a href="#getTaskCount-方法分析" class="headerlink" title="getTaskCount()方法分析"></a>getTaskCount()方法分析</h4><p>返回计划任务数量的估计值(已经执行完的任务数+正在执行的任务数+工作队列等待的线程数)。</p>
+<pre><code>public long getTaskCount() {
+        final ReentrantLock mainLock = this.mainLock;
+        mainLock.lock();
+        try {
+            //已经完成的任务数
+            long n = completedTaskCount;
+            //加上正在线程池执行的任务数
+            for (Worker w : workers) {
+                n += w.completedTasks;
+                if (w.isLocked())
+                    ++n;
+            }
+            //再加上工作队列中等待的任务数
+            return n + workQueue.size();
+        } finally {
+            mainLock.unlock();
+        }
+    }
+</code></pre><h4 id="getCompletedTaskCount-方法分析"><a href="#getCompletedTaskCount-方法分析" class="headerlink" title="getCompletedTaskCount()方法分析"></a>getCompletedTaskCount()方法分析</h4><p>返回已经完成的任务数，其实是已完成的加上正执行的任务数。源码和getTaskCount()基本类似。</p>
+<h4 id="toString-方法分析"><a href="#toString-方法分析" class="headerlink" title="toString()方法分析"></a>toString()方法分析</h4><p>返回线程池的相关信息</p>
+<pre><code>public String toString() {
+    long ncompleted;
+    int nworkers, nactive;
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    try {
+        ncompleted = completedTaskCount;
+        nactive = 0;
+        nworkers = workers.size();
+        for (Worker w : workers) {
+            ncompleted += w.completedTasks;
+            if (w.isLocked())
+                ++nactive;
+        }
+    } finally {
+        mainLock.unlock();
+    }
+    int c = ctl.get();
+    String rs = (runStateLessThan(c, SHUTDOWN) ? &quot;Running&quot; :
+                 (runStateAtLeast(c, TERMINATED) ? &quot;Terminated&quot; :
+                  &quot;Shutting down&quot;));
+    return super.toString() +
+        &quot;[&quot; + rs +
+        &quot;, pool size = &quot; + nworkers +
+        &quot;, active threads = &quot; + nactive +
+        &quot;, queued tasks = &quot; + workQueue.size() +
+        &quot;, completed tasks = &quot; + ncompleted +
+        &quot;]&quot;;
+}
+</code></pre><h3 id="线程池简单示例"><a href="#线程池简单示例" class="headerlink" title="线程池简单示例"></a>线程池简单示例</h3><pre><code>public class Test {
+     public static void main(String[] args) {   
+         ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 200, TimeUnit.MILLISECONDS,
+                 new ArrayBlockingQueue&lt;Runnable&gt;(5));
+
+         for(int i=0;i&lt;15;i++){
+             MyTask myTask = new MyTask(i);
+             executor.execute(myTask);
+             System.out.println(&quot;线程池中线程数目：&quot;+executor.getPoolSize()+&quot;，队列中等待执行的任务数目：&quot;+
+             executor.getQueue().size()+&quot;，已执行玩别的任务数目：&quot;+executor.getCompletedTaskCount());
+         }
+         executor.shutdown();
+     }
+}
+class MyTask implements Runnable {
+    private int taskNum;
+
+    public MyTask(int num) {
+        this.taskNum = num;
+    }
+
+    @Override
+    public void run() {
+        System.out.println(&quot;正在执行task &quot;+taskNum);
+        try {
+            Thread.currentThread().sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(&quot;task &quot;+taskNum+&quot;执行完毕&quot;);
+    }
+}
+</code></pre><p>在java doc中，并不提倡我们直接使用ThreadPoolExecutor，而是使用Executors类中提供的几个静态方法来创建线程池：</p>
+<pre><code>Executors.newCachedThreadPool();        //创建一个缓冲池，缓冲池容量大小为Integer.MAX_VALUE
+Executors.newSingleThreadExecutor();   //创建容量为1的缓冲池
+Executors.newFixedThreadPool(int);    //创建固定容量大小的缓冲池
+</code></pre><p>具体实现如下：</p>
+<pre><code>public static ExecutorService newFixedThreadPool(int nThreads) {
+return new ThreadPoolExecutor(nThreads, nThreads,
+                              0L, TimeUnit.MILLISECONDS,
+                              new LinkedBlockingQueue&lt;Runnable&gt;());
+}
+public static ExecutorService newSingleThreadExecutor() {
+    return new FinalizableDelegatedExecutorService
+        (new ThreadPoolExecutor(1, 1,
+                                0L, TimeUnit.MILLISECONDS,
+                                new LinkedBlockingQueue&lt;Runnable&gt;()));
+}
+public static ExecutorService newCachedThreadPool() {
+    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                  60L, TimeUnit.SECONDS,
+                                  new SynchronousQueue&lt;Runnable&gt;());
+}
+</code></pre><ul>
+<li><p>newFixedThreadPool创建的线程池corePoolSize和maximumPoolSize值是相等的，它使用的LinkedBlockingQueue；</p>
+</li>
+<li><p>newSingleThreadExecutor将corePoolSize和maximumPoolSize都设置为1，也使用的LinkedBlockingQueue；</p>
+</li>
+<li><p>newCachedThreadPool将corePoolSize设置为0，将maximumPoolSize设置为Integer.MAX_VALUE，使用的SynchronousQueue，也就是说来了任务就创建线程运行，当线程空闲超过60秒，就销毁线程。</p>
+</li>
+</ul>
+<h3 id="配置线程池大小"><a href="#配置线程池大小" class="headerlink" title="配置线程池大小"></a>配置线程池大小</h3><p>如果线程池过大，那么大量的线程将在相对很少的CPU和内存资源上发生竞争，如果线程池过小，那么会导致许多空闲的处理器无法执行工作，从而降低吞吐率。</p>
+<p>NCPU是系统处理器的数量</p>
+<p>如果是CPU密集型任务，就需要尽量压榨CPU，参考值可以设为 NCPU+1</p>
+<p>如果是IO密集型任务，参考值可以设置为2*NCPU</p>
+<p>　　当然，这只是一个参考值，具体的设置还需要根据实际情况进行调整，比如可以先将线程池大小设置为参考值，再观察任务运行情况和系统负载、资源利用率来进行适当调整。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/11/01/Java并发之线程池基础/">Java并发之线程池基础</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">huiHui</a></p>
+        <p><span>发布时间:</span>2017-11-01, 10:35:00</p>
+        <p><span>最后更新:</span>2017-11-01, 10:43:48</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/11/01/Java并发之线程池基础/" title="Java并发之线程池基础">http://huihui.kim/2017/11/01/Java并发之线程池基础/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/11/01/Java并发之线程池基础/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/">
+                    Java并发之线程池—Callable,Future,FutureTask
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/11/01/Java并发之阻塞队列/">
+                    Java并发之阻塞队列
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程池"><span class="toc-number">1.</span> <span class="toc-text">线程池</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么设计线程池"><span class="toc-number">1.1.</span> <span class="toc-text">为什么设计线程池</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#作用"><span class="toc-number">1.1.1.</span> <span class="toc-text">作用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程池构造函数"><span class="toc-number">1.2.</span> <span class="toc-text">线程池构造函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#源码构造方式一"><span class="toc-number">1.2.1.</span> <span class="toc-text">源码构造方式一</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#源码构造方式二"><span class="toc-number">1.2.2.</span> <span class="toc-text">源码构造方式二</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#源码构造方式三"><span class="toc-number">1.2.3.</span> <span class="toc-text">源码构造方式三</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#源码构造方式四"><span class="toc-number">1.2.4.</span> <span class="toc-text">源码构造方式四</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#源码构造函数分析"><span class="toc-number">1.2.5.</span> <span class="toc-text">源码构造函数分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程池流程图"><span class="toc-number">1.3.</span> <span class="toc-text">线程池流程图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AbstractExecutorService"><span class="toc-number">1.4.</span> <span class="toc-text">AbstractExecutorService</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ExecutorService接口"><span class="toc-number">1.5.</span> <span class="toc-text">ExecutorService接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Executor接口"><span class="toc-number">1.6.</span> <span class="toc-text">Executor接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#各方法源码分析"><span class="toc-number">1.7.</span> <span class="toc-text">各方法源码分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ThreadPoolExecutor类分析"><span class="toc-number">1.8.</span> <span class="toc-text">ThreadPoolExecutor类分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池状态码"><span class="toc-number">1.8.1.</span> <span class="toc-text">线程池状态码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池成员变量"><span class="toc-number">1.8.2.</span> <span class="toc-text">线程池成员变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池的线程初始化"><span class="toc-number">1.8.3.</span> <span class="toc-text">线程池的线程初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#execute-方法分析"><span class="toc-number">1.8.4.</span> <span class="toc-text">execute()方法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#shutdown-方法分析"><span class="toc-number">1.8.5.</span> <span class="toc-text">shutdown()方法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ShutdownNow-方法分析"><span class="toc-number">1.8.6.</span> <span class="toc-text">ShutdownNow()方法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#isShutdown-方法分析"><span class="toc-number">1.8.7.</span> <span class="toc-text">isShutdown()方法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#isTerminated-方法分析"><span class="toc-number">1.8.8.</span> <span class="toc-text">isTerminated()方法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#remove-方法分析"><span class="toc-number">1.8.9.</span> <span class="toc-text">remove()方法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#purge-方法分析"><span class="toc-number">1.8.10.</span> <span class="toc-text">purge()方法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getPoolSize-方法分析"><span class="toc-number">1.8.11.</span> <span class="toc-text">getPoolSize()方法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getActiveCount-方法分析"><span class="toc-number">1.8.12.</span> <span class="toc-text">getActiveCount()方法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getLargestPoolSize-方法分析"><span class="toc-number">1.8.13.</span> <span class="toc-text">getLargestPoolSize()方法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getTaskCount-方法分析"><span class="toc-number">1.8.14.</span> <span class="toc-text">getTaskCount()方法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#getCompletedTaskCount-方法分析"><span class="toc-number">1.8.15.</span> <span class="toc-text">getCompletedTaskCount()方法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#toString-方法分析"><span class="toc-number">1.8.16.</span> <span class="toc-text">toString()方法分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程池简单示例"><span class="toc-number">1.9.</span> <span class="toc-text">线程池简单示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置线程池大小"><span class="toc-number">1.10.</span> <span class="toc-text">配置线程池大小</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Java并发之线程池基础　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://huihui.kim/2017/11/01/Java并发之线程池基础/';
+            this.page.identifier = '2017/11/01/Java并发之线程池基础/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/" title="上一篇: Java并发之线程池—Callable,Future,FutureTask">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/11/01/Java并发之阻塞队列/" title="下一篇: Java并发之阻塞队列">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/">Java并发之线程池拓展—ExecutorService原理，静态工厂方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/">Java并发之线程池—Callable,Future,FutureTask</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池基础/">Java并发之线程池基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之阻塞队列/">Java并发之阻塞队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/LintCode题解--中等篇(1)/">LintCode题解——中等篇（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Java并发之ThreadLocal/">Java并发之ThreadLocal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/24/Java并发之Lock/">Java并发之Lock</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Spring基于注解的配置/">Spring基于注解的配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Django前端页面相关处理/">Django Html相关配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/SSM项目知识点总结/">SSM小项目知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Spring AOP切面/">Spring AOP切面编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Mybatis-generator详细配置demo/">Mybatis-Generator相关配置demo</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/LintCode题解（二）/">LintCode题解（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/01/LintCode题解（七）/">LintCode题解（七）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（一）/">LintCode题解（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java并发基础/">Java并发基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/springMVC基础/">SpringMVC中@RequestMapping等基础知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java数据库与事务处理机制/">Java数据库处理与事务机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/Spring属性配置细节/">Spring Bean配置细节</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/LintCode题解（四）/">LintCode题解（四）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/LintCode题解（三）/">LintCode题解（三）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/31/Java容器/">Java容器(集合)，持有对象总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/27/servlet实现网页重定向/">Servlet实现网页重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/servlet实现文件上传下载/">Servlet文件上传下载类</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/CSS预处理器比较/">有关CSS预处理器的比较选择(Sass&Less&Stylus)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/js内置对象——string&array/">Js内置对象进阶（一）——String&Array</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">Vue仿饿了么知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/web开发者必备http知识/">Web开发者必备Http基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/python中pip install中utf-8错误的解决方法/">Pip Install中utf-8编码问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/我们仍未知道那天所看见的list/">我们仍未知道那些天所看见的List</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/01/jquery实现樱花坠落插件/">Jquery实现web页面樱花坠落的特效</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/16/Angular2.0开发/">Angular2.0仿今日头条应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/24/后端学习angular--组件篇/">后端学angular2.0的痛苦历程--组件篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的Mysql数据库优化操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/python进阶学习--参数/">Python进阶学习--*Arg、**kw和装饰器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/mysql自连接/">Mysql自连接与join关联</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/10/用IIFE与let方法改写循环闭包/">用IIFE与let命令改写循环闭包</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/19/WEB-CSS布局/">WEB前端--CSS布局必备知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/16/JS回调函数/">JS回调函数详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/Hexo&Gituhub博客搭建/">Hexo&Github博客搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/smarty模板引擎/">Smarty模板引擎</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 huiHui
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

@@ -276,6 +276,1066 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Java并发之线程池拓展—ExecutorService原理与静态工厂方法" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/" class="article-date">
+      <time datetime="2017-11-01T02:35:00.000Z" itemprop="datePublished">2017-11-01</time>
+</a>
+
+ 
+    <a href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/">Java并发之线程池拓展—ExecutorService原理，静态工厂方法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Executors类"><a href="#Executors类" class="headerlink" title="Executors类"></a>Executors类</h2><p>这个类包含了所有的线程池静态工厂方法，我们一般使用工厂方法之一来创建一个线程池。</p>
+<h3 id="ExecutorService接口"><a href="#ExecutorService接口" class="headerlink" title="ExecutorService接口"></a>ExecutorService接口</h3><p>接口 java.util.concurrent.ExecutorService 表述了异步执行的机制，并且可以让任务在后台执行。一个 ExecutorService 实例因此特别像一个线程池。事实上，在 java.util.concurrent 包中的 ExecutorService 的实现就是一个线程池的实现。</p>
+<h3 id="任务委托"><a href="#任务委托" class="headerlink" title="任务委托"></a>任务委托</h3><p><img src="http://static.oschina.net/uploads/space/2013/1119/165710_YOvh_136226.png" alt=""></p>
+<p>一旦线程把任务委托给 ExecutorService，该线程就会继续执行与运行任务无关的其它任务。</p>
+<h3 id="ExecutorService的创建"><a href="#ExecutorService的创建" class="headerlink" title="ExecutorService的创建"></a>ExecutorService的创建</h3><h4 id="newFixedThreadPool"><a href="#newFixedThreadPool" class="headerlink" title="newFixedThreadPool()"></a>newFixedThreadPool()</h4><pre><code>public static ExecutorService newFixedThreadPool(int nThreads) {
+    return new ThreadPoolExecutor(nThreads, nThreads,
+                                  0L, TimeUnit.MILLISECONDS,
+                                  new LinkedBlockingQueue&lt;Runnable&gt;());
+}
+public static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory) {
+    return new ThreadPoolExecutor(nThreads, nThreads,
+                                  0L, TimeUnit.MILLISECONDS,
+                                  new LinkedBlockingQueue&lt;Runnable&gt;(),
+                                  threadFactory);
+}
+</code></pre><p>newFixedThreadPool创建一个固定长度的线程池，每当提交一个任务就创建一个线程，直到线程池的最大数量，这时线程池规模将不再变化（如果某个线程发生了未预期的Exception而结束，那么线程池会补充一个新的线程）</p>
+<h4 id="newSingleThreadExecutor"><a href="#newSingleThreadExecutor" class="headerlink" title="newSingleThreadExecutor()"></a>newSingleThreadExecutor()</h4><pre><code>public static ExecutorService newSingleThreadExecutor() {
+    return new FinalizableDelegatedExecutorService
+        (new ThreadPoolExecutor(1, 1,
+                                0L, TimeUnit.MILLISECONDS,
+                                new LinkedBlockingQueue&lt;Runnable&gt;()));
+}
+public static ExecutorService newSingleThreadExecutor(ThreadFactory threadFactory) {
+    return new FinalizableDelegatedExecutorService
+        (new ThreadPoolExecutor(1, 1,
+                                0L, TimeUnit.MILLISECONDS,
+                                new LinkedBlockingQueue&lt;Runnable&gt;(),
+                                threadFactory));
+}
+</code></pre><p>newSingleThreadExecutor是一个单线程的Executor，它创建单个工作者线程来执行任务，如果这个县城异常结束，会创建另一个线程来代替。能确保依照任务在队列中的顺序来执行任务。</p>
+<h4 id="newCachedThreadPool"><a href="#newCachedThreadPool" class="headerlink" title="newCachedThreadPool()"></a>newCachedThreadPool()</h4><pre><code>public static ExecutorService newCachedThreadPool() {
+    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                  60L, TimeUnit.SECONDS,
+                                  new SynchronousQueue&lt;Runnable&gt;());
+}
+public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {
+    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                  60L, TimeUnit.SECONDS,
+                                  new SynchronousQueue&lt;Runnable&gt;(),
+                                  threadFactory);
+}
+</code></pre><p>newCachedThreadPool将创建一个可缓存的线程池，这个工厂方法很重要，是个无界线程池，我们将会专门在另一篇文章讲这个方法。</p>
+<p>如果线程池当前规模超过了处理需求时，将回收空闲的线程，当需求增加时，则可以添加新的线程，规模不u你在任何限制。</p>
+<h4 id="newScheduledThreadPool"><a href="#newScheduledThreadPool" class="headerlink" title="newScheduledThreadPool()"></a>newScheduledThreadPool()</h4><pre><code>public static ScheduledExecutorService newScheduledThreadPool(int corePoolSize) {
+    return new ScheduledThreadPoolExecutor(corePoolSize);
+}
+public static ScheduledExecutorService newScheduledThreadPool(
+        int corePoolSize, ThreadFactory threadFactory) {
+    return new ScheduledThreadPoolExecutor(corePoolSize, threadFactory);
+}
+</code></pre><p>创建一个固定长度的线程池，而且以延迟或定时的方式来执行任务，类似于Timer。</p>
+<h3 id="ExecutorService使用方法"><a href="#ExecutorService使用方法" class="headerlink" title="ExecutorService使用方法"></a>ExecutorService使用方法</h3><p>主要是几个方法的使用，具体看我线程池的第一篇文章</p>
+<pre><code>void shutdown();
+List&lt;Runnable&gt; shutdownNow();
+boolean isShutdown();
+boolean isTerminated();
+boolean awaitTermination(long timeout, TimeUnit unit)
+    throws InterruptedException;
+submit();
+invokeAny();
+invokeAll();
+execute();
+</code></pre><h4 id="execute"><a href="#execute" class="headerlink" title="execute()"></a>execute()</h4><pre><code>ExecutorService executorService = Executors.newSingleThreadExecutor();
+executorService.execute(new Runnable() {
+    public void run() {
+        System.out.println(&quot;Asynchronous task&quot;);
+    }
+});
+executorService.shutdown();
+</code></pre><p>使用这种方式没有办法获取执行 Runnable 之后的结果，如果你希望获取运行之后的返回值，就必须使用 接收 Callable 参数的 execute() 方法，后者将会在下文中提到。</p>
+<h4 id="submit"><a href="#submit" class="headerlink" title="submit()"></a>submit()</h4><pre><code>Future future = executorService.submit(new Runnable() {
+public void run() {
+    System.out.println(&quot;Asynchronous task&quot;);
+}
+});
+//如果任务结束执行则返回 null
+System.out.println(&quot;future.get()=&quot; + future.get());
+</code></pre><p>方法 submit(Callable) 和方法 submit(Runnable) 比较类似，但是区别则在于它们接收不同的参数类型。Callable 的实例与 Runnable 的实例很类似，但是 Callable 的 call() 方法可以返回壹個结果。方法 Runnable.run() 则不能返回结果。</p>
+<p>Callable 的返回值可以从方法 submit(Callable) 返回的 Future 对象中获取。如下是一个 ExecutorService Callable 的样例：</p>
+<pre><code>Future future = executorService.submit(new Callable(){
+    public Object call() throws Exception {
+        System.out.println(&quot;Asynchronous Callable&quot;);
+        return &quot;Callable Result&quot;;
+    }
+});
+
+System.out.println(&quot;future.get() = &quot; + future.get());
+</code></pre><p>上述样例代码会输出如下结果：</p>
+<pre><code>Asynchronous Callable
+future.get() = Callable Result
+</code></pre><h4 id="关闭服务"><a href="#关闭服务" class="headerlink" title="关闭服务"></a>关闭服务</h4><p>当使用 ExecutorService 完毕之后，我们应该关闭它，这样才能保证线程不会继续保持运行状态。<br>举例来说，如果你的程序通过 main() 方法启动，并且主线程退出了你的程序，如果你还有一个活动的 ExecutorService 存在于你的程序中，那么程序将会继续保持运行状态。存在于 ExecutorService 中的活动线程会阻止Java虚拟机关闭。<br>为了关闭在 ExecutorService 中的线程，你需要调用 shutdown() 方法。ExecutorService 并不会马上关闭，而是不再接收新的任务，一旦所有的线程结束执行当前任务，ExecutorServie 才会真的关闭。所有在调用 shutdown() 方法之前提交到 ExecutorService 的任务都会执行。<br>如果你希望立即关闭 ExecutorService，你可以调用 shutdownNow() 方法。这个方法会尝试马上关闭所有正在执行的任务，并且跳过所有已经提交但是还没有运行的任务。但是对于正在执行的任务，是否能够成功关闭它是无法保证的，有可能他们真的被关闭掉了，也有可能它会一直执行到任务结束。这是一个最好的尝试。 </p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Java并发之线程池拓展—Callable，Future，FutureTask" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/" class="article-date">
+      <time datetime="2017-11-01T02:35:00.000Z" itemprop="datePublished">2017-11-01</time>
+</a>
+
+ 
+    <a href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/">Java并发之线程池—Callable,Future,FutureTask</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="AbstractExecutorService类源码分析"><a href="#AbstractExecutorService类源码分析" class="headerlink" title="AbstractExecutorService类源码分析"></a>AbstractExecutorService类源码分析</h2><p>线程池ThreadPoolExecutor继承于AbstractorExecutorService类，所以分析该类的构成很有必要。</p>
+<p>上一篇博文提到ExecutorService是JDK并发工具包提供的一个核心接口，相当于一个线程池，提供执行任务和管理生命周期的方法。AbstractExecutorService主要实现了这个接口。 处理后的源码如下：</p>
+<pre><code>public abstract class AbstractExecutorService implements ExecutorService {
+    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) {
+        return new FutureTask&lt;T&gt;(runnable, value);
+    }
+    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) {
+        return new FutureTask&lt;T&gt;(callable);
+    }
+    //submit函数1
+    public Future&lt;?&gt; submit(Runnable task) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;Void&gt; ftask = newTaskFor(task, null);
+        execute(ftask);
+        return ftask;
+    }
+    //submit函数2
+    public &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;T&gt; ftask = newTaskFor(task, result);
+        execute(ftask);
+        return ftask;
+    }
+    //submit函数3
+    public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;T&gt; ftask = newTaskFor(task);
+        execute(ftask);
+        return ftask;
+    }
+    private &lt;T&gt; T doInvokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,boolean timed, long nanos) throws InterruptedException, ExecutionException, TimeoutException {······}
+    public &lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException, ExecutionException, TimeoutException {······}
+    public &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException {
+}
+</code></pre><h3 id="submit-方法源码分析"><a href="#submit-方法源码分析" class="headerlink" title="submit()方法源码分析"></a>submit()方法源码分析</h3><p>下面三个submit()方法是ExecutorService接口中的，并且由AbstructExecutorService类具体实现。    </p>
+<pre><code>public Future&lt;?&gt; submit(Runnable task) {···}
+
+public &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result) {···}
+
+public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {···}
+</code></pre><h4 id="Callable-接口源码"><a href="#Callable-接口源码" class="headerlink" title="Callable()接口源码"></a>Callable()接口源码</h4><pre><code>@FunctionalInterface
+public interface Callable&lt;V&gt; {
+    //计算结果
+    V call() throws Exception;
+}
+</code></pre><h4 id="newTaskFor-方法源码"><a href="#newTaskFor-方法源码" class="headerlink" title="newTaskFor()方法源码"></a>newTaskFor()方法源码</h4><pre><code>protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) {
+        return new FutureTask&lt;T&gt;(runnable, value);
+    }
+protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) {
+        return new FutureTask&lt;T&gt;(callable);
+    }
+</code></pre><h4 id="FutureTask类部分源码"><a href="#FutureTask类部分源码" class="headerlink" title="FutureTask类部分源码"></a>FutureTask类部分源码</h4><pre><code>public class FutureTask&lt;V&gt; implements RunnableFuture&lt;V&gt; {
+    ···
+    public FutureTask(Callable&lt;V&gt; callable) {···}
+    public FutureTask(Runnable runnable, V result) {···}
+    ···
+}
+</code></pre><h4 id="RunnableFuture接口源码"><a href="#RunnableFuture接口源码" class="headerlink" title="RunnableFuture接口源码"></a>RunnableFuture接口源码</h4><pre><code>public interface RunnableFuture&lt;V&gt; extends Runnable, Future&lt;V&gt; {
+    void run();
+}
+</code></pre><h4 id="Runnable接口源码"><a href="#Runnable接口源码" class="headerlink" title="Runnable接口源码"></a>Runnable接口源码</h4><pre><code>@FunctionalInterface
+public interface Runnable {
+    public abstract void run();
+}
+</code></pre><h4 id="Future接口源码"><a href="#Future接口源码" class="headerlink" title="Future接口源码"></a>Future接口源码</h4><pre><code>public interface Future&lt;V&gt; {
+    //试图取消对任务的执行,参数为true表示可以取消正在执行的任务
+    boolean cancel(boolean mayInterruptIfRunning);
+    //任务是否取消成功
+    boolean isCancelled();
+    //任务是否已经完成
+    boolean isDone();
+    //获取执行结果，会产生阻塞，等到任务执行完再返回结果
+    V get() throws InterruptedException, ExecutionException;
+    //在指定时间内未返回结果，则返回null
+    V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
+}
+</code></pre><p>从上述源码可知，想要分析submit()方法，转接这需要分析很多FutureTask类和若干接口。梳理一下如下所示</p>
+<pre><code>ThreadPoolExecutor--&gt;(extends)AbstractExecutorService
+AbstractExecutorService--&gt;具有三个submit()方法,参数类型包括Runnable,Callable
+submit()--&gt;返回FutureTask类对象--&gt;(implements)RunnableFuture--&gt;(extends)Runnable,Future
+</code></pre><p>我们来看Callable接口，从源码可知，这个接口只有一个call()方法，用以调用并返回结果，和Runnable相似，用以返回一个对象或异常。</p>
+<p>Call接口使用泛型定义返回类型，Executors类提供了一些有用的方法在线程池中执行Callable内的任务。由于Callable任务是并行的（并行就是整体看上去是并行的，其实在某个时间点只有一个线程在执行），我们必须等待它返回的结果。</p>
+<p>java.util.concurrent.Future对象为我们解决了这个问题。在线程池提交Callable任务后返回了一个Future对象，使用它可以知道Callable任务的状态和得到Callable返回的执行结果。Future提供了get()方法让我们可以等待Callable结束并获取它的执行结果。</p>
+<p>可以用ExecutorService接口中的submit()方法实现这个功能,submit()负责向线程池提交Callable任务,然后返回Future对象，我们在借助Future对象的get()方法获取Callable接口中call()方法的结果：</p>
+<pre><code>&lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task);
+</code></pre><h5 id="submit-具体实现源码"><a href="#submit-具体实现源码" class="headerlink" title="submit()具体实现源码"></a>submit()具体实现源码</h5><pre><code>public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {
+    //Callable任务为空，抛出无参异常
+    if (task == null) throw new NullPointerException();
+    //返回FutureTask类对象,
+    RunnableFuture&lt;T&gt; ftask = newTaskFor(task);
+    //向线程池提交一个任务
+    execute(ftask);
+    //返回处理后的任务
+    return ftask;
+}
+</code></pre><p>我们分析的是传入Callable类型参数的submit方法，其实其他两个源码都类似， 注解基本都已经备注好，第一步判断参数的有无，我们来看看第二步返回是FutureTask类的对象，注意这个类实现的是RunnableFuture接口，而这个接口继承的又是Runnable和Future接口<span style="color:red">(接口也是可以extends接口的哦！)</span>。所以它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值。来看第二步代码FutureTask类的构造函数源码：</p>
+<pre><code>public FutureTask(Callable&lt;V&gt; callable) {
+    if (callable == null)
+        throw new NullPointerException();
+    this.callable = callable;
+    this.state = NEW;      
+}
+</code></pre><p>FutureTask类实现了Future接口的一系列方法，如get()。第三步是向线程池提交任务，最后返回这个任务，下面看一个实例：</p>
+<h5 id="Callable-Future示例"><a href="#Callable-Future示例" class="headerlink" title="Callable,Future示例"></a>Callable,Future示例</h5><pre><code>public class Test {
+    public static void main(String[] args) {
+        //建议使用Executors类中的方法构建线程池，具体使用方法和源码分析看我关于线程池本主题的其他博文
+        ExecutorService executor = Executors.newCachedThreadPool();
+        Task task = new Task();
+        Future&lt;Integer&gt; result = executor.submit(task);
+        executor.shutdown();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
+
+        System.out.println(&quot;主线程在执行任务&quot;);
+
+        try {
+            System.out.println(&quot;task运行结果&quot;+result.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(&quot;所有任务执行完毕&quot;);
+    }
+}
+class Task implements Callable&lt;Integer&gt;{
+    @Override
+    public Integer call() throws Exception {
+        System.out.println(&quot;子线程在进行计算&quot;);
+        Thread.sleep(3000);
+        int sum = 0;
+        for(int i=0;i&lt;100;i++)
+            sum += i;
+        return sum;
+    }
+}
+</code></pre><p>执行结果如下：</p>
+<pre><code>子线程在进行计算
+主线程在执行任务
+task运行结果4950
+所有任务执行完毕
+</code></pre><h5 id="Callable-FutureTask示例"><a href="#Callable-FutureTask示例" class="headerlink" title="Callable,FutureTask示例"></a>Callable,FutureTask示例</h5><pre><code>public class Test {
+    public static void main(String[] args) {
+        //第一种方式，线程池方式
+        ExecutorService executor = Executors.newCachedThreadPool();
+        Task task = new Task();
+        FutureTask&lt;Integer&gt; futureTask = new FutureTask&lt;Integer&gt;(task);
+        executor.submit(futureTask);
+        executor.shutdown();
+
+        //第二种方式，注意这种方式和第一种方式效果是类似的，只不过一个使用的是ExecutorService，一个使用的是Thread
+        /*Task task = new Task();
+        FutureTask&lt;Integer&gt; futureTask = new FutureTask&lt;Integer&gt;(task);
+        Thread thread = new Thread(futureTask);
+        thread.start();*/
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
+
+        System.out.println(&quot;主线程在执行任务&quot;);
+
+        try {
+            System.out.println(&quot;task运行结果&quot;+futureTask.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(&quot;所有任务执行完毕&quot;);
+    }
+}
+class Task implements Callable&lt;Integer&gt;{
+    @Override
+    public Integer call() throws Exception {
+        System.out.println(&quot;子线程在进行计算&quot;);
+        Thread.sleep(3000);
+        int sum = 0;
+        for(int i=0;i&lt;100;i++)
+            sum += i;
+        return sum;
+    }
+}
+</code></pre><p>上面一段代码是对Callable+FutureTask方法的演示，若是Runnable+FutureTask也可以用此调用方式，只是task类中的不是call方法，而是实现run方法。</p>
+<p>如果为了可取消性而使用 Future 但又不提供可用的结果，则可以声明 Future&lt;?&gt; 形式类型、并返回 null 作为底层任务的结果。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Java并发之线程池基础" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/01/Java并发之线程池基础/" class="article-date">
+      <time datetime="2017-11-01T02:35:00.000Z" itemprop="datePublished">2017-11-01</time>
+</a>
+
+ 
+    <a href="/2017/11/01/Java并发之线程池基础/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/11/01/Java并发之线程池基础/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/01/Java并发之线程池基础/">Java并发之线程池基础</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><h3 id="为什么设计线程池"><a href="#为什么设计线程池" class="headerlink" title="为什么设计线程池"></a>为什么设计线程池</h3><p>如果不使用线程池，当并发的线程数量很多，并且每个线程执行很短时间就结束，这要频繁创建线程会造成大量资源消，降低系统效率。</p>
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>合理利用线程池能够带来三个好处。第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。第二：提高响应速度。当任务到达时，任务可以不需要的等到线程创建就能立即执行。第三：提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。但是要做到合理的利用线程池，必须对其原理了如指掌。</p>
+<h3 id="线程池构造函数"><a href="#线程池构造函数" class="headerlink" title="线程池构造函数"></a>线程池构造函数</h3><h4 id="源码构造方式一"><a href="#源码构造方式一" class="headerlink" title="源码构造方式一"></a>源码构造方式一</h4><pre><code>public ThreadPoolExecutor(int corePoolSize,
+                              int maximumPoolSize,
+                              long keepAliveTime,
+                              TimeUnit unit,
+                              BlockingQueue&lt;Runnable&gt; workQueue) {
+        this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+             Executors.defaultThreadFactory(), defaultHandler);
+    }
+</code></pre><h4 id="源码构造方式二"><a href="#源码构造方式二" class="headerlink" title="源码构造方式二"></a>源码构造方式二</h4><pre><code>public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue&lt;Runnable&gt; workQueue,
+                          ThreadFactory threadFactory) {
+    this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+         threadFactory, defaultHandler);
+}
+</code></pre><h4 id="源码构造方式三"><a href="#源码构造方式三" class="headerlink" title="源码构造方式三"></a>源码构造方式三</h4><pre><code>public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue&lt;Runnable&gt; workQueue,
+                          RejectedExecutionHandler handler) {
+    this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+         Executors.defaultThreadFactory(), handler);
+}
+</code></pre><h4 id="源码构造方式四"><a href="#源码构造方式四" class="headerlink" title="源码构造方式四"></a>源码构造方式四</h4><pre><code>public ThreadPoolExecutor(int corePoolSize,
+                          int maximumPoolSize,
+                          long keepAliveTime,
+                          TimeUnit unit,
+                          BlockingQueue&lt;Runnable&gt; workQueue,
+                          ThreadFactory threadFactory,
+                          RejectedExecutionHandler handler) {
+    if (corePoolSize &lt; 0 ||
+        maximumPoolSize &lt;= 0 ||
+        maximumPoolSize &lt; corePoolSize ||
+        keepAliveTime &lt; 0)
+        throw new IllegalArgumentException();
+    if (workQueue == null || threadFactory == null || handler == null)
+        throw new NullPointerException();
+    this.corePoolSize = corePoolSize;
+    this.maximumPoolSize = maximumPoolSize;
+    this.workQueue = workQueue;
+    this.keepAliveTime = unit.toNanos(keepAliveTime);
+    this.threadFactory = threadFactory;
+    this.handler = handler;
+}
+</code></pre><h4 id="源码构造函数分析"><a href="#源码构造函数分析" class="headerlink" title="源码构造函数分析"></a>源码构造函数分析</h4><p>前三个线程池构造函数都使用的this()来调用其他构造函数，而真正初始化作用的构造函数是第四个，所以前三个构造函数是基于第四个构造器初始化的。</p>
+<p>下面详细说明每个参数的含义：</p>
+<ul>
+<li>corePollSize: 核心池的大小，这个参数跟后面讲述的线程池的实现原理有非常大的关系。<span style="color:red">在创建了线程池后，默认情况下，线程池中并没有任何线程，而是等待有任务到来才创建线程去执行任务，除非调用了prestartAllCoreThreads()或者prestartCoreThread()方法，从这2个方法的名字就可以看出，是预创建线程的意思，即在没有任务到来之前就创建corePoolSize个线程或者一个线程。默认情况下，在创建了线程池后，线程池中的线程数为0，当有任务来之后，就会创建一个线程去执行任务，当线程池中的线程数目达到corePoolSize后，就会把到达的任务放到缓存队列当中；</span></li>
+<li>maximumPoolSize: 线程池最大线程数，这个参数也是一个非常重要的参数，它表示在线程池中最多能创建多少个线程；</li>
+<li>keepAliveTime: 线程池的工作线程空闲后，保持存活的时间。所以如果任务很多，并且每个任务执行的时间比较短，可以调大这个时间，提高线程的利用率。<span style="color:red">默认线程池的线程数大于线程池大小时起作用，即当线程池中的线程数大于corePoolSize时，如果一个线程空闲的时间达到keepAliveTime，则会终止，直到线程池中的线程数不超过corePoolSize，但是如果调用了allowCoreThreadTimeOut(boolean)方法，在线程池中的线程数不大于corePoolSize时，keepAliveTime参数也会起作用，直到线程池中的线程数为0；</span></li>
+<li>workQueue: 一个阻塞队列，用来存储等待执行的任务，这个参数的选择也很重要，会对线程池的运行过程产生重大影响.</li>
+</ul>
+<pre><code>ArrayBlockingQueue：是一个基于数组结构的有界阻塞队列，此队列按 FIFO（先进先出）原则对元素进行排序。
+
+LinkedBlockingQueue：一个基于链表结构的阻塞队列，此队列按FIFO （先进先出） 排序元素，吞吐量通常要高于ArrayBlockingQueue。静态工厂方法Executors.newFixedThreadPool()使用了这个队列。
+
+SynchronousQueue：一个不存储元素的阻塞队列。每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于LinkedBlockingQueue，静态工厂方法Executors.newCachedThreadPool使用了这个队列。
+
+PriorityBlockingQueue：一个具有优先级得无限阻塞队列。
+</code></pre><ul>
+<li>unit: 时间单位</li>
+<li>threadFactory: 用于设置创建线程的工厂，可以通过线程工厂给每个创建出来的线程设置更有意义的名字</li>
+<li>handler: 拒绝处理任务时的策略</li>
+</ul>
+<pre><code>ThreadPoolExecutor.AbortPolicy:丢弃任务并抛出RejectedExecutionException异常。 
+ThreadPoolExecutor.DiscardPolicy：也是丢弃任务，但是不抛出异常。 
+ThreadPoolExecutor.DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）
+ThreadPoolExecutor.CallerRunsPolicy：由调用线程处理该任务 
+</code></pre><p>再来看看以上的构造函数，可以发现四个构造函数在对threadFactory和handler的处理不同。</p>
+<h3 id="线程池流程图"><a href="#线程池流程图" class="headerlink" title="线程池流程图"></a>线程池流程图</h3><p><img src="http://gityuan.com/images/android-process/thread-pool.jpg" alt=""></p>
+<ul>
+<li>1、当有新任务时，先判断线程数是否达到corePoolSize，未满的话直接继续创建新线程，满的话进入下一步。</li>
+<li>2、判断工作队列workQueue是否已满，未满则将新任务添加到队列中等待，满的话进入下一步。</li>
+<li>3、判断线程池是否达到maximumPoolSize，是的话按饱和策略处理，无法处理新任务，没有达到的话则继续创建线程。</li>
+</ul>
+<h3 id="AbstractExecutorService"><a href="#AbstractExecutorService" class="headerlink" title="AbstractExecutorService"></a>AbstractExecutorService</h3><p>ExecutorService是JDK并发工具包提供的一个核心接口，相当于一个线程池，提供执行任务和管理生命周期的方法。AbstractExecutorService主要实现了这个接口。<br>处理后的源码如下：</p>
+<pre><code>public abstract class AbstractExecutorService implements ExecutorService {
+    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) {
+        return new FutureTask&lt;T&gt;(runnable, value);
+    }
+    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) {
+        return new FutureTask&lt;T&gt;(callable);
+    }
+    //submit函数1
+    public Future&lt;?&gt; submit(Runnable task) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;Void&gt; ftask = newTaskFor(task, null);
+        execute(ftask);
+        return ftask;
+    }
+    //submit函数2
+    public &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;T&gt; ftask = newTaskFor(task, result);
+        execute(ftask);
+        return ftask;
+    }
+    //submit函数3
+    public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;T&gt; ftask = newTaskFor(task);
+        execute(ftask);
+        return ftask;
+    }
+    private &lt;T&gt; T doInvokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,boolean timed, long nanos) throws InterruptedException, ExecutionException, TimeoutException {······}
+    public &lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException, ExecutionException, TimeoutException {······}
+    public &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException {
+}    
+</code></pre><h3 id="ExecutorService接口"><a href="#ExecutorService接口" class="headerlink" title="ExecutorService接口"></a>ExecutorService接口</h3><p>源码如下所示：</p>
+<pre><code>public interface ExecutorService extends Executor {
+    void shutdown();
+    List&lt;Runnable&gt; shutdownNow();
+    boolean isShutdown();
+    boolean isTerminated();
+    boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException;
+    &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task);
+    &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result);
+    Future&lt;?&gt; submit(Runnable task);
+    &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks) throws InterruptedException;
+    &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit) throws InterruptedException;
+    &lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks) throws InterruptedException, ExecutionException;
+    &lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
+}
+</code></pre><h3 id="Executor接口"><a href="#Executor接口" class="headerlink" title="Executor接口"></a>Executor接口</h3><pre><code>public interface Executor {
+    void execute(Runnable command);
+}
+</code></pre><h3 id="各方法源码分析"><a href="#各方法源码分析" class="headerlink" title="各方法源码分析"></a>各方法源码分析</h3><p>在分析之前先梳理一下各个类和接口的实现继承关系。</p>
+<pre><code>ThreadPoolExector——&gt;(extends)AbstractExecutorService——&gt;(implement)ExectorService——&gt;(implement)Executor
+</code></pre><p>现在我们来依次分析：</p>
+<h3 id="ThreadPoolExecutor类分析"><a href="#ThreadPoolExecutor类分析" class="headerlink" title="ThreadPoolExecutor类分析"></a>ThreadPoolExecutor类分析</h3><p>先看这个类的相关方法的使用与源码</p>
+<h4 id="线程池状态码"><a href="#线程池状态码" class="headerlink" title="线程池状态码"></a>线程池状态码</h4><pre><code>volatile int runState;
+static final int RUNNING    = 0;
+static final int SHUTDOWN   = 1;
+static final int STOP       = 2;
+static final int TERMINATED = 3;
+</code></pre><ul>
+<li>当创建线程池后，初始时，线程池处于RUNNING状态；</li>
+<li>如果调用了shutdown()方法，则线程池处于SHUTDOWN状态，此时线程池不能够接受新的任务，它会等待所有任务执行完毕；</li>
+<li>如果调用了shutdownNow()方法，则线程池处于STOP状态，此时线程池不能接受新的任务，并且会去尝试终止正在执行的任务；</li>
+<li>当线程池处于SHUTDOWN或STOP状态，并且所有工作线程已经销毁，任务缓存队列已经清空或执行结束后，线程池被设置为TERMINATED状态。</li>
+</ul>
+<h4 id="线程池成员变量"><a href="#线程池成员变量" class="headerlink" title="线程池成员变量"></a>线程池成员变量</h4><pre><code>private final BlockingQueue&lt;Runnable&gt; workQueue;              //任务缓存队列，用来存放等待执行的任务
+private final ReentrantLock mainLock = new ReentrantLock();   //线程池的主要状态锁，对线程池状态（runState等）的改变都要使用这个锁
+private final HashSet&lt;Worker&gt; workers = new HashSet&lt;Worker&gt;();  //用来存放工作集
+private volatile long  keepAliveTime;    //线程存货时间   
+private volatile boolean allowCoreThreadTimeOut;   //是否允许为核心线程设置存活时间
+private volatile int   corePoolSize;     //核心池的大小（即线程池中的线程数目大于这个参数时，提交的任务会被放进任务缓存队列）
+private volatile int   maximumPoolSize;   //线程池最大能容忍的线程数
+private volatile int   poolSize;       //线程池中当前的线程数
+private volatile RejectedExecutionHandler handler; //任务拒绝策略
+private volatile ThreadFactory threadFactory;   //线程工厂，用来创建线程
+private int largestPoolSize;   //用来记录线程池中曾经出现过的最大线程数
+private long completedTaskCount;   //用来记录已经执行完毕的任务个数
+</code></pre><h4 id="线程池的线程初始化"><a href="#线程池的线程初始化" class="headerlink" title="线程池的线程初始化"></a>线程池的线程初始化</h4><pre><code>//初始化核心线程池一个线程
+public boolean prestartCoreThread() {
+    return addIfUnderCorePoolSize(null); //注意传进去的参数是null
+}
+//初始化核心线程池所有线程
+public int prestartAllCoreThreads() {
+    int n = 0;
+    while (addIfUnderCorePoolSize(null))//注意传进去的参数是null
+        ++n;
+    return n;
+}
+</code></pre><h4 id="execute-方法分析"><a href="#execute-方法分析" class="headerlink" title="execute()方法分析"></a>execute()方法分析</h4><p>首先是Executor接口中的execute的方法，为核心方法。这个方法主要在ThreadPoolExecutor中实现，这个方法可以向线程池提交一个任务，交由线程池去执行。源码如下：</p>
+<pre><code>public void execute(Runnable command) {
+    if (command == null)
+        throw new NullPointerException();
+    //获取ctl，主线程控制状态ctl是包装两个概念的原子整数，其中workerCount指代有效线程数，runState指代线程是运行还是停止等。
+    int c = ctl.get();
+    //保证增加工作线程时，ctl可以实时更新。
+    if (workerCountOf(c) &lt; corePoolSize) {
+        if (addWorker(command, true))
+            return;
+        c = ctl.get();
+    }
+    //保证任务可以在新线程或合并线程中运行
+    if (isRunning(c) &amp;&amp; workQueue.offer(command)) {
+        int recheck = ctl.get();
+        if (! isRunning(recheck) &amp;&amp; remove(command))
+            reject(command);
+        else if (workerCountOf(recheck) == 0)
+            addWorker(null, false);
+    }
+    else if (!addWorker(command, false))
+        reject(command);
+}    
+</code></pre><p>从传入的参数可知它是执行的实现Runnable接口的线程。  </p>
+<h4 id="shutdown-方法分析"><a href="#shutdown-方法分析" class="headerlink" title="shutdown()方法分析"></a>shutdown()方法分析</h4><p>这个方法主要是有序关闭线程，先前提交的任务将会执行，但不会再接受新任务。一般执行关闭线程池任务主要使用shutdown()方法。</p>
+<pre><code>public void shutdown() {
+    //声明一个重入锁
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    //关闭线程
+    try {
+        //确保有权限关闭线程
+        checkShutdownAccess();
+        //将运行状态转化为跟定目标
+        advanceRunState(SHUTDOWN);
+        //中断线程，等待未执行的任务
+        interruptIdleWorkers();
+        onShutdown();
+    } finally {
+        mainLock.unlock();
+    }
+    tryTerminate();
+}
+</code></pre><h4 id="ShutdownNow-方法分析"><a href="#ShutdownNow-方法分析" class="headerlink" title="ShutdownNow()方法分析"></a>ShutdownNow()方法分析</h4><p>中断所有已经执行的任务，并且不接受新的任务，源码与方法shutdown()类似。不同点是ShutdownNow()遍历线程池中的工作线程，然后逐个调用线程的interrupt方法来中断线程，所以无法响应中断的任务可能永远无法终止。shutdownNow会首先将线程池的状态设置成STOP，然后尝试停止所有的正在执行或暂停任务的线程，并返回等待执行任务的列表。</p>
+<pre><code>public List&lt;Runnable&gt; shutdownNow() {
+    List&lt;Runnable&gt; tasks;
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    try {
+        checkShutdownAccess();
+        advanceRunState(STOP);
+        interruptWorkers();
+        tasks = drainQueue();
+    } finally {
+        mainLock.unlock();
+    }
+    tryTerminate();
+    return tasks;
+}
+</code></pre><h4 id="isShutdown-方法分析"><a href="#isShutdown-方法分析" class="headerlink" title="isShutdown()方法分析"></a>isShutdown()方法分析</h4><p>只要调用了这两个关闭方法的其中一个，isShutdown方法就会返回true。判断是否在关闭线程池。</p>
+<pre><code>public boolean isShutdown() {
+    return ! isRunning(ctl.get());
+}
+</code></pre><h4 id="isTerminated-方法分析"><a href="#isTerminated-方法分析" class="headerlink" title="isTerminated()方法分析"></a>isTerminated()方法分析</h4><p>当所有的任务都已关闭后,才表示线程池关闭成功，这时调用isTerminaed方法会返回true。</p>
+<pre><code>public boolean isTerminated() {
+    return runStateAtLeast(ctl.get(), TERMINATED);
+}
+</code></pre><h4 id="remove-方法分析"><a href="#remove-方法分析" class="headerlink" title="remove()方法分析"></a>remove()方法分析</h4><p>移除线程池中正在执行的任务，线程未执行的话则不执行该方法。</p>
+<pre><code>public boolean remove(Runnable task) {
+    boolean removed = workQueue.remove(task);
+    tryTerminate(); 
+    return removed;
+}
+</code></pre><h4 id="purge-方法分析"><a href="#purge-方法分析" class="headerlink" title="purge()方法分析"></a>purge()方法分析</h4><p>删除线程池中所有已经被取消的任务，用于回收存储回收操作。    </p>
+<pre><code>public void purge() {
+    final BlockingQueue&lt;Runnable&gt; q = workQueue;
+    try {
+        Iterator&lt;Runnable&gt; it = q.iterator();
+        while (it.hasNext()) {
+            Runnable r = it.next();
+            if (r instanceof Future&lt;?&gt; &amp;&amp; ((Future&lt;?&gt;)r).isCancelled())
+                it.remove();
+        }
+    } catch (ConcurrentModificationException fallThrough) {
+        for (Object r : q.toArray())
+            if (r instanceof Future&lt;?&gt; &amp;&amp; ((Future&lt;?&gt;)r).isCancelled())
+                q.remove(r);
+    }
+    tryTerminate(); 
+}
+</code></pre><h4 id="getPoolSize-方法分析"><a href="#getPoolSize-方法分析" class="headerlink" title="getPoolSize()方法分析"></a>getPoolSize()方法分析</h4><p>用于返回当前线程池存在的线程数量</p>
+<pre><code>public int getPoolSize() {
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    try {
+        return runStateAtLeast(ctl.get(), TIDYING) ? 0
+            : workers.size();
+    } finally {
+        mainLock.unlock();
+    }
+}
+</code></pre><h4 id="getActiveCount-方法分析"><a href="#getActiveCount-方法分析" class="headerlink" title="getActiveCount()方法分析"></a>getActiveCount()方法分析</h4><p>返回正在执行任务的线程数量</p>
+<pre><code>  public int getActiveCount() {
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    try {
+        int n = 0;
+        for (Worker w : workers)
+            if (w.isLocked())
+                ++n;
+        return n;
+    } finally {
+        mainLock.unlock();
+    }
+}
+</code></pre><h4 id="getLargestPoolSize-方法分析"><a href="#getLargestPoolSize-方法分析" class="headerlink" title="getLargestPoolSize()方法分析"></a>getLargestPoolSize()方法分析</h4><p>返回线程池中曾经创建过的线程最大数量。通过这个数据可以知道线程池是否满过。如等于线程池的最大大小，则表示线程池曾经满了。</p>
+<pre><code>public int getLargestPoolSize() {
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    try {
+        return largestPoolSize;
+    } finally {
+        mainLock.unlock();
+    }
+}
+</code></pre><h4 id="getTaskCount-方法分析"><a href="#getTaskCount-方法分析" class="headerlink" title="getTaskCount()方法分析"></a>getTaskCount()方法分析</h4><p>返回计划任务数量的估计值(已经执行完的任务数+正在执行的任务数+工作队列等待的线程数)。</p>
+<pre><code>public long getTaskCount() {
+        final ReentrantLock mainLock = this.mainLock;
+        mainLock.lock();
+        try {
+            //已经完成的任务数
+            long n = completedTaskCount;
+            //加上正在线程池执行的任务数
+            for (Worker w : workers) {
+                n += w.completedTasks;
+                if (w.isLocked())
+                    ++n;
+            }
+            //再加上工作队列中等待的任务数
+            return n + workQueue.size();
+        } finally {
+            mainLock.unlock();
+        }
+    }
+</code></pre><h4 id="getCompletedTaskCount-方法分析"><a href="#getCompletedTaskCount-方法分析" class="headerlink" title="getCompletedTaskCount()方法分析"></a>getCompletedTaskCount()方法分析</h4><p>返回已经完成的任务数，其实是已完成的加上正执行的任务数。源码和getTaskCount()基本类似。</p>
+<h4 id="toString-方法分析"><a href="#toString-方法分析" class="headerlink" title="toString()方法分析"></a>toString()方法分析</h4><p>返回线程池的相关信息</p>
+<pre><code>public String toString() {
+    long ncompleted;
+    int nworkers, nactive;
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    try {
+        ncompleted = completedTaskCount;
+        nactive = 0;
+        nworkers = workers.size();
+        for (Worker w : workers) {
+            ncompleted += w.completedTasks;
+            if (w.isLocked())
+                ++nactive;
+        }
+    } finally {
+        mainLock.unlock();
+    }
+    int c = ctl.get();
+    String rs = (runStateLessThan(c, SHUTDOWN) ? &quot;Running&quot; :
+                 (runStateAtLeast(c, TERMINATED) ? &quot;Terminated&quot; :
+                  &quot;Shutting down&quot;));
+    return super.toString() +
+        &quot;[&quot; + rs +
+        &quot;, pool size = &quot; + nworkers +
+        &quot;, active threads = &quot; + nactive +
+        &quot;, queued tasks = &quot; + workQueue.size() +
+        &quot;, completed tasks = &quot; + ncompleted +
+        &quot;]&quot;;
+}
+</code></pre><h3 id="线程池简单示例"><a href="#线程池简单示例" class="headerlink" title="线程池简单示例"></a>线程池简单示例</h3><pre><code>public class Test {
+     public static void main(String[] args) {   
+         ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 200, TimeUnit.MILLISECONDS,
+                 new ArrayBlockingQueue&lt;Runnable&gt;(5));
+
+         for(int i=0;i&lt;15;i++){
+             MyTask myTask = new MyTask(i);
+             executor.execute(myTask);
+             System.out.println(&quot;线程池中线程数目：&quot;+executor.getPoolSize()+&quot;，队列中等待执行的任务数目：&quot;+
+             executor.getQueue().size()+&quot;，已执行玩别的任务数目：&quot;+executor.getCompletedTaskCount());
+         }
+         executor.shutdown();
+     }
+}
+class MyTask implements Runnable {
+    private int taskNum;
+
+    public MyTask(int num) {
+        this.taskNum = num;
+    }
+
+    @Override
+    public void run() {
+        System.out.println(&quot;正在执行task &quot;+taskNum);
+        try {
+            Thread.currentThread().sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(&quot;task &quot;+taskNum+&quot;执行完毕&quot;);
+    }
+}
+</code></pre><p>在java doc中，并不提倡我们直接使用ThreadPoolExecutor，而是使用Executors类中提供的几个静态方法来创建线程池：</p>
+<pre><code>Executors.newCachedThreadPool();        //创建一个缓冲池，缓冲池容量大小为Integer.MAX_VALUE
+Executors.newSingleThreadExecutor();   //创建容量为1的缓冲池
+Executors.newFixedThreadPool(int);    //创建固定容量大小的缓冲池
+</code></pre><p>具体实现如下：</p>
+<pre><code>public static ExecutorService newFixedThreadPool(int nThreads) {
+return new ThreadPoolExecutor(nThreads, nThreads,
+                              0L, TimeUnit.MILLISECONDS,
+                              new LinkedBlockingQueue&lt;Runnable&gt;());
+}
+public static ExecutorService newSingleThreadExecutor() {
+    return new FinalizableDelegatedExecutorService
+        (new ThreadPoolExecutor(1, 1,
+                                0L, TimeUnit.MILLISECONDS,
+                                new LinkedBlockingQueue&lt;Runnable&gt;()));
+}
+public static ExecutorService newCachedThreadPool() {
+    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                  60L, TimeUnit.SECONDS,
+                                  new SynchronousQueue&lt;Runnable&gt;());
+}
+</code></pre><ul>
+<li><p>newFixedThreadPool创建的线程池corePoolSize和maximumPoolSize值是相等的，它使用的LinkedBlockingQueue；</p>
+</li>
+<li><p>newSingleThreadExecutor将corePoolSize和maximumPoolSize都设置为1，也使用的LinkedBlockingQueue；</p>
+</li>
+<li><p>newCachedThreadPool将corePoolSize设置为0，将maximumPoolSize设置为Integer.MAX_VALUE，使用的SynchronousQueue，也就是说来了任务就创建线程运行，当线程空闲超过60秒，就销毁线程。</p>
+</li>
+</ul>
+<h3 id="配置线程池大小"><a href="#配置线程池大小" class="headerlink" title="配置线程池大小"></a>配置线程池大小</h3><p>如果线程池过大，那么大量的线程将在相对很少的CPU和内存资源上发生竞争，如果线程池过小，那么会导致许多空闲的处理器无法执行工作，从而降低吞吐率。</p>
+<p>NCPU是系统处理器的数量</p>
+<p>如果是CPU密集型任务，就需要尽量压榨CPU，参考值可以设为 NCPU+1</p>
+<p>如果是IO密集型任务，参考值可以设置为2*NCPU</p>
+<p>　　当然，这只是一个参考值，具体的设置还需要根据实际情况进行调整，比如可以先将线程池大小设置为参考值，再观察任务运行情况和系统负载、资源利用率来进行适当调整。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Java并发之阻塞队列" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/01/Java并发之阻塞队列/" class="article-date">
+      <time datetime="2017-11-01T02:35:00.000Z" itemprop="datePublished">2017-11-01</time>
+</a>
+
+ 
+    <a href="/2017/11/01/Java并发之阻塞队列/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/11/01/Java并发之阻塞队列/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/01/Java并发之阻塞队列/">Java并发之阻塞队列</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>使用非阻塞队列的时候有一个很大问题就是：它不会对当前线程产生阻塞，那么在面对类似消费者-生产者的模型时，就必须额外地实现同步策略以及线程间唤醒策略，这个实现起来就非常麻烦。但是有了阻塞队列就不一样了，它会对当前线程产生阻塞，比如一个线程从一个空的阻塞队列中取元素，此时线程会被阻塞直到阻塞队列中有了元素。当队列中有元素后，被阻塞的线程会自动被唤醒（不需要我们编写代码去唤醒）。这样提供了极大的方便性。</p>
+<h3 id="主要的阻塞队列"><a href="#主要的阻塞队列" class="headerlink" title="主要的阻塞队列"></a>主要的阻塞队列</h3><p>自从Java 1.5之后，在java.util.concurrent包下提供了若干个阻塞队列，主要有以下几个：</p>
+<p>　　ArrayBlockingQueue：基于数组实现的一个阻塞队列，在创建ArrayBlockingQueue对象时必须制定容量大小。并且可以指定公平性与非公平性，默认情况下为非公平的，即不保证等待时间最长的队列最优先能够访问队列。</p>
+<p>　　LinkedBlockingQueue：基于链表实现的一个阻塞队列，在创建LinkedBlockingQueue对象时如果不指定容量大小，则默认大小为Integer.MAX_VALUE。</p>
+<p>　　PriorityBlockingQueue：以上2种队列都是先进先出队列，而PriorityBlockingQueue却不是，它会按照元素的优先级对元素进行排序，按照优先级顺序出队，每次出队的元素都是优先级最高的元素。注意，此阻塞队列为无界阻塞队列，即容量没有上限（通过源码就可以知道，它没有容器满的信号标志），前面2种都是有界队列。</p>
+<p>　　DelayQueue：基于PriorityQueue，一种延时阻塞队列，DelayQueue中的元素只有当其指定的延迟时间到了，才能够从队列中获取到该元素。DelayQueue也是一个无界队列，因此往队列中插入数据的操作（生产者）永远不会被阻塞，而只有获取数据的操作（消费者）才会被阻塞。</p>
+<h3 id="阻塞队列中的方法-VS-非阻塞队列中的方法"><a href="#阻塞队列中的方法-VS-非阻塞队列中的方法" class="headerlink" title="阻塞队列中的方法 VS 非阻塞队列中的方法"></a>阻塞队列中的方法 VS 非阻塞队列中的方法</h3><p>1.非阻塞队列中的几个主要方法：</p>
+<p>　　add(E e):将元素e插入到队列末尾，如果插入成功，则返回true；如果插入失败（即队列已满），则会抛出异常；</p>
+<p>　　remove()：移除队首元素，若移除成功，则返回true；如果移除失败（队列为空），则会抛出异常；</p>
+<p>　　offer(E e)：将元素e插入到队列末尾，如果插入成功，则返回true；如果插入失败（即队列已满），则返回false；</p>
+<p>　　poll()：移除并获取队首元素，若成功，则返回队首元素；否则返回null；</p>
+<p>　　peek()：获取队首元素，若成功，则返回队首元素；否则返回null</p>
+<p>　　对于非阻塞队列，一般情况下建议使用offer、poll和peek三个方法，不建议使用add和remove方法。因为使用offer、poll和peek三个方法可以通过返回值判断操作成功与否，而使用add和remove方法却不能达到这样的效果。注意，非阻塞队列中的方法都没有进行同步措施。</p>
+<p>2.阻塞队列中的几个主要方法：</p>
+<p>　　阻塞队列包括了非阻塞队列中的大部分方法，上面列举的5个方法在阻塞队列中都存在，但是要注意这5个方法在阻塞队列中都进行了同步措施。除此之外，阻塞队列提供了另外4个非常有用的方法：</p>
+<p>　　put(E e)</p>
+<p>　　take()</p>
+<p>　　offer(E e,long timeout, TimeUnit unit)</p>
+<p>　　poll(long timeout, TimeUnit unit)</p>
+<p>　　</p>
+<p>　　put方法用来向队尾存入元素，如果队列满，则等待；</p>
+<p>　　take方法用来从队首取元素，如果队列为空，则等待；</p>
+<p>　　offer方法用来向队尾存入元素，如果队列满，则等待一定的时间，当时间期限达到时，如果还没有插入成功，则返回false；否则返回true；</p>
+<p>　　poll方法用来从队首取元素，如果队列空，则等待一定的时间，当时间期限达到时，如果取到，则返回null；否则返回取得的元素；</p>
+<h3 id="阻塞队列的实现原理"><a href="#阻塞队列的实现原理" class="headerlink" title="阻塞队列的实现原理"></a>阻塞队列的实现原理</h3><pre><code>public class ArrayBlockingQueue&lt;E&gt; extends AbstractQueue&lt;E&gt;
+implements BlockingQueue&lt;E&gt;, java.io.Serializable {
+
+private static final long serialVersionUID = -817911632652898426L;
+
+/** The queued items  */
+private final E[] items;
+/** items index for next take, poll or remove */
+private int takeIndex;
+/** items index for next put, offer, or add. */
+private int putIndex;
+/** Number of items in the queue */
+private int count;
+
+/*
+* Concurrency control uses the classic two-condition algorithm
+* found in any textbook.
+*/
+
+/** Main lock guarding all access */
+private final ReentrantLock lock;
+/** Condition for waiting takes */
+private final Condition notEmpty;
+/** Condition for waiting puts */
+private final Condition notFull;
+}
+</code></pre><p> 　<br> 　<br> 　　可以看出，ArrayBlockingQueue中用来存储元素的实际上是一个数组，takeIndex和putIndex分别表示队首元素和队尾元素的下标，count表示队列中元素的个数。</p>
+<p>　　lock是一个可重入锁，notEmpty和notFull是等待条件。</p>
+<p>　　下面看一下ArrayBlockingQueue的构造器，构造器有三个重载版本：</p>
+<pre><code>public ArrayBlockingQueue(int capacity) {
+    }
+public ArrayBlockingQueue(int capacity, boolean fair) {
+
+    }
+public ArrayBlockingQueue(int capacity, boolean fair,
+                          Collection&lt;? extends E&gt; c) {
+}
+</code></pre><p> 　　第一个构造器只有一个参数用来指定容量，第二个构造器可以指定容量和公平性，第三个构造器可以指定容量、公平性以及用另外一个集合进行初始化。<br>然后看它的两个关键方法的实现：put()和take()：<br>　　<br>　  public void put(E e) throws InterruptedException {<br>        if (e == null) throw new NullPointerException();<br>        final E[] items = this.items;<br>        final ReentrantLock lock = this.lock;<br>        lock.lockInterruptibly();<br>        try {<br>            try {<br>                while (count == items.length)<br>                    notFull.await();<br>            } catch (InterruptedException ie) {<br>                notFull.signal(); // propagate to non-interrupted thread<br>                throw ie;<br>            }<br>            insert(e);<br>        } finally {<br>            lock.unlock();<br>        }<br>    }</p>
+<p>从put方法的实现可以看出，它先获取了锁，并且获取的是可中断锁，然后判断当前元素个数是否等于数组的长度，如果相等，则调用notFull.await()进行等待，如果捕获到中断异常，则唤醒线程并抛出异常。</p>
+<p>　　当被其他线程唤醒时，通过insert(e)方法插入元素，最后解锁。<br>我们看一下insert方法的实现：<br>　　<br>　 <figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">　 private void <span class="keyword">insert(E </span>x) &#123;</div><div class="line">    items[putIndex] = x<span class="comment">;</span></div><div class="line">    putIndex = inc(putIndex)<span class="comment">;</span></div><div class="line">    ++<span class="built_in">count</span><span class="comment">;</span></div><div class="line">    notEmpty.signal()<span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>它是一个private方法，插入成功后，通过notEmpty唤醒正在等待取元素的线程。</p>
+<p>　　下面是take()方法的实现：<br>　　<br>　　<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">　　<span class="function"><span class="keyword">public</span> E <span class="title">take</span>(<span class="params"></span>) throws InterruptedException </span>&#123;</div><div class="line">    final ReentrantLock <span class="keyword">lock</span> = <span class="keyword">this</span>.<span class="keyword">lock</span>;</div><div class="line">    <span class="keyword">lock</span>.lockInterruptibly();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">while</span> (count == <span class="number">0</span>)</div><div class="line">                notEmpty.<span class="keyword">await</span>();</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException ie) &#123;</div><div class="line">            notEmpty.signal(); <span class="comment">// propagate to non-interrupted thread</span></div><div class="line">            <span class="keyword">throw</span> ie;</div><div class="line">        &#125;</div><div class="line">        E x = extract();</div><div class="line">        <span class="keyword">return</span> x;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        <span class="keyword">lock</span>.unlock();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>跟put方法实现很类似，只不过put方法等待的是notFull信号，而take方法等待的是notEmpty信号。在take方法中，如果可以取元素，则通过extract方法取得元素，下面是extract方法的实现：</p>
+<pre><code>private E extract() {
+    final E[] items = this.items;
+    E x = items[takeIndex];
+    items[takeIndex] = null;
+    takeIndex = inc(takeIndex);
+    --count;
+    notFull.signal();
+    return x;
+}
+</code></pre><p>跟insert方法也很类似。</p>
+<p>其实从这里大家应该明白了阻塞队列的实现原理，事实它和我们用Object.wait()、Object.notify()和非阻塞队列实现生产者-消费者的思路类似，只不过它把这些工作一起集成到了阻塞队列中实现。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-LintCode题解--中等篇(1)" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -561,20 +1621,20 @@ public class Solution {
 
 
   
-    <article id="post-走近Java并发—ThreadLocal" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Java并发之ThreadLocal" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/26/走近Java并发—ThreadLocal/" class="article-date">
+      <a href="/2017/10/26/Java并发之ThreadLocal/" class="article-date">
       <time datetime="2017-10-26T12:00:00.000Z" itemprop="datePublished">2017-10-26</time>
 </a>
 
  
-    <a href="/2017/10/26/走近Java并发—ThreadLocal/#comments" title="查看评论">
+    <a href="/2017/10/26/Java并发之ThreadLocal/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/26/走近Java并发—ThreadLocal/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/26/Java并发之ThreadLocal/"></span>
         
     </a>
 
@@ -589,7 +1649,7 @@ public class Solution {
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/26/走近Java并发—ThreadLocal/">认识Java并发艺术——ThreadLocal</a>
+      <a class="article-title" href="/2017/10/26/Java并发之ThreadLocal/">Java并发之ThreadLocal</a>
     </h1>
   
 
@@ -619,7 +1679,7 @@ public class Solution {
 
       
         <p class="article-more-link">
-          <a href="/2017/10/26/走近Java并发—ThreadLocal/#more">阅读全文 >></a>
+          <a href="/2017/10/26/Java并发之ThreadLocal/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -638,20 +1698,20 @@ public class Solution {
 
 
   
-    <article id="post-走近Java并发—Lock" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Java并发之Lock" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/24/走近Java并发—Lock/" class="article-date">
+      <a href="/2017/10/24/Java并发之Lock/" class="article-date">
       <time datetime="2017-10-24T12:00:00.000Z" itemprop="datePublished">2017-10-24</time>
 </a>
 
  
-    <a href="/2017/10/24/走近Java并发—Lock/#comments" title="查看评论">
+    <a href="/2017/10/24/Java并发之Lock/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/24/走近Java并发—Lock/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/24/Java并发之Lock/"></span>
         
     </a>
 
@@ -666,7 +1726,7 @@ public class Solution {
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/24/走近Java并发—Lock/">Java并发——Lock</a>
+      <a class="article-title" href="/2017/10/24/Java并发之Lock/">Java并发之Lock</a>
     </h1>
   
 
@@ -699,7 +1759,7 @@ public class Solution {
 
       
         <p class="article-more-link">
-          <a href="/2017/10/24/走近Java并发—Lock/#more">阅读全文 >></a>
+          <a href="/2017/10/24/Java并发之Lock/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -1050,619 +2110,6 @@ action = /register/
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-SSM项目知识点总结" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/13/SSM项目知识点总结/" class="article-date">
-      <time datetime="2017-10-13T02:14:00.000Z" itemprop="datePublished">2017-10-13</time>
-</a>
-
- 
-    <a href="/2017/10/13/SSM项目知识点总结/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/13/SSM项目知识点总结/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/13/SSM项目知识点总结/">SSM小项目知识点总结</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="读取Java配置文件——Properties类"><a href="#读取Java配置文件——Properties类" class="headerlink" title="读取Java配置文件——Properties类"></a>读取Java配置文件——Properties类</h2><p>Java中Java.Util.Properties类主要用于读取Java的配置文件，在项目中若要读取resouce文件下的配置，这是非常方便的。</p>
-<h3 id="Properties的继承关系"><a href="#Properties的继承关系" class="headerlink" title="Properties的继承关系"></a>Properties的继承关系</h3><pre><code>Java.lang.Object--&gt;java.util.Dictionary--&gt;java.util.Hashtable&lt;Object, Object&gt;--&gt;java.util.Properties
-</code></pre><p>主要方法：</p>
-<ul>
-<li>getProperty(String Key):用指定的键在属性列表中搜索属性</li>
-<li>load(InputStream inStream):从输入流中读取属性列表，通过指定文件进行装载获取文件的键值对</li>
-<li>setProperty(String key, String value):调用Hashtable的方法put，设置键值对</li>
-<li>store(OutputStream, String comments):将Properties表中属性写入输出流，与load方法相反</li>
-<li>close():清除所有装载的键值对</li>
-</ul>
-<h3 id="读取Properties文件"><a href="#读取Properties文件" class="headerlink" title="读取Properties文件"></a>读取Properties文件</h3><p>最常用的方法是通过java.lang.Class类的getResouceAsStream(String name)读取文件。</p>
-<pre><code>static{
-    InputStreamRead inputRead = new InputStreamRead(PropertiesUtil.Class.getResourceAsStream(fileName));
-    //做异常处理
-    props = new Properties();
-    props.load(inputRead);
-}
-public static String getProperty(String key, String defaultValue){
-    String value = props.getProperty(key.trim());
-    if(StringUtils.isBlank(value))
-        value = defaultValue;
-    return value.trim();    
-}
-</code></pre><h2 id="Java日期和字符串相互转换——joda-Time的使用"><a href="#Java日期和字符串相互转换——joda-Time的使用" class="headerlink" title="Java日期和字符串相互转换——joda-Time的使用"></a>Java日期和字符串相互转换——joda-Time的使用</h2><p>需要Maven导入</p>
-<ul>
-<li>DateTime():无参构造函数会创建当前系统所在时区的时间</li>
-<li>DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute)：这个构造方法方便快速地构造一个指定的时间</li>
-<li>DateTime(long instant)：这个构造方法创建出来的实例，是通过一个long类型的时间戳，它表示这个时间戳距1970-01-01T00:00:00Z的毫秒数</li>
-<li>DateTime(Object instant)：这个构造方法可以通过一个Object对象构造一个实例。这个Object对象可以是这些类型：ReadableInstant, String, Calendar和Date。</li>
-</ul>
-<h3 id="str-lt-–-gt-date"><a href="#str-lt-–-gt-date" class="headerlink" title="str&lt;–&gt;date"></a>str&lt;–&gt;date</h3><pre><code>DateTimeFormatter format = DateTimeFormat .forPattern(&quot;yyyy-MM-dd HH:mm:ss&quot;);  
-//时间解析  
-DateTime dateTime = DateTime.parseDateTime(&quot;2012-12-21 23:22:45&quot;, format);  
-System.out.println(dateTime.toDate());
-//时间格式化，输出==&gt; 2012/12/21 23:22:45 Fri  
-String string_u = dateTime.toString(&quot;yyyy/MM/dd HH:mm:ss EE&quot;);  
-System.out.println(string_u);  
-//格式化带Locale，输出==&gt; 2012年12月21日 23:22:45 星期五  
-String string_c = dateTime.toString(&quot;yyyy年MM月dd日 HH:mm:ss EE&quot;,Locale.CHINESE);  
-System.out.println(string_c); 
-</code></pre><h2 id="VO-PO-BO-JO-POJO-DTO-QO-DAO概念"><a href="#VO-PO-BO-JO-POJO-DTO-QO-DAO概念" class="headerlink" title="VO,PO,BO,JO,POJO,DTO,QO,DAO概念"></a>VO,PO,BO,JO,POJO,DTO,QO,DAO概念</h2><h3 id="PO-persistant-object-持久对象"><a href="#PO-persistant-object-持久对象" class="headerlink" title="PO(persistant object) 持久对象"></a>PO(persistant object) 持久对象</h3><p>在 o/r 映射的时候出现的概念，如果没有 o/r 映射，没有这个概念存在了。通常对应数据模型 ( 数据库 ), 本身还有部分业务逻辑的处理。可以看成是与数据库中的表相映射的 java 对象。最简单的 PO 就是对应数据库中某个表中的一条记录，多个记录可以用 PO 的集合。 PO 中应该不包含任何对数据库的操作。</p>
-<h3 id="DO（Domain-Object）领域对象"><a href="#DO（Domain-Object）领域对象" class="headerlink" title="DO（Domain Object）领域对象"></a>DO（Domain Object）领域对象</h3><p>就是从现实世界中抽象出来的有形或无形的业务实体。一般和数据中的表结构对应。</p>
-<h3 id="TO-Transfer-Object-，数据传输对象"><a href="#TO-Transfer-Object-，数据传输对象" class="headerlink" title="TO(Transfer Object) ，数据传输对象"></a>TO(Transfer Object) ，数据传输对象</h3><p>在应用程序不同 tie( 关系 ) 之间传输的对象</p>
-<h3 id="DTO（Data-Transfer-Object）数据传输对象"><a href="#DTO（Data-Transfer-Object）数据传输对象" class="headerlink" title="DTO（Data Transfer Object）数据传输对象"></a>DTO（Data Transfer Object）数据传输对象</h3><p>这个概念来源于J2EE的设计模式，原来的目的是为了EJB的分布式应用提供粗粒度的数据实体，以减少分布式调用的次数，从而提高分布式调用的性能和降低网络负载，但在这里，我泛指用于展示层与服务层之间的数据传输对象。<br>比如我们一张表有100个字段，那么对应的PO就有100个属性。<br>但是我们界面上只要显示10个字段，<br>客户端用WEB service来获取数据，没有必要把整个PO对象传递到客户端，<br>这时我们就可以用只有这10个属性的DTO来传递结果到客户端，这样也不会暴露服务端表结构.到达客户端以后，如果用这个对象来对应界面显示，那此时它的身份就转为VO</p>
-<h3 id="VO-value-object-值对象-ViewObject-视图对象"><a href="#VO-value-object-值对象-ViewObject-视图对象" class="headerlink" title="VO(value object) 值对象(ViewObject)视图对象"></a>VO(value object) 值对象(ViewObject)视图对象</h3><p>视图对象，用于展示层，它的作用是把某个指定页面（或组件）的所有数据封装起来。</p>
-<h3 id="BO-business-object-业务对象"><a href="#BO-business-object-业务对象" class="headerlink" title="BO(business object) 业务对象"></a>BO(business object) 业务对象</h3><p>从业务模型的角度看 , 见 UML 元件领域模型中的领域对象。封装业务逻辑的 java 对象 , 通过调用 DAO 方法 , 结合 PO,VO 进行业务操作。 business object: 业务对象 主要作用是把业务逻辑封装为一个对象。这个对象可以包括一个或多个其它的对象。 比如一个简历，有教育经历、工作经历、社会关系等等。 我们可以把教育经历对应一个 PO ，工作经历对应一个 PO ，社会关系对应一个 PO 。 建立一个对应简历的 BO 对象处理简历，每个 BO 包含这些 PO 。 这样处理业务逻辑时，我们就可以针对 BO 去处理。</p>
-<h3 id="POJO-plain-ordinary-java-object-简单无规则-java-对象"><a href="#POJO-plain-ordinary-java-object-简单无规则-java-对象" class="headerlink" title="POJO(plain ordinary java object) 简单无规则 java 对象"></a>POJO(plain ordinary java object) 简单无规则 java 对象</h3><p>纯的传统意义的 java 对象。就是说在一些 Object/Relation Mapping 工具中，能够做到维护数据库表记录的 persisent object 完全是一个符合 Java Bean 规范的纯 Java 对象，没有增加别的属性和方法。我的理解就是最基本的 Java Bean ，只有属性字段及 setter 和 getter 方法！。</p>
-<p>DAO(data access object) 数据访问对象</p>
-<p>是一个 sun 的一个标准 j2ee 设计模式， 这个模式中有个接口就是 DAO ，它负持久层的操作。为业务层提供接口。此对象用于访问数据库。通常和 PO 结合使用， DAO 中包含了各种数据库的操作方法。通过它的方法 , 结合 PO 对数据库进行相关的操作。夹在业务逻辑与数据库资源中间。配合 VO, 提供数据库的 CRUD 操作</p>
-<h2 id="文件上传基础"><a href="#文件上传基础" class="headerlink" title="文件上传基础"></a>文件上传基础</h2><p>SpringMVC配置如下:</p>
-<pre><code>&lt;!-- 上传文件 --&gt;  
-&lt;bean id=&quot;multipartResolver&quot; class=&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;&gt;  
-    &lt;property name=&quot;defaultEncoding&quot; value=&quot;utf-8&quot;/&gt;  
-    &lt;!-- 最大内存大小 --&gt;  
-    &lt;property name=&quot;maxInMemorySize&quot; value=&quot;10240&quot;/&gt;  
-    &lt;!-- 最大文件大小，-1为不限制大小 --&gt;  
-    &lt;property name=&quot;maxUploadSize&quot; value=&quot;-1&quot;/&gt;  
-&lt;/bean&gt;
-</code></pre><p>Maven配置如下：</p>
-<pre><code>&lt;dependency&gt;  
-    &lt;groupId&gt;commons-fileupload&lt;/groupId&gt;  
-    &lt;artifactId&gt;commons-fileupload&lt;/artifactId&gt;  
-    &lt;version&gt;1.3.1&lt;/version&gt;  
-&lt;/dependency&gt;  
-&lt;dependency&gt;  
-    &lt;groupId&gt;commons-io&lt;/groupId&gt;  
-    &lt;artifactId&gt;commons-io&lt;/artifactId&gt;  
-    &lt;version&gt;2.4&lt;/version&gt;  
-&lt;/dependency&gt;
-</code></pre><p>图片上传核心代码如下</p>
-<pre><code>@RequestMapping(value=&quot;uploadImage&quot;, method=RequestMethod.POST)
-@ResponseBody
-private String findUpload(User user, @RequestParam(value=&quot;file&quot;, requires=false) MultipartFile file, HttpServletRequest request){
-    //获取物理路径WEB-APP的路径
-    String pathRoot = request.getSession().getServletContext().getRealPath(&quot;&quot;);
-    String Path = &quot;&quot;;
-    if(file!=null){
-        //生成UUID作为文件名称
-        String uuid = UUID.randomUUID.toString().replace(&quot;-&quot;, &quot;&quot;);
-        //获取文件类型
-        String contentType = file.getContentType();
-        //获取文件后缀名称
-        String imageName = contentType.subString(contentType.indexOf(&quot;/&quot;)+1);
-        path = &quot;/upload/&quot;+uuid+imageName;
-        file.transferTo(new File(pathRoot+path));
-    }
-    request.setAttribute(&quot;imagesPath&quot;, path);
-}
-</code></pre><p>若是多文件上传：</p>
-<pre><code>String pathRoot = request.getSession().getServletContext().getRealPath(&quot;&quot;);  
-String path=&quot;&quot;;  
-List&lt;String&gt; listImagePath=new ArrayList&lt;String&gt;();  
-    for (MultipartFile mf : file) {  
-        if(!mf.isEmpty()){  
-            //生成uuid作为文件名称  
-            String uuid = UUID.randomUUID().toString().replaceAll(&quot;-&quot;,&quot;&quot;);  
-            //获得文件类型（可以判断如果不是图片，禁止上传）  
-            String contentType=mf.getContentType();  
-            //获得文件后缀名称  
-            String imageName=contentType.substring(contentType.indexOf(&quot;/&quot;)+1);  
-            path=&quot;/static/images/&quot;+uuid+&quot;.&quot;+imageName;  
-            mf.transferTo(new File(pathRoot+path));  
-            listImagePath.add(path);  
-        }  
-    }  
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Spring AOP切面" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/11/Spring AOP切面/" class="article-date">
-      <time datetime="2017-10-11T02:14:00.000Z" itemprop="datePublished">2017-10-11</time>
-</a>
-
- 
-    <a href="/2017/10/11/Spring AOP切面/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/11/Spring AOP切面/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/11/Spring AOP切面/">Spring AOP切面编程</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <a id="more"></a>
-<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><h3 id="AOP术语"><a href="#AOP术语" class="headerlink" title="AOP术语"></a>AOP术语</h3><p>作用：保证各步骤之间的良好隔离性，保证源代码的无关性。<br>AOP处理具有横切性质的系统级服务，如事务管理、安全检查、缓存、对象池管理</p>
-<ul>
-<li>切面（Aspect）：业务流程运行的某个特定步骤，应用运行过程的关注点，通常称为横切关注点</li>
-<li>连接点（JoinPoint）：程序执行过程中明确的点，如方法的调用，异常的抛出<br>-增强处理（Advice）：AOP特点切入点执行的增强处理，如before、around等</li>
-<li>切入点（PointCut）：可以插入增强处理的连接点</li>
-</ul>
-<h3 id="Annotation方式的AOP"><a href="#Annotation方式的AOP" class="headerlink" title="Annotation方式的AOP"></a>Annotation方式的AOP</h3><p>首先保证XML配置文件有下面一句来启动AspectJ支持：</p>
-<pre><code>&lt;aop:aspectj-autoproxy/&gt;
-</code></pre><p>或者不在XML中配置，但要在配置文件中加上</p>
-<pre><code>&lt;bean class=&quot;org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator&quot;&gt;
-</code></pre><h4 id="Aspect"><a href="#Aspect" class="headerlink" title="Aspect"></a>Aspect</h4><p>使用@Aspect注解即可</p>
-<h4 id="增强处理"><a href="#增强处理" class="headerlink" title="增强处理"></a>增强处理</h4><h6 id="Before"><a href="#Before" class="headerlink" title="Before"></a>Before</h6><p>使用Before时需要指定Value值，表示切入点</p>
-<pre><code>@Aspect
-public class BeforeAdvice{
-    @Before(&quot;execution(* org.crazyint.app.service.impl.*.*(...))&quot;)
-    public void before(){...}
-}
-</code></pre><p>@Before会在程序执行前加入增强…一切都是在主程序无知条件下进行的</p>
-<h5 id="AfterReturning"><a href="#AfterReturning" class="headerlink" title="AfterReturning"></a>AfterReturning</h5><p>在目标方法正常完成后被加入,依然要指定value(PointCut),可以指定returning，可通过该形参访问目标方法返回值</p>
-<pre><code>@Aspect
-public class AfterReturningAdvice{
-    @AfterReturing(returning=&quot;rvt&quot;,pointcut=execution(org.crazyint.app.service.impl.*.*(...))&quot;)
-    public void log(Object rvt){
-        System.out.println(rvt);
-    }
-</code></pre><h5 id="AfterThrowing"><a href="#AfterThrowing" class="headerlink" title="AfterThrowing"></a>AfterThrowing</h5><p>用于处理程序中未处理的异常，也需要指定value，并需要指定throwing，用来访问目标方法所抛出的异常</p>
-<pre><code>@Aspect
-public class AfterThrowingAdvice{
-    @AfterThrowing(throwing=&quot;ex&quot;,pointcut=&quot;exectution(..)&quot;)
-    public void Throwing(Throwable ex){System.out.println(ex)}
-}
-</code></pre><h5 id="After"><a href="#After" class="headerlink" title="After"></a>After</h5><p>用于目标方法成功完成后加入，和Before相似，不叙述</p>
-<h5 id="Around"><a href="#Around" class="headerlink" title="Around"></a>Around</h5><p>功能十分强大，近似于Before和AfterThrowing，但是需要在线程安全的环境中使用，没有必要使用Around增强处理<br>使用Around时，需要将第一个参数定义为ProceedingJoinPoint，为JoinPoint的子类</p>
-<h4 id="访问目标方法参数"><a href="#访问目标方法参数" class="headerlink" title="访问目标方法参数"></a>访问目标方法参数</h4><p>访问目标方法需要将定义增强处理方法时将第一个参数定义为JoinPoint类型<br>，JointPoint有如下常用方法</p>
-<ul>
-<li>Object[] getArgs():返回执行目标方法时的参数</li>
-<li>Signature getSignature():返回被增强的方法的相关信息</li>
-<li>Object getTarget(): 返回被加入增强处理的目标对象</li>
-<li>Object getThis():返回AOP框架为目标对象生成的代理对象</li>
-</ul>
-<h4 id="定义切入点"><a href="#定义切入点" class="headerlink" title="定义切入点"></a>定义切入点</h4><pre><code>@Aspect 
-public class SystemArchitecture{
-    @PointCut(&quot;exectution(* org.crazyint.app.service.impl.Chain*.say(...))&quot;)
-    public void myPoint(){
-
-    }
-}
-</code></pre><p>引用切入点</p>
-<pre><code>@Aspect
-public class usePoint{
-    @before(pointcut=&quot;SystemArchitecture.myPoint()&quot;)
-    public void example(){...}
-}
-</code></pre><h4 id="切入点指示符"><a href="#切入点指示符" class="headerlink" title="切入点指示符"></a>切入点指示符</h4><ul>
-<li>execution    :匹配执行方法的连接点，用于表达式开头</li>
-<li>modifiers-pattern :指定方法修饰符，支持通配符，可以省略</li>
-<li>ret-type-pattern :指定方法返回值类型，可以用*表示</li>
-<li>declare-type-pattern :指定方法所属的类，可以省略</li>
-<li>name-pattern :指定匹配的方法名，用*匹配所有方法</li>
-<li>param-pattern ：指定方法声明的形参列表，支持两个通配符，*和…</li>
-<li>throws-pattern :指定方法抛出的异常</li>
-<li>within ：限定匹配类型的连接点</li>
-<li>this ：用于限定AOP代理必须是指定类型的实例，匹配对象所有连接点</li>
-<li>target ：限定目标对象必须是指定类型的实例，匹配对象所有的连接点</li>
-<li>args ：要求参数类型是指定类型的实例</li>
-<li>&amp;&amp; ：要求连接点同时匹配两个切入点表达式</li>
-<li>||：要求连接点匹配任意一个切入点表达式</li>
-<li>！：要求连接点不匹配指定切入点表达式</li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Mybatis-generator详细配置demo" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/08/Mybatis-generator详细配置demo/" class="article-date">
-      <time datetime="2017-10-08T02:14:00.000Z" itemprop="datePublished">2017-10-08</time>
-</a>
-
- 
-    <a href="/2017/10/08/Mybatis-generator详细配置demo/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/08/Mybatis-generator详细配置demo/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/08/Mybatis-generator详细配置demo/">Mybatis-Generator相关配置demo</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="generatorConfig-xml配置信息"><a href="#generatorConfig-xml配置信息" class="headerlink" title="generatorConfig.xml配置信息"></a>generatorConfig.xml配置信息</h2><p>首先在resource中配置好datasource.propertise文件,包括数据库信息和mysql-connector的jar包位置。</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE generatorConfiguration
-        PUBLIC &quot;-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN&quot;
-        &quot;http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd&quot;&gt;
-
-&lt;generatorConfiguration&gt;
-    &lt;!--导入属性配置--&gt;
-    &lt;properties resource=&quot;datasource.properties&quot;&gt;&lt;/properties&gt;
-
-    &lt;!--指定特定数据库的jdbc驱动jar包的位置--&gt;
-    &lt;classPathEntry location=&quot;${db.driverLocation}&quot;/&gt;
-
-    &lt;context id=&quot;default&quot; targetRuntime=&quot;MyBatis3&quot;&gt;
-
-        &lt;!-- optional，旨在创建class时，对注释进行控制 --&gt;
-        &lt;commentGenerator&gt;
-            &lt;property name=&quot;suppressDate&quot; value=&quot;true&quot;/&gt;
-            &lt;property name=&quot;suppressAllComments&quot; value=&quot;true&quot;/&gt;
-        &lt;/commentGenerator&gt;
-
-        &lt;!--jdbc的数据库连接 --&gt;
-        &lt;jdbcConnection
-                driverClass=&quot;${db.driverClassName}&quot;
-                connectionURL=&quot;${db.url}&quot;
-                userId=&quot;${db.username}&quot;
-                password=&quot;${db.password}&quot;&gt;
-        &lt;/jdbcConnection&gt;
-
-
-        &lt;!-- 非必需，类型处理器，在数据库类型和java类型之间的转换控制--&gt;
-        &lt;javaTypeResolver&gt;
-            &lt;property name=&quot;forceBigDecimals&quot; value=&quot;false&quot;/&gt;
-        &lt;/javaTypeResolver&gt;
-
-
-        &lt;!-- Model模型生成器,用来生成含有主键key的类，记录类 以及查询Example类
-            targetPackage     指定生成的model生成所在的包名
-            targetProject     指定在该项目下所在的路径
-        --&gt;
-        &lt;!--&lt;javaModelGenerator targetPackage=&quot;com.huihui.pojo&quot; targetProject=&quot;.\src\main\java&quot;&gt;--&gt;
-        &lt;javaModelGenerator targetPackage=&quot;com.huihui.pojo&quot; targetProject=&quot;./src/main/java&quot;&gt;
-            &lt;!-- 是否允许子包，即targetPackage.schemaName.tableName --&gt;
-            &lt;property name=&quot;enableSubPackages&quot; value=&quot;false&quot;/&gt;
-            &lt;!-- 是否对model添加 构造函数 --&gt;
-            &lt;property name=&quot;constructorBased&quot; value=&quot;true&quot;/&gt;
-            &lt;!-- 是否对类CHAR类型的列的数据进行trim操作 --&gt;
-            &lt;property name=&quot;trimStrings&quot; value=&quot;true&quot;/&gt;
-            &lt;!-- 建立的Model对象是否 不可改变  即生成的Model对象不会有 setter方法，只有构造方法 --&gt;
-            &lt;property name=&quot;immutable&quot; value=&quot;false&quot;/&gt;
-        &lt;/javaModelGenerator&gt;
-
-        &lt;!--mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 --&gt;
-        &lt;!--&lt;sqlMapGenerator targetPackage=&quot;mappers&quot; targetProject=&quot;.\src\main\resources&quot;&gt;--&gt;
-        &lt;sqlMapGenerator targetPackage=&quot;mappers&quot; targetProject=&quot;./src/main/resources&quot;&gt;
-            &lt;property name=&quot;enableSubPackages&quot; value=&quot;false&quot;/&gt;
-        &lt;/sqlMapGenerator&gt;
-
-        &lt;!-- 客户端代码，生成易于使用的针对Model对象和XML配置文件 的代码
-                type=&quot;ANNOTATEDMAPPER&quot;,生成Java Model 和基于注解的Mapper对象
-                type=&quot;MIXEDMAPPER&quot;,生成基于注解的Java Model 和相应的Mapper对象
-                type=&quot;XMLMAPPER&quot;,生成SQLMap XML文件和独立的Mapper接口
-        --&gt;
-
-        &lt;!-- targetPackage：mapper接口dao生成的位置 --&gt;
-        &lt;!--&lt;javaClientGenerator type=&quot;XMLMAPPER&quot; targetPackage=&quot;com.mmall.dao&quot; targetProject=&quot;.\src\main\java&quot;&gt;--&gt;
-        &lt;javaClientGenerator type=&quot;XMLMAPPER&quot; targetPackage=&quot;com.mmall.dao&quot; targetProject=&quot;./src/main/java&quot;&gt;
-            &lt;!-- enableSubPackages:是否让schema作为包的后缀 --&gt;
-            &lt;property name=&quot;enableSubPackages&quot; value=&quot;false&quot; /&gt;
-        &lt;/javaClientGenerator&gt;
-
-        &lt;!--配置数据库表相关信息，注意一定要和原表名相同--&gt;
-        &lt;table tableName=&quot;shipping&quot; domainObjectName=&quot;Shipping&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
-        &lt;table tableName=&quot;cart&quot; domainObjectName=&quot;Cart&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
-        &lt;table tableName=&quot;cart_item&quot; domainObjectName=&quot;CartItem&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
-        &lt;table tableName=&quot;category&quot; domainObjectName=&quot;Category&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
-        &lt;table tableName=&quot;order&quot; domainObjectName=&quot;Order&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
-        &lt;table tableName=&quot;order_item&quot; domainObjectName=&quot;OrderItem&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
-        &lt;table tableName=&quot;pay_info&quot; domainObjectName=&quot;PayInfo&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
-        &lt;table tableName=&quot;product&quot; domainObjectName=&quot;Product&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;
-            &lt;columnOverride column=&quot;detail&quot; jdbcType=&quot;VARCHAR&quot; /&gt;
-            &lt;columnOverride column=&quot;sub_images&quot; jdbcType=&quot;VARCHAR&quot; /&gt;
-        &lt;/table&gt;
-        &lt;table tableName=&quot;user&quot; domainObjectName=&quot;User&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
-
-
-        &lt;!-- geelynote mybatis插件的搭建 --&gt;
-    &lt;/context&gt;
-&lt;/generatorConfiguration&gt;
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-CentOS下nginx的安装配置" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/06/CentOS下nginx的安装配置/" class="article-date">
-      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
-</a>
-
- 
-    <a href="/2017/10/06/CentOS下nginx的安装配置/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下nginx的安装配置/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Nginx是一款轻量级Web服务器，也是反向代理服务器</p>
-<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ul>
-<li>直接支持Rails和PHP的程序</li>
-<li>作为Http反向代理服务器</li>
-<li>作为负载均衡服务器</li>
-<li>作为邮件代理服务器</li>
-<li>帮助实现前端动静分离</li>
-</ul>
-<h2 id="安装Nginx依赖"><a href="#安装Nginx依赖" class="headerlink" title="安装Nginx依赖"></a>安装Nginx依赖</h2><p>1、安装cc</p>
-<pre><code># 输入gcc -v查询版本信息，看系统是否自带安装
-yum install gcc
-</code></pre><p>2、安装pcre</p>
-<pre><code>yum install pcre-devel
-</code></pre><p>3、安装zlib</p>
-<pre><code>yum install zlib zlib-devel    
-</code></pre><p>4、选择安装openssl</p>
-<pre><code>yum install openssl openssl-devel
-</code></pre><p>5、一键综合安装</p>
-<pre><code>yum -y install gcc zlib zlib-devel pcre-devel openssl openssl-devel
-</code></pre><h2 id="下载源码包解压缩"><a href="#下载源码包解压缩" class="headerlink" title="下载源码包解压缩"></a>下载源码包解压缩</h2><p><a href="http://www/nginx.org/" target="_blank" rel="external">http://www/nginx.org/</a></p>
-<pre><code>tar -zxvf nginx-*.tar.gz
-</code></pre><h2 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a>nginx安装</h2><p>进入nginx目录执行./configure</p>
-<ul>
-<li>也可以制定安装目录，增加参数–prefix=/usr/nginx</li>
-<li>如果不指定路径，也可以通过whereis nginx进行查询</li>
-<li>默认安装在/usr/local/nginx</li>
-</ul>
-<p>继续执行make，续集执行make install</p>
-<h2 id="nginx常用命令"><a href="#nginx常用命令" class="headerlink" title="nginx常用命令"></a>nginx常用命令</h2><p>测试配置文件</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -t
-</code></pre><p>启动命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx
-</code></pre><p>停止命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -s stop
-或者是 nginx -s quit
-</code></pre><p>重启命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -s reload
-</code></pre><p>查看进程命令</p>
-<pre><code>ps -ef | grep nginx
-</code></pre><p>平滑重启</p>
-<pre><code>kill -HUP 【nginx主进程号(即查看进程命令查到的PID)】
-</code></pre><h2 id="增加防火墙访问权限"><a href="#增加防火墙访问权限" class="headerlink" title="增加防火墙访问权限"></a>增加防火墙访问权限</h2><p>1、sudo vim /etc.sysconfig/iptables-config<br>2、- A INPUT -p tcp -m state –state NEW<br>   -m tcp –dport 80 -j ACCEPT<br>3、重启防火墙</p>
-<h2 id="虚拟域名配置测试验证"><a href="#虚拟域名配置测试验证" class="headerlink" title="虚拟域名配置测试验证"></a>虚拟域名配置测试验证</h2><p>1、编辑sudo vim /usr/local/nginx/conf/nginx.conf<br>增加include vhost/*.conf<br>2、在/usr/local/nginx/conf目录创建vhost文件夹<br>3、配置<br>sudo vim /etc/hosts所对应的域名.conf<br>如：sudo vim /usr/local/nginx/conf/vhost www.huihui.com.conf<br>将如下配置写入到该文件下</p>
-<pre><code>server {
-     listen 80;
-     autoindex on;
-     server_name www.huihui.com;
-     access_log /usr/local/nginx/logs/access.log combined; 
-     index index.html index.htm index.jsp index.php; 
-     #error_page 404 /404.html;
-     if ( $query_string ~* &quot;.*[\;&apos;\&lt;\&gt;].*&quot; )
-            { 
-                    return 404;
-            }
-     location / {
-            proxy_pass http://172.0.0.1:8080;
-            add_header Access-Control-Allow-Origin *;
-            }
- }
-</code></pre><p>4、重启验证<br>启动${nginx}/sbin/nginx<br>重启${nginx}/sbin/nginx -s reload,如sudo ./nginx -s reload<br>${nginx}为安装在系统中的路径，如/usr/local/nginx<br>5、访问验证<br>使用默认80端口访问验证<a href="http://localhost:80" target="_blank" rel="external">http://localhost:80</a></p>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>可以配置域名转发，但是请一定要配置host，并且host生效之后才可以，设置完成后腰重启浏览器<br>1、linux<br>sudo vim /etc/hosts<br>添加好对应的域名及ip<br>保存退出</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
     </div>
 
       

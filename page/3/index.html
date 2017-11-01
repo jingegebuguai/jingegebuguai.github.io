@@ -276,6 +276,892 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-LintCode题解（一）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/30/LintCode题解（一）/" class="article-date">
+      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
+</a>
+
+ 
+    <a href="/2017/09/30/LintCode题解（一）/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（一）/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/30/LintCode题解（一）/">LintCode题解（一）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="单例singleton（题号204）"><a href="#单例singleton（题号204）" class="headerlink" title="单例singleton（题号204）"></a>单例singleton（题号204）</h2><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>单例 是最为最常见的设计模式之一。对于任何时刻，如果某个类只存在且最多存在一个具体的实例，那么我们称这种设计模式为单例。例如，对于 class Mouse (不是动物的mouse哦)，我们应将其设计为 singleton 模式。</p>
+<p>你的任务是设计一个 getInstance 方法，对于给定的类，每次调用 getInstance 时，都可得到同一个实例。</p>
+<p>样例（Java中）：</p>
+<pre><code>A a = A.getInstance();
+A b = A.getInstance();
+</code></pre><p>a应等于b。</p>
+<h3 id="解答过程"><a href="#解答过程" class="headerlink" title="解答过程"></a>解答过程</h3><p>若是看过设计模式的应该都清楚，单例是一种创建型模式。并且单例类只能有一个实例，必须自己创建自己的唯一实例，必须给其他对象提供这一实例。一般有如下几种实现方式：</p>
+<p>懒汉式，线程不安全：</p>
+<pre><code>public class Singleton{
+    private static Singleton instance;
+    private Singletion(){}
+    public static Singleton getInstance(){
+        if(instance==null){
+            instance = new Singletan();
+        }
+    } 
+}
+</code></pre><p>懒汉式，线程安全：</p>
+<pre><code>public class Singleton{
+    private static Singleton instance;
+    private Singletion(){}
+    public static synchronized Singleton getInstance(){
+        if(instance==null){
+            instance = new Singletan();
+        }
+    } 
+}    
+</code></pre><p>饿汉式(最常用)：</p>
+<pre><code>public class Singleton{
+    private static Singleton instance = new Singleton();
+    private Singletion(){}
+    public static Singleton getInstance(){
+        return instance;
+    } 
+}    
+</code></pre><p>双重锁（DCL）：</p>
+<pre><code>public class Singleton{
+    private volatile static Singleton singleton;
+    private Singletion(){}
+    public static Singleton getInstance(){
+        if(singleton==null){
+            synchronized(Singleton.class){
+                if(singleton == null){
+                    singleton = new Singleton();
+                }
+            }
+        }
+        return singleton;
+    } 
+}    
+</code></pre><h2 id="二叉树的路径和（题号376）"><a href="#二叉树的路径和（题号376）" class="headerlink" title="二叉树的路径和（题号376）"></a>二叉树的路径和（题号376）</h2><h3 id="问题描述-1"><a href="#问题描述-1" class="headerlink" title="问题描述"></a>问题描述</h3><p>给定一个二叉树，找出所有路径中各节点相加总和等于给定 目标值 的路径。</p>
+<p>一个有效的路径，指的是从根节点到叶节点的路径。<br>    1<br>    / \<br>   2   4<br>  / \<br> 2   3<br>返回：<br> [<br>  [1, 2, 2],<br>  [1, 4]<br>]</p>
+<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>读取树的路径最先想到的应该是树的遍历，这里的遍历方式是先序遍历，其次，最简单的就是使用DFS（深度优先遍历）。<br>DFS的遍历顺序为1-&gt;2-&gt;2-&gt;3-&gt;4,逻辑自然明了。<br>下面给出邻接矩阵模型类AMWGraph.java，其中depthFirstSearch(),broadFirstSearch<br>()分别代表深度优先和广度优先遍历。</p>
+<pre><code>import java.util.ArrayList;
+import java.util.LinkedList;
+/**
+ * @description 邻接矩阵模型类
+ * @author beanlam
+ * @time 2015.4.17 
+ */
+public class AMWGraph {
+    private ArrayList vertexList;//存储点的链表
+    private int[][] edges;//邻接矩阵，用来存储边
+    private int numOfEdges;//边的数目
+
+    public AMWGraph(int n) {
+        //初始化矩阵，一维数组，和边的数目
+        edges=new int[n][n];
+        vertexList=new ArrayList(n);
+        numOfEdges=0;
+    }
+
+    //得到结点的个数
+    public int getNumOfVertex() {
+        return vertexList.size();
+    }
+
+    //得到边的数目
+    public int getNumOfEdges() {
+        return numOfEdges;
+    }
+
+    //返回结点i的数据
+    public Object getValueByIndex(int i) {
+        return vertexList.get(i);
+    }
+
+    //返回v1,v2的权值
+    public int getWeight(int v1,int v2) {
+        return edges[v1][v2];
+    }
+
+    //插入结点
+    public void insertVertex(Object vertex) {
+        vertexList.add(vertexList.size(),vertex);
+    }
+
+    //插入结点
+    public void insertEdge(int v1,int v2,int weight) {
+        edges[v1][v2]=weight;
+        numOfEdges++;
+    }
+
+    //删除结点
+    public void deleteEdge(int v1,int v2) {
+        edges[v1][v2]=0;
+        numOfEdges--;
+    }
+
+    //得到第一个邻接结点的下标
+    public int getFirstNeighbor(int index) {
+        for(int j=0;j&lt;vertexList.size();j++) {
+            if (edges[index][j]&gt;0) {
+                return j;
+            }
+        }
+        return -1;
+    }
+
+    //根据前一个邻接结点的下标来取得下一个邻接结点
+    public int getNextNeighbor(int v1,int v2) {
+        for (int j=v2+1;j&lt;vertexList.size();j++) {
+            if (edges[v1][j]&gt;0) {
+                return j;
+            }
+        }
+        return -1;
+    }
+
+    //私有函数，深度优先遍历
+    private void depthFirstSearch(boolean[] isVisited,int  i) {
+        //首先访问该结点，在控制台打印出来
+        System.out.print(getValueByIndex(i)+&quot;  &quot;);
+        //置该结点为已访问
+        isVisited[i]=true;
+
+        int w=getFirstNeighbor(i);//
+        while (w!=-1) {
+            if (!isVisited[w]) {
+                depthFirstSearch(isVisited,w);
+            }
+            w=getNextNeighbor(i, w);
+        }
+    }
+
+    //对外公开函数，深度优先遍历，与其同名私有函数属于方法重载
+    public void depthFirstSearch() {
+        for(int i=0;i&lt;getNumOfVertex();i++) {
+            //因为对于非连通图来说，并不是通过一个结点就一定可以遍历所有结点的。
+            if (!isVisited[i]) {
+                depthFirstSearch(isVisited,i);
+            }
+        }
+    }
+
+    //私有函数，广度优先遍历
+    private void broadFirstSearch(boolean[] isVisited,int i) {
+        int u,w;
+        LinkedList queue=new LinkedList();
+
+        //访问结点i
+        System.out.print(getValueByIndex(i)+&quot;  &quot;);
+        isVisited[i]=true;
+        //结点入队列
+        queue.addlast(i);
+        while (!queue.isEmpty()) {
+            u=((Integer)queue.removeFirst()).intValue();
+            w=getFirstNeighbor(u);
+            while(w!=-1) {
+                if(!isVisited[w]) {
+                    //访问该结点
+                    System.out.print(getValueByIndex(w)+&quot;  &quot;);
+                    //标记已被访问
+                    isVisited[w]=true;
+                    //入队列
+                    queue.addLast(w);
+                }
+                //寻找下一个邻接结点
+                w=getNextNeighbor(u, w);
+            }
+        }
+    }
+
+    //对外公开函数，广度优先遍历
+    public void broadFirstSearch() {
+        for(int i=0;i&lt;getNumOfVertex();i++) {
+            if(!isVisited[i]) {
+                broadFirstSearch(isVisited, i);
+            }
+        }
+    }
+}
+</code></pre><p>这里给出另一种解法：</p>
+<pre><code>/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+public class Solution {
+    /**
+     * @param root the root of binary tree
+     * @param target an integer
+     * @return all valid paths
+     */
+    public List&lt;List&lt;Integer&gt;&gt; binaryTreePathSum(TreeNode root, int target) {
+        // Write your code here
+        List&lt;List&lt;Integer&gt;&gt; list = new ArrayList&lt;List&lt;Integer&gt;&gt;();
+        if(root==null)
+            return list;
+        if(root.left==null&amp;&amp;root.right==null){
+            if(root.val==target){
+                 List&lt;Integer&gt; _list = new ArrayList&lt;Integer&gt;();
+                 _list.add(root.val);
+                 list.add(_list);
+            }
+            return list;
+       }
+       list.addAll(binaryTreePathSum(root.left,target-root.val));
+       list.addAll(binaryTreePathSum(root.right,target-root.val));
+        for(List&lt;Integer&gt; i :list)
+            i.add(0,root.val);
+           return list;    
+    }
+ }
+</code></pre><h2 id="字符串置换（题号211）"><a href="#字符串置换（题号211）" class="headerlink" title="字符串置换（题号211）"></a>字符串置换（题号211）</h2><p>给定两个字符串，请设计一个方法来判定其中一个字符串是否为另一个字符串的置换。</p>
+<p>置换的意思是，通过改变顺序可以使得两个字符串相等。<br>“abc” 为 “cba” 的置换。</p>
+<p>“aabc” 不是 “abcc” 的置换。</p>
+<pre><code>public class Solution {
+/*
+ * @param A: a string
+ * @param B: a string
+ * @return: a boolean
+ */
+    public boolean Permutation(String A, String B) {
+        // write your code here
+        int index =0;
+        if(A.length()==0&amp;&amp;B.length()==0)
+            return true;
+        if(A.length() == B.length()){
+        String _A[] = A.split(&quot;&quot;);
+        String _B[] = B.split(&quot;&quot;);
+        Map&lt;String,Integer&gt; mapA = new TreeMap&lt;String,Integer&gt;();
+        Map&lt;String,Integer&gt; mapB = new TreeMap&lt;String,Integer&gt;();
+        for(int i = 0;i&lt;_A.length;i++){
+            Integer num_A = mapA.get(_A[i]);
+            Integer num_B = mapB.get(_B[i]);
+            mapA.put(_A[i],num_A==null?1:num_A+1);
+            mapB.put(_B[i],num_B==null?1:num_B+1);      
+        }
+        Iterator&lt;String&gt; iter = mapA.keySet().iterator();
+        while(iter.hasNext()){
+            String key = (String)iter.next();
+            if(!mapA.get(key).equals(mapB.get(key)))
+                break;
+            else
+                index++;
+        }
+        if(index==mapA.keySet().size())
+            return true;
+        else
+            return false;
+    }else
+        return false;
+    }
+}
+</code></pre><h2 id="回文数（题号491）"><a href="#回文数（题号491）" class="headerlink" title="回文数（题号491）"></a>回文数（题号491）</h2><p>判断一个正整数是不是回文数。</p>
+<p>回文数的定义是，将这个数反转之后，得到的数仍然是同一个数。<br>11, 121, 1, 12321 这些是回文数。</p>
+<p>23, 32, 1232 这些不是回文数。</p>
+<p>很简单，思想也很多，这里贴出其中一种算法：</p>
+<pre><code>public class Solution {
+/*
+ * @param num: a positive number
+ * @return: true if it&apos;s a palindrome or false
+ */
+    public boolean isPalindrome(int num) {
+        // write your code here
+        LinkedList&lt;String&gt; list = new LinkedList&lt;String&gt;();
+        String s = Integer.toString(num);
+        String _s[] = s.split(&quot;&quot;);
+        list.addAll(Arrays.asList(_s));
+        while(list.size()&gt;1){
+            if(list.getFirst().equals(list.getLast())){
+                    list.removeFirst();
+                    list.removeLast();
+                }else
+                    break;;
+        }
+        if(list.size()&gt;1)
+            return false;
+        else
+            return true;
+}
+}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Java并发基础" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/29/Java并发基础/" class="article-date">
+      <time datetime="2017-09-29T12:00:00.000Z" itemprop="datePublished">2017-09-29</time>
+</a>
+
+ 
+    <a href="/2017/09/29/Java并发基础/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/29/Java并发基础/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/29/Java并发基础/">Java并发基础</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p>可以说并发是Java开发工程师面试时最常见的面试题了，关于并发的书籍也有很多，比如Java并发编程实战，Java并发编程艺术等。下面的几篇文章目的用最浅显的内容来解释并发的基础内容、并发的三大特性、线程池、并发容器、锁机制、相关源码分析等内容。并且会在每一篇章最后总结出常见的面试题。<br>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/09/29/Java并发基础/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-springMVC基础" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/29/springMVC基础/" class="article-date">
+      <time datetime="2017-09-29T12:00:00.000Z" itemprop="datePublished">2017-09-29</time>
+</a>
+
+ 
+    <a href="/2017/09/29/springMVC基础/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/29/springMVC基础/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/29/springMVC基础/">SpringMVC中@RequestMapping等基础知识</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>Spring MVC使用@RequestMApping注解为控制器指定可以处理哪些URL请求<br>在控制器的类定义及方法定义处都可标注<br>@RequestMapping</p>
+<ul>
+<li>类定义处：提供初步的请求映射信息。相对于WEB应用的根目录</li>
+<li>方法处：提供进一步的细分映射信息，相对于类定义处的URL。若类定义处标注@RequestMapping,则方法处标记的URL相对于WEB应用的根目录</li>
+</ul>
+<p>DispatcherServlet截获请求后，就通过控制器上@RequestMapping提供的映射信息确定请求所对应的处理方法。</p>
+<h3 id="请求参数，方法，请求头"><a href="#请求参数，方法，请求头" class="headerlink" title="请求参数，方法，请求头"></a>请求参数，方法，请求头</h3><p>@RequestMapping除了可以使用请求URL映射请求外…<br>@RequestMapping的value，method，params及heads分别表示请求url，请求方法，请求参数和请求头的映射条件，他们之间是与的关系，联合使用可以更加精确化。</p>
+<h4 id="params和heads"><a href="#params和heads" class="headerlink" title="params和heads"></a>params和heads</h4><ul>
+<li>param1：表示请求必须包含名为params1的请求参数</li>
+<li>!param1：表示请求不能包含名为param1的请求参数</li>
+<li>param1!=value1:表示请求包含名为param1的请求参数，但其值不能为value1</li>
+<li><p>{“param1=value1”, “param2”}:请求必须包含名为param1和param2的两个请求参数，且param1的参数的值必须为value1</p>
+<p>  @RequestMapping(value = “method”, method = RequestMethod.POST)<br>  public String method(){</p>
+<pre><code>System.out.println(&quot;method_POST&quot;);
+return SUCCESS;
+</code></pre><p>  }</p>
+</li>
+</ul>
+<h3 id="Ant风格资源地址通配符"><a href="#Ant风格资源地址通配符" class="headerlink" title="Ant风格资源地址通配符"></a>Ant风格资源地址通配符</h3><ul>
+<li>？：匹配文件名中的一个字符</li>
+<li>*：匹配文件名中的任意字符</li>
+<li><strong>:</strong>：匹配多层路径</li>
+</ul>
+<p>Ant风格的URL</p>
+<ul>
+<li>/user/*/createUser：匹配/user/aaa/createUser、/user/bbb/createUser等URL</li>
+<li>/user/**/createUser:匹配/user/createUser、/user/aaa/bbb/createUser等URL</li>
+<li>/user/createUser??:匹配/user/createUseraa、/user/createUserbb等URL</li>
+</ul>
+<h3 id="PathVariable映射URL绑定的占位符"><a href="#PathVariable映射URL绑定的占位符" class="headerlink" title="@PathVariable映射URL绑定的占位符"></a>@PathVariable映射URL绑定的占位符</h3><p>带占位符的URL是spring3.0新增的功能，该功能在SpringMVC向REST目标挺进发展过程中具有里程碑的意义<br>通过@PathVariable可以将URL中占位符参数绑定到控制器处理方法的入参中：URL的{XXX}占位符可以通过@PathVariable(“XXX”)绑定到操作方法的入参中</p>
+<p>示例代码如下</p>
+<pre><code>@RequestMapping(value=&quot;/variable/{id}&quot;)
+public String testVariable(@PathVariable(&quot;id&quot;) Integer id){
+    System.out.println(&quot;PathVariable:&quot;+id);
+    return SUCCESS;
+}
+&lt;a href=&quot;/springMVC/variable/1&quot;&gt;pathVariable&lt;/a&gt;
+</code></pre><h3 id="REST处理"><a href="#REST处理" class="headerlink" title="REST处理"></a>REST处理</h3><p>GET:获取数据<br>POST:添加数据<br>PUT:新增数据<br>DELETE:删除数据<br>需要在web.xml加上配置</p>
+<pre><code>&lt;filter&gt;
+    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;
+&lt;/filter&gt;
+&lt;filter-mapping&gt;
+    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+</code></pre><p>简单示例</p>
+<pre><code>@RequestMapping(value = &quot;testRest/{id}&quot;, method = RequestMethod.PUT)
+public String testRestDelete(@PathVariable(&quot;id&quot;) Integer id){
+    System.out.println(&quot;testRest PUT：&quot;+id);
+    return SUCCESS;
+ }    
+</code></pre><h3 id="RequestParam绑定请求参数值"><a href="#RequestParam绑定请求参数值" class="headerlink" title="@RequestParam绑定请求参数值"></a>@RequestParam绑定请求参数值</h3><p> 在处理方法入参处使用@RequestParam可以把请求参数传递给请求方法</p>
+<ul>
+<li>val  ue： 参数名</li>
+<li><p>required： 不是必须，默认为true，表示请求参数中必须包含对应的参数，若不存在，将抛出异常</p>
+<p>   @RequestMapping(“/testRequestParam”)<br> public String testRequestParam(@RequestParam(value = “username”) String str, @RequestParam(value = “age”, required = false, defaultValue = “18”) Integer age){</p>
+<pre><code>System.out.println(&quot;RequestParam: username:&quot;+str+&quot;age:&quot;+age);
+return SUCCESS;
+</code></pre><p> }</p>
+</li>
+</ul>
+<h3 id="CookieValue"><a href="#CookieValue" class="headerlink" title="@CookieValue"></a>@CookieValue</h3><p>@CookieValue可以让处理方法入参绑定某个Cookie值</p>
+<pre><code>@requestMapping(&quot;/handle6&quot;)
+public String handle6(@CookieValue(value=&quot;sessionId&quot;, required=false)String sessionId, @RequestParam(&quot;age&quot;) int age)
+return &quot;...&quot;;
+</code></pre><h3 id="使用POJO对象绑定顶请求参数值"><a href="#使用POJO对象绑定顶请求参数值" class="headerlink" title="使用POJO对象绑定顶请求参数值"></a>使用POJO对象绑定顶请求参数值</h3><p>Spring MVC会按请求参数名和POJO属性名进行自动匹配，自动为该对象填充属性值，支持级联属性。</p>
+<h3 id="MVC的Handler方法接受ServletAPI类型的参数"><a href="#MVC的Handler方法接受ServletAPI类型的参数" class="headerlink" title="MVC的Handler方法接受ServletAPI类型的参数"></a>MVC的Handler方法接受ServletAPI类型的参数</h3><pre><code>HttpServletRequest
+HttpServletResponse
+HttpSeession
+java.security.Principal
+Lacale
+InputStream
+OutPutStream
+Reader
+Writer
+</code></pre><h3 id="处理模型数据"><a href="#处理模型数据" class="headerlink" title="处理模型数据"></a>处理模型数据</h3><p>Spring MVC提供以下几种途径输出模型数据：</p>
+<ul>
+<li>ModelAndView：处理方法返回值类型为ModelAndView时，方法体即可通过该对象添加模型数据</li>
+<li>Mao及Model：入参为org.springframework.ui.Model、org.springfreamework.ui.ModelMap或java.uti.Map时，处理方法返回时，Map中的数据会自动添加到模型中。</li>
+<li>@SessionAttributes：将模型中的某个属性暂存到HttpSession中，以便多个请求之间可以共享这个属性</li>
+<li>@modelAttribute：方法入参标注注解后，入参的对象会放到数据模型中</li>
+</ul>
+<h4 id="ModelAndView"><a href="#ModelAndView" class="headerlink" title="ModelAndView"></a>ModelAndView</h4><p>控制器处理方法返回值如果为ModelAndView，则即包含视图信息，也包含模型数据信息<br>添加模型数据：</p>
+<ul>
+<li>ModelAndView addObject(String attributeName, Object attributeValue)</li>
+<li>ModelAndView addAllObject(Map<string, ?=""> modelMap)</string,></li>
+</ul>
+<p>设置视图：</p>
+<ul>
+<li>void setView(View view)</li>
+<li>void setViewName(String viewName)</li>
+</ul>
+<p>目标方法返回值可以是ModelAndView类型<br>其中可以包含视图和模型信息<br>SpringMVC会把模型ModelAndView的Model中数据放到request域对象。</p>
+<pre><code>@RequestMapping(&quot;/testModelAndView&quot;)
+public ModelAndView testModelAndView(){
+    String viewName = SUCCESS;
+    ModelAndView modelAndView = new ModelAndView(viewName);
+    modelAndView.addObject(&quot;time&quot;, new Date());
+    return modelAndView;
+}
+</code></pre><h3 id="SessionAttributes"><a href="#SessionAttributes" class="headerlink" title="@SessionAttributes"></a>@SessionAttributes</h3><p>若希望在多个请求之间共用某个模型属性数据，则可以在控制器类上标注一个@SessionAttributes，SpringMVC将在模型中对应的属性暂存到HttpSession中。<br>@SessionAttributes除了可以通过属性名制定需要放到会话的属性外（value），还可以通过模型属性的对象类型制定那些模型需要放到会话中（type）</p>
+<ul>
+<li>SessionAttributes(types=User.class)会将隐含模型中所有类型为User.class的属性添加到会话中。</li>
+<li>@SessionAttributes(value={“user1”, “User2”})</li>
+<li>@SessionAttributes(types={User.class, Dept.class})</li>
+<li>@SessionAttribute(value={“user1”, “user2”}, types={Dept.class})</li>
+</ul>
+<h3 id="ModelAttribute"><a href="#ModelAttribute" class="headerlink" title="@ModelAttribute"></a>@ModelAttribute</h3><p>可被应用在方法或方法参数上<br>标注在方法上的@ModelAttribute说明方法是用于添加一个或多个属性到model上。这样的方法能接受与@RequestMapping标注相同的参数类型，只不过不能直接被映射到具体的请求<br>在同一个控制器中，标注了@ModelAttribute的方法实际上会在@RequestMapping方法之前被调用。</p>
+<pre><code>// Add one attribute
+// The return value of the method is added to the model under the name &quot;account&quot;
+// You can customize the name via @ModelAttribute(&quot;myAccount&quot;)
+
+@ModelAttribute
+public Account addAccount(@RequestParam String number) {
+    return accountManager.findAccount(number);
+}
+
+// Add multiple attributes
+
+@ModelAttribute
+public void populateModel(@RequestParam String number, Model model) {
+    model.addAttribute(accountManager.findAccount(number));
+    // add more ...
+}
+</code></pre><p>@ModelAttribute标注方法有两种风格：</p>
+<ul>
+<li>在第一种写法中，方法通过返回值的方式默认地将添加一个属性；</li>
+<li>在第二种写法中，方法接收一个Model对象，然后可以向其中添加任意数量的属性。<br>可以在根据需要，在两种风格中选择合适的一种。</li>
+</ul>
+<p>一个控制器可以拥有多个@ModelAttribute方法。同个控制器内的所有这些方法，都会在@RequestMapping方法之前被调用。</p>
+<pre><code>@Controller
+public class HelloModelController{
+    @ModelAttribute
+    public void populateModel(@RequestParam String abc, Model){
+        model.addAttribute(&quot;attributeName&quot;, abc);
+    }
+
+    @RequestMapping(&quot;/helloWorld&quot;)
+    public String helloWorld(){
+        return &quot;helloWorld.jsp&quot;;
+    }
+}
+</code></pre><p>@ModelAttribute的作用如下：</p>
+<ul>
+<li>绑定请求参数到命令对象：放到功能处理方法的入参上时，用于将多个请求参数绑定到一个命令对象，从而简化绑定流程，而且自动暴露为模型数据用于视图页面展示时使用</li>
+</ul>
+<pre><code>public String test(@ModelAttribute(&quot;user&quot;) UserModel user)
+</code></pre><p>我们可以在视图页面使用${user.username}来绑定的命令对象的属性</p>
+<ul>
+<li><p>暴露@RequestMapping方法返回值为模型数据：放到功能处理方法的返回值上，是暴露功能处理方法返回值为模型数据，用于视图页面展示时使用</p>
+<p>  public @ModelAttribute(“user2”) UserModel test3(@ModelAttribute(“user2”) UserModel user)     </p>
+</li>
+</ul>
+<h3 id="视图解析流程"><a href="#视图解析流程" class="headerlink" title="视图解析流程"></a>视图解析流程</h3><p>请求处理方法执行完成后，最终返回一个ModelAndView对象。对于那些返回String，View或者ModelMap等类型的处理方法，Spring MVC也会在内部将她们装配成一个ModelAndVIew对象，它包含了逻辑名和模型对象的视图<br>Spring MVC借助视图解析器（ViewResolver）得到最终的视图对象（View），最终的视图是jsp，也可能是其他形式的视图<br>处理器工作重点聚焦在生产模型数据的工作上，从而实现MVC的充分解耦。<br>视图不存在线程安全问题<br>实现类：</p>
+<ul>
+<li>InternalResourceView:将JSP或其他资源封装成一个视图，是InternalResourceViewResolver默认使用的视图实现类    </li>
+<li>JstlView：jsp使用Jstl国际化标签功能，需要使用高视图类</li>
+<li>AbstrctExcelView：Excel文档视图的抽象类 </li>
+<li>MappingJacksonJsonView:将模型数据jackson开源框架的ObjectMapper以JSON方式输出</li>
+<li>报表试图若干</li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Java数据库与事务处理机制" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/29/Java数据库与事务处理机制/" class="article-date">
+      <time datetime="2017-09-29T02:14:00.000Z" itemprop="datePublished">2017-09-29</time>
+</a>
+
+ 
+    <a href="/2017/09/29/Java数据库与事务处理机制/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/29/Java数据库与事务处理机制/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/29/Java数据库与事务处理机制/">Java数据库处理与事务机制</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="数据库连接"><a href="#数据库连接" class="headerlink" title="数据库连接"></a>数据库连接</h2><p>数据库连接步骤如下：</p>
+<ul>
+<li>下载mysql-connector-java的jar包，并导入</li>
+<li>加载注册驱动程序，Class.forName(“com.mysql.jdbc.Driver”)</li>
+<li><p>连接数据库</p>
+<p>  conn = DriverManager.getCOnnection(DB_URL,USER,PASS)</p>
+</li>
+<li><p>执行sql语句</p>
+<p>  //创建用于执行sql语句的Statement对象<br>  stmt = (Stattement)conn.createStatement();<br>  //执行查询语句，返回查询结果<br>  ResultSet rs = stmt.executeQuery(“SELECT id,name FROM test”);<br>  while(rs.next()){</p>
+<pre><code>int id = rs.getInt(&quot;id&quot;);
+String name = rs.getString(&quot;name&quot;);
+out.println(&quot;...&quot;+id+&quot;...&quot;+name);
+out.println(&quot;&lt;br /&gt;&quot;)
+</code></pre><p>  }<br>  //执行插入语句，返回插入行数<br>  String 失去了= “INSERT INTO test …VALUES(…)”<br>  stmt = (Statement)conn.create.Statement();<br>  int count = stmt.executeUpdate(sql);<br>  //数据库更新(删除)和插入相似</p>
+</li>
+</ul>
+<ul>
+<li><p>关闭数据库连接</p>
+<p>  rs.close();<br>  stmt.close();<br>  conn.close();    </p>
+</li>
+<li><p>PrepareStatement<br>是Statement的子接口，可以传入带占位符的sqlyuju，提供补充占位符变量的方法</p>
+<p>  String sql = “insert into mysql_test values(?,?,?)”<br>  PrepareStatement ps = conn.preprareStatement(sql);<br>  ps.setString(1, ‘’);<br>  ps.setString(2, ‘’);<br>  ps.setString(3, ‘’);<br>  ps.execteUpdate();</p>
+</li>
+</ul>
+<h3 id="Java事务处理"><a href="#Java事务处理" class="headerlink" title="Java事务处理"></a>Java事务处理</h3><p>何为事物： 所有的操作要么同时完成，要么同时失败。在mysql中提供Commit和Rollback命令进行事务的提交与回滚。</p>
+<p>java的事务处理类型有三种，JDBC、JTA（Java Transaction API）事务、容器事务。容器事务多用于Spring中。</p>
+<h4 id="JDBC事务处理机制"><a href="#JDBC事务处理机制" class="headerlink" title="JDBC事务处理机制"></a>JDBC事务处理机制</h4><p>JDBC一切行为包括事务是基于一个connection的.<br>JDBC事务处理步骤：</p>
+<ul>
+<li><p>取消JDBC的自动提交</p>
+<p>  void setAutoCommit(bollean autoCommit)=&gt;setAutoCommit(false)</p>
+</li>
+<li><p>执行各个sql语句，加入到批处理之中    </p>
+</li>
+<li><p>如若所有语句都执行成功，则提交事务commit(),如果出现错误，则回滚：roolback()</p>
+</li>
+</ul>
+<p>基本核心如下：</p>
+<pre><code>//取消自动提交
+conn.setAutoCommit(false)
+//将sql加入到批处理
+stmt.addBatch();
+stmt.addBatch();
+//执行批处理操作
+stmt.execteBatch();
+//提交事务
+commit();
+//发生错误
+try{
+    rollback();
+}
+</code></pre><p>优缺点：</p>
+<ul>
+<li>可以将多个sql语句放到同一个事务中，保证ACID特性，API比较简单，性能好 </li>
+<li>局限是：一个JDBC事务不能跨多个数据库</li>
+</ul>
+<p>实例如下所示：</p>
+<pre><code>public static void example(){
+    Connection conn = null;
+}try{
+    Class.forName(&quot;com.mysql.jdbc.Driver&quot;);
+    conn = DreiverManager.getConnection(&quot;jdbc:ysql://localhost:3306/mysqltest&quot;, USSR, PASS);
+    conn.setAutoCommit(false);//取消自动提交，改为手动提交
+    String sql_1 = &quot;update test_table set name=&apos;...&apos; where name=&apos;...&apos;&quot;;
+    String sql_2 = &quot;insert test_table (name,url) values(&apos;...&apos;,&apos;&apos;),(&apos;&apos;,&apos;&apos;)&quot;;
+    stmt = (Statement)conn.create.Statement();
+    int count = stmt.executeUpdate(sql_1);
+    //若所有结果执行完成，则执行提交事务
+    stmt.execteUpdate(sql_2);
+    conn.commit();
+    ps.close();
+    conn.close()
+    catch(ClassNotFoundException e){
+        e.printStackTrace();
+    }catch(SQLException e){
+        e.printStackTrace();
+        try{
+            //只要有一个sql语句错误，则事务回滚
+            conn.rollback();
+        }catch(SQLException e){
+            e.printStackTrace();    
+        }    
+    }
+}    
+</code></pre><h3 id="JTA事务处理"><a href="#JTA事务处理" class="headerlink" title="JTA事务处理"></a>JTA事务处理</h3><p>JDBC事务无法满足分布式数据库的处理，所以使用JTA，JTA是一个java企业版的应用程序接口，在java中，允许完成跨越多个XA资源的分布式事务<br>XA（数据库与事务管理器的接口标准，Oracle，DB2，Sybase提供XA支持）</p>
+<p>JTA提供了java.transaction.UserTansaction,主要方法为：</p>
+<ul>
+<li>begin:开启一个事务</li>
+<li>commit：提交当前事务</li>
+<li>rollback：回滚当前事务</li>
+<li>setRollbackOnly：把当前事务标记为回滚</li>
+<li>setTransactionTimeout:设置事务的事件，就是抛出异常，回滚事务</li>
+</ul>
+<p>要想使用用 JTA 事务，那么就需要有一个实现 javax.sql.XADataSource 、 javax.sql.XAConnection 和 javax.sql.XAResource 接口的 JDBC 驱动程序。一个实现了这些接口的驱动程序将可以参与 JTA 事务。一个 XADataSource 对象就是一个 XAConnection 对象的工厂。XAConnection 是参与 JTA 事务的 JDBC 连接。</p>
+<p>要使用JTA事务，必须使用XADataSource来产生数据库连接，产生的连接为一个XA连接。</p>
+<p>XA连接（javax.sql.XAConnection）和非XA（java.sql.Connection）连接的区别在于：XA可以参与JTA的事务，而且不支持自动提交。</p>
+<pre><code>public void JtaTransfer() { 
+        javax.transaction.UserTransaction tx = null;
+        java.sql.Connection conn = null;
+         try{ 
+             tx = (javax.transaction.UserTransaction) context.lookup(&quot;java:comp/UserTransaction&quot;);  //取得JTA事务，本例中是由Jboss容器管理
+             javax.sql.DataSource ds = (javax.sql.DataSource) context.lookup(&quot;java:/XAOracleDS&quot;);  //取得数据库连接池，必须有支持XA的数据库、驱动程序  
+             tx.begin();
+            conn = ds.getConnection();
+
+             // 将自动提交设置为 false，
+             //若设置为 true 则数据库将会把每一次数据更新认定为一个事务并自动提交
+             conn.setAutoCommit(false);
+
+             stmt = conn.createStatement(); 
+             // 将 A 账户中的金额减少 500 
+             stmt.execute(&quot;\
+             update t_account set amount = amount - 500 where account_id = &apos;A&apos;&quot;);
+             // 将 B 账户中的金额增加 500 
+             stmt.execute(&quot;\
+             update t_account set amount = amount + 500 where account_id = &apos;B&apos;&quot;);
+
+             // 提交事务
+             tx.commit();
+             // 事务提交：转账的两步操作同时成功
+         } catch(SQLException sqle){            
+             try{ 
+                 // 发生异常，回滚在本事务中的操做
+              tx.rollback();
+                 // 事务回滚：转账的两步操作完全撤销
+                 stmt.close(); 
+                 conn.close(); 
+             }catch(Exception ignore){ 
+
+             } 
+             sqle.printStackTrace(); 
+         } 
+     }
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1508,1014 +2394,6 @@ response.setHeader(&quot;location&quot;,site);
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-servlet实现文件上传下载" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/08/26/servlet实现文件上传下载/" class="article-date">
-      <time datetime="2017-08-26T02:14:00.000Z" itemprop="datePublished">2017-08-26</time>
-</a>
-
- 
-    <a href="/2017/08/26/servlet实现文件上传下载/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/08/26/servlet实现文件上传下载/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/26/servlet实现文件上传下载/">Servlet文件上传下载类</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="Servlet文件上传"><a href="#Servlet文件上传" class="headerlink" title="Servlet文件上传"></a>Servlet文件上传</h2><p>Servlet 可以与 HTML form 标签一起使用，来允许用户上传文件到服务器。上传的文件可以是文本文件或图像文件或任何文档。<br>本文使用到的文件有：</p>
-<ul>
-<li>upload.jsp : 文件上传表单。</li>
-<li>message.jsp : 上传成功后跳转页面。</li>
-<li>UploadServlet.java : 上传处理 Servlet。<br>需要引入的 jar 文件：commons-fileupload-1.3.2、commons-io-2.5.jar。</li>
-</ul>
-<p>下面的 HTML 代码创建了一个文件上传表单。以下几点需要注意：</p>
-<ul>
-<li>表单 method 属性应该设置为 POST 方法，不能使用 GET 方法。</li>
-<li>表单 enctype 属性应该设置为 multipart/form-data.</li>
-<li>表单 action 属性应该设置为在后端服务器上处理文件上传的 Servlet 文件。下面的实例使用了 UploadServlet Servlet 来上传文件。</li>
-<li>上传单个文件，您应该使用单个带有属性 type=”file” 的 <input ...=""> 标签。为了允许多个文件上传，请包含多个 name 属性值不同的 input 标签。输入标签具有不同的名称属性的值。浏览器会为每个 input 标签关联一个浏览按钮。</li>
-</ul>
-<h3 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h3><ul>
-<li>１、创建DiskFileItemFactory对象，设置缓冲区大小和临时文件目录</li>
-<li>２、使用DiskFileItemFactory 对象创建ServletFileUpload对象，并设置上传文件的大小限制。</li>
-<li>３、调用ServletFileUpload.parseRequest方法解析request对象，得到一个保存了所有上传内容的List对象。</li>
-<li>４、对list进行迭代，每迭代一个FileItem对象，调用其isFormField方法判断是否是上传文件</li>
-<li>为普通表单字段，则调用getFieldName、getString方法得到字段名和字段值</li>
-<li>为上传文件，则调用getInputStream方法得到数据输入流，从而读取上传数据。</li>
-</ul>
-<h3 id="ServletContext类"><a href="#ServletContext类" class="headerlink" title="ServletContext类"></a>ServletContext类</h3><p>WEB容器在启动时，它会为每个WEB应用程序都创建一个对应的ServletContext对象，它代表当前web应用。</p>
-<p>ServletConfig对象中维护了ServletContext对象的引用，开发人员在编写servlet时，可以通过ServletConfig.getServletContext方法获得ServletContext对象。</p>
-<p>由于一个WEB应用中的所有Servlet共享同一个ServletContext对象，因此Servlet对象之间可以通过ServletContext对象来实现通讯。ServletContext对象通常也被称之为context域对象。</p>
-<p>1.多个Servlet通过ServletContext对象实现数据共享。</p>
-<p>在InitServlet的Service方法中利用ServletContext对象存入需要共享的数据</p>
-<pre><code>/*获取ServletContext对象*/  
-
-ServletContext context = this.getServletContext();   
-
-//存入共享的数据    
-
-context.setAttribute(&quot;name&quot;, &quot;haha&quot;); 
-</code></pre><p>在其它的Servlet中利用ServletContext对象获取共享的数据   </p>
-<pre><code>/*获取ServletContext对象*/  
-
-ServletContext context = this.getServletContext();   
-
-//获取共享的数据   
-
-String name = context.getAttribute(&quot;name&quot;);   
-
-System.out.println(&quot;共享的内容值是:&quot;+name);  
-</code></pre><p>2.获取WEB应用的初始化参数。</p>
-<p>在web.xml文件中配置需要初始化的参数信息。</p>
-<pre><code>&lt;web-app&gt;   
-
- &lt;context-param&gt;   
-
-&lt;param-name&gt;url&lt;/param-name&gt;   
-
-&lt;param-value&gt;jdbc:MySQL://localhost:3306/4g&lt;/param-value&gt;   
-
- &lt;/context-param&gt;   
-
-&lt;context-param&gt;   
-
- &lt;param-name&gt;password&lt;/param-name&gt;   
-
- &lt;param-value&gt;1314qr&lt;/param-value&gt;   
-
- &lt;/context-param&gt;   
-
- &lt;context-param&gt;   
-
-  &lt;param-name&gt;user&lt;/param-name&gt;   
-
-  &lt;param-value&gt;root&lt;/param-value&gt;   
-
-  &lt;/context-param&gt;   
-
-&lt;/web-app&gt;  
-</code></pre><p>在DemoServlet的doPost方法中测试获取初始化参数的步骤如下:   </p>
-<pre><code>/*获取ServletContext对象*/  
-
- ServletContext context = this.getServletContext();   
-
-/*获取初始化参数*/  
-
-//获取指定名称的初始化参数   
-
-String url = context.getInitParameter(&quot;url&quot;); 
-
- //获取web.xml文件中所有的初始化应用参数          
-
- Enumeration&lt;String&gt; enumer = context.getInitParameterNames();   
-
-while(enumer.hasMoreElements()){   
-
-String name = enumer.nextElement();   
-
- String value = context.getInitParameter(name);   
-
- System.out.println(name+&quot;==========&quot;+value);   
-
-    }   
-</code></pre><p>2.实现Servlet的转发：</p>
-<p>在测试的Servlet中实现转发的步骤如下:  </p>
-<pre><code>/*要利用ServletContext对象实现转发获取对象*/  
-
-ServletContext context = this.getServletContext();   
-
- //在request对象中存入name属性    
-
-request.setAttribute(&quot;name&quot;, &quot;haha&quot;);   
-
- /*根据转发的地址获取 RequestDispatcher对象*/  
-
-RequestDispatcher  rd  = context.getRequestDispatcher(&quot;/index.jsp&quot;);   
-
-//调用转发方法 以下采用任意方法即可    
-
-rd.forward(request, response);   
-
-  //rd.include(request, response);   
-</code></pre><p>注意：forward与include的区别 </p>
-<p>forward方法是把请求的内容转发到另外的一个servlet.而include是把另一个servlet处理过后的内容拿过来.</p>
-<p>（forward方法调用后在响应中的没有提交的内容被自动消除。将请求转发给其他的Servlet后，由</p>
-<pre><code>被调用的Servlet负责对请求做出响应，而原先Servlet的执行则终止。      
-</code></pre><p>   include方法使原先的Servlet和转发到的Servlet都可以输出响应信息，即原先的Servlet还可以继续输出响应信息）</p>
-<p>3.利用ServletContext对象读取资源文件。  </p>
-<p>读取资源文件(properties文件（属性文件）)的三种方式</p>
-<p>配置的properties的内容如下:   </p>
-<pre><code>url=jdbc\:mysql\://localhost\:3306/3g ; 
-
-user=root;
-
-password=root;  
-</code></pre><p>获取实现的代码如下:   </p>
-<pre><code>/*获取ServletContext对象*/  
-
-ServletContext context = this.getServletContext();     
-
-//第一种方式    
-
-URL url = context.getResource(&quot;WEB-INF/classes/db.properties&quot;);   
-
-InputStream is =  url.openStream();   
-</code></pre><p>//第二种方式   </p>
-<pre><code> /*读取db.properties文件*/  
-
-String path =context.getRealPath(&quot;WEB-INF/classes/db.properties&quot;);   
-
- /*根据文件的路径 构建文件对象*/  
-
-File file = new File(path);   
-
- /*根据file文件对象 创建输入流*/  
-
-InputStream is = new FileInputStream(file);   
-</code></pre><p>//第三种方式   </p>
-<pre><code>InputStream is = context.getResourceAsStream(&quot;WEB-INF/classes/db.properties &quot;);    
-</code></pre><p> 以三种方式任意一种可以：    </p>
-<p>  /<em>解析properties的文件</em>/  </p>
-<pre><code>Properties prop = new Properties();   
-
-//从输入流中读取属性列表（键和元素对）。   
-
- prop.load(is);   
-
- Set&lt;String&gt; set = prop.stringPropertyNames();   
-
-  //遍历set集合   
-
-  Iterator&lt;String&gt; it = set.iterator();   
-
-  while(it.hasNext()){   
-
-      String key = it.next();   
-
-      String value = prop.getProperty(key);   
-
-      System.out.println(key+&quot;-----&quot;+value);   
-
-         }   
-</code></pre><h3 id="DiskFileItemFactory类"><a href="#DiskFileItemFactory类" class="headerlink" title="DiskFileItemFactory类"></a>DiskFileItemFactory类</h3><p>DiskFIleItemFactory是FileItem对象的工厂，常用方法如下：</p>
-<ul>
-<li>public void setSize Threshold(int sizeThresshold):设置内存缓冲区的大小，默认值为10k。当上传文件大于缓冲区大小，fileupload组件使用临时文件缓存上传文件。由于Java虚拟机默认可以使用的内存空间是有限的，超出限制会抛出“java.lang.OutOfMemory”错误。如果上传文件很大，在内存中将无法临时保存该文件内容，Apache文件上传组件转而采用临时文件来保存这些数据；如果上传的文件很小，保存在内存中将会达到更快的效应。</li>
-<li>public void setRepository(Java.io.File repository) ：指定临时文件目录，默认值为System.getProperty(“Java.io.tmpdir”).</li>
-<li>public DiskFileItemFactory(int sizeThreshold,java.io.File repository) ：构造函数采用参数指定临界值和系统临时文件夹构造文件项工厂对象。</li>
-<li>boolean isMultipartContent(HttpServletRequest request) ：判断上传表单是否为multipart/form-data类型</li>
-<li>List parseRequest(HttpServletRequest request)：解析request对象，并把表单中的每一个输入项包装成一个fileItem 对象，并返回一个保存了所有FileItem的list集合。</li>
-<li>setFileSizeMax(long fileSizeMax) ：设置上传文件的最大值</li>
-<li>setSizeMax(long sizeMax) ：设置上传文件总量的最大值</li>
-<li>setHeaderEncoding(java.lang.String encoding) ：设置编码格式</li>
-<li>setProgressListener(ProgressListener pListener) </li>
-</ul>
-<h3 id="ServletFileUpload类"><a href="#ServletFileUpload类" class="headerlink" title="ServletFileUpload类"></a>ServletFileUpload类</h3><p>该类是文件上传的核心类，在使用ServletFileUpload对象解析请求时要设置DiskFileItemFactory对象属性sizeThreshold（临界值）和repository（临时目录）,所以实现文件上传之前，先构造好DiskFileItemFactory的实例对象，通过ServletFileUpload对象的构造方法或者FileItemFactory（）方法设置ServletFileUpload对象的FileItemFactory对象。</p>
-<h4 id="构造方法："><a href="#构造方法：" class="headerlink" title="构造方法："></a>构造方法：</h4><ul>
-<li><p>public ServletFileUpload()</p>
-<p>   构造一个未初始化的实例，需要在解析请求之前先调用setFileItemFactory()方法设置 fileItemFactory属性。</p>
-</li>
-<li><p>public ServletFileUpload(FileItemFactory fileItemFactory)</p>
-<p>  构造一个实例，并根据参数指定的FileItemFactory 对象，设置 fileItemFactory属性。</p>
-</li>
-</ul>
-<h4 id="ServletFileUpload类常用方法："><a href="#ServletFileUpload类常用方法：" class="headerlink" title="ServletFileUpload类常用方法："></a>ServletFileUpload类常用方法：</h4><ul>
-<li><p>1)  public void setSizeMax(long sizeMax)</p>
-<p>  setSizeMax方法继承自FileUploadBase类，用于设置请求消息实体内容（即所有上传数据）的最大尺寸限制，以防止客户端恶意上传超大文件来浪费服务器端的存储空间。其参数是以字节为单位的long型数字。<br>  在请求解析的过程中，如果请求消息体内容的大小超过了setSizeMax方法的设置值，将会抛出FileUploadBase内部定义的SizeLimitExceededException异常(FileUploadException的子类)。该方法有一个对应的读方法：public long getSizeMax()方法。</p>
-</li>
-<li><p>2) public void setFileSizeMax(long fileSizeMax)</p>
-<p>  setFileSizeMax方法继承自FileUploadBase类，用于设置单个上传文件的最大尺寸限制，以防止客户端恶意上传超大文件来浪费服务器端的存储空间。其参数是以字节为单位的long型数字。该方法有一个对应的读方法：public long geFileSizeMax()方法。<br>  在请求解析的过程中，如果单个上传文件的大小超过了setFileSizeMax方法的设置值，将会抛出FileUploadBase内部定义的FileSizeLimitExceededException异常(FileUploadException的子类)。</p>
-</li>
-<li><p>3) public List parseRequest(javax.servlet.http.HttpServletRequest req)</p>
-<p>  parseRequest 方法是ServletFileUpload类的重要方法，它是对HTTP请求消息体内容进行解析的入口方法。它解析出FORM表单中的每个的数据，并将它们分别包装成独立的FileItem对象，然后将这些FileItem对象加入进一个List类型的集合对象中返回。<br>  该方法抛出FileUploadException异常来处理诸如文件尺寸过大、请求消息中的实体内容的类型不是“multipart/form-data”、IO异常、请求消息体长度信息丢失等各种异常。每一种异常都是FileUploadException的一个子类型。</p>
-</li>
-<li><p>4)  public FileItemIterator getItemIterator(HttpServletRequest request)</p>
-<p>  getItemIterator方法和parseRequest 方法基本相同。但是getItemIterator方法返回的是一个迭代器，该迭代器中保存的不是FileItem对象，而是FileItemStream 对象，如果你希望进一步提高新能，你可以采用getItemIterator方法，直接获得每一个文件项的数据输入流，做底层处理；如果性能不是问题，你希望代码简单，则采用parseRequest方法即可。</p>
-</li>
-<li><p>5) public stiatc boolean isMultipartContent(HttpServletRequest req)</p>
-<pre><code>isMultipartContent方法方法用于判断请求消息中的内容是否是“multipart/form-data”类型，是则返回true，否则返回false。isMultipartContent方法是一个静态方法，不用创建ServletFileUpload类的实例对象即可被调用。
-</code></pre></li>
-<li><p>6) getFileItemFactory()和setFileItemFactory(FileItemFactory)</p>
-<p>   方法继承自FileUpload类，用于设置和读取fileItemFactory属性。</p>
-</li>
-<li><p>7) public void setProgressListener(ProgressListener pListener)</p>
-<p>  设置文件上传进度监听器。该方法有一个对应的读取方法：ProgressListener getProgressListener()。</p>
-</li>
-<li><p>8) public void setHeaderEncoding()</p>
-<p>   在文件上传请求的消息体中，除了普通表单域的值是文本内容以外，文件上传字段中的文件路径名也是文本，在内存中保存的是它们的某种字符集编码的字节数组，Apache文件上传组件在读取这些内容时，必须知道它们所采用的字符集编码，才能将它们转换成正确的字符文本返回。</p>
-<pre><code>setHeaderEncoding方法继承自FileUploadBase类，用于设置上面提到的字符编码。如果没有设置，则对应的读方法getHeaderEncoding()方法返回null，将采用HttpServletRequest设置的字符编码，如果HttpServletRequest的字符编码也为null，则采用系统默认字符编码。可以通过一下语句获得系统默认字符编码：
- System.getProperty(&quot;file.encoding&quot;));
-</code></pre></li>
-</ul>
-<h3 id="File-separate"><a href="#File-separate" class="headerlink" title="File.separate"></a>File.separate</h3><p>为了跨平台考虑，文件写法如下所示：</p>
-<pre><code>//windows写法
-File file = new File(&quot;C:\tmp\test.txt&quot;);
-//linux写法
-File file new File(&quot;/tmp/test.txt&quot;);
-//跨平台写法
-File myFile = new File(&quot;C:&quot;+File.separate+&quot;tmp&quot;+File.separate+File.seaprate+&quot;test.txt&quot;);
-</code></pre><ul>
-<li>separatorChar为系统默认名称分隔符，此字段被初始化为包含file.seprate值得第一个字符，在Unix系统为“/”，在windows系统为“\”。</li>
-<li>pathsepratorChar为系统路径分隔符，此字段被初始化为包含path.seprate值得第一个字符，在Unix系统为“：”，在windows系统为“；”。</li>
-</ul>
-<h4 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h4><p>1、设置文件上传的MEMORY_THRESHOLD(内存临界值)、MAX_FILE_SIZE(最大上传文件值)、MAX_REEQUEST_SIZE(最大请求值)。</p>
-<pre><code>private static final int MEMORY_THRESHOLD = 1024*1024*3;
-private static final int MAX_FILE_SIZE = 1024*1024*40;
-private static final int MAX_REQUEST_SIZE = 1024*1024*50
-</code></pre><p>2、 设置文件上传服务器的临时目录</p>
-<pre><code>DiskFileItemFactory factory = new DiskFileItemFatory();
-factory.setRepository(MEMRORY_THRESHOLD);
-//设置临时存储目录
-factory.setRepository(new File(System.getProperty(&quot;java.io.tmpdir&quot;)));
-ServletFileUpload upload = new ServletFileUpload(factory);
-//设置最大单文件值
-upload.setFileSizeMax(MAX_FILE_SIZE);
-//设置最大请求值（文件和表单数据）
-upload.setSizeMax(MAX_REQUEST_SIZE);
-//设置编码
-upload.setHeaderEncoding(&quot;utf-8&quot;);
-//构建上传文件临时存储目录路径
-String uploadPath = (this)request.getServletContext().getRealPath(&quot;./&quot;)+file.separate+UPLOAD_DIRECTORY;
-</code></pre><p>3、解析请求内容提取文件数据</p>
-<pre><code>list&lt;FileItem&gt; formItems = upload.parseRequest(request);
-//处理不在表单中的数据
-for(FileItem item : formItems){
-    if(!item.isFormField){
-        String fileName = new File(item.getName()).getName();
-        String filePath = uploadPath +file.separate+fileName;
-        File storeFile = new File(filePath);
-        item.write(storeFile);
-        }
-    }
-</code></pre><p>4、跳转到jsp文件,反馈上传消息结果</p>
-<pre><code>request.getServletContext().getRequestDispatcher(&quot;/../jsp&quot;).forword(request,response);
-</code></pre><h2 id="servlet文件下载"><a href="#servlet文件下载" class="headerlink" title="servlet文件下载"></a>servlet文件下载</h2><h3 id="getParameter和getAttribute区别"><a href="#getParameter和getAttribute区别" class="headerlink" title="getParameter和getAttribute区别"></a>getParameter和getAttribute区别</h3><ul>
-<li>getParameter得到的都是String，用于读取提交表单的值，或是某个表单提交过去的数据。 getAtrribute获取可以是对象Object，需进行转换，可用此设置任意对象，用于获取对象容器的数据值。（主要为SESSION值）</li>
-<li>getParameter()获取POST/GET传递的参数值，用于客户端重定向，用于表单或url重定向传值接收数据。</li>
-<li>getAttribute()用于服务器重定向，在servlet中使用forword函数。</li>
-</ul>
-<h3 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h3><p> 1、获得请求文件名</p>
-<pre><code>String fileName = request.getParameter(&quot;FileName&quot;);
-</code></pre><p>2、设置相关属性</p>
-<pre><code>//设置文件MIME类型
-response.setContentType(getServletContext().getMimeType(filename));    
-//设置Content.Disposition
-response.setHeader(&quot;Content-Disposition&quot;,&quot;attachment;filename=&quot;+filename);
-</code></pre><p>3、获取目标文件绝对路径，读取文件</p>
-<pre><code>String FilePath = getServletContent().getRealPath(&quot;/upload/&quot;+filename);
-//读取文件
-InputStream in = new FileInputStream(FilePath);
-OutputStream out response.getOutputStream();
-//写文件
-out.write(in.read());
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-CSS预处理器比较" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/07/01/CSS预处理器比较/" class="article-date">
-      <time datetime="2017-07-01T08:55:00.000Z" itemprop="datePublished">2017-07-01</time>
-</a>
-
- 
-    <a href="/2017/07/01/CSS预处理器比较/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/07/01/CSS预处理器比较/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/01/CSS预处理器比较/">有关CSS预处理器的比较选择(Sass&amp;Less&amp;Stylus)</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>CSS预处理器定义了一种新的语言，其基本思想是，用一种专门的编程语言，为CSS增加了一些编程的特性，将CSS作为目标生成文件，然后开发者就只要使用这种语言进行编码工作。通俗的说，CSS预处理器用一种专门的编程语言，进行Web页面样式设计，然后再编译成正常的CSS文件，以供项目使用。CSS预处理器为CSS增加一些编程的特性，无需考虑浏览器的兼容性问题，例如你可以在CSS中使用变量、简单的逻辑程序、函数等等在编程语言中的一些基本特性，可以让你的CSS更加简洁、适应性更强、可读性更佳，更易于代码的维护等诸多好处.</p>
-<h2 id="LESS-amp-Sass"><a href="#LESS-amp-Sass" class="headerlink" title="LESS &amp; Sass"></a>LESS &amp; Sass</h2><p>LESS是受Sass启发而开发的工具，它列出了如下开发的理由：“为什么要开发一个Sass的替代品呢？原因很简单：首先是语法。Sass的一个关键特性是缩进式的语法，这种语法可以产生柱式外观的代码。但是你需要花费时间学习一门新的语法以及重新构建你现在的样式表。<br>LESS给CSS带来了很多特性，使得LESS能够和CSS无缝地紧密结合在一起。因此，你可以平滑地由CSS迁移到LESS，如果你只是对使用变量或者操作感兴趣的话，你不需要学习一整门全新的语言。”</p>
-<h2 id="Stylus"><a href="#Stylus" class="headerlink" title="Stylus"></a>Stylus</h2><p>Stylus相对前两者较新，可以看官方文档介绍的功能。</p>
-<ul>
-<li>来自NodeJS社区，所以和NodeJS走得很近，与JavaScript联系非常紧密。还有专门JavaScript API：<a href="http://learnboost.github.io/stylus/docs/js.html" target="_blank" rel="external">http://learnboost.github.io/stylus/docs/js.html</a></li>
-<li>支持Ruby之类等等框架</li>
-<li>更多更强大的支持和功能</li>
-</ul>
-<p>总结：Sass看起来在提供的特性上占有优势，但是LESS能够让开发者平滑地从现存CSS文件过渡到LESS，而不需要像Sass那样需要将CSS文件转换成Sass格式。Stylus功能上更为强壮，和js联系更加紧密。</p>
-<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p>默认Sass使用“.scss”扩展名。Sass语法规则可以像CSS那样书写：</p>
-<pre><code>h1 {
-    color: #936;
-    background-olor: #333
-}
-</code></pre><p>LESS和Sass一样，都是使用CSS的标准语法，只是LESS的源文件的扩展名是“.less”，其基本语法类似于:</p>
-<pre><code>h1 {
-    color: #936;
-    background-olor: #333
-}
-</code></pre><p>Stylus的语法花样多一些，它的文件扩展名是“.styl”，Stylus也接受标准的CSS语法，但是他也像Sass老的语法规则，使用缩进控制，同时Stylus也接受不带大括号（｛｝）和分号的语法，如下所示：</p>
-<pre><code>h1 {
-  color: #963;
-  background-color:#333;
-}
-/*省略大括号（｛｝）*/
-h1 
-  color: #963;
-  background-color: #333;
-/*省略大括号（｛｝）和分号（;）*/
-h1
-  color #963
-  background-color #333
-</code></pre><h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>变量允许我们单独定义一系列通用的样式，然后在需要的时候去调用。所以在做全局样式调整的时候我们可能只需要修改几行代码就可以了。<br>Sass使用$符号来标识变量：</p>
-<pre><code>$nav-color: #F90;
-nav {
-    $width: 100px;
-    width: $width
-    color: $nav-color;
-}
-</code></pre><p>Less使用@符号来定义标识变量:</p>
-<pre><code>@nav-color: #F90
-nav {
-    @width: 100px;
-    width: @width;
-    color: @nav-color
-}
-</code></pre><p>Stylus变量定义相对没有特殊符号:</p>
-<pre><code>nav-color = #F90
-nav 
-    width 100px
-    color nav-color
-</code></pre><p>三种预处理器编译后的结果为：</p>
-<pre><code>nav{
-    width: 100px;
-    color: #F90;
-}
-</code></pre><p>值得注意的是Stylus还有一个属性查找功能，不需分配变量就可以调用内部属性值：</p>
-<pre><code>nav
-    width 100px
-    height (@width / 2)
-    color #F90
-</code></pre><h2 id="Mixins"><a href="#Mixins" class="headerlink" title="Mixins"></a>Mixins</h2><p>Sass中混合器使用@mixin标识符定义，通过@include使用混合器。混合器传参方式和PHP有点像：</p>
-<pre><code>@mixin rounded-corner($radius, $hover: red) {
-    -moz-boeder-radius: $radius;
-    -webkit-border-radius: $radius;
-    border-radius: $radius;
-    &amp;:hover {
-        color: $hover;
-    }
-}
-#header {
-    @include rounded-corner($radius: 10px)
-}
-</code></pre><p>Less的混合器使用方式，如同Sass的简化版：</p>
-<pre><code>.rounded-corner(@radius, @hover: red) {
-    -moz-boeder-radius: @radius;
-    -webkit-border-radius: @radius;
-    border-radius: @radius;
-    &amp;:hover {
-        color: @hover;
-    }
-}
-#header {
-    .rounded-corner(10px)
-}
-</code></pre><p>Stylus的混合书写方式：</p>
-<pre><code>rounded-corner(radius, hover = red)
-    -moz-boeder-radius: radius;
-    -webkit-border-radius: radius;
-    border-radius: radius;
-    &amp;:hover 
-        color: hover;
-
-#header 
-    rounded-corner(10px)
-</code></pre><p>三种预处理器编译后的结果如下：</p>
-<pre><code>#header {
-    -moz-boeder-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    &amp;:hover 
-        color: red;
-}
-</code></pre><p>注意在Less中@arguments可以传递所有参数， Stylus的arguments具有相似功能，这在某些情况很方便。</p>
-<h2 id="嵌套"><a href="#嵌套" class="headerlink" title="嵌套"></a>嵌套</h2><p>三种预处理器的嵌套思想几乎一致，只是写法上略有不同。而嵌套功能的目的是减少不必要的代码量，使父子节点关系更加明了，优化css。css中重复写选择器是非常恼人的。如果要写一大串指向页面中同一块的样式时，往往需要一遍又一遍地写同一个ID，如果写原生的css是相当的烦人。注意的是写伪元素和伪类时，前面要加上父选择器标识符&amp;。比如有以下一段原生css代码：</p>
-<pre><code>#header h1 {
-  font-size: 26px;
-  font-weight: bold;
-}
-#header p {
-  font-size: 12px;
-}
-#header p a {
-  text-decoration: none;
-}
-#header p a:hover {
-  border-width: 1px;
-}
-</code></pre><p>现在将这段代码转变为Sass或Less:</p>
-<pre><code>#header {
-    h1 {
-        font-size: 26px;
-        font-weight: bold;
-    }
-    p {
-        font-size: 12px;
-        a {
-            text-decoration: none;
-            &amp;:hover {
-                border-width: 1px;
-            }
-        }
-    }
-}
-</code></pre><p>如果用Stylus来写的话，将会缩减更多：</p>
-<pre><code>#header
-    h1
-        font-size 26px
-        font-weight bold
-    p
-        font-size 12px
-        a
-            text-decoration none
-            &amp;:hover
-                border-width 1px    
-</code></pre><h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><p>Stylus的@extend指令受SASS实现的启发，基本一致，除了些轻微差异。此功能大大简化了继承其他语义规则集的语义规则集的维护。目前Stylus与SASS不同之处在于SASS不允许<strong>@extend</strong>嵌套选择器。<br>下面是继承的示例：</p>
-<pre><code>.message {
-  padding: 10px;
-  border: 1px solid #eee;
-}
-.warning {
-  @extend .message;
-  color: #E2E21E;
-}
-
-// 编译后
-.message, .warning {
-  padding: 10px;
-  border: 1px solid #eee;
-}
-.warning {
-  color: #E2E21E;
-}
-</code></pre><p>Less继承方式和Sass，Stylus不同，它在嵌套中继承选择器下的样式，缺点是每个选择器会有重复样式产生：</p>
-<pre><code>.message {
-    padding: 10px;
-    border: 1px solid #eee;
-}
-.warning {
-    .message;
-    color: #E2E21E
-}
-</code></pre><h2 id="颜色函数"><a href="#颜色函数" class="headerlink" title="颜色函数"></a>颜色函数</h2><p>Sass颜色函数</p>
-<pre><code>lighten($color, 10%); /* 返回的颜色在$color基础上变亮10% */
-darken($color, 10%);  /* 返回的颜色在$color基础上变暗10% */
-saturate($color, 10%);   /* 返回的颜色在$color基础上饱和度增加10% */
-desaturate($color, 10%); /* 返回的颜色在$color基础上饱和度减少10% */
-grayscale($color);  /* 返回$color的灰度色*/
-complement($color); /* 返回$color的补色 */
-invert($color);     /* 返回$color的反相色 */
-mix($color1, $color2, 50%); /* $color1 和 $color2 的 50% 混合色*/
-</code></pre><p>Less颜色函数</p>
-<pre><code>lighten(@color, 10%); /* 返回的颜色在@color基础上变亮10% */
-darken(@color, 10%);  /* 返回的颜色在@color基础上变暗10%*/
-saturate(@color, 10%);   /* 返回的颜色在@color基础上饱和度增加10% */
-desaturate(@color, 10%); /* 返回的颜色在@color基础上饱和度降低10%*/
-spin(@color, 10);  /* 返回的颜色在@color基础上色调增加10 */
-spin(@color, -10); /* 返回的颜色在@color基础上色调减少10 */
-mix(@color1, @color2); /* 返回的颜色是@color1和@color2两者的混合色 */    
-</code></pre><p>Stylus颜色函数</p>
-<pre><code>lighten(color, 10%); /* 返回的颜色在&apos;color&apos;基础上变亮10% */
-darken(color, 10%);  /* 返回的颜色在&apos;color&apos;基础上变暗10% */
-saturate(color, 10%);   /* 返回的颜色在&apos;color&apos;基础上饱和度增加10% */
-desaturate(color, 10%); /* 返回的颜色在&apos;color&apos;基础上饱和度降低10% */      
-</code></pre><h2 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h2><p>Sass条件语句中使用@if，@else，@else if：</p>
-<pre><code>$type: monster;
-p {
-  @if $type == ocean {
-    color: blue;
-  } @else if $type == matador {
-    color: red;
-  } @else if $type == monster {
-    color: green;
-  } @else {
-    color: black;
-  }
-}
-</code></pre><p>Stylus的条件语句使用if，else，else if</p>
-<pre><code>overload-padding = true
-
-if overload-padding
-  padding(y, x)
-    margin y x
-
-body
-  padding 5px 10px
-</code></pre><p>Less和Sass，Stylus不同，它使用关键词when，而且提供了很多类型检查函数来辅助条件表达式，例如：iscolor、isnumber、isstring、iskeyword、isurl等等，支持AND，OR，NOT支持表达式。</p>
-<pre><code>.mixin (@a) when (iscolor(@a)) { 
-  background-color: black; 
- } 
- .mixin (@a) when (isnumber(@a)) { 
-  background-color: white; 
- } 
- .class1 { .mixin(red) } 
- .class2 { .mixin(6) }    
-// 转译出来的CSS
-
-.class1 { 
-  background-color: black; 
- } 
- .class2 { 
-  background-color: white; 
- }    
-</code></pre><h2 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h2><p>Sass使用@for，通过from，through来实现循环，另外还支持@each，@while的使用。</p>
-<pre><code>@for $i from 1 through 3 {
-      .item-#{$i} { width: 2em * $i; }
-}    
-
-// 编译后
-.item-1 {  width: 2em; }
-.item-2 {  width: 4em; }
-.item-3 {  width: 6em; }
-</code></pre><p>几种循环格式如下：</p>
-<pre><code>@for $var from [start] through [end] {block}
-@each $var in [list] {block}
-@while [condition] {block}
-</code></pre><p>在Stylus样式中通过for/in对表达式进行循环，形式如下：</p>
-<pre><code>for &lt;val-name&gt; [, &lt;key-name&gt;] in &lt;expression&gt;    
-</code></pre><p>示例：</p>
-<pre><code>body
-  fonts = Impact Arial sans-serif
-  for font, i in fonts
-    foo i font    
-// 编译后
-
-body {
-  foo: 0 Impact;
-  foo: 1 Arial;
-  foo: 2 sans-serif;
-}    
-</code></pre><p>Less的循环方式如同它的条件语句，通过when来实现。<br>基本上，Less 的设计思路偏向原生 CSS，而 Sass 和 Stylus更偏向计算机语言（分别是 Ruby 和 JS）。所以，可能，前者更适合前端，后者适合工程师。相对于Sass和Less而言，Stylus更加简洁，拥有更强大的功能，所以我选择Stylus。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/未闻花名/">未闻花名</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-js内置对象——string&amp;array" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/06/25/js内置对象——string&array/" class="article-date">
-      <time datetime="2017-06-25T14:30:00.000Z" itemprop="datePublished">2017-06-25</time>
-</a>
-
- 
-    <a href="/2017/06/25/js内置对象——string&array/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/06/25/js内置对象——string&amp;array/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/25/js内置对象——string&array/">Js内置对象进阶（一）——String&amp;Array</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>JavaScript有一些常见的内置对象，如String，Array，Boolean，Date，Regexp，Object，Number，Function等。这些内置对象看起来简单，实际关系异常复杂。<br>这些内置对象从表现形式来说很像其他语言中的类型（type）或者类（class），比如Java中的String 类。有时候说js是比java更加面向对象的语言，一点不为过。</p>
-<h2 id="String对象"><a href="#String对象" class="headerlink" title="String对象"></a>String对象</h2><p>String对象是JavaScript原生提供的三个包装对象之一，用来生成字符串的包装对象实例。<br>平时我们经常使用的String对象属性方法有：</p>
-<ul>
-<li>length属性：返回字符串长度</li>
-<li>concat：用来连接两个字符串</li>
-<li>substr和slice：用来截取字符串，不过截取方式不同</li>
-<li>indexOf：确定一个字符串在另一个字符串中的位置</li>
-<li>trim：用于去除字符串两端的空格</li>
-<li>toLowerCase 和 toUpperCase ：改变字符串大小写</li>
-<li>repalce：用于替换匹配的子字符串，一般情况下只替换第一个匹配</li>
-<li>split：分割字符串，返回一个由分割出来的各部分组成的新数组。</li>
-</ul>
-<p>下面分析一段代码</p>
-<pre><code>var str1 = &apos;a test string&apos;
-var str2 = new String(&apos;a test string&apos;)
-str1.length                    //13
-str1.indexOf(&apos;t&apos;)              //2
-console.log(typeof str1)       //string
-console.log(typeof str2)       //object
-str1 instanceof String         //false
-str2 instanceof String         //true
-</code></pre><p>原始值str1 并不是一个对象，它只是一个字面量，并且是一个不可变的值。如果要在这个字面量上执行一些操作，比如获取长度、访问其中某个字符等，那需要将其转换为String 对象。在必要时语言会自动把字符串字面量转换成一个 String 对象，也就是说你并不需要 显式创建一个对象。<br>以上的内容用下面这段代码解释再好不过。</p>
-<pre><code>String instanceof Object
-new String(&apos;foo&apos;) instanceof String; // true
-new String(&apos;foo&apos;) instanceof Object; // true
-
-&apos;foo&apos; instanceof String; // false
-&apos;foo&apos; instanceof Object; // false
-</code></pre><h3 id="String对象调用Array对象方法"><a href="#String对象调用Array对象方法" class="headerlink" title="String对象调用Array对象方法"></a>String对象调用Array对象方法</h3><p>许多数组函数用来处理字符串很方便。虽然字符串没有这些函数，但可以通过“借用”数组的非变更方法来处理字符串：</p>
-<pre><code>var a = &apos;feiyan&apos;
-a.join; // undefined
-a.map; // undefined
-var c = Array.prototype.join.call( a, &quot;-&quot; );
-var d = Array.prototype.map.call( a, function(v){
-    return v.toUpperCase() + &quot;.&quot;;
-    } ).join( &quot;&quot; );
-c;            //f-e-i-y-a-n
-d;            //F.E.I.Y.A.N.
-</code></pre><p>其中的join方法和map方法都是数组对象的方法，这里字符串对象可以通过原型调用先把字符串对象转化为数字对象，然后再通过join方法变为字符串。而很多时候我们可以用[]代替Array.prototype:</p>
-<pre><code>Array.prototype === [].__proto__   //true
-</code></pre><p>在许多方面，字符串表现的好像字符数组，许多Javascript array相关方法也可以使用在String类型上，但是并不是所有的方法都可以。看下面示例：</p>
-<pre><code>var name = &apos;feiyan&apos;
-a = [].push.call(name, &apos;is a lovely girl&apos;)
-</code></pre><p>报错：提示Javascript中字符串是只读的，因此任何方法想改变字符串都将失败，因此可以排除掉数组的push、pop、shift、unshift、splice、reverse方法。如果真要实现这个功能，这样这么做：</p>
-<pre><code>var name = &apos;feiyan&apos;
-name.concat(&apos; is a lovely girl&apos;).split()
-</code></pre><p>其他一些不改变原字符串的方法（如一些遍历方法）可以随意使用：</p>
-<pre><code>var str1 = &apos;a lovely girl&apos;
-var a = [].forEach.call(str1,function(ele,index,arr){
-    console.log(ele)
-    })
-</code></pre><h3 id="ES6常用字符串特性"><a href="#ES6常用字符串特性" class="headerlink" title="ES6常用字符串特性"></a>ES6常用字符串特性</h3><p>ES6为字符串添加了遍历器接口，使得字符串可以被for…of循环遍历。</p>
-<pre><code>for(var i of &apos;string&apos;){
-    console.log(i)
-}
-</code></pre><p>ES6引入了一种新型的字符串字面量语法，我们称之为模板字符串（template strings）。除了使用反撇号字符 ` 代替普通字符串的引号 ‘ 或 “ 外，它们看起来与普通字符串并无二致。在最简单的情况下，它们与普通字符串的表现一致。<br>现在，我们看到了一个比 + 运算符更优雅的语法，下面是一些你期待的特性：</p>
-<ul>
-<li>模板占位符可以是任何 JavaScript 表达式，所以函数调用和四则运算等都是合法的。（甚至你还可以在一个模板字符串中嵌套另一个模板字符串。）</li>
-<li>如果一个值不是字符串，它将被转换为字符串。例如，如果 action 是一个对象，那么该对象的 .toString() 将被调用，来将其转换为字符串。</li>
-<li>如果你想在模板字符串中使用反引号，你需要使用反斜杠 \ 将其转义。</li>
-<li>同样地，如果想在模板字符串中输出 \${，也需要使用反斜杠将其转义：\${ 或 ${。</li>
-<li>模板字符串可以跨越多行：</li>
-</ul>
-<pre><code>$(&quot;#warning&quot;).html(`
-      &lt;h1&gt;Warning Title!&lt;/h1&gt;
-      &lt;p&gt;This is some information,it is ${warning}&lt;/p&gt;
-`);
-</code></pre><h2 id="Array对象"><a href="#Array对象" class="headerlink" title="Array对象"></a>Array对象</h2><p>Array是JavaScript的内置对象，同时也是一个构造函数，可以用它生成新的数组。<br>作为构造函数时，Array可以接受参数，但是不同的参数，会使得Array产生不同的行为。<br>数组对象的常用方法如下：</p>
-<ul>
-<li>isArray：判断一个值是否为数组</li>
-<li>toString：返回数组的字符串形式</li>
-<li>push方法，pop方法：push方法用于在数组的末端添加一个或多个元素，并返回添加后的数组的长度，pop方法用于删除数组的最后一个元素，并返回该元素</li>
-<li>join：以参数作为分隔符，将所有数组成员组成一个字符串返回</li>
-<li>concat：将新数组的成员，添加到原数组的尾部，然后返回一个新数组，常用于连接多个数组</li>
-<li>shift方法，unshift方法： shift方法用于删除数组的第一个元素，并返回该元素，unshift方法用于在数组的第一个位置添加元素，并返回添加新元素后的数组长度</li>
-<li>reverse：用于颠倒数组中元素的顺序</li>
-<li>slice返回指定位置的数组成员组成的新数组，原数组不变。它的第一个参数为起始位置（从0开始），第二个参数为终止位置（但该位置的元素本身不包括在内）。如果省略第二个参数，则一直返回到原数组的最后一个成员</li>
-<li>sort：对数组元素进行排序，默认是按照字典顺序排序</li>
-<li>map：对数组的所有成员依次调用一个函数，根据函数结果返回一个新数组</li>
-<li>forEach：遍历数组的所有成员</li>
-<li>filter：依次对所有数组成员调用一个测试函数</li>
-<li>indexOf：返回给定元素在数组中第一次出现的位置，如果没有出现则返回-1</li>
-</ul>
-<h3 id="Array-from"><a href="#Array-from" class="headerlink" title="Array.from"></a>Array.from</h3><p>有时需要将类数组（一组通过数字索引的值）转换为真正的数组，这一般通过数组工具函数（如indexOf(..)、concat(..)、forEach(..) 等）来实现。类数组如下：<br>例如，一些DOM 查询操作会返回DOM 元素列表，它们并非真正意义上的数组，但十分<br>类似。另一个例子是通过arguments 对象（类数组）将函数的参数当作列表来访问（从<br>ES6 开始已废止）。</p>
-<pre><code>function foo() {
-    var arr = Array.prototype.slice.call( arguments );
-    arr.push( &quot;bam&quot; );
-    console.log( arr );
-}
-foo( &quot;bar&quot;, &quot;baz&quot; ); // [&quot;bar&quot;,&quot;baz&quot;,&quot;bam&quot;]
-</code></pre><p>如上所示，slice() 返回参数列表（上例中是一个类数组）的一个数组复本。<br>用ES6 中的内置工具函数Array.from(..) 也能实现同样的功能：</p>
-<pre><code>function f() {
-      return Array.from(arguments);
-}
-</code></pre><p>Array.from() 方法从一个类似数组或可迭代的对象中创建一个新的数组实例。</p>
-<pre><code>Array.from(&apos;foo&apos;); 
-// [&quot;f&quot;, &quot;o&quot;, &quot;o&quot;]
-</code></pre><p>Array.from方法还支持类似数组的对象。所谓类似数组的对象，本质特征只有一点，即必须有length属性。因此，任何有length属性的对象，都可以通过Array.from方法转为数组，而此时扩展运算符就无法转换。</p>
-<pre><code>Array.from({ length: 3 });
-// [ undefined, undefined, undefined ]
-</code></pre><p>Array.from还可以接受第二个参数，作用类似于数组的map方法，用来对每个元素进行处理，将处理后的值放入返回的数组。</p>
-<pre><code>Array.from([1, 2, 3], (x) =&gt; x * x)
-// [1, 4, 9]
-Array.from([1,2,3].map((x) =&gt; x * x))
-// [1, 4, 9]
-</code></pre><h3 id="find方法"><a href="#find方法" class="headerlink" title="find方法"></a>find方法</h3><p>数组实例的find方法，用于找出第一个符合条件的数组成员。它的参数是一个回调函数，所有数组成员依次执行该回调函数，直到找出第一个返回值为true的成员，然后返回该成员。如果没有符合条件的成员，则返回undefined。</p>
-<pre><code>[1, 5, 10, 15].find(function(value, index, arr) {
-      return value &gt; 9;
-}) // 10
-</code></pre><p>数组实例的findIndex方法的用法与find方法非常类似，返回第一个符合条件的数组成员的位置，如果所有成员都不符合条件，则返回-1。</p>
-<h3 id="fill方法"><a href="#fill方法" class="headerlink" title="fill方法"></a>fill方法</h3><p>fill方法使用给定值，填充一个数组。fill方法还可以接受第二个和第三个参数，用于指定填充的起始位置和结束位置。</p>
-<pre><code>[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;].fill(7)
-// [7, 7, 7]
-new Array(3).fill(7)
-// [7, 7, 7]
-[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;].fill(7, 1, 2)
-// [&apos;a&apos;, 7, &apos;c&apos;]
-</code></pre><h3 id="includes方法"><a href="#includes方法" class="headerlink" title="includes方法"></a>includes方法</h3><p>includes方法返回一个布尔值，表示某个数组是否包含给定的值，与字符串的includes方法类似</p>
-<h3 id="空位的处理"><a href="#空位的处理" class="headerlink" title="空位的处理"></a>空位的处理</h3><p>数组的空位指，数组的某一个位置没有任何值。比如，Array构造函数返回的数组都是空位。<br>ES5 对空位的处理，大多数情况下会忽略空位。</p>
-<ul>
-<li>forEach(), filter(), every() 和some()都会跳过空位。</li>
-<li>map()会跳过空位，但会保留这个值</li>
-<li>join()和toString()会将空位视为undefined，而undefined和null会被处理成空字符串。</li>
-</ul>
-<pre><code>// forEach方法
-[,&apos;a&apos;].forEach((x,i) =&gt; console.log(i)); // 1
-
-// filter方法
-[&apos;a&apos;,,&apos;b&apos;].filter(x =&gt; true) // [&apos;a&apos;,&apos;b&apos;]
-
-// every方法
-[,&apos;a&apos;].every(x =&gt; x===&apos;a&apos;) // true
-
-// some方法
-[,&apos;a&apos;].some(x =&gt; x !== &apos;a&apos;) // false
-
-// map方法
-[,&apos;a&apos;].map(x =&gt; 1) // [,1]
-
-// join方法
-[,&apos;a&apos;,undefined,null].join(&apos;#&apos;) // &quot;#a##&quot;
-
-// toString方法
-[,&apos;a&apos;,undefined,null].toString() // &quot;,a,,&quot;
-</code></pre><p>ES6 则是明确将空位转为undefined。Array.from方法会将数组的空位，转为undefined，也就是说，这个方法不会忽略空位。for…of循环也会遍历空位。</p>
-<pre><code>Array.from([&apos;a&apos;,,&apos;b&apos;])
-// [ &quot;a&quot;, undefined, &quot;b&quot; ]
-let arr = [, ,];
-for (let i of arr) {
-  console.log(1);
-}
-// 1
-// 1
-</code></pre><p>数组arr有两个空位，for…of并没有忽略它们。如果改成map方法遍历，空位是会跳过的。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/未闻花名/">未闻花名</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-vue仿饿了么项目的重要知识点与那些坑" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/" class="article-date">
-      <time datetime="2017-06-25T12:30:00.000Z" itemprop="datePublished">2017-06-25</time>
-</a>
-
- 
-    <a href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/06/25/vue仿饿了么项目的重要知识点与那些坑/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">Vue仿饿了么知识点总结</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="Vue-nextTick-callback-context"><a href="#Vue-nextTick-callback-context" class="headerlink" title="Vue.nextTick([callback,context])"></a>Vue.nextTick([callback,context])</h2><h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。</p>
-<pre><code>vm.msg = &apos;Hello&apos;
-Vue.nextTick(function(){
-    // DOM更新
-</code></pre><h2 id="vm-nextTick-callback"><a href="#vm-nextTick-callback" class="headerlink" title="vm.$nextTick([callback])"></a>vm.$nextTick([callback])</h2><h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><p>{function} [callback]</p>
-<h3 id="用法-1"><a href="#用法-1" class="headerlink" title="用法"></a>用法</h3><p>将回调延迟到下次DOM更新循环后执行。在修改数据之后立即使用它，然后等待DOM更新。它跟全局方法Vue.nextTick一样，不同的是回调的this自动绑定到调用它的实例上。</p>
-<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><pre><code>new Vue({
-    // ...
-    methods: {
-        example: function () {
-            this.msg = &apos;changed&apos;
-            this.$nextTick(function() {
-                this.dosomthingElse()
-                })
-        }
-    }
-})
-</code></pre><h2 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h2><p>简单起见， v-el 和 v-ref 合并为一个 ref属性了，可以在组件实例中通过 $refs 来调用。这意味着 v-el:my-element 将写成这样： ref=”myElement”， v-ref:my-component 变成了这样： ref=”myComponent”。绑定在一般元素上时，ref 指DOM元素，绑定在组件上时，ref 为一组件实例。<br>因为 v-ref 不再是一个指令了而是一个特殊的属性，它也可以被动态定义了。这样在和v-for 结合的时候是很有用的：    </p>
-<pre><code>&lt;p v-for = &quot;item in items&quot; v-bind:ref=&quot;items&quot;&gt;&lt;/p&gt;
-</code></pre><p>和 1.x 中不同， $refs 不是响应的，因为它们在渲染过程中注册/更新。只有监听变化并重复渲染才能使它们响应。<br>另一方面，设计$refs主要是提供给 js 程序访问的，并不建议在模板中过度依赖使用它。因为这意味着在实例之外去访问实例状态，违背了 Vue 数据驱动的思想。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li></ul>
     </div>
 
       
