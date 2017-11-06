@@ -276,6 +276,357 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Django图片相关处理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/20/Django图片相关处理/" class="article-date">
+      <time datetime="2017-10-20T02:14:00.000Z" itemprop="datePublished">2017-10-20</time>
+</a>
+
+ 
+    <a href="/2017/10/20/Django图片相关处理/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/20/Django图片相关处理/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="前台访问后台图片"><a href="#前台访问后台图片" class="headerlink" title="前台访问后台图片"></a>前台访问后台图片</h3><p>对于ImageField类型的字段，需要进行特殊处理，相关处理配置如下所示：</p>
+<p>1、setting中配置MEDIA_URL和MEDIA_ROOT</p>
+<pre><code>MEDIA_URL=&quot;media&quot;
+#配置图片文件夹路径
+MEDIA_ROOT=(
+        os.path.join(BASE_DIR, &apos;&apos;media)
+    )
+</code></pre><p>2、如果使用加载，需要在setting的TEMPLATES中加上下面</p>
+<pre><code>&apos;django.template.context_processors.madia&apos;
+</code></pre><p>3、设置url</p>
+<pre><code>from django.views.static improt serve
+from project.setting import MEDIA_ROOT
+url(r&apos;^media/(?P&lt;path&gt;.*)&apos;, serve,{&apos;document_root&apos;:settings.MEDIA_ROOT}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Django前端页面相关处理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/19/Django前端页面相关处理/" class="article-date">
+      <time datetime="2017-10-19T02:14:00.000Z" itemprop="datePublished">2017-10-19</time>
+</a>
+
+ 
+    <a href="/2017/10/19/Django前端页面相关处理/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/19/Django前端页面相关处理/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/19/Django前端页面相关处理/">Django Html相关配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="静态文件加载"><a href="#静态文件加载" class="headerlink" title="静态文件加载"></a>静态文件加载</h2><p>html文件头要加上下面代码，意思要预加载配置文件中的staticfiles文件</p>
+<pre><code>{% load staticfiles %}
+</code></pre><h3 id="css，js，img文件配置"><a href="#css，js，img文件配置" class="headerlink" title="css，js，img文件配置"></a>css，js，img文件配置</h3><p>其中，static为配置文件目录</p>
+<pre><code>&lt;script scr={% static 'js/example.js' %}&gt;&lt;/script&gt;
+&lt;link rel=&quot;staticsheet&quot; type=&quot;text/css&quot; href={%static 'css/example.css'%}&gt;
+&lt;img src={% static 'images/example.jpg' %} /&gt;
+</code></pre><h3 id="url配置"><a href="#url配置" class="headerlink" title="url配置"></a>url配置</h3><pre><code>&lt;a href={% url 'login' %}&gt; 
+&lt;a href={% url 'register' %}&gt;
+action = /login/
+action = /register/
+</code></pre><h2 id="网站模板配置"><a href="#网站模板配置" class="headerlink" title="网站模板配置"></a>网站模板配置</h2><p>为了节省代码，导航，底部，访问统计等地方需要使用共同的html。<br>使用base.html来包含通用的文件</p>
+<pre><code>&lt;!DOCTYPE html5&gt;
+&lt;html&gt;
+    &lt;head&gt;&lt;title&gt;&lt;% block title %&gt;标题&lt;% endtitle %&gt;&lt;/title&gt;&lt;/head&gt;
+    &lt;body&gt;
+        &lt;% include &apos;nav.html&apos; %&gt;
+        &lt;% block main %&gt;
+        &lt;main-section /&gt;
+        &lt;% endblock %&gt;
+        &lt;% include &apos;foot.html&apos; %&gt;    
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>其中block为使继承的模板可以随意重写该部分，include作用是加载其他html文件。<br>我们可以通过继承或者说是扩展<br>extends原来的base.html文件，这样可以重写减少工作量</p>
+<pre><code>&lt;% extends &apos;base.html&apos; %&gt;
+&lt;% block title %&gt;new title&lt;% endblock %&gt;
+
+&lt;% block main %&gt;new main content&lt;% endblock %&gt;    
+</code></pre><p>一般模板放在app下的templates中，django会自动查找，我们一般使用类里加载html文件的形式.</p>
+<pre><code>return render(request, &apos;index.html&apos;)
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Spring基于注解的配置" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/19/Spring基于注解的配置/" class="article-date">
+      <time datetime="2017-10-19T02:14:00.000Z" itemprop="datePublished">2017-10-19</time>
+</a>
+
+ 
+    <a href="/2017/10/19/Spring基于注解的配置/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/19/Spring基于注解的配置/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/19/Spring基于注解的配置/">Spring基于注解的配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Annotation-注解"><a href="#Annotation-注解" class="headerlink" title="Annotation(注解)"></a>Annotation(注解)</h2><h3 id="标注Spring-Bean的Annotation"><a href="#标注Spring-Bean的Annotation" class="headerlink" title="标注Spring Bean的Annotation"></a>标注Spring Bean的Annotation</h3><ul>
+<li>@Component：标注一个普通的Spring Bean类</li>
+<li>@Service：标注一个控制器组件</li>
+<li>@Controller：标注一个业务逻辑组件类</li>
+<li>@Repository：标注一个DAO组件类</li>
+</ul>
+<p>下面为@Component的注解</p>
+<pre><code>package annotation;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class UserObject {
+
+    public void getUser(){
+        System.out.println(&quot;component  getUser...&quot;);
+    }
+}
+</code></pre><p>其在XML中配置方式很简单，只需加上下面</p>
+<pre><code>&lt;context:component-scan base-package=&quot;package(包路径)&quot;&gt;&lt;/context:component-scan&gt;
+</code></pre><p>可以添加<context:include-filter>和<context:exclude-filter>子元素更详细的指定Annotation标注。使用时需要添加type属性和expression.</context:exclude-filter></context:include-filter></p>
+<p>其中type可以指定下面四种过滤器</p>
+<ul>
+<li><p>annotation: 需要指定一个注解名，如下org.springframework.stereotype.Repository，过滤DAO注解</p>
+<p>  <context:component-scan base-package="annotation" use-default-filters="false"></context:component-scan></p>
+<pre><code>&lt;!--&lt;context:include-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Repository&quot;&gt;&lt;/context:include-filter&gt;
+</code></pre><p>  </p>
+</li>
+<li><p>regex：正则过滤器 ，指定正则表达式</p>
+</li>
+<li>assignable：类名过滤器，指定java类</li>
+<li><p>aspextJ:AspextJ过滤器</p>
+<p>其中annotaion和assignable最常用</p>
+<h3 id="Bean作用域的注解（annotation）"><a href="#Bean作用域的注解（annotation）" class="headerlink" title="Bean作用域的注解（annotation）"></a>Bean作用域的注解（annotation）</h3><p>没有指定Bean的Scope默认为singleton</p>
+<p>  @Scope(“prototype”)<br>  //为Bean实例指定person名<br>  @Component(“person”)<br>  public class Person(){…}</p>
+</li>
+</ul>
+<h3 id="Resource配置Bean依赖"><a href="#Resource配置Bean依赖" class="headerlink" title="@Resource配置Bean依赖"></a>@Resource配置Bean依赖</h3><p>一般XML的依赖配置：</p>
+<pre><code>&lt;bean id=&quot;person&quot; class=&quot;autowire.Person&quot; p:name=&quot;huihui&quot; p:address-ref=&quot;address2&quot; &gt;&lt;/bean&gt;
+</code></pre><p>注解的依赖配置        </p>
+<pre><code>@Component
+public Class Person{
+    private String name;
+    private Address address;
+    public void setName(String name){
+        this.name = name;
+    }
+    @resource(name=&quot;address&quot;)
+    public void setAddress(Address address){
+        this.address = address;
+    }
+    public void toString(){...}
+}
+</code></pre><p>将指定容器中的Bean作为参数传入，一般setter在XML方法是必须的，但是在注解中，@Resource可以修饰Field，可以省略name属性。在使用@Resource修饰Field时，Spring会直接使用java ee的Field注入。可以不使用setter方法。<br>@Resource修饰setter方法，省略name属性，则name属性是setter方法去掉前面set字串，首字母小写得到的字串。</p>
+<p>@PostConstruct，@PreDestroy定制生命周期行为<br>init-method（@PostConstruct）在Bean依赖关系注入完成后回调该方法，destroy-method（@PreDestroy）在销毁Bean之前回调该方法。</p>
+<pre><code>@Component
+public class Person{
+    private String name;
+    private Car car;
+    public void setName(String name){
+        this.name = name;
+    }
+    @Resource
+    public void setCar(Car car){
+        this.car = car
+    }
+    @PostConstruct
+    public void init(){...}
+    @PreDestriy
+    public void destroy(){...}
+    public void toString(){...}
+}
+</code></pre><h3 id="DependsOn-Lazy"><a href="#DependsOn-Lazy" class="headerlink" title="@DependsOn,@Lazy"></a>@DependsOn,@Lazy</h3><p>@Depends（depends-on）用于强制初始化其他Bean，@Lazy(lazy-init)用于指定该Bean是否取消预初始化.</p>
+<pre><code>@Lazy(true)
+@DependsOn({&apos;car&apos;, &apos;address&apos;})
+@Conponent
+public class Person{...}
+</code></pre><p>上面代码使用@DependsOn修饰Person类，强制初始化car和address两个Bean,使用@Lazy实现懒初始化。</p>
+<h3 id="Autowired"><a href="#Autowired" class="headerlink" title="@Autowired"></a>@Autowired</h3><p>实现自动装配，标注setter方法，普通方法，Field和构造器，个人倾向显式指定依赖。<br>@QUALIfier根据Bean标识zhiding自动装配。</p>
+<h3 id="Value"><a href="#Value" class="headerlink" title="@Value"></a>@Value</h3><p>Spring提供了注解@Value，用于在程序中获取properties配置文件属性值。例如：</p>
+<ol>
+<li><p>applicationContext.xml中指定配置文件。</p>
+ <context:property-placeholder location="classpath:xxx.properties" ignore-unresolvable="true">
+
+<ol>
+<li><p>Spring bean中使用@Value注解获取指定参数。</p>
+<p>// xxx.properties配置项：<br>// server.ip=192.168.1.1<br>// server.port=8080</p>
+<p>@Value(“${server.ip}”)<br>private String ip;</p>
+<p>@Value(“${server.port}”)<br>private int port;</p>
+</li>
+</ol>
+</context:property-placeholder></li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-SSM项目知识点总结" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -756,139 +1107,6 @@ public class usePoint{
 
 
   
-    <article id="post-CentOS下nginx的安装配置" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/06/CentOS下nginx的安装配置/" class="article-date">
-      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
-</a>
-
- 
-    <a href="/2017/10/06/CentOS下nginx的安装配置/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下nginx的安装配置/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Nginx是一款轻量级Web服务器，也是反向代理服务器</p>
-<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ul>
-<li>直接支持Rails和PHP的程序</li>
-<li>作为Http反向代理服务器</li>
-<li>作为负载均衡服务器</li>
-<li>作为邮件代理服务器</li>
-<li>帮助实现前端动静分离</li>
-</ul>
-<h2 id="安装Nginx依赖"><a href="#安装Nginx依赖" class="headerlink" title="安装Nginx依赖"></a>安装Nginx依赖</h2><p>1、安装cc</p>
-<pre><code># 输入gcc -v查询版本信息，看系统是否自带安装
-yum install gcc
-</code></pre><p>2、安装pcre</p>
-<pre><code>yum install pcre-devel
-</code></pre><p>3、安装zlib</p>
-<pre><code>yum install zlib zlib-devel    
-</code></pre><p>4、选择安装openssl</p>
-<pre><code>yum install openssl openssl-devel
-</code></pre><p>5、一键综合安装</p>
-<pre><code>yum -y install gcc zlib zlib-devel pcre-devel openssl openssl-devel
-</code></pre><h2 id="下载源码包解压缩"><a href="#下载源码包解压缩" class="headerlink" title="下载源码包解压缩"></a>下载源码包解压缩</h2><p><a href="http://www/nginx.org/" target="_blank" rel="external">http://www/nginx.org/</a></p>
-<pre><code>tar -zxvf nginx-*.tar.gz
-</code></pre><h2 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a>nginx安装</h2><p>进入nginx目录执行./configure</p>
-<ul>
-<li>也可以制定安装目录，增加参数–prefix=/usr/nginx</li>
-<li>如果不指定路径，也可以通过whereis nginx进行查询</li>
-<li>默认安装在/usr/local/nginx</li>
-</ul>
-<p>继续执行make，续集执行make install</p>
-<h2 id="nginx常用命令"><a href="#nginx常用命令" class="headerlink" title="nginx常用命令"></a>nginx常用命令</h2><p>测试配置文件</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -t
-</code></pre><p>启动命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx
-</code></pre><p>停止命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -s stop
-或者是 nginx -s quit
-</code></pre><p>重启命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -s reload
-</code></pre><p>查看进程命令</p>
-<pre><code>ps -ef | grep nginx
-</code></pre><p>平滑重启</p>
-<pre><code>kill -HUP 【nginx主进程号(即查看进程命令查到的PID)】
-</code></pre><h2 id="增加防火墙访问权限"><a href="#增加防火墙访问权限" class="headerlink" title="增加防火墙访问权限"></a>增加防火墙访问权限</h2><p>1、sudo vim /etc.sysconfig/iptables-config<br>2、- A INPUT -p tcp -m state –state NEW<br>   -m tcp –dport 80 -j ACCEPT<br>3、重启防火墙</p>
-<h2 id="虚拟域名配置测试验证"><a href="#虚拟域名配置测试验证" class="headerlink" title="虚拟域名配置测试验证"></a>虚拟域名配置测试验证</h2><p>1、编辑sudo vim /usr/local/nginx/conf/nginx.conf<br>增加include vhost/*.conf<br>2、在/usr/local/nginx/conf目录创建vhost文件夹<br>3、配置<br>sudo vim /etc/hosts所对应的域名.conf<br>如：sudo vim /usr/local/nginx/conf/vhost www.huihui.com.conf<br>将如下配置写入到该文件下</p>
-<pre><code>server {
-     listen 80;
-     autoindex on;
-     server_name www.huihui.com;
-     access_log /usr/local/nginx/logs/access.log combined; 
-     index index.html index.htm index.jsp index.php; 
-     #error_page 404 /404.html;
-     if ( $query_string ~* &quot;.*[\;&apos;\&lt;\&gt;].*&quot; )
-            { 
-                    return 404;
-            }
-     location / {
-            proxy_pass http://172.0.0.1:8080;
-            add_header Access-Control-Allow-Origin *;
-            }
- }
-</code></pre><p>4、重启验证<br>启动${nginx}/sbin/nginx<br>重启${nginx}/sbin/nginx -s reload,如sudo ./nginx -s reload<br>${nginx}为安装在系统中的路径，如/usr/local/nginx<br>5、访问验证<br>使用默认80端口访问验证<a href="http://localhost:80" target="_blank" rel="external">http://localhost:80</a></p>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>可以配置域名转发，但是请一定要配置host，并且host生效之后才可以，设置完成后腰重启浏览器<br>1、linux<br>sudo vim /etc/hosts<br>添加好对应的域名及ip<br>保存退出</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-CentOS下jdk、tomcat配置" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1090,6 +1308,139 @@ setenforce 0
       
           
         
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-CentOS下nginx的安装配置" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/06/CentOS下nginx的安装配置/" class="article-date">
+      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+
+ 
+    <a href="/2017/10/06/CentOS下nginx的安装配置/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下nginx的安装配置/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Nginx是一款轻量级Web服务器，也是反向代理服务器</p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ul>
+<li>直接支持Rails和PHP的程序</li>
+<li>作为Http反向代理服务器</li>
+<li>作为负载均衡服务器</li>
+<li>作为邮件代理服务器</li>
+<li>帮助实现前端动静分离</li>
+</ul>
+<h2 id="安装Nginx依赖"><a href="#安装Nginx依赖" class="headerlink" title="安装Nginx依赖"></a>安装Nginx依赖</h2><p>1、安装cc</p>
+<pre><code># 输入gcc -v查询版本信息，看系统是否自带安装
+yum install gcc
+</code></pre><p>2、安装pcre</p>
+<pre><code>yum install pcre-devel
+</code></pre><p>3、安装zlib</p>
+<pre><code>yum install zlib zlib-devel    
+</code></pre><p>4、选择安装openssl</p>
+<pre><code>yum install openssl openssl-devel
+</code></pre><p>5、一键综合安装</p>
+<pre><code>yum -y install gcc zlib zlib-devel pcre-devel openssl openssl-devel
+</code></pre><h2 id="下载源码包解压缩"><a href="#下载源码包解压缩" class="headerlink" title="下载源码包解压缩"></a>下载源码包解压缩</h2><p><a href="http://www/nginx.org/" target="_blank" rel="external">http://www/nginx.org/</a></p>
+<pre><code>tar -zxvf nginx-*.tar.gz
+</code></pre><h2 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a>nginx安装</h2><p>进入nginx目录执行./configure</p>
+<ul>
+<li>也可以制定安装目录，增加参数–prefix=/usr/nginx</li>
+<li>如果不指定路径，也可以通过whereis nginx进行查询</li>
+<li>默认安装在/usr/local/nginx</li>
+</ul>
+<p>继续执行make，续集执行make install</p>
+<h2 id="nginx常用命令"><a href="#nginx常用命令" class="headerlink" title="nginx常用命令"></a>nginx常用命令</h2><p>测试配置文件</p>
+<pre><code>安装路径下的/nginx/sbin/nginx -t
+</code></pre><p>启动命令</p>
+<pre><code>安装路径下的/nginx/sbin/nginx
+</code></pre><p>停止命令</p>
+<pre><code>安装路径下的/nginx/sbin/nginx -s stop
+或者是 nginx -s quit
+</code></pre><p>重启命令</p>
+<pre><code>安装路径下的/nginx/sbin/nginx -s reload
+</code></pre><p>查看进程命令</p>
+<pre><code>ps -ef | grep nginx
+</code></pre><p>平滑重启</p>
+<pre><code>kill -HUP 【nginx主进程号(即查看进程命令查到的PID)】
+</code></pre><h2 id="增加防火墙访问权限"><a href="#增加防火墙访问权限" class="headerlink" title="增加防火墙访问权限"></a>增加防火墙访问权限</h2><p>1、sudo vim /etc.sysconfig/iptables-config<br>2、- A INPUT -p tcp -m state –state NEW<br>   -m tcp –dport 80 -j ACCEPT<br>3、重启防火墙</p>
+<h2 id="虚拟域名配置测试验证"><a href="#虚拟域名配置测试验证" class="headerlink" title="虚拟域名配置测试验证"></a>虚拟域名配置测试验证</h2><p>1、编辑sudo vim /usr/local/nginx/conf/nginx.conf<br>增加include vhost/*.conf<br>2、在/usr/local/nginx/conf目录创建vhost文件夹<br>3、配置<br>sudo vim /etc/hosts所对应的域名.conf<br>如：sudo vim /usr/local/nginx/conf/vhost www.huihui.com.conf<br>将如下配置写入到该文件下</p>
+<pre><code>server {
+     listen 80;
+     autoindex on;
+     server_name www.huihui.com;
+     access_log /usr/local/nginx/logs/access.log combined; 
+     index index.html index.htm index.jsp index.php; 
+     #error_page 404 /404.html;
+     if ( $query_string ~* &quot;.*[\;&apos;\&lt;\&gt;].*&quot; )
+            { 
+                    return 404;
+            }
+     location / {
+            proxy_pass http://172.0.0.1:8080;
+            add_header Access-Control-Allow-Origin *;
+            }
+ }
+</code></pre><p>4、重启验证<br>启动${nginx}/sbin/nginx<br>重启${nginx}/sbin/nginx -s reload,如sudo ./nginx -s reload<br>${nginx}为安装在系统中的路径，如/usr/local/nginx<br>5、访问验证<br>使用默认80端口访问验证<a href="http://localhost:80" target="_blank" rel="external">http://localhost:80</a></p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>可以配置域名转发，但是请一定要配置host，并且host生效之后才可以，设置完成后腰重启浏览器<br>1、linux<br>sudo vim /etc/hosts<br>添加好对应的域名及ip<br>保存退出</p>
+
       
     </div>
     
@@ -1352,739 +1703,9 @@ setenforce 0
 
 
   
-    <article id="post-LintCode题解（七）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/01/LintCode题解（七）/" class="article-date">
-      <time datetime="2017-10-01T02:14:00.000Z" itemprop="datePublished">2017-10-01</time>
-</a>
-
- 
-    <a href="/2017/10/01/LintCode题解（七）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/01/LintCode题解（七）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/01/LintCode题解（七）/">LintCode题解（七）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <hr>
-<h2 id="判断数独是否合法"><a href="#判断数独是否合法" class="headerlink" title="判断数独是否合法"></a>判断数独是否合法</h2><p>请判定一个数独是否有效。</p>
-<p>该数独可能只填充了部分数字，其中缺少的数字用 . 表示。</p>
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>一个合法的数独（仅部分填充）并不一定是可解的。我们仅需使填充的空格有效即可。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
-    /*
-     * @param board: the board
-     * @return: whether the Sudoku is valid
-     */
-    public boolean isValidSudoku(char[][] board) {
-        // write your code here
-        boolean[] index = new boolean[9];
-
-        for(int j = 0; j&lt;9; j++){
-            Arrays.fill(index, false);
-            for(int i = 0; i&lt;9; i++){
-                if(!checkSudoku(index, board[j][i]))
-                    return false;
-            }
-        }
-
-        for(int i = 0; i&lt;9; i++){
-            Arrays.fill(index, false);
-            for(int j = 0; j&lt;9; j++){
-                if(!checkSudoku(index, board[i][j]))
-                    return false;
-            }
-        }
-
-        for(int i=0; i&lt;9; i=i+3){
-            for(int j = 0; j&lt;9; j=j+3){
-                Arrays.fill(index, false);
-                for(int k = 0; k&lt;9; k++){
-                    if(!checkSudoku(index, board[i+k/3][j+k%3]))
-                        return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public boolean checkSudoku(boolean[] index, char num){
-        if(num == &apos;.&apos;)
-            return true;
-        int _num = num-&apos;0&apos;;    
-        if(num&gt;9||num&lt;0||index[_num-1])
-            return false;
-
-        index[_num-1] = true;
-        return true;    
-    }
-}
-</code></pre><h2 id="平面列表"><a href="#平面列表" class="headerlink" title="平面列表"></a>平面列表</h2><p>给定一个列表，该列表中的每个要素要么是个列表，要么是整数。将其变成一个只包含整数的简单列表。</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给定 [1,2,[1,2]]，返回 [1,2,1,2]。</p>
-<p>给定 [4,[3,[2,[1]]]]，返回 [4,3,2,1]。</p>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p>使用递归</p>
-<pre><code> /**
- * // This is the interface that allows for creating nested lists.
- * // You should not implement it, or speculate about its implementation
- * public interface NestedInteger {
- *
- *     // @return true if this NestedInteger holds a single integer,
- *     // rather than a nested list.
- *     public boolean isInteger();
- *
- *     // @return the single integer that this NestedInteger holds,
- *     // if it holds a single integer
- *     // Return null if this NestedInteger holds a nested list
- *     public Integer getInteger();
- *
- *     // @return the nested list that this NestedInteger holds,
- *     // if it holds a nested list
- *     // Return null if this NestedInteger holds a single integer
- *     public List&lt;NestedInteger&gt; getList();
- * }
- */
-public class Solution {
-
-    // @param nestedList a list of NestedInteger
-    // @return a list of integer
-    public List&lt;Integer&gt; flatten(List&lt;NestedInteger&gt; nestedList) {
-        // Write your code here
-
-        List&lt;Integer&gt; list = new ArrayList&lt;Integer&gt;();
-        for(NestedInteger ele:nestedList){
-            if(ele.isInteger())
-                list.add(ele.getInteger());
-            else
-                list.addAll(flatten(ele.getList()));
-
-        }
-        return list;
-    }
-
-}
-</code></pre><h2 id="克隆二叉树"><a href="#克隆二叉树" class="headerlink" title="克隆二叉树"></a>克隆二叉树</h2><p>深度复制一个二叉树。</p>
-<p>给定一个二叉树，返回一个他的 克隆品 </p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定一颗二叉树</p>
-<pre><code>    1                
-   /  \
-  2    3     
- / \
-4   5
-    =&gt;
-    1
-   /  \
-  2    3
- / \
-4   5
-</code></pre><h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><pre><code>/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
-public class Solution {
-    /**
-     * @param root: The root of binary tree
-     * @return root of new tree
-     */
-    public TreeNode cloneTree(TreeNode root) {
-        // Write your code here
-        if(root==null)
-            return null;
-        TreeNode _root = new TreeNode(root.val);
-        if(root.left!=null)
-            _root.left = cloneTree(root.left);
-        if(root.right!=null)
-            _root.right = cloneTree(root.right);
-        return _root;    
-    }
-}
-</code></pre><h2 id="序号排列"><a href="#序号排列" class="headerlink" title="序号排列"></a>序号排列</h2><p>排列序号</p>
-<p>给出一个不含重复数字的排列，求这些数字的所有排列按字典序排序后该排列的编号。其中，编号从1开始。</p>
-<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>例如，排列[1,2,4]是第1个排列。</p>
-<h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p>原谅我一开始题目意思都没有理解。<br>对于一个数321，三个数的排列有3！种，知道第一个数，排列有2！种，知道第二个数，排列有1！知道第三个数，排列有0！；<br>第一位后小于第一位的数为x，第二位后小于第二位的数有y，第三位后为0，所以最后排列序号的结果为index = x<em>2!+y</em>1!。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-LintCode题解（五）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/30/LintCode题解（五）/" class="article-date">
-      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
-</a>
-
- 
-    <a href="/2017/09/30/LintCode题解（五）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（五）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="岛屿个数"><a href="#岛屿个数" class="headerlink" title="岛屿个数"></a>岛屿个数</h2><p>给一个01矩阵，求不同的岛屿的个数。</p>
-<p>0代表海，1代表岛，如果两个1相邻，那么这两个1属于同一个岛。我们只考虑上下左右为相邻。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><pre><code>[
-  [1, 1, 0, 0, 0],
-  [0, 1, 0, 0, 1],
-  [0, 0, 0, 1, 1],
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1]
-]
-</code></pre><p>如上矩阵有3个岛屿。</p>
-<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>这题比较复杂，需要使用到深度遍历，使用递归将已确定的岛屿由true转化为false。并且递归他的四周其他岛屿。</p>
-<pre><code>public class Solution {
-/**
- * @param grid a boolean 2D matrix
- * @return an integer
- */
-    public int numIslands(boolean[][] grid) {
-        // Write your code here
-        if(grid.length==0)
-            return 0;
-        int row = grid.length;
-        int column = grid[0].length;
-        int count = 0;
-
-        for(int i = 0;i &lt; row;i++){
-            for(int j  = 0;j &lt; column;j++){
-                if(grid[i][j]==true){
-                    dfs_Islands(grid,i,j);
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-    private void dfs_Islands(boolean[][] grid, int i, int j){
-        if(i&lt;0||j&lt;0||i&gt;=grid.length||j&gt;=grid[0].length)
-            return; 
-        if(grid[i][j]==true){
-            grid[i][j]=false;
-            dfs_Islands(grid, i-1, j);
-            dfs_Islands(grid, i+1, j);
-            dfs_Islands(grid, i, j-1);
-            dfs_Islands(grid, i, j+1);
-        }    
-    }
-}
-</code></pre><h2 id="有效回文串"><a href="#有效回文串" class="headerlink" title="有效回文串"></a>有效回文串</h2><p>给定一个字符串，判断其是否为一个回文串。只包含字母和数字，忽略大小写。</p>
-<p> 注意事项</p>
-<p>你是否考虑过，字符串有可能是空字符串？这是面试过程中，面试官常常会问的问题。</p>
-<p>在这个题目中，我们将空字符串判定为有效回文。</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>“A man, a plan, a canal: Panama” 是一个回文。</p>
-<p>“race a car” 不是一个回文。</p>
-<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
-/*
- * @param s: A string
- * @return: Whether the string is a valid palindrome
- */
-    public static boolean isPalindrome(String s) {
-        // write your code here
-        boolean index = true;
-        if(s.length()==0)
-            return index;
-        String[] str = s。toLowerCase.split(&quot;&quot;);
-        int low = 0;
-        int high = s.length()-1;
-        while(low&lt;high){
-            if(str[low].matches(&quot;\\w&quot;)&amp;&amp;str[high].matches(&quot;\\w&quot;)){
-                if(str[low].equals(str[high])&amp;&amp;low==high-1)
-                    low = low+1;
-                else if(str[low].equals(str[high])&amp;&amp;low!=high+1){
-                    low = low+1;    
-                    high = high-1;
-                }
-                else if(!str[low].equals(str[high]))
-                    break;
-            }else{
-                if(!str[low].matches(&quot;\\w&quot;))
-                    low = low+1;
-                else if(!str[high].matches(&quot;\\w&quot;))
-                    high = high-1;
-            }
-        }
-        if(low==high)
-            index=true;
-        else
-            index=false;
-        return index;    
-    }
-}
-</code></pre><p>上面的算法完全是我凑出来的，汗颜啊。<br>下面是别人写的，给予参考：</p>
-<pre><code>public class Solution {
-/**
- * @param s A string
- * @return Whether the string is a valid palindrome
- */
-    public boolean isPalindrome(String s) {
-        // Write your code here
-        if(s.equals(&quot;&quot;)) return true;
-        int len = s.length();
-        int left = 0;
-        int right = len - 1;
-        s = s.toLowerCase();
-        while(left &lt; right){
-            char leftchar = s.charAt( left );
-            char rightchar = s.charAt( right );
-            while(!isValid(leftchar)){
-                left ++;
-                leftchar = s.charAt( left );
-                if(left&gt;=right) return true;
-            }
-            while(!isValid(rightchar)){
-                right --;
-                rightchar = s.charAt( right );
-                if(right&lt;=left) return true;
-            }
-            if(leftchar != rightchar)
-                return false;
-            left ++;
-            right --;
-        }
-
-        return true;
-
-    }
-    public boolean isValid(char ch){
-        if(ch&gt;=&apos;a&apos; &amp;&amp; ch &lt;= &apos;z&apos;)
-            return true;
-        if(ch &gt;=&apos;0&apos; &amp;&amp; ch &lt;= &apos;9&apos;)
-            return true;
-        return false;
-    }
-}    
-</code></pre><h2 id="最长上升子序列"><a href="#最长上升子序列" class="headerlink" title="最长上升子序列"></a>最长上升子序列</h2><p>给定一个整数数组（下标从 0 到 n-1， n 表示整个数组的规模），请找出该数组中的最长上升连续子序列。（最长上升连续子序列可以定义为从右到左或从左到右的序列。）</p>
-<p> 注意事项</p>
-<p>time</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 [5, 4, 2, 1, 3], 其最长上升连续子序列（LICS）为 [5, 4, 2, 1], 返回 4.</p>
-<p>给定 [5, 1, 2, 3, 4], 其最长上升连续子序列（LICS）为 [1, 2, 3, 4], 返回 4.</p>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
-    /*
-     * @param A: An array of Integer
-     * @return: an integer
-     */
-    public int longestIncreasingContinuousSubsequence(int[] A) {
-        // write your code here
-        if(A.length==0)
-            return 0;
-        int up = 1;
-        int _up =1;
-        int _down=1;
-        int down=1;
-        for(int i=1;i&lt;A.length;i++){
-            if(A[i]&gt;A[i-1]){
-                _up = _up+1;
-                if(_down&gt;=down){
-                    down = _down;
-                    _down = 1;
-                }else
-                    _down =1;
-            }
-            if(A[i]&lt;A[i-1]){
-                _down = _down+1;
-                if(_up&gt;=up){
-                    up = _up;
-                    _up = 1;
-                }else
-                    _up=1;
-            }
-        }
-        if(_up&gt;=up)
-            up = _up;
-        if(_down&gt;=down)
-            down = _down;
-        if(down&gt;=up)
-            return down;
-        else
-            return up;
-    }
-}    
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-LintCode题解（六）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/30/LintCode题解（六）/" class="article-date">
-      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
-</a>
-
- 
-    <a href="/2017/09/30/LintCode题解（六）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（六）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="奇偶分割数组"><a href="#奇偶分割数组" class="headerlink" title="奇偶分割数组"></a>奇偶分割数组</h2><p>分割一个整数数组，使得奇数在前偶数在后。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>给定 [1, 2, 3, 4]，返回 [1, 3, 2, 4]。</p>
-<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>这题还是比较简单的，方法很多很多，我们将数组循环遍历，将遍历中的偶数和奇数相互交换就ok了。</p>
-<pre><code>public class Solution {
-/*
- * @param nums: an array of integers
- * @return: nothing
- */
-    public void partitionArray(int[] nums) {
-        // write your code here
-        int length = nums.length;
-        int temp = 0;
-        int index = 0;
-        if(length==0)
-            return;
-        for(int i=0;i&lt;length;i++){
-            if(nums[i]%2==0){
-                index = i;
-                while(nums[index]%2==0){
-                    if(index!=length-1)
-                        index=index+1;
-                    else
-                        break;
-                }
-                temp = nums[i];
-                nums[i] = nums[index];
-                nums[index] = temp;
-            }
-        }
-    }
-}
-</code></pre><h2 id="二进制中1个数"><a href="#二进制中1个数" class="headerlink" title="二进制中1个数"></a>二进制中1个数</h2><p>计算在一个 32 位的整数的二进制表示中有多少个 1.</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给定 32 (100000)，返回 1</p>
-<p>给定 5 (101)，返回 2</p>
-<p>给定 1023 (111111111)，返回 9    </p>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p>按与计算<br>1&amp;1==1，1&amp;0==0，0&amp;&amp;0==0；下面是很巧妙的一个方法。</p>
-<pre><code>public class Solution {
-/*
- * @param num: An integer
- * @return: An integer
- */
-    public int countOnes(int num) {
-        // write your code here
-        int count = 0;
-        while(num!=0){
-            num = num &amp; (num-1);
-            count++;
-        }
-        return count;       
-    }
-}
-</code></pre><h2 id="反转整数"><a href="#反转整数" class="headerlink" title="反转整数"></a>反转整数</h2><p>将一个整数中的数字进行颠倒，当颠倒后的整数溢出时，返回 0 (标记为 32 位整数)。</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 x = 123，返回 321</p>
-<p>给定 x = -123，返回 -321</p>
-<h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><p>反转很简单，难点在于颠倒后证书溢出判断，int32位范围是-2^31~2^31-1,这里使用temp/10与reversed_n进行判断，当temp溢出时，/10不等于reversed_n，所以可判断溢出成立。</p>
-<pre><code>public class Solution {
-    /*
-     * @param n: the integer to be reversed
-     * @return: the reversed integer
-     */
-    public int reverseInteger(int n) {
-        // Write your code here
-        int reversed_n = 0;
-
-        while (n != 0) {
-            int temp = reversed_n * 10 + n % 10;
-            n = n / 10;
-            if (temp / 10 != reversed_n) {
-                reversed_n = 0;
-                break;
-            }
-            reversed_n = temp;
-        }
-        return reversed_n;
-    }
-}
-</code></pre><h2 id="加一"><a href="#加一" class="headerlink" title="加一"></a>加一</h2><p>给定一个非负数，表示一个数字数组，在该数的基础上+1，返回一个新的数组。</p>
-<p>该数字按照大小进行排列，最大的数在列表的最前面。</p>
-<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>给定 [1,2,3] 表示 123, 返回 [1,2,4].</p>
-<p>给定 [9,9,9] 表示 999, 返回 [1,0,0,0].</p>
-<h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p>google的题，哪道没有陷阱，第一次被坑了。<br>注意不要把数组转为int型整数，因为不确定数组大小会导致溢出。<br>本题思想是，若数组值都为9，则增加数组length，首位设为1，其他位为0；否则，末位加1，结束返回。</p>
-<pre><code>public class Solution {
-    /*
-     * @param digits: a number represented as an array of digits
-     * @return: the result
-     */
-    public static int[] plusOne(int[] digits) {
-        // write your code here
-        boolean index = true;
-        for(int n=0; n&lt;digits.length;n++){
-            if(digits[n]!=9)
-                index = false;
-        }
-        if(index==true){
-            int[] num = new int[digits.length+1];
-            num[0] = 1;
-            for(int m=1;m&lt;digits.length+1;m++)
-                num[m] = 0;
-            return num;
-        }
-        for(int i=digits.length-1;i&gt;=0;i--){
-            if(digits[i]!=9){
-                digits[i] = digits[i]+1;
-                break;
-            }else{
-                digits[i] = 0;
-            }
-        }
-        return digits;
-    }
-}
-</code></pre><h2 id="把排序数组转换为高度最小的二叉搜索树"><a href="#把排序数组转换为高度最小的二叉搜索树" class="headerlink" title="把排序数组转换为高度最小的二叉搜索树"></a>把排序数组转换为高度最小的二叉搜索树</h2><p>给一个排序数组（从小到大），将其转换为一棵高度最小的排序二叉树。</p>
-<h3 id="样例-4"><a href="#样例-4" class="headerlink" title="样例"></a>样例</h3><p>给出数组 [1,2,3,4,5,6,7], 返回</p>
-<pre><code>     4
-   /   \
-  2     6
- / \    / \
-1   3  5   7
-</code></pre><h2 id="算法-4"><a href="#算法-4" class="headerlink" title="算法"></a>算法</h2><pre><code>/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */ 
-public class Solution(){
-    /**
-     * @param nums: an integer array
-     * @return: a tree node
-     */
-    public TreeNode sortArrayToBST(int[] A){
-        if(A==null)
-            return null;
-        return bulidTree(A, 0, A.length-1);    
-    }
-
-    public void buildTree(int[] A, int start, int end){
-        if(start&gt;end)
-            return null;
-        int middle = (start+end)/2;
-        TreeNode root = new TreeNode(A[middle]);
-        A.left = buildTree(A, start, middle-1);
-        A.right = buildTree(A, middle+1, end);     
-    }
-}
-</code></pre><h2 id="二进制求和"><a href="#二进制求和" class="headerlink" title="二进制求和"></a>二进制求和</h2><p>给定两个二进制字符串，返回他们的和（用二进制表示）。</p>
-<h2 id="样例-5"><a href="#样例-5" class="headerlink" title="样例"></a>样例</h2><p>a = 11</p>
-<p>b = 1</p>
-<p>返回 100</p>
-<h2 id="算法-5"><a href="#算法-5" class="headerlink" title="算法"></a>算法</h2><p>这种题千万不要将二进制转化为整数，这样转化复杂度将提高几何倍数。<br>注意如果相应位相加结果为2（1+1），则结果设为1，这时要设一个哨兵，相应位溢出时，哨兵设为1；结果为3（1+1+哨兵）时，相同道理。</p>
-<pre><code>public class Solution {
-    /*
-     * @param a: a number
-     * @param b: a number
-     * @return: the result
-     */
-    public String addBinary(String a, String b) {
-        // write your code here
-        if(b.length()==0&amp;&amp;a.length()==0)
-            return null;
-        String str = &quot;&quot;;
-        int index = 0;
-        int i = 0;
-        int middle = 0;
-        String[] A = a.split(&quot;&quot;);
-        String[] B = b.split(&quot;&quot;);
-        while(i&lt;A.length||i&lt;B.length) {
-            if (i &gt;= A.length &amp;&amp; i &lt; B.length)
-                middle = Integer.valueOf(B[B.length-1-i]) + index;
-            else if (i &gt;= B.length &amp;&amp; i &lt; A.length)
-                middle = Integer.valueOf(A[A.length-1-i]) + index;
-            else if (i &lt; A.length &amp;&amp; i &lt; B.length)
-                middle = Integer.valueOf(A[A.length-1-i]) + Integer.valueOf(B[B.length-1-i]) + index;
-            if (middle == 3) {
-                str = 1 + str;
-                index = 1;
-                //i=i+1;
-            } else if (middle == 2) {
-                str = 0 + str;
-                index = 1;
-            } else if (middle == 0 || middle == 1) {
-                str = middle + str;
-                index = 0;
-            }
-            i = i + 1;
-        }
-        if(index==1)
-            str = index+str;
-        return str;
-    }
-}    
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>

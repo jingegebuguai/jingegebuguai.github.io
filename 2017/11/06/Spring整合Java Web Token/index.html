@@ -15,18 +15,18 @@
 
 
 
-<meta name="description" content="LockLock与Synchronized区别 Lock非Java内置特性，而Synchronized是Java语言的关键字，因此是内置特性。Lock是一个接口，通过这个接口可以实现同步访问。 Synchronized不需要手动释放锁，当Synchronized方法或代码块执行完成后，系统会自动让线程释放对锁的占用；Lock需要用户手动释放锁，如果没有释放锁，会导致死锁现象。">
+<meta name="description" content="Java Web TokenJSON Web Token（JWT）是一个非常轻巧的规范。这个规范允许我们使用JWT在用户和服务器之间传递安全可靠的信息。 JWT组成一个JWT实际上就是一个字符串，它由三部分组成，头部、载荷与签名。 荷载{ &amp;quot;iss&amp;quot;: &amp;quot;John Wu JWT&amp;quot;, &amp;quot;iat&amp;quot;: 1441593502, &amp;quot;exp">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java并发之Lock">
-<meta property="og:url" content="http://huihui.kim/2017/10/24/Java并发之Lock/index.html">
+<meta property="og:title" content="Spring 整合Java Web Token">
+<meta property="og:url" content="http://huihui.kim/2017/11/06/Spring整合Java Web Token/index.html">
 <meta property="og:site_name" content="huiHui&#39;s blogs">
-<meta property="og:description" content="LockLock与Synchronized区别 Lock非Java内置特性，而Synchronized是Java语言的关键字，因此是内置特性。Lock是一个接口，通过这个接口可以实现同步访问。 Synchronized不需要手动释放锁，当Synchronized方法或代码块执行完成后，系统会自动让线程释放对锁的占用；Lock需要用户手动释放锁，如果没有释放锁，会导致死锁现象。">
+<meta property="og:description" content="Java Web TokenJSON Web Token（JWT）是一个非常轻巧的规范。这个规范允许我们使用JWT在用户和服务器之间传递安全可靠的信息。 JWT组成一个JWT实际上就是一个字符串，它由三部分组成，头部、载荷与签名。 荷载{ &amp;quot;iss&amp;quot;: &amp;quot;John Wu JWT&amp;quot;, &amp;quot;iat&amp;quot;: 1441593502, &amp;quot;exp">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-01T02:49:37.818Z">
+<meta property="og:updated_time" content="2017-11-06T07:07:18.392Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java并发之Lock">
-<meta name="twitter:description" content="LockLock与Synchronized区别 Lock非Java内置特性，而Synchronized是Java语言的关键字，因此是内置特性。Lock是一个接口，通过这个接口可以实现同步访问。 Synchronized不需要手动释放锁，当Synchronized方法或代码块执行完成后，系统会自动让线程释放对锁的占用；Lock需要用户手动释放锁，如果没有释放锁，会导致死锁现象。">
+<meta name="twitter:title" content="Spring 整合Java Web Token">
+<meta name="twitter:description" content="Java Web TokenJSON Web Token（JWT）是一个非常轻巧的规范。这个规范允许我们使用JWT在用户和服务器之间传递安全可靠的信息。 JWT组成一个JWT实际上就是一个字符串，它由三部分组成，头部、载荷与签名。 荷载{ &amp;quot;iss&amp;quot;: &amp;quot;John Wu JWT&amp;quot;, &amp;quot;iat&amp;quot;: 1441593502, &amp;quot;exp">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -58,7 +58,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Java并发之Lock | huiHui&#39;s blogs</title>
+<title>Spring 整合Java Web Token | huiHui&#39;s blogs</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -271,11 +271,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-Java并发之Lock" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Spring整合Java Web Token" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/24/Java并发之Lock/" class="article-date">
-      <time datetime="2017-10-24T12:00:00.000Z" itemprop="datePublished">2017-10-24</time>
+      <a href="/2017/11/06/Spring整合Java Web Token/" class="article-date">
+      <time datetime="2017-11-06T04:33:00.000Z" itemprop="datePublished">2017-11-06</time>
 </a>
 
 
@@ -290,7 +290,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Java并发之Lock
+      Spring 整合Java Web Token
     </h1>
   
 
@@ -315,276 +315,273 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h2><h3 id="Lock与Synchronized区别"><a href="#Lock与Synchronized区别" class="headerlink" title="Lock与Synchronized区别"></a>Lock与Synchronized区别</h3><ul>
-<li>Lock非Java内置特性，而Synchronized是Java语言的关键字，因此是内置特性。Lock是一个接口，通过这个接口可以实现同步访问。</li>
-<li>Synchronized不需要手动释放锁，当Synchronized方法或代码块执行完成后，系统会自动让线程释放对锁的占用；Lock需要用户手动释放锁，如果没有释放锁，会导致死锁现象。</li>
-</ul>
-<a id="more"></a>
-<h3 id="Lock接口的使用"><a href="#Lock接口的使用" class="headerlink" title="Lock接口的使用"></a>Lock接口的使用</h3><pre><code>public interface lock { 
-    void lock();
-    void lockInterruptibly() throws InterruptException;
-    boolean trylock();
-    boolean trylock(long time, TimeUnit unit) throws InterruptException;
-    void unlock();
-    Condition newCondition();
+        <h2 id="Java-Web-Token"><a href="#Java-Web-Token" class="headerlink" title="Java Web Token"></a>Java Web Token</h2><p>JSON Web Token（JWT）是一个非常轻巧的规范。这个规范允许我们使用JWT在用户和服务器之间传递安全可靠的信息。</p>
+<h3 id="JWT组成"><a href="#JWT组成" class="headerlink" title="JWT组成"></a>JWT组成</h3><p>一个JWT实际上就是一个字符串，它由三部分组成，<span style="color:red">头部、载荷与签名。</span></p>
+<h3 id="荷载"><a href="#荷载" class="headerlink" title="荷载"></a>荷载</h3><pre><code>{
+&quot;iss&quot;: &quot;John Wu JWT&quot;,
+&quot;iat&quot;: 1441593502,
+&quot;exp&quot;: 1441594722,
+&quot;aud&quot;: &quot;www.example.com&quot;,
+&quot;sub&quot;: &quot;jrocket@example.com&quot;,
+&quot;from_user&quot;: &quot;B&quot;,
+&quot;target_user&quot;: &quot;A&quot;
 }
-</code></pre><p>unlock()作用是释放锁。最常用获取锁的方法是lock(),lock必须被显式的被创建，锁定和释放。一般使用ReentrantLock实例化，为了保证锁最后一定释放，要把互斥区放到try块中，并在finally语句中释放锁。当有return语句时，把return语句放到try子句中，确保unlock()不会过早执行。</p>
-<pre><code>//默认为非公平锁，若使用公平所，需要传入参数true
-Lock lock = new ReentrantLock();
-···
-lock.lock();
-try{
-    //执行任务，更新状态
-} catch(Exception e){
-    ...
-} finally{
-    lock.unlock();
-}
-</code></pre><p>tryLock()返回值是布尔型，trylock(long time, TimeUnit unit)方法和tryLock()类似，区别就是这个方法拿不到锁会等待一段时间，如果在时间期限内还拿不到锁就返回false。</p>
-<pre><code>Lock lock = new ReentrantLock();
-···
-if(lock.tryLock()){
-    try{
-        //执行任务，更新状态
-    }catch(Exception e){
-        ···
-    } finally{
-        lock.unlock();
-    }
-}else{
-    ···
-}
-</code></pre><p>lockInterruptibly()与以上方法不同，这个方法获取锁时，如果线程正在等待获取锁，则这个线程能够响应中断，即中断线程等待状态。例如：线程A，线程B都想获取到锁，此时A获取到锁，B只能等待，但是B也可以调用threadB.interrupt()中断等待状态。</p>
-<pre><code>public void method() throws InterruptedException(){
-    lock.interruptibly();
-    try{
-        //执行任务，更新状态
-    }catch(Exception e){
-        ···
-    } finally{
-        lock.unlock();
-    }
-}
-</code></pre><p>已获取到锁的线程无法interrupt()中断，interrupt()只能中断阻塞状态的线程。</p>
-<p>以上是简略的用法，完整的使用方法如下:</p>
-<p>对lock()方法执行代码如下：</p>
-<pre><code>import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Stream;
-
-public class Main{
-    private List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
-    （1）//private Lock lock = new ReentrantLock();
-    public void method(Thread thread){
-        （2）//Lock lock = new ReentrantLock();
-        lock.lock();
-        try{
-            System.out.println(thread.getName()+&quot;获取线程&quot;);
-            Stream.of(1,2,3,4,5).forEach(e -&gt; list.add(e));
-            System.out.println(list);
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            System.out.println(thread.getName()+&quot;释放线程&quot;);
-            lock.unlock();
-        }
-    }
-
-    public static void main(String[] args) {
-        Main test = new Main();
-        new Thread(){
-            @Override
-            public void run(){
-                super.run();
-                test.method(Thread.currentThread());
-            }
-        }.start();
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                test.method(Thread.currentThread());
-            }
-        }.start();
-    }
-}
-</code></pre><p>若是去掉（2）处注释，执行代码，执行结果如下：</p>
-<pre><code>Thread-0获取线程
-Thread-1获取线程
-[null, 1, 2, 2, 3, 3, 4, 5, 5]
-[null, 1, 2, 2, 3, 3, 4, 5, 5]
-Thread-1释放线程
-Thread-0释放线程
-</code></pre><p>为何Thread-0还未释放，Thread-1就获取到锁了呢？因为注释（2）处的lock是局部变量，我们两个线程执行时获取到的lock锁不是同一个锁，所以没有冲突。而（1）处的lock是仅此一家啊！</p>
-<p>所以去掉（1）处的注释获取到的结果如下：</p>
-<pre><code>Thread-0获取线程
-[1, 2, 3, 4, 5]
-Thread-0释放线程
-Thread-1获取线程
-[1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
-Thread-1释放线程
-</code></pre><p>下面对tryLock()方法执行代码如下：</p>
-<pre><code>import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Stream;
-
-public class Main{
-    private List&lt;Integer&gt; list = new ArrayList&lt;Integer&gt;();
-    private Lock lock = new ReentrantLock();
-    public void method(Thread thread){
-        if(lock.tryLock()){
-            try{
-                System.out.println(thread.getName()+&quot;获取线程&quot;);
-                Stream.of(1,2,3,4,5).forEach(e -&gt; list.add(e));
-                System.out.println(list);
-            }catch (Exception e){
-                e.printStackTrace();
-            }finally {
-                System.out.println(thread.getName()+&quot;释放线程&quot;);
-                lock.unlock();
-            }
-        }else{
-            System.out.println(thread.getName()+&quot;获取线程失败&quot;);
-        }
-    }
-
-    public static void main(String[] args) {
-        Main test = new Main();
-        new Thread(){
-            @Override
-            public void run(){
-                super.run();
-                test.method(Thread.currentThread());
-            }
-        }.start();
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                test.method(Thread.currentThread());
-            }
-        }.start();
-    }
-}
-</code></pre><p>tryLock()执行结果如下：</p>
-<pre><code>Thread-1获取线程
-Thread-0获取线程失败
-[1, 2, 3, 4, 5]
-Thread-1释放线程    
-</code></pre><p>对lockInterruptibly执行测试代码如下：</p>
-<pre><code>import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Stream;
-
-class thread1 implements Runnable{
-    private Main test = null;
-    public thread1(Main test){
-        this.test = test;
-    }
-    @Override
-    public void run() {
-        try{
-            test.method(Thread.currentThread());
-        }catch(Exception e){
-            System.out.println(Thread.currentThread()+&quot;线程被中断&quot;);
-        }
-    }
-}
-
-public class Main{
-    Lock lock = new ReentrantLock();
-    public void method(Thread thread) throws InterruptedException{
-        lock.lockInterruptibly();
-        try{
-            System.out.println(thread.getName()+&quot;得到了锁&quot;);
-            long startTime = System.currentTimeMillis();
-            for(    ;     ;) {
-                if(System.currentTimeMillis() - startTime &gt;= Integer.MAX_VALUE)
-                    break;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            System.out.println(thread.getName()+&quot;释放线程&quot;);
-            lock.unlock();
-        }
-    }
-
-    public static void main(String[] args) {
-        Main test = new Main();
-        Thread thread_1 = new Thread(new thread1(test));
-        Thread thread_2 = new Thread(new thread1(test));
-        thread_1.start();
-        thread_2.start();
-        try{
-            Thread.sleep(2000);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        thread_2.interrupt();
-    }
-}
-</code></pre><p>执行结果如下所示：</p>
-<pre><code>Thread-0得到了锁
-Thread[Thread-1,5,main]线程被中断
-</code></pre><h3 id="ReadWriteLock接口"><a href="#ReadWriteLock接口" class="headerlink" title="ReadWriteLock接口"></a>ReadWriteLock接口</h3><pre><code>public interface ReadWriteLock{
-    //return the lock of userd for reading
-    Lock readLock();
-    //return the lock of userd for writing
-    Lock writeLock();
-}
-</code></pre><p>这个接口的两个方法主要用来获取读锁和获取写锁。ReentrantReadWriteLock实现这个接口，并且包含其他很多方法，最主要的还是readLock()和writeLock().这样的用意还是让多个线程可以同时进行读操作.</p>
-<pre><code>import java.util.concurrent.locks.ReentrantReadWriteLock;
-public class test {
-    private ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
-    public static void main(String[] args) {
-        test _test = new test();
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                _test.method(Thread.currentThread());
-            }
-        }.start();
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                _test.method(Thread.currentThread());
-            }
-        }.start();
-    }
-    public void method(Thread thread){
-        reentrantReadWriteLock.readLock().lock();
-        long start = System.currentTimeMillis();
-        try{
-            while(System.currentTimeMillis()-start&lt;1){
-                System.out.println(thread.getName()+&quot;正在读操作&quot;);
-            }
-            System.out.println(thread.getName()+&quot;都操作完成&quot;);
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally {
-            reentrantReadWriteLock.readLock().unlock();
-        }
-    }
-}
-</code></pre><p>总结来说，Lock和synchronized有以下几点不同：</p>
+</code></pre><p>这里面的前五个字段都是由JWT的标准所定义的。</p>
 <ul>
-<li>Lock是一个接口，而synchronized是Java中的关键字，synchronized是内置的语言实现；</li>
-<li>synchronized在发生异常时，会自动释放线程占有的锁，因此不会导致死锁现象发生；而Lock在发生异常时，如果没有主动通过unLock()去释放锁，则很可能造成死锁现象，因此使用Lock时需要在finally块中释放锁；</li>
-<li>Lock可以让等待锁的线程响应中断，而synchronized却不行，使用synchronized时，等待的线程会一直等待下去，不能够响应中断；</li>
-<li>通过Lock可以知道有没有成功获取锁，而synchronized却无法办到。</li>
-<li>Lock可以提高多个线程进行读操作的效率。</li>
+<li>iss: 该JWT的签发者</li>
+<li>sub: 该JWT所面向的用户</li>
+<li>aud: 接收该JWT的一方</li>
+<li>exp(expires): 什么时候过期，这里是一个Unix时间戳</li>
+<li>iat(issued at): 在什么时候签发的</li>
 </ul>
-<p>在性能上来说，如果竞争资源不激烈，两者的性能是差不多的，而当竞争资源非常激烈时（即有大量线程同时竞争），此时Lock的性能要远远优于synchronized。所以说，在具体使用时要根据适当情况选择。</p>
+<p>这些定义都可以在标准中找到。</p>
+<p>将上面的JSON对象进行[base64编码]可以得到下面的字符串。这个字符串我们将它称作JWT的Payload（载荷）。</p>
+<pre><code>eyJpc3MiOiJKb2huIFd1IEpXVCIsImlhdCI6MTQ0MTU5MzUwMiwiZXhwIjoxNDQxNTk0NzIyLCJhdWQiOiJ3d3cuZXhhbXBsZS5jb20iLCJzdWIiOiJqcm9ja2V0QGV4YW1wbGUuY29tIiwiZnJvbV91c2VyIjoiQiIsInRhcmdldF91c2VyIjoiQSJ9
+</code></pre><h3 id="头部"><a href="#头部" class="headerlink" title="头部"></a>头部</h3><p>JWT还需要一个头部，头部用于描述关于该JWT的最基本的信息，例如其类型以及签名所用的算法等。这也可以被表示成一个JSON对象。</p>
+<pre><code>{
+</code></pre><p>  “typ”: “JWT”,<br>  “alg”: “HS256”<br>    }</p>
+<p>在这里，我们说明了这是一个JWT，并且我们所用的签名算法（后面会提到）是HS256算法。（算法根据实际情况而变）</p>
+<pre><code>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
+</code></pre><h3 id="签名"><a href="#签名" class="headerlink" title="签名"></a>签名</h3><p>签名就是将荷载和头部编码用.号连接在一起就形成了</p>
+<pre><code>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcm9tX3VzZXIiOiJCIiwidGFyZ2V0X3VzZXIiOiJBIn0
+</code></pre><p>我们将上面拼接完的字符串用HS256算法进行加密。在加密的时候，我们还需要提供一个密钥（secret）。如果我们用mystar作为密钥的话，那么就可以得到我们加密后的内容</p>
+<pre><code>rSWamyAYwuHCo7IFAgd1oRpSP7nzL7BF5t7ItqpKViM
+</code></pre><p>最后将这一部分签名也拼接在被签名的字符串后面，我们就得到了完整的JWT</p>
+<pre><code>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcm9tX3VzZXIiOiJCIiwidGFyZ2V0X3VzZXIiOiJBIn0.rSWamyAYwuHCo7IFAgd1oRpSP7nzL7BF5t7ItqpKViM
+</code></pre><h4 id="签名的目的"><a href="#签名的目的" class="headerlink" title="签名的目的"></a>签名的目的</h4><p>最后一步签名的过程，实际上是对头部以及载荷内容进行签名。一般而言，加密算法对于不同的输入产生的输出总是不一样的。对于两个不同的输入，产生同样的输出的概率极其地小（有可能比我成世界首富的概率还小）。所以，我们就把“不一样的输入产生不一样的输出”当做必然事件来看待吧。</p>
+<p>所以，如果有人对头部以及载荷的内容解码之后进行修改，再进行编码的话，那么新的头部和载荷的签名和之前的签名就将是不一样的。而且，如果不知道服务器加密的时候用的密钥的话，得出来的签名也一定会是不一样的。</p>
+<p>服务器应用在接受到JWT后，会首先对头部和载荷的内容用同一算法再次签名。那么服务器应用是怎么知道我们用的是哪一种算法呢？别忘了，我们在JWT的头部中已经用alg字段指明了我们的加密算法了。</p>
+<p>如果服务器应用对头部和载荷再次以同样方法签名之后发现，自己计算出来的签名和接受到的签名不一样，那么就说明这个Token的内容被别人动过的，我们应该拒绝这个Token，返回一个HTTP 401 Unauthorized响应。</p>
+<p>我们可以看到，JWT适合用于向Web应用传递一些非敏感信息。例如在上面提到的完成加好友的操作，还有诸如下订单的操作等等。</p>
+<p>其实JWT还经常用于设计用户认证和授权系统，甚至实现Web应用的单点登录。</p>
+<h2 id="Spring使用JWT"><a href="#Spring使用JWT" class="headerlink" title="Spring使用JWT"></a>Spring使用JWT</h2><h3 id="Maven配置方式"><a href="#Maven配置方式" class="headerlink" title="Maven配置方式"></a>Maven配置方式</h3><pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.auth0&lt;/groupId&gt;
+    &lt;artifactId&gt;java-jwt&lt;/artifactId&gt;
+    &lt;version&gt;3.2.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><h3 id="JWT算法-了解"><a href="#JWT算法-了解" class="headerlink" title="JWT算法(了解)"></a>JWT算法(了解)</h3><table>
+<thead>
+<tr>
+<th>JWS</th>
+<th style="text-align:center">算法</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HS256</td>
+<td style="text-align:center">HMAC256</td>
+<td>HMAC with SHA-256</td>
+</tr>
+<tr>
+<td>HS384</td>
+<td style="text-align:center">HMAC384</td>
+<td>HMAC with SHA-384</td>
+</tr>
+<tr>
+<td>HS512</td>
+<td style="text-align:center">HMAC512</td>
+<td>HMAC with SHA-512</td>
+</tr>
+<tr>
+<td>RS256</td>
+<td style="text-align:center">RSA256</td>
+<td>RSASSA-PKCS1-v1_5 with SHA-256</td>
+</tr>
+<tr>
+<td>RS384</td>
+<td style="text-align:center">RSA384</td>
+<td>RSASSA-PKCS1-v1_5 with SHA-384</td>
+</tr>
+<tr>
+<td>RS512</td>
+<td style="text-align:center">RSA512</td>
+<td>RSASSA-PKCS1-v1_5 with SHA-512</td>
+</tr>
+<tr>
+<td>ES256</td>
+<td style="text-align:center">ECDSA256</td>
+<td>ECDSA with curve P-256 and SHA-256</td>
+</tr>
+<tr>
+<td>ES384</td>
+<td style="text-align:center">ECDSA384</td>
+<td>ECDSA with curve P-384 and SHA-384</td>
+</tr>
+<tr>
+<td>ES512</td>
+<td style="text-align:center">ECDSA512</td>
+<td>ECDSA with curve P-521 and SHA-512</td>
+</tr>
+</tbody>
+</table>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><h4 id="选择算法"><a href="#选择算法" class="headerlink" title="选择算法"></a>选择算法</h4><p>算法定义了一个令牌是如何被签名和验证的。它可以用HMAC算法的原始值来实例化，也可以在RSA和ECDSA算法的情况下对密钥对或密钥提供程序进行实例化。创建后，该实例可用于令牌签名和验证操作。</p>
+<p>在使用RSA或ECDSA算法时，只需要签署JWTs，就可以通过传递null值来避免指定公钥。当您需要验证JWTs时，也可以使用私钥进行操作</p>
+<p>使用静态的字符密文或者key来获取算法器:</p>
+<pre><code>//HMAC
+Algorithm algorithmHS = Algorithm.HMAC256(&quot;secret&quot;);
 
+//RSA
+RSAPublicKey publicKey = //Get the key instance
+RSAPrivateKey privateKey = //Get the key instance
+Algorithm algorithmRS = Algorithm.RSA256(publicKey, privateKey);
+</code></pre><p>使用一个key提供者来获取算法:<br>  通过使用KeyProvider，您可以在运行时更改密钥，用于验证令牌签名或为RSA或ECDSA算法签署一个新的令牌。这是通过实现RSAKeyProvider或ECDSAKeyProvider方法实现的:</p>
+<ul>
+<li>getPublicKeyById(String kid): 它在令牌签名验证中调用，它应该返回用于验证令牌的密钥。如果使用了关键的轮换，例如JWK，它可以使用id来获取正确的轮换键(或者只是一直返回相同的键)。</li>
+<li>getPrivateKey(): 在令牌签名期间调用它，它应该返回用于签署JWT的密钥。</li>
+<li>getPrivateKeyId():在令牌签名期间调用它，它应该返回标识由getPrivateKey()返回的键的id的id。这个值比JWTCreator.Builder和keyid(String)方法中的值更受欢迎。如果您不需要设置孩子的值，就避免使用KeyProvider实例化算法。  </li>
+</ul>
+<h3 id="创建JWT"><a href="#创建JWT" class="headerlink" title="创建JWT"></a>创建JWT</h3><pre><code>try {
+Algorithm algorithm = Algorithm.HMAC256(&quot;secret&quot;);
+String token = JWT.create()
+    .withIssuer(&quot;auth0&quot;)
+    .sign(algorithm);
+} catch (UnsupportedEncodingException exception){
+    //UTF-8 encoding not supported
+} catch (JWTCreationException exception){
+    //Invalid Signing configuration / Couldn&apos;t convert Claims.
+}
+</code></pre><p>如果Claim不能转换为JSON，或者在签名过程中使用的密钥无效，那么将会抛出JWTCreationException异常。</p>
+<h3 id="验证令牌"><a href="#验证令牌" class="headerlink" title="验证令牌"></a>验证令牌</h3><p>首先需要通过调用jwt.require()和传递算法实例来创建一个JWTVerifier实例。如果您要求令牌具有特定的Claim值，请使用构建器来定义它们。方法build()返回的实例是可重用的，因此您可以定义一次，并使用它来验证不同的标记。最后调用verifier.verify()来验证token</p>
+<pre><code>String token = &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJhdXRoMCJ9.AbIJTDMFc7yUa5MhvcP03nJPyCPzZtQcGEp-zWfOkEE&quot;;
+try {
+    Algorithm algorithm = Algorithm.HMAC256(&quot;secret&quot;);
+    JWTVerifier verifier = JWT.require(algorithm)
+        .withIssuer(&quot;auth0&quot;)
+        .build(); //Reusable verifier instance
+    DecodedJWT jwt = verifier.verify(token);
+} catch (UnsupportedEncodingException exception){
+    //UTF-8 encoding not supported
+} catch (JWTVerificationException exception){
+    //Invalid signature/claims
+}
+</code></pre><h3 id="时间验证"><a href="#时间验证" class="headerlink" title="时间验证"></a>时间验证</h3><p>当验证一个令牌时，时间验证会自动发生，导致在值无效时抛出一个JWTVerificationException。如果前面的任何一个字段都丢失了，那么在这个验证中就不会考虑这些字段。</p>
+<p>要指定令牌仍然被认为有效的余地窗口，在JWTVerifier builder中使用accept回旋()方法，并传递一个正值的秒值。这适用于上面列出的每一项。</p>
+<pre><code>JWTVerifier verifier = JWT.require(algorithm)
+.acceptLeeway(1) // 1 sec for nbf, iat and exp
+.build();
+</code></pre><p>您还可以为给定的日期声明指定一个自定义值，并为该声明覆盖缺省值。</p>
+<pre><code>JWTVerifier verifier = JWT.require(algorithm)
+.acceptLeeway(1)   //1 sec for nbf and iat
+.acceptExpiresAt(5)   //5 secs for exp
+.build();
+</code></pre><h3 id="信息解析"><a href="#信息解析" class="headerlink" title="信息解析"></a>信息解析</h3><h4 id="Algorithm-“alg”"><a href="#Algorithm-“alg”" class="headerlink" title="Algorithm (“alg”)"></a>Algorithm (“alg”)</h4><p>返回jwt的算法值或,如果没有定义则返回null</p>
+<pre><code>String algorithm = jwt.getAlgorithm();
+</code></pre><p>如果您需要在您的lib/app中测试此行为，将验证实例转换为basever可视化，以获得verific.build()方法的可见性，该方法可以接受定制的时钟。例如:</p>
+<pre><code>BaseVerification verification = (BaseVerification) JWT.require(algorithm)
+.acceptLeeway(1)
+.acceptExpiresAt(5);
+Clock clock = new CustomClock(); //Must implement Clock interface
+JWTVerifier verifier = verification.build(clock);
+</code></pre><h4 id="Type-“typ”"><a href="#Type-“typ”" class="headerlink" title="Type (“typ”)"></a>Type (“typ”)</h4><p>返回jwt的类型值，如果没有定义则返回null（多数情况类型值为jwt）</p>
+<pre><code>String type = jwt.getType();
+</code></pre><h4 id="Content-Type-“cty”"><a href="#Content-Type-“cty”" class="headerlink" title="Content Type (“cty”)"></a>Content Type (“cty”)</h4><p>返回内容的类型,如果没有定义则返回null</p>
+<pre><code>String contentType = jwt.getContentType();
+</code></pre><h4 id="Key-Id-“kid”"><a href="#Key-Id-“kid”" class="headerlink" title="Key Id (“kid”)"></a>Key Id (“kid”)</h4><p>返回key的id值,如果没有定义则返回null</p>
+<pre><code>String keyId = jwt.getKeyId();
+</code></pre><h3 id="自定义字段"><a href="#自定义字段" class="headerlink" title="自定义字段"></a>自定义字段</h3><p>在令牌的头部中定义的附加声明可以通过调用getHeaderClaim() 获取,即使无法找到，也会返回。您可以通过调用claim.isNull()来检查声明的值是否为null。</p>
+<pre><code>Claim claim = jwt.getHeaderClaim(&quot;owner&quot;);
+</code></pre><p>当使用jwt.create()创建一个令牌时，您可以通过调用withHeader()来指定头声明，并同时传递声明的映射。</p>
+<pre><code>Map&lt;String, Object&gt; headerClaims = new HashMap();
+headerClaims.put(&quot;owner&quot;, &quot;auth0&quot;);
+String token = JWT.create()
+    .withHeader(headerClaims)
+    .sign(algorithm);
+</code></pre><p>提示:在签名过程之后，alg和typ值将始终包含在Header中。</p>
+<h4 id="JWT的负载-Payload-声明"><a href="#JWT的负载-Payload-声明" class="headerlink" title="JWT的负载(Payload)声明"></a>JWT的负载(Payload)声明</h4><pre><code>Issuer (&quot;iss&quot;)
+</code></pre><p>返回签发者的名称值,如果没有在负载中定义则返回null</p>
+<pre><code>String issuer = jwt.getIssuer();
+Subject (&quot;sub&quot;)
+</code></pre><p>返回jwt所面向的用户的值,如果没有在负载中定义则返回null</p>
+<pre><code>String subject = jwt.getSubject();
+Audience (&quot;aud&quot;)
+</code></pre><p>返回该jwt由谁接收,如果没有在负载中定义则返回null</p>
+<pre><code>List&lt;String&gt; audience = jwt.getAudience();
+Expiration Time (&quot;exp&quot;)
+</code></pre><p>返回该jwt的过期时间,如果在负载中没有定义则返回null</p>
+<pre><code>Date expiresAt = jwt.getExpiresAt();
+Not Before (&quot;nbf&quot;)
+</code></pre><p>Returns the Not Before value or null if it’s not defined in the Payload.</p>
+<pre><code>Date notBefore = jwt.getNotBefore();
+Issued At (&quot;iat&quot;)
+</code></pre><p>返回在什么时候签发的,如果在负载中没有定义则返回null</p>
+<pre><code>Date issuedAt = jwt.getIssuedAt();
+JWT ID (&quot;jti&quot;)
+</code></pre><p>返回该jwt的唯一标志,如果在负载中没有定义则返回null</p>
+<pre><code>String id = jwt.getId();
+</code></pre><h4 id="自定义声明"><a href="#自定义声明" class="headerlink" title="自定义声明"></a>自定义声明</h4><p>在令牌有效负载中定义的附加声明可以通过调用getClaims()或 getClaim()和传递声明名来获得。即使无法找到声明，也将会有返回值。您可以通过调用claim.isNull()来检查声明的值是否为null。</p>
+<pre><code>Map&lt;String, Claim&gt; claims = jwt.getClaims();    //Key is the Claim name
+Claim claim = claims.get(&quot;isAdmin&quot;);
+</code></pre><p>或者:</p>
+<pre><code>Claim claim = jwt.getClaim(&quot;isAdmin&quot;);
+</code></pre><p>当使用jwt.create()创建一个令牌时，您可以通过调用withClaim()来指定自定义声明，并同时传递名称和值。</p>
+<pre><code>String token = JWT.create()
+    .withClaim(&quot;name&quot;, 123)
+    .withArrayClaim(&quot;array&quot;, new Integer[]{1, 2, 3})
+    .sign(algorithm);
+</code></pre><p>您还可以通过调用withClaim()来验证jwt.require()的自定义声明，并传递该名称和所需的值。</p>
+<pre><code>JWTVerifier verifier = JWT.require(algorithm)
+    .withClaim(&quot;name&quot;, 123)
+    .withArrayClaim(&quot;array&quot;, 1, 2, 3)
+    .build();
+DecodedJWT jwt = verifier.verify(&quot;my.jwt.token&quot;);    
+</code></pre><h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><pre><code>package course.utils;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.google.common.collect.Maps;
+import course.pojo.User;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
+import java.util.Map;
+
+public class JwtUtils {
+
+    //创建token
+    public static String creatToken(User user) throws IllegalArgumentException, UnsupportedEncodingException{
+        Algorithm algorithm = Algorithm.HMAC256(&quot;secret&quot;);
+        String username = user.getUsername();
+        Map&lt;String, Object&gt; map = Maps.newHashMap();
+        map.put(&quot;alg&quot;, &quot;HS256&quot;);
+        map.put(&quot;typ&quot;, &quot;JWT&quot;);
+        String token = JWT.create().withHeader(map)
+                .withClaim(&quot;username&quot;, username)
+                .withExpiresAt(new Date(System.currentTimeMillis()+360000))
+                .sign(algorithm);
+        return token;
+    }
+
+    //验证jwt
+    public static DecodedJWT verifyJwt(String token){
+        DecodedJWT decodedJWT = null;
+        try{
+            Algorithm algorithm = Algorithm.HMAC256(&quot;secret&quot;);
+            JWTVerifier jwtVerifier = JWT.require(algorithm).build();
+            decodedJWT = jwtVerifier.verify(token);
+        }catch(IllegalArgumentException e){
+            e.printStackTrace();
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }catch(JWTVerificationException e) {
+            e.printStackTrace();
+        }
+        return decodedJWT;
+    }
+
+    public static void main(String[] args) throws UnsupportedEncodingException{
+//        String username = &quot;root&quot;;
+//        Integer id =1;
+//        System.out.println(creatToken(username,id));
+//        String token = &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MDgxMzgxNDAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyb290In0.OeRdHJZKmxFBqIN-A-uSNQK8JyKdzX-wcFR883oMqFA&quot;;
+//        System.out.println(verifyJwt(&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MDgxMzgxNDAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyb290In0.OeRdHJZKmxFBqIN-A-uSNQK8JyKdzX-wcFR883oMqFA&quot;));
+//        System.out.println(verifyJwt(token).getClaims().get(&quot;username&quot;).asString());
+    }
+}
+</code></pre>
       
     </div>
     
@@ -592,13 +589,13 @@ public class test {
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/10/24/Java并发之Lock/">Java并发之Lock</a></p>
+        <p><span>本文标题:</span><a href="/2017/11/06/Spring整合Java Web Token/">Spring 整合Java Web Token</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">huiHui</a></p>
-        <p><span>发布时间:</span>2017-10-24, 20:00:00</p>
-        <p><span>最后更新:</span>2017-11-01, 10:49:37</p>
+        <p><span>发布时间:</span>2017-11-06, 12:33:00</p>
+        <p><span>最后更新:</span>2017-11-06, 15:07:18</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/10/24/Java并发之Lock/" title="Java并发之Lock">http://huihui.kim/2017/10/24/Java并发之Lock/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/10/24/Java并发之Lock/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/11/06/Spring整合Java Web Token/" title="Spring 整合Java Web Token">http://huihui.kim/2017/11/06/Spring整合Java Web Token/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/11/06/Spring整合Java Web Token/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -611,15 +608,15 @@ public class test {
     <nav id="article-nav">
         
             <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/10/26/Java并发之ThreadLocal/">
-                    Java并发之ThreadLocal
+                <a href="/2017/11/06/Java MD5加密/">
+                    Java MD5加密
                 </a>
             </div>
         
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/10/20/Django图片相关处理/">
-                    Django图片相关处理方法
+                <a href="/2017/11/01/Java并发之线程池基础/">
+                    Java并发之线程池基础
                 </a>
             </div>
         
@@ -631,7 +628,7 @@ public class test {
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Lock"><span class="toc-number">1.</span> <span class="toc-text">Lock</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Lock与Synchronized区别"><span class="toc-number">1.1.</span> <span class="toc-text">Lock与Synchronized区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lock接口的使用"><span class="toc-number">1.2.</span> <span class="toc-text">Lock接口的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ReadWriteLock接口"><span class="toc-number">1.3.</span> <span class="toc-text">ReadWriteLock接口</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-Web-Token"><span class="toc-number">1.</span> <span class="toc-text">Java Web Token</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JWT组成"><span class="toc-number">1.1.</span> <span class="toc-text">JWT组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#荷载"><span class="toc-number">1.2.</span> <span class="toc-text">荷载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#头部"><span class="toc-number">1.3.</span> <span class="toc-text">头部</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#签名"><span class="toc-number">1.4.</span> <span class="toc-text">签名</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#签名的目的"><span class="toc-number">1.4.1.</span> <span class="toc-text">签名的目的</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring使用JWT"><span class="toc-number">2.</span> <span class="toc-text">Spring使用JWT</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Maven配置方式"><span class="toc-number">2.1.</span> <span class="toc-text">Maven配置方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JWT算法-了解"><span class="toc-number">2.2.</span> <span class="toc-text">JWT算法(了解)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方法"><span class="toc-number">2.3.</span> <span class="toc-text">使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#选择算法"><span class="toc-number">2.3.1.</span> <span class="toc-text">选择算法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建JWT"><span class="toc-number">2.4.</span> <span class="toc-text">创建JWT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#验证令牌"><span class="toc-number">2.5.</span> <span class="toc-text">验证令牌</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#时间验证"><span class="toc-number">2.6.</span> <span class="toc-text">时间验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#信息解析"><span class="toc-number">2.7.</span> <span class="toc-text">信息解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Algorithm-“alg”"><span class="toc-number">2.7.1.</span> <span class="toc-text">Algorithm (“alg”)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Type-“typ”"><span class="toc-number">2.7.2.</span> <span class="toc-text">Type (“typ”)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Type-“cty”"><span class="toc-number">2.7.3.</span> <span class="toc-text">Content Type (“cty”)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Key-Id-“kid”"><span class="toc-number">2.7.4.</span> <span class="toc-text">Key Id (“kid”)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义字段"><span class="toc-number">2.8.</span> <span class="toc-text">自定义字段</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#JWT的负载-Payload-声明"><span class="toc-number">2.8.1.</span> <span class="toc-text">JWT的负载(Payload)声明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#自定义声明"><span class="toc-number">2.8.2.</span> <span class="toc-text">自定义声明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例"><span class="toc-number">3.</span> <span class="toc-text">实例</span></a></li></ol>
         
     </div>
     <style>
@@ -667,7 +664,7 @@ public class test {
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"Java并发之Lock　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"Spring 整合Java Web Token　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -686,8 +683,8 @@ public class test {
     <div id="disqus_thread"></div>
     <script>
         var disqus_config = function(){
-            this.page.url = 'http://huihui.kim/2017/10/24/Java并发之Lock/';
-            this.page.identifier = '2017/10/24/Java并发之Lock/';
+            this.page.url = 'http://huihui.kim/2017/11/06/Spring整合Java Web Token/';
+            this.page.identifier = '2017/11/06/Spring整合Java Web Token/';
         };
         var loadComment = function(){
             var d = document, s = d.createElement('script');
@@ -709,7 +706,7 @@ public class test {
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/10/26/Java并发之ThreadLocal/" title="上一篇: Java并发之ThreadLocal">
+            <a href="/2017/11/06/Java MD5加密/" title="上一篇: Java MD5加密">
                 <i class="fa fa-angle-left"></i>
             </a>
         
@@ -717,7 +714,7 @@ public class test {
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/10/20/Django图片相关处理/" title="下一篇: Django图片相关处理方法">
+            <a href="/2017/11/01/Java并发之线程池基础/" title="下一篇: Java并发之线程池基础">
                 <i class="fa fa-angle-right"></i>
             </a>
         

@@ -14,19 +14,20 @@
 <meta name="author" content="huiHui" />
 
 
+    
+    
 
-<meta name="description" content="所有模版标签用分隔符包围，默认为“{”和“}”。 模板注释模板注释被星号包围，两边星号被定界符“{ }”包围，如 {  smarty  }smarty注释不会在模板文件的最后输出中出现，这与不同（译注：html注释在页面源码中可见，而smarty注释则不能）。如下简单代码片{smarty*}在源码中不可见，而源码可见。 12345678910&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;">
-<meta name="keywords" content="PHP">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Smarty模板引擎">
-<meta property="og:url" content="http://huihui.kim/2017/03/11/smarty模板引擎/index.html">
+
+<meta name="description" content="不屈于他人之下，技术永远没有尽头，不断进步才能生存">
+<meta property="og:type" content="website">
+<meta property="og:title" content="huiHui&#39;s blogs">
+<meta property="og:url" content="http://huihui.kim/page/6/index.html">
 <meta property="og:site_name" content="huiHui&#39;s blogs">
-<meta property="og:description" content="所有模版标签用分隔符包围，默认为“{”和“}”。 模板注释模板注释被星号包围，两边星号被定界符“{ }”包围，如 {  smarty  }smarty注释不会在模板文件的最后输出中出现，这与不同（译注：html注释在页面源码中可见，而smarty注释则不能）。如下简单代码片{smarty*}在源码中不可见，而源码可见。 12345678910&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;">
+<meta property="og:description" content="不屈于他人之下，技术永远没有尽头，不断进步才能生存">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-03-11T08:07:48.774Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Smarty模板引擎">
-<meta name="twitter:description" content="所有模版标签用分隔符包围，默认为“{”和“}”。 模板注释模板注释被星号包围，两边星号被定界符“{ }”包围，如 {  smarty  }smarty注释不会在模板文件的最后输出中出现，这与不同（译注：html注释在页面源码中可见，而smarty注释则不能）。如下简单代码片{smarty*}在源码中不可见，而源码可见。 12345678910&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;">
+<meta name="twitter:title" content="huiHui&#39;s blogs">
+<meta name="twitter:description" content="不屈于他人之下，技术永远没有尽头，不断进步才能生存">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -54,11 +55,13 @@
 <link rel="stylesheet" href="/css/style.css">
 
 
+    <style> .article { opacity: 0;} </style>
+
 
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Smarty模板引擎 | huiHui&#39;s blogs</title>
+<title>huiHui&#39;s blogs</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -67,8 +70,8 @@
     var yiliaConfig = {
         fancybox: true,
         animate: true,
-        isHome: false,
-        isPost: true,
+        isHome: true,
+        isPost: false,
         isArchive: false,
         isTag: false,
         isCategory: false,
@@ -271,13 +274,24 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-smarty模板引擎" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap">
+  
+    <article id="post-smarty模板引擎" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2017/03/11/smarty模板引擎/" class="article-date">
       <time datetime="2017-03-11T02:14:00.000Z" itemprop="datePublished">2017-03-11</time>
 </a>
 
+ 
+    <a href="/2017/03/11/smarty模板引擎/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/03/11/smarty模板引擎/"></span>
+        
+    </a>
 
     </div>
   
@@ -289,27 +303,12 @@
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      Smarty模板引擎
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/11/smarty模板引擎/">Smarty模板引擎</a>
     </h1>
   
 
       </header>
-      
-      <div class="article-info article-info-post">
-        
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-        
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
-    </div>
-
-        <div class="clearfix"></div>
-      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -341,85 +340,27 @@
       
     </div>
     
-  </div>
-  
-    
-    <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/03/11/smarty模板引擎/">Smarty模板引擎</a></p>
-        <p><span>文章作者:</span><a href="/" title="回到主页">huiHui</a></p>
-        <p><span>发布时间:</span>2017-03-11, 10:14:00</p>
-        <p><span>最后更新:</span>2017-03-11, 16:07:48</p>
-        <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/03/11/smarty模板引擎/" title="Smarty模板引擎">http://huihui.kim/2017/03/11/smarty模板引擎/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/03/11/smarty模板引擎/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
-            <script> var clipboard = new Clipboard('.copy-path'); </script>
-        </p>
-        <p>
-            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
-        </p>
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
     </div>
 
 
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+    </div>
 
-    <nav id="article-nav">
-        
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/03/11/Hexo&Gituhub博客搭建/">
-                    Hexo&amp;Github博客搭建
-                </a>
-            </div>
-        
-        
-    </nav>
-
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
   
 </article>
 
-    <div id="toc" class="toc-article">
-        <strong class="toc-title">文章目录</strong>
-        
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#模板注释"><span class="toc-number">1.</span> <span class="toc-text">模板注释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量初步"><span class="toc-number">2.</span> <span class="toc-text">变量初步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#双引号中插入变量"><span class="toc-number">2.1.</span> <span class="toc-text">双引号中插入变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数"><span class="toc-number">3.</span> <span class="toc-text">函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#属性"><span class="toc-number">4.</span> <span class="toc-text">属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Math"><span class="toc-number">5.</span> <span class="toc-text">Math</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#忽略smarty语法"><span class="toc-number">6.</span> <span class="toc-text">忽略smarty语法</span></a></li></ol>
-        
-    </div>
-    <style>
-        .left-col .switch-btn,
-        .left-col .switch-area {
-            display: none;
-        }
-        .toc-level-3 i,
-        .toc-level-3 ol {
-            display: none !important;
-        }
-    </style>
-
-    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
-
-    <script>
-        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
-    </script>
-
-
-
-    
-<div class="share">
-    
-        <div class="bdsharebuttonbox">
-            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
-            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
-            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
-            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
-            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
-            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
-            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
-        </div>
-        <script>
-            window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"Smarty模板引擎　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-        </script>
-    
-
-    
-</div>
 
 
 
@@ -427,55 +368,13 @@
 
 
 
-    
-        <section id="comments">
-    <style> aside.comment-bar { margin: auto 30px; }</style>
-    <div id="disqus_thread"></div>
-    <script>
-        var disqus_config = function(){
-            this.page.url = 'http://huihui.kim/2017/03/11/smarty模板引擎/';
-            this.page.identifier = '2017/03/11/smarty模板引擎/';
-        };
-        var loadComment = function(){
-            var d = document, s = d.createElement('script');
-            s.src = '//.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        }
-    </script>
-    
-    <script> loadComment(); </script>
 
-</section>
-
-
-    
-
-
-
-
-    <div class="scroll" id="post-nav-button">
-        
-            <a href="/2017/03/11/Hexo&Gituhub博客搭建/" title="上一篇: Hexo&amp;Github博客搭建">
-                <i class="fa fa-angle-left"></i>
-            </a>
-        
-
-        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
-
-        
-            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
-        
-    </div>
-
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Java读写Properties属性/">Java读写Properties属性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Java MD5加密/">Java MD5加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Spring整合Java Web Token/">Spring 整合Java Web Token</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池基础/">Java并发之线程池基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/">Java并发之线程池—Callable,Future,FutureTask</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/">Java并发之线程池拓展—ExecutorService原理，静态工厂方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之阻塞队列/">Java并发之阻塞队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/LintCode题解--中等篇(1)/">LintCode题解——中等篇（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Java并发之ThreadLocal/">Java并发之ThreadLocal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/24/Java并发之Lock/">Java并发之Lock</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Django前端页面相关处理/">Django Html相关配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Spring基于注解的配置/">Spring基于注解的配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/SSM项目知识点总结/">SSM小项目知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Spring AOP切面/">Spring AOP切面编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Mybatis-generator详细配置demo/">Mybatis-Generator相关配置demo</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/LintCode题解（二）/">LintCode题解（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/01/LintCode题解（七）/">LintCode题解（七）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（一）/">LintCode题解（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java并发基础/">Java并发基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/springMVC基础/">SpringMVC中@RequestMapping等基础知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java数据库与事务处理机制/">Java数据库处理与事务机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/Spring属性配置细节/">Spring Bean配置细节</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/LintCode题解（四）/">LintCode题解（四）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/LintCode题解（三）/">LintCode题解（三）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/31/Java容器/">Java容器(集合)，持有对象总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/27/servlet实现网页重定向/">Servlet实现网页重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/servlet实现文件上传下载/">Servlet文件上传下载类</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/CSS预处理器比较/">有关CSS预处理器的比较选择(Sass&Less&Stylus)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/js内置对象——string&array/">Js内置对象进阶（一）——String&Array</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">Vue仿饿了么知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/web开发者必备http知识/">Web开发者必备Http基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/python中pip install中utf-8错误的解决方法/">Pip Install中utf-8编码问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/我们仍未知道那天所看见的list/">我们仍未知道那些天所看见的List</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/01/jquery实现樱花坠落插件/">Jquery实现web页面樱花坠落的特效</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/16/Angular2.0开发/">Angular2.0仿今日头条应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/24/后端学习angular--组件篇/">后端学angular2.0的痛苦历程--组件篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的Mysql数据库优化操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/python进阶学习--参数/">Python进阶学习--*Arg、**kw和装饰器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/mysql自连接/">Mysql自连接与join关联</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/10/用IIFE与let方法改写循环闭包/">用IIFE与let命令改写循环闭包</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/19/WEB-CSS布局/">WEB前端--CSS布局必备知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/16/JS回调函数/">JS回调函数详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/Hexo&Gituhub博客搭建/">Hexo&Github博客搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/smarty模板引擎/">Smarty模板引擎</a></li></ul>
-
-
-
-
-    <script>
-        
-    </script>
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span>
+    </nav>
+  
 </div>
       <footer id="footer">
     <div class="outer">
@@ -529,6 +428,26 @@
         })
     </script>
 
+
+    
+
+    
+        <script id="dsq-count-scr" src="//.disqus.com/count.js" async></script>
+        <script>
+            if ($(".left-col").is(":visible")) {
+                var $disqusCount = $(".disqus-comment-count");
+                $disqusCount.bind("DOMNodeInserted", function(e) {
+                    var num = $(this).text().replace(/[^0-9]/ig,"");
+                    if (num > 0) {
+                        $(this).siblings(".count-comment").text(num);
+                    }
+                    $(this).remove();
+                })
+            } else {
+                $(".disqus-comment-count").remove();
+            }
+        </script>
+     
 
 
 
