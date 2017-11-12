@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="huiHui" />
+
+
+
+<meta name="description" content="可以说并发是Java开发工程师面试时最常见的面试题了，关于并发的书籍也有很多，比如Java并发编程实战，Java并发编程艺术等。下面的几篇文章目的用最浅显的内容来解释并发的基础内容、并发的三大特性、线程池、并发容器、锁机制、相关源码分析等内容。并且会在每一篇章最后总结出常见的面试题。">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发基础">
+<meta property="og:url" content="http://huihui.kim/2017/09/29/Java并发基础/index.html">
+<meta property="og:site_name" content="huiHui&#39;s blogs">
+<meta property="og:description" content="可以说并发是Java开发工程师面试时最常见的面试题了，关于并发的书籍也有很多，比如Java并发编程实战，Java并发编程艺术等。下面的几篇文章目的用最浅显的内容来解释并发的基础内容、并发的三大特性、线程池、并发容器、锁机制、相关源码分析等内容。并且会在每一篇章最后总结出常见的面试题。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://static.oschina.net/uploads/space/2013/0621/174442_0BNr_182175.jpg">
+<meta property="og:updated_time" content="2017-11-01T02:42:20.927Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java并发基础">
+<meta name="twitter:description" content="可以说并发是Java开发工程师面试时最常见的面试题了，关于并发的书籍也有很多，比如Java并发编程实战，Java并发编程艺术等。下面的几篇文章目的用最浅显的内容来解释并发的基础内容、并发的三大特性、线程池、并发容器、锁机制、相关源码分析等内容。并且会在每一篇章最后总结出常见的面试题。">
+<meta name="twitter:image" content="http://static.oschina.net/uploads/space/2013/0621/174442_0BNr_182175.jpg">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="huiHui&#39;s blogs" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Java并发基础 | huiHui&#39;s blogs</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">huiHui</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://jingegebuguai.github.com/">GitHub</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于全栈</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">huiHui</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">huiHui</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" target="_blank" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Java并发基础" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/29/Java并发基础/" class="article-date">
+      <time datetime="2017-09-29T12:00:00.000Z" itemprop="datePublished">2017-09-29</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java并发基础
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>可以说并发是Java开发工程师面试时最常见的面试题了，关于并发的书籍也有很多，比如Java并发编程实战，Java并发编程艺术等。下面的几篇文章目的用最浅显的内容来解释并发的基础内容、并发的三大特性、线程池、并发容器、锁机制、相关源码分析等内容。并且会在每一篇章最后总结出常见的面试题。<br><a id="more"></a></p>
+<h2 id="进程？线程？"><a href="#进程？线程？" class="headerlink" title="进程？线程？"></a>进程？线程？</h2><p>这可以说是操作系统中的一块问题，也是Java并发编程的开始。首先来看看基本概念：</p>
+<ul>
+<li>进程是具有一定独立功能的程序关于某个数据集合上的一次运行活动,进程是系统进行资源分配和调度的一个独立单位.</li>
+<li>线程是进程的一个实体,是CPU调度和分派的基本单位,它是比进程更小的能独立运行的基本单位.线程自己基本上不拥有系统资源,只拥有一点在运行中必不可少的资源(如程序计数器,一组寄存器和栈),但是它可与同属一个进程的其他的线程共享进程所拥有的全部资源.</li>
+</ul>
+<p>如果实在无法理解，可以去看看阮一峰老师的解释：<br><a href="http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html" target="_blank" rel="external">一个比较有趣的进程，线程的解释</a></p>
+<p>二者区别：</p>
+<ul>
+<li>进程：进程有独立的代码和数据空间，进程间的切换会有较大的开销，每个进程可以包含多个线程。</li>
+<li>线程：多个线程可以共享代码和数据空间，每个线程有独立的运行栈和PC，切换开销较小。</li>
+</ul>
+<p>二者相同点：<br>执行阶段：创建，就绪，运行，阻塞，终止。</p>
+<h2 id="主线程"><a href="#主线程" class="headerlink" title="主线程"></a>主线程</h2><p>通常运行一个java程序，就会有一个线程立即运行，这个线程就是主线程。</p>
+<ul>
+<li>是产生其他子线程的线程</li>
+<li>通常最后完成，执行各种关闭动作（后面会发现不做处理，它也会提前完成）</li>
+</ul>
+<p>尽管主线程在程序启动时自动创建，但它可以由一个Thread对象控制。为此，你必须调用方法currentThread()获得它的一个引用，currentThread()是Thread类的公有的静态成员。它的通常形式如下：</p>
+<pre><code>static Thread currentThread( )
+</code></pre><p>该方法返回一个调用它的线程的引用。一旦你获得主线程的引用，你就可以像控制其他线程那样控制主线程。</p>
+<pre><code>class CurrentThreadDemo {
+    public static void main(String args[]) {
+        Thread t = Thread.currentThread();
+        System.out.println(&quot;Current thread: &quot; + t);
+        // change the name of the thread
+        t.setName(&quot;My Thread&quot;);
+        System.out.println(&quot;After name change: &quot; + t);
+        try {
+            for(int n = 5; n &gt; 0; n--) {
+                System.out.println(n);
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println(&quot;Main thread interrupted&quot;);
+        }
+    }
+}
+</code></pre><p>输出如下：</p>
+<pre><code>Current thread: Thread[main,5,main]
+After name change: Thread[My Thread,5,main]
+5
+4
+3
+2
+1
+</code></pre><p>我们输出的线程显示顺序依次是[线程名称，优先级，组的名称]。主线程名称默认为main，优先级为5，main为组的名称。<br>我们可以用setName()设置线程的名称，用getName()获取线程的名称。</p>
+<pre><code>final void setName(String threadName)
+final String getName()
+</code></pre><h2 id="Thread类"><a href="#Thread类" class="headerlink" title="Thread类"></a>Thread类</h2><pre><code>class testThread extend Thread{
+    private String name;
+    public testThread(){
+        this.name = name;
+    }
+    public void run(){
+        for(int i=0;i&lt;5;i++){
+            System.out.println(name+&quot;running: &quot;+i);
+        }try{
+            sleep((int) Math.random()*10);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+}
+public class Main{
+    public static void main(String[] args){
+        testThread thread_1 = new testThread(&quot;A&quot;);
+        testThread thread_2 = new testThread(&quot;B&quot;);
+        thread_1.start();
+        thread_2.start();
+    }
+}
+</code></pre><p>运行结果如下：</p>
+<pre><code>B running: 0
+A running: 0
+B running: 1
+B running: 2
+A running: 1
+B running: 3
+A running: 2
+A running: 3
+A running: 4
+B running: 4
+</code></pre><p>在start()方法后，并不是立即执行多线程代码，而是使线程进入可运行状态（Runnable），何时运行由操作系统决定。由于代码执行时乱序的，所以我们要加上线程机制。</p>
+<h2 id="Runnable接口"><a href="#Runnable接口" class="headerlink" title="Runnable接口"></a>Runnable接口</h2><pre><code>import static java.lang.Thread.sleep;
+class testThread implements Runnable{
+    private String name;
+    public testThread(String name){
+        this.name = name;
+    }
+    public void run(){
+        for (int i=0;i&lt;5;i++){
+            System.out.println(name+&quot; running: &quot;+i);
+        }try{
+            Thread.sleep((int)Math.random()*10);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+}
+public class Main{
+    public static void main(String[] args) {
+        testThread thread_1 = new testThread(&quot;C&quot;);
+        testThread thread_2 = new testThread(&quot;D&quot;);
+        new Thread(thread_1).start();
+        new Thread(thread_2).start();
+    }
+}
+</code></pre><p>运行结果：</p>
+<pre><code>C running: 0
+C running: 1
+C running: 2
+C running: 3
+C running: 4
+D running: 0
+D running: 1
+D running: 2
+D running: 3
+D running: 4
+</code></pre><p>在启动线程时，需要先通过Thread类的构造方法Thread类的构造方法Thread构造出对象，然后调用Thread对象的start()方法来运行多线程代码。<br>注意Thread和Runnable之间代码具有细微的差别，但是二者背后的差距很大。</p>
+<h2 id="Thread类和Runnable接口区别"><a href="#Thread类和Runnable接口区别" class="headerlink" title="Thread类和Runnable接口区别"></a>Thread类和Runnable接口区别</h2><p>实现Runnable接口比继承Thread类所具有的优势：<br>1）：适合多个相同的程序代码的线程去处理同一个资源<br>2）：可以避免java中的单继承的限制<br>3）：增加程序的健壮性，代码可以被多个线程共享，代码和数据独立<br>4）：线程池只能放入实现Runable或callable类线程，不能直接放入继承Thread的类</p>
+<h2 id="线程状态转化图"><a href="#线程状态转化图" class="headerlink" title="线程状态转化图"></a>线程状态转化图</h2><p><img src="http://static.oschina.net/uploads/space/2013/0621/174442_0BNr_182175.jpg" alt=""></p>
+<ol>
+<li><p>新建(new)：新创建了一个线程对象。</p>
+</li>
+<li><p>可运行(runnable)：线程对象创建后，其他线程(比如main线程）调用了该对象的start()方法。该状态的线程位于可运行线程池中，等待被线程调度选中，获取cpu 的使用权 。</p>
+</li>
+<li><p>运行(running)：可运行状态(runnable)的线程获得了cpu 时间片（timeslice） ，执行程序代码。</p>
+</li>
+<li><p>阻塞(block)：阻塞状态是指线程因为某种原因放弃了cpu 使用权，也即让出了cpu timeslice，暂时停止运行。直到线程进入可运行(runnable)状态，才有机会再次获得cpu timeslice 转到运行(running)状态。阻塞的情况分三种： </p>
+</li>
+</ol>
+<p>(一). 等待阻塞：运行(running)的线程执行o.wait()方法，JVM会把该线程放入等待队列(waitting queue)中。</p>
+<p>(二). 同步阻塞：运行(running)的线程在获取对象的同步锁时，若该同步锁被别的线程占用，则JVM会把该线程放入锁池(lock pool)中。</p>
+<p>(三). 其他阻塞：运行(running)的线程执行Thread.sleep(long ms)或t.join()方法，或者发出了I/O请求时，JVM会把该线程置为阻塞状态。当sleep()状态超时、join()等待线程终止或者超时、或者I/O处理完毕时，线程重新转入可运行(runnable)状态。</p>
+<ol>
+<li>死亡(dead)：线程run()、main() 方法执行结束，或者因异常退出了run()方法，则该线程结束生命周期。死亡的线程不可再次复生。</li>
+</ol>
+<h2 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h2><h3 id="sleep"><a href="#sleep" class="headerlink" title="sleep()"></a>sleep()</h3><p>最简单的一个函数，作用是在指定的毫秒数内瓤当前正在执行的线程进入休眠，也就是进入阻塞状态。另外它没有对象锁这个概念。</p>
+<h3 id="join"><a href="#join" class="headerlink" title="join()"></a>join()</h3><p>join是Thread类的一个方法，启动线程后直接调用，即join()的作用是：“等待该线程终止”，这里需要理解的就是该线程是指的主线程等待子线程的终止。也就是在子线程调用了join()方法后面的代码，只有等到子线程结束了才能执行。<br>在很多情况下，主线程生成并起动了子线程，如果子线程里要进行大量的耗时的运算，主线程往往将于子线程之前结束，但是如果主线程处理完其他的事务后，需要用到子线程的处理结果，也就是主线程需要等待子线程执行完成之后再结束，这个时候就要用到join()方法了。<br>不加join。<br>看如下示例（不加join函数的情况）：</p>
+<pre><code>import static java.lang.Thread.sleep;
+class testThread implements Runnable{
+    private String name;
+    public testThread(String name){
+        this.name = name;
+    }
+    public void run(){
+        System.out.println(Thread.currentThread().getName()+&quot; 线程开始运行&quot;);
+        for(int i=0;i&lt;5;i++) {
+            System.out.println(name + &quot; running &quot; + i);
+            try {
+                sleep((int) Math.random() * 10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(Thread.currentThread().getName()+&quot; 线程运行结束&quot;);
+    }
+}
+public class Main{
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread().getName()+ &quot; 主线程开始运行&quot;);
+        new Thread(new testThread(&quot;E&quot;)).start();
+        new Thread(new testThread(&quot;F&quot;)).start();
+        System.out.println(Thread.currentThread().getName()+ &quot; 主线程运行结束&quot;);
+    }
+}
+</code></pre><p>运行结果如下：</p>
+<pre><code>main 主线程开始运行
+main 主线程运行结束
+Thread-0 线程开始运行
+Thread-1 线程开始运行
+E running 0
+F running 0
+E running 1
+F running 1
+E running 2
+F running 2
+E running 3
+F running 3
+E running 4
+F running 4
+Thread-0 线程运行结束
+Thread-1 线程运行结束
+</code></pre><p>我们想让主线程最后执行完，下面再看看加上join（）的情况：</p>
+<pre><code>import static java.lang.Thread.sleep;
+class testThread implements Runnable{
+    private String name;
+    public testThread(String name){
+        this.name = name;
+    }
+    public void run(){
+        System.out.println(Thread.currentThread().getName()+&quot; 线程开始运行&quot;);
+        for(int i=0;i&lt;5;i++) {
+            System.out.println(name + &quot; running &quot; + i);
+            try {
+                sleep((int) Math.random() * 10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(Thread.currentThread().getName()+&quot; 线程运行结束&quot;);
+    }
+}
+public class Main{
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread().getName()+ &quot; 主线程开始运行&quot;);
+        Thread thread_1 = new Thread(new testThread(&quot;E&quot;));
+        Thread thread_2 = new Thread(new testThread(&quot;F&quot;));
+        thread_1.start();
+        thread_2.start();
+        try{
+            thread_1.join();
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        try{
+            thread_2.join();
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        System.out.println(Thread.currentThread().getName()+ &quot; 主线程运行结束&quot;);
+    }
+}
+</code></pre><p>运行结果如下：</p>
+<pre><code>main 主线程开始运行
+Thread-0 线程开始运行
+E running 0
+Thread-1 线程开始运行
+F running 0
+E running 1
+F running 1
+E running 2
+F running 2
+E running 3
+F running 3
+E running 4
+F running 4
+Thread-0 线程运行结束
+Thread-1 线程运行结束
+main 主线程运行结束        
+</code></pre><h3 id="yield"><a href="#yield" class="headerlink" title="yield()"></a>yield()</h3><p>作用是暂停当前的执行的线程对象，开始执行其他线程。<br>需要注意的是yield()是让当前运行状态进入到可运行状态，而非阻塞状态，实际情况下，我们并无法保证yield()完美的完成让步目的，即使当前线程让步了，根据优先级，该线程还可能继续被选中，继续执行该线程。由于可控性差的原因，建议尽量少用yield()函数。</p>
+<p>sleep()和yield()的区别：</p>
+<p>sleep()和yield()的区别):sleep()使当前线程进入停滞状态，所以执行sleep()的线程在指定的时间内肯定不会被执行；yield()只是使当前线程重新回到可执行状态，所以执行yield()的线程有可能在进入到可执行状态后马上又被执行。<br>sleep 方法使当前运行中的线程睡眼一段时间，进入不可运行状态，这段时间的长短是由程序设定的，yield 方法使当前线程让出 CPU 占有权，但让出的时间是不可设定的。实际上，yield()方法对应了如下操作：先检测当前是否有相同优先级的线程处于同可运行状态，如有，则把 CPU  的占有权交给此线程，否则，继续运行原来的线程。所以yield()方法称为“退让”，它把运行机会让给了同等优先级的其他线程<br>另外，sleep 方法允许较低优先级的线程获得运行机会，但 yield()  方法执行时，当前线程仍处在可运行状态，所以，不可能让出较低优先级的线程些时获得 CPU 占有权。在一个运行系统中，如果较高优先级的线程没有调用 sleep 方法，又没有受到 I\O 阻塞，那么，较低优先级线程只能等待所有较高优先级的线程运行结束，才有机会运行。 </p>
+<h3 id="wait-amp-notify"><a href="#wait-amp-notify" class="headerlink" title="wait()&amp;notify()"></a>wait()&amp;notify()</h3><p>wait()和notify()必须和synchronized一起使用，二者针对对象进行操作。wait()必须在同步代码块中调用，调用wait()的线程会等待，知道其他线程调用了notify()方法之后，该线程才会被唤醒。被唤醒并不意味着立即获得对象锁，需要等待两件事的发生：</p>
+<ul>
+<li>有其他线程调用同一个对象的notify或者notifyAll方法（调用notify/notifyAll方法之前）</li>
+<li><p>被唤醒之后重新获得对象的锁(调用notify/notifyAll方法之后)才能继续往下执行后续动作。</p>
+<p>  import java.util.concurrent.TimeUnit;<br>  public class Main{</p>
+<pre><code>public static Object object = new Object();
+static class testThread_1 implements Runnable{
+    @Override
+    public void run()
+    {
+        synchronized(object)
+        {
+            System.out.println(Thread.currentThread().getName()+&quot; running.&quot;);
+            try
+            {
+                object.wait();
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+            System.out.println(Thread.currentThread().getName()+&quot; get the lock.&quot;);
+        }
+    }
+}
+static class testThread_2 implements Runnable{
+    @Override
+    public void run() {
+        synchronized (object){
+            System.out.println(Thread.currentThread().getName()+ &quot; running&quot;);
+            object.notify();
+            System.out.println(Thread.currentThread().getName()+ &quot; is invoked&quot;);
+            System.out.println(Thread.currentThread().getName()+ &quot;release the lock&quot;);
+        }
+    }
+}
+public static void main(String[] args)throws InterruptedException {
+    new Thread(new testThread_1()).start();
+    TimeUnit.SECONDS.sleep(1);
+    new Thread(new testThread_2()).start();
+}
+</code></pre><p>  }</p>
+</li>
+</ul>
+<p>运行结果如下：</p>
+<pre><code>Thread-0 running.
+Thread-1 running
+Thread-1 is invoked
+Thread-1release the lock
+Thread-0 get the lock.
+</code></pre><h3 id="其他函数"><a href="#其他函数" class="headerlink" title="其他函数"></a>其他函数</h3><ul>
+<li>activeCount    返回当前线程的线程组中活动线程的个数</li>
+<li>checkAccess    判断当前运行的线程是否有更改当前线程的权限</li>
+<li>currentThread      返回当前线程</li>
+<li>dumpStack      输出当前线程的堆栈跟踪信息到标准错误输出流</li>
+<li>enumerate      复制当前线程的线程组和子线程组中的活动线程到指定数组</li>
+<li>getAllStackTraces      返回所有活动线程对应的堆栈信息</li>
+<li>getContextClassLoader      返回当前线程的上下文类装载器</li>
+<li>getDefaultUncaughtExceptionHandler    返回线程因未捕获的例外非正常终止时调用的默认处理程序</li>
+<li>getId   返回线程的标识符</li>
+<li>getName    返回线程的名称</li>
+<li>getPriority    返回线程的优先级</li>
+<li>getStackTrace    返回线程的堆栈数组</li>
+<li>getState    返回当前线程的状态</li>
+<li>getThreadGroup    返回线程所属的线程组</li>
+<li>getUncaughtExceptionHandler    返回线程因未捕获的例外非正常终止时调用的处理程序</li>
+<li>holdsLock    当前线程拥有指定对象的监控器锁时，返回true</li>
+<li>interrupt    中断这个线程</li>
+<li>interrupted    判断当前线程是否已经中断</li>
+<li>isAlive    判断当前线程是否处于活动状态</li>
+<li>isDaemon     判断这个线程是否守护线程</li>
+<li>isInterrupted   判断当前进程是否已经中断</li>
+<li>run    线程的运行代码</li>
+<li>setContextClassLoader   设置当前线程的上下文类装载器</li>
+<li>setDaemon    设置当前线程为守护线程</li>
+<li>setDefaultUncaughtExceptionHandler    设置线程因未捕获的例外非正常终止时调用的默认处理程序</li>
+<li>setName    更改线程的名字</li>
+<li>setPriority    更改线程的优先级</li>
+<li>setUncaughtExceptionHandler    设置线程因未捕获的例外非正常终止时调用的处理程序</li>
+<li>start   当前线程开始执行</li>
+<li>toString   返回当前线程的字符串表示</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这一块基本都是Java入门书籍中都会出现的知识点，当然真的是入门。其中，Thread类和Runnable接口之间的区别是面试最常见的题目。线程同步部分在后面的章节结合synchronized一起叙述。下面一个章节将结合Java并发编程实战这本书来谈谈并发三大特性的相关机制和volatile的相关基础。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/09/29/Java并发基础/">Java并发基础</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">huiHui</a></p>
+        <p><span>发布时间:</span>2017-09-29, 20:00:00</p>
+        <p><span>最后更新:</span>2017-11-01, 10:42:20</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/29/Java并发基础/" title="Java并发基础">http://huihui.kim/2017/09/29/Java并发基础/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/09/29/Java并发基础/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/09/30/LintCode题解（六）/">
+                    LintCode题解（六）
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/29/springMVC基础/">
+                    SpringMVC中@RequestMapping等基础知识
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#进程？线程？"><span class="toc-number">1.</span> <span class="toc-text">进程？线程？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#主线程"><span class="toc-number">2.</span> <span class="toc-text">主线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thread类"><span class="toc-number">3.</span> <span class="toc-text">Thread类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Runnable接口"><span class="toc-number">4.</span> <span class="toc-text">Runnable接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Thread类和Runnable接口区别"><span class="toc-number">5.</span> <span class="toc-text">Thread类和Runnable接口区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程状态转化图"><span class="toc-number">6.</span> <span class="toc-text">线程状态转化图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用函数"><span class="toc-number">7.</span> <span class="toc-text">常用函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sleep"><span class="toc-number">7.1.</span> <span class="toc-text">sleep()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#join"><span class="toc-number">7.2.</span> <span class="toc-text">join()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#yield"><span class="toc-number">7.3.</span> <span class="toc-text">yield()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wait-amp-notify"><span class="toc-number">7.4.</span> <span class="toc-text">wait()&notify()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他函数"><span class="toc-number">7.5.</span> <span class="toc-text">其他函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">7.6.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Java并发基础　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://huihui.kim/2017/09/29/Java并发基础/';
+            this.page.identifier = '2017/09/29/Java并发基础/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/09/30/LintCode题解（六）/" title="上一篇: LintCode题解（六）">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/29/springMVC基础/" title="下一篇: SpringMVC中@RequestMapping等基础知识">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Java读写Properties属性/">Java读写Properties属性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Java MD5加密/">Java MD5加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Spring整合Java Web Token/">Spring 整合Java Web Token</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池基础/">Java并发之线程池基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/">Java并发之线程池—Callable,Future,FutureTask</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/">Java并发之线程池拓展—ExecutorService原理，静态工厂方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之阻塞队列/">Java并发之阻塞队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/LintCode题解--中等篇(1)/">LintCode题解——中等篇（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Java并发之ThreadLocal/">Java并发之ThreadLocal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/24/Java并发之Lock/">Java并发之Lock</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Django前端页面相关处理/">Django Html相关配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Spring基于注解的配置/">Spring基于注解的配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/SSM项目知识点总结/">SSM小项目知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Spring AOP切面/">Spring AOP切面编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Mybatis-generator详细配置demo/">Mybatis-Generator相关配置demo</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/LintCode题解（二）/">LintCode题解（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/01/LintCode题解（七）/">LintCode题解（七）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（一）/">LintCode题解（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java并发基础/">Java并发基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/springMVC基础/">SpringMVC中@RequestMapping等基础知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java数据库与事务处理机制/">Java数据库处理与事务机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/Spring属性配置细节/">Spring Bean配置细节</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/LintCode题解（四）/">LintCode题解（四）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/LintCode题解（三）/">LintCode题解（三）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/31/Java容器/">Java容器(集合)，持有对象总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/27/servlet实现网页重定向/">Servlet实现网页重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/servlet实现文件上传下载/">Servlet文件上传下载类</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/CSS预处理器比较/">有关CSS预处理器的比较选择(Sass&Less&Stylus)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/js内置对象——string&array/">Js内置对象进阶（一）——String&Array</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">Vue仿饿了么知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/web开发者必备http知识/">Web开发者必备Http基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/python中pip install中utf-8错误的解决方法/">Pip Install中utf-8编码问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/我们仍未知道那天所看见的list/">我们仍未知道那些天所看见的List</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/01/jquery实现樱花坠落插件/">Jquery实现web页面樱花坠落的特效</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/16/Angular2.0开发/">Angular2.0仿今日头条应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/24/后端学习angular--组件篇/">后端学angular2.0的痛苦历程--组件篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的Mysql数据库优化操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/python进阶学习--参数/">Python进阶学习--*Arg、**kw和装饰器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/mysql自连接/">Mysql自连接与join关联</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/10/用IIFE与let方法改写循环闭包/">用IIFE与let命令改写循环闭包</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/19/WEB-CSS布局/">WEB前端--CSS布局必备知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/16/JS回调函数/">JS回调函数详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/Hexo&Gituhub博客搭建/">Hexo&Github博客搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/smarty模板引擎/">Smarty模板引擎</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 huiHui
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

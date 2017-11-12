@@ -276,6 +276,1113 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-jquery实现樱花坠落插件" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/06/01/jquery实现樱花坠落插件/" class="article-date">
+      <time datetime="2017-06-01T02:55:00.000Z" itemprop="datePublished">2017-06-01</time>
+</a>
+
+ 
+    <a href="/2017/06/01/jquery实现樱花坠落插件/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/06/01/jquery实现樱花坠落插件/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/01/jquery实现樱花坠落插件/">Jquery实现web页面樱花坠落的特效</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="Cherry-Blossoms"><a href="#Cherry-Blossoms" class="headerlink" title="Cherry_Blossoms"></a>Cherry_Blossoms</h1><p>jquery实现web页面樱花坠落的特效（很浪漫哟）</p>
+<h2 id="开发原因"><a href="#开发原因" class="headerlink" title="开发原因"></a>开发原因</h2><ul>
+<li>上课看到一位女生桌面背景是一课樱花树，顿时产生了一个让樱花可以在web页面飞舞的想法，借此把这个插件献送给那位女同学；</li>
+<li>开发过焦点图，轮转图，瀑布流等应用插件，但是这类型插件还是第一次做，那个啥兴趣使然对吧；<h2 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h2></li>
+<li>Jquery+webstorm,无需额外配置任何环境，移动端无法使用</li>
+</ul>
+<h2 id="效果演示"><a href="#效果演示" class="headerlink" title="效果演示"></a>效果演示</h2><p>为了更加显眼，背景换成了黑色,gif图有些卡顿，实际效果比较流畅<br>效果详见<a href="https://github.com/jingegebuguai/Cherry_Blossoms" target="_blank" rel="external">Github</a></p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><ul>
+<li><p>在需要加入效果的页面加入html代码,位置最好放在body元素下第一个标签</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"cherry"</span>&gt;</div><div class="line">  &lt;img id=<span class="string">"yinghua"</span> src=<span class="string">"../image/yinghua.png"</span> alt=<span class="string">""</span> &gt;</div><div class="line">&lt;<span class="regexp">/div&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>导入一下js代码其中各变量可根据需要改变</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">        $(<span class="string">'.cherry'</span>).Cherry_Blossoms(&#123;</div><div class="line">            is_Cherry:<span class="literal">true</span>,<span class="comment">//是否生成樱花</span></div><div class="line">            image_min:<span class="number">10</span>,<span class="comment">//花瓣最小宽度和高度</span></div><div class="line">            image_max:<span class="number">50</span>,<span class="comment">//花瓣最大宽度和高度</span></div><div class="line">            time_min:<span class="number">10000</span>,<span class="comment">//花瓣最快下坠时间</span></div><div class="line">            time_max:<span class="number">20000</span>,<span class="comment">//花瓣最慢下坠时间</span></div><div class="line">            interval:<span class="number">500</span><span class="comment">//花瓣生成时间间隔</span></div><div class="line">        &#125;)</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="js插件"><a href="#js插件" class="headerlink" title="js插件"></a>js插件</h2><ul>
+<li>IIFE（立即执行匿名函数）</li>
+<li>$.extend(),扩展插件定义默认参数  </li>
+<li>randomNum（）设置[m,n]类型随机数</li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jquery/">Jquery</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Angular2.0开发" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/05/16/Angular2.0开发/" class="article-date">
+      <time datetime="2017-05-16T08:00:00.000Z" itemprop="datePublished">2017-05-16</time>
+</a>
+
+ 
+    <a href="/2017/05/16/Angular2.0开发/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/05/16/Angular2.0开发/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/16/Angular2.0开发/">Angular2.0仿今日头条应用</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>学习Angular2.0的都知道，这个框架主要是针对大型项目开发，所以用来练手，不是很方便。起初是见到Vue的仿项目太多，而作为宣传Angular的一种目的，我也写了一个仿的今日头条项目。</p>
+<h3 id="项目准备"><a href="#项目准备" class="headerlink" title="项目准备"></a>项目准备</h3><ul>
+<li>使用angular CLI创建新项目，将app替换</li>
+<li>项目使用者需掌握ES6和Typescript</li>
+</ul>
+<h3 id="项目截图"><a href="#项目截图" class="headerlink" title="项目截图"></a>项目截图</h3><p><img src="http://i4.buimg.com/591295/8c0baca7a55f2a1c.png" alt=""><br><img src="http://i4.buimg.com/591295/c563e95230e005a9.png" alt=""><br><img src="http://i2.muimg.com/591295/3870d2709777127c.png" alt=""><br><img src="http://i2.muimg.com/591295/5d6958d213b2b535.png" alt=""></p>
+<h3 id="项目相关"><a href="#项目相关" class="headerlink" title="项目相关"></a>项目相关</h3><ul>
+<li>1、该仿作应用是基于web页面，浏览时调制手机页面大小</li>
+<li>2、由于没有使用任何插件，没有使用jquery等类库，体验效果和数据刷新效果比较差</li>
+<li>3、大量使用angular2中的Jsonp服务跨域调取今日头条数据</li>
+<li>4、现项目刚完成1/3,还有大量工作，优化没有完成，会后续不定期更新</li>
+</ul>
+<h3 id="更新日志"><a href="#更新日志" class="headerlink" title="更新日志"></a>更新日志</h3><ul>
+<li>5.4~8 实现Api接口数据获取(新闻、评论和段子)</li>
+<li>5.9 实现频道选择功能 ,同步到导航栏</li>
+<li>5.10 实现搜索框功能</li>
+<li>5.11 优化API接口,合并导航频道组件（除段子）</li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Angular/">Angular</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-后端学习angular--组件篇" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/04/24/后端学习angular--组件篇/" class="article-date">
+      <time datetime="2017-04-24T12:00:00.000Z" itemprop="datePublished">2017-04-24</time>
+</a>
+
+ 
+    <a href="/2017/04/24/后端学习angular--组件篇/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/04/24/后端学习angular--组件篇/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/24/后端学习angular--组件篇/">后端学angular2.0的痛苦历程--组件篇</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Input、-Output、setter使用方法"><a href="#Input、-Output、setter使用方法" class="headerlink" title="@Input、@Output、setter使用方法"></a>@Input、@Output、setter使用方法</h2><p>刚接触angular两个星期,感觉这个js框架不好学，现在对ngOnChange,@ViewChild不是很熟练，只会简单的操作，感觉这两个用起来不是很顺手。如果对概念不熟悉，上网自查。不喜欢写文字，所以纯代码demo献上。<br>子组件如下：</p>
+<pre><code>import {Input, Component, OnInit, Output, EventEmitter,} from &quot;@angular/core&quot;;
+@Component({
+  selector: &apos;child&apos;,
+  template: `
+        &lt;div&gt;
+        &lt;label FOR=&quot;name&quot;&gt;姓名:&lt;/label&gt;
+        &lt;input id=&quot;name&quot; type=&quot;text&quot; value=&quot;{{content.name}}&quot; [(ngModel)]=&quot;content.name&quot; placeholder=&quot;姓名&quot; /&gt;{{content.name}}
+        &lt;/div&gt;
+        &lt;div&gt;
+        &lt;label FOR=&quot;age&quot;&gt;年龄:&lt;/label&gt;
+        &lt;input id=&quot;age&quot; type=&quot;text&quot; value=&quot;{{content.age}}&quot; [(ngModel)]=&quot;content.age&quot; placeholder=&quot;年龄&quot; /&gt; {{content.age}}
+        &lt;/div&gt;
+        &lt;div&gt;
+        &lt;button (click)=&quot;Child_Number()&quot;&gt;点击按钮&lt;/button&gt;&lt;div&gt;&lt;span&gt;子组件: {{child_num}} &lt;/span&gt;&lt;/div&gt;
+        &lt;/div&gt;`
+})
+export class ChildComponent{
+  _content:any={};
+  @Input()
+  set content(content:any){
+    this._content.name=(content.name&amp;&amp;content.name.trim())||&apos;请填写姓名&apos;;
+    this._content.age=content.age||&apos;请填写年龄&apos;;
+  }
+  get content(){return this._content;}
+
+  child_num: number=1;
+  @Output() onIncrease=new EventEmitter&lt;number&gt;();//实例化自定义事件，用来订阅触发事件
+  Child_Number(){
+    this.child_num=this.child_num+1;
+    //向OnIncrease事件传递值，子传父
+    this.onIncrease.emit(this.child_num);
+  }
+}
+</code></pre><p>父组件如下：</p>
+<pre><code>import {Component, OnInit, Input, ViewChild,AfterViewInit} from &apos;@angular/core&apos;;
+import {timestamp} from &quot;rxjs/operator/timestamp&quot;;
+import {ChildComponent} from &quot;./child.component&quot;;
+
+@Component({
+  selector: &apos;father&apos;,
+    template:`&lt;h3&gt;Father&lt;/h3&gt;
+    {{date}}
+    &lt;child [content]=&quot;content&quot; (onIncrease)=&quot;Father_Number($event)&quot;&gt;&lt;/child&gt;
+    &lt;p&gt;父组件: {{father_num}}&lt;/p&gt;{{result}}
+    `
+})
+export class AppComponent implements OnInit {
+  father_num: number=1;
+  Father_Number(child_num:number){
+    this.father_num+=child_num;
+  }
+
+  content:any={
+    name:&apos;Huihui&apos;,
+    age:18
+  };
+
+  date:any;
+  constructor(){
+    setInterval(()=&gt;{this.date=new Date()},1000);
+  }
+
+  //@ViewChild
+  @ViewChild(ChildComponent) child:ChildComponent;
+  result:string;
+  ngOnInit(){}
+}
+</code></pre><p>上述包括父子组件的@input，@output通信，以及setter拦截属性的组合使用。</p>
+<h2 id="ViewChild使用方法"><a href="#ViewChild使用方法" class="headerlink" title="@ViewChild使用方法"></a>@ViewChild使用方法</h2><p>除了上述实现组件通信外，还有一种方法@ViewChild也可以获取到子组件的变量和方法。下面给出demo：<br>父组件：</p>
+<pre><code>import {Component,AfterViewInit, ViewChild} from &apos;@angular/core&apos;;
+import {ChildComponent} from &apos;./child.component&apos;;
+@Component({
+    selector: &apos;father&apos;,
+    template: `&lt;child (click)=&quot;add()&quot;&gt;&lt;/child&gt;`
+})
+export class AppComponent{
+  result:number;
+  constructor(){}
+  @ViewChild(ChildComponent) child:ChildComponent
+  ngAfterViewInit(){
+      this.add();
+  }
+  add(){
+      alert(this.child.Child(30,20));
+  }
+}
+</code></pre><p>子组件：</p>
+<pre><code>import {Component} from &quot;@angular/core&quot;;
+@Component({
+  selector: &apos;child&apos;,
+  template: `&lt;div&gt;
+            &lt;input type=&quot;button&quot; value=&quot;求和&quot;/&gt;
+            &lt;/div&gt;
+            `
+})
+export class ChildComponent{
+  Child=(num1,num2)=&gt;(num1+num2)
+}
+</code></pre><p>我这里将子组件的方法传给父组件使用，这里用到了简单的箭头函数，解析后就是下面代码，如果箭头函数不懂的话，angular2会受到很大影响，不懂看ES6中的讲解：</p>
+<pre><code>function Child(num1,num2){
+    return num1+num2;
+}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js-angular/">js,angular</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-总结常见MYSQL数据库优化操作" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/04/20/总结常见MYSQL数据库优化操作/" class="article-date">
+      <time datetime="2017-04-20T12:00:00.000Z" itemprop="datePublished">2017-04-20</time>
+</a>
+
+ 
+    <a href="/2017/04/20/总结常见MYSQL数据库优化操作/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/04/20/总结常见MYSQL数据库优化操作/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的Mysql数据库优化操作</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p><img src="" alt=""></p>
+<h2 id="一、Index索引"><a href="#一、Index索引" class="headerlink" title="一、Index索引"></a>一、Index索引</h2><p>将Index放第一位，不用说，这种优化方式我们一直都在悄悄使用，那便是主键索引。有时候我们可能并不在意，如果定义适合的索引，数据库查询性能(速度)将提高几倍甚至几十倍。</p>
+<h3 id="普通索引"><a href="#普通索引" class="headerlink" title="普通索引"></a>普通索引</h3><p>作用是提高查询速度。</p>
+<h4 id="建表，创建索引"><a href="#建表，创建索引" class="headerlink" title="建表，创建索引"></a>建表，创建索引</h4><pre><code>CREATE TABLE tbl_name(
+字段名称 字段类型 [完整性约束条件],
+~
+index [索引名] (column_name)
+);
+</code></pre><h4 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h4><pre><code>CREATE INDEX index_name ON tab_name (column_name)
+</code></pre><h4 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h4><pre><code>DROP INDEX index_name FROM tab_name 
+</code></pre><h4 id="查看索引"><a href="#查看索引" class="headerlink" title="查看索引"></a>查看索引</h4><pre><code>SHOW index FROM tab_name
+</code></pre><h3 id="主键索引"><a href="#主键索引" class="headerlink" title="主键索引"></a>主键索引</h3><p>作用是加速查询和唯一约束</p>
+<h4 id="建表，创建索引-1"><a href="#建表，创建索引-1" class="headerlink" title="建表，创建索引"></a>建表，创建索引</h4><pre><code>CREATE TABLE tbl_name(
+字段名称 字段类型 [完整性约束条件],
+~
+PRIMARY KEY(column_name)
+);
+</code></pre><h4 id="创建索引-1"><a href="#创建索引-1" class="headerlink" title="创建索引"></a>创建索引</h4><pre><code>ALTER TABLE tab_name ADD PRIMARY KEY(column_name)
+</code></pre><h4 id="删除索引-1"><a href="#删除索引-1" class="headerlink" title="删除索引"></a>删除索引</h4><pre><code>ALTER TABLE tab_name DROP PRIMAY KEY(column_name)
+</code></pre><h3 id="唯一索引"><a href="#唯一索引" class="headerlink" title="唯一索引"></a>唯一索引</h3><p>作用是加速查询和唯一约束</p>
+<h4 id="建表，创建索引-2"><a href="#建表，创建索引-2" class="headerlink" title="建表，创建索引"></a>建表，创建索引</h4><pre><code>CREATE TABLE tbl_name(
+字段名称 字段类型 [完整性约束条件],
+~
+unique [索引名] (column_name)
+);
+</code></pre><h4 id="创建索引-2"><a href="#创建索引-2" class="headerlink" title="创建索引"></a>创建索引</h4><pre><code>CREATE UNIQUE INDEX index_name ON tab_name (column_name)
+</code></pre><h4 id="删除索引-2"><a href="#删除索引-2" class="headerlink" title="删除索引"></a>删除索引</h4><pre><code>DROP UNIQUE INDEX index_name FROM tab_name 
+</code></pre><h2 id="二、少用SELECT"><a href="#二、少用SELECT" class="headerlink" title="二、少用SELECT*"></a>二、少用SELECT*</h2><p>可能有的人查询数据库时，遇到要查询的都会select<em>，这是不恰当的行为。我们应该取我们要用的数据，而不是全取，因为当我们select</em>时，会增加web服务器的负担，增加网络传输的负载，查询速度自然就下降 。</p>
+<h2 id="三、EXPLAIN-SELECT"><a href="#三、EXPLAIN-SELECT" class="headerlink" title="三、EXPLAIN SELECT"></a>三、EXPLAIN SELECT</h2><p>对于这个功能估计很多人都没见过，但是这里强烈推荐使用。explain显示了mysql如何使用索引来处理select语句以及连接表。可以帮助选择更好的索引和写出更优化的查询语句。主要用发就是在select前加上explain即可。</p>
+<pre><code>EXPLAIN SELECT [查找字段名] FROM tab_name ...
+</code></pre><h2 id="四、开启查询缓存"><a href="#四、开启查询缓存" class="headerlink" title="四、开启查询缓存"></a>四、开启查询缓存</h2><p>大多数的MySQL服务器都开启了查询缓存。这是提高性最有效的方法之一，而且这是被MySQL的数据库引擎处理的。当有很多相同的查询被执行了多次的时候，这些查询结果会被放到一个缓存中，这样，后续的相同的查询就不用操作表而直接访问缓存结果了。<br>第一步把query_cache_type设置为ON，然后查询系统变量have_query_cache是否可用：</p>
+<pre><code>show variables like &apos;have_query_cache&apos;
+</code></pre><p>之后，分配内存大小给查询缓存，控制缓存查询结果的最大值。相关操作在配置文件中进行修改。</p>
+<h2 id="五、使用NOT-NULL"><a href="#五、使用NOT-NULL" class="headerlink" title="五、使用NOT NULL"></a>五、使用NOT NULL</h2><p>很多表都包含可为 NULL （空值） 的列，即使应用程序井不需要保存 NULL 也是如此 ，这是因为可为 NULL 是列的默认属性。通常情况下最好指定列为 NOT NULL，除非真 的需要存储 NULL 值。<br>如果查询中包含可为 NULL 的列，对 MySQL 来说更难优化 ，因为可为 NULL 的列使 得索引、索引统计和值比较都更复杂 。可为NULL 的列会使用更多的存储空间 ，在 MySQL 里也需要特殊处理 。当可为NULL 的列被索引肘，每个索引记录需要一个额 外的字节，在 MyISAM 里甚至还可能导致固定大小 的索引 （例如只有一个整数列的 索引） 变成可变大小的索引。<br>通常把可为 NULL 的列改为 NOT NULL 带来的性能提升比较小 ，所以 （调优时） 没有 必要首先在现有schema中查找井修改掉这种情况 ，除非确定这会导致问题。但是， 如果计划在列上建索引 ，就应该尽量避免设计成可为 NULL 的列。当然也有例外 ，例如值得一提的是，InnoDB 使用单独的位 （bit ） 存储 NULL 值 ，所 以对于稀疏数据由有很好的空间效率 。但这一点不适用于MyISAM 。</p>
+<h2 id="六、存储引擎的选择"><a href="#六、存储引擎的选择" class="headerlink" title="六、存储引擎的选择"></a>六、存储引擎的选择</h2><p>对于如何选择MyISAM和InnoDB,如果你需要事务处理或是外键，那么InnoDB可能是比较好的方式。如果你需要全文索引，那么通常来说MyISAM是好的选择，因为这是系统内建的，然而，我们其实并不会经常地去测试两百万行记录。所以，就算是慢一点，我们可以通过使用Sphinx从InnoDB中获得全文索引。<br>数据的大小，是一个影响你选择什么样存储引擎的重要因素，大尺寸的数据集趋向于选择InnoDB方式，因为其支持事务处理和故障恢复。数据库的在小决定了故障恢复的时间长短，InnoDB可以利用事务日志进行数据恢复，这会比较快。而MyISAM可能会需要<br>几个小时甚至几天来干这些事，InnoDB只需要几分钟。<br>您操作数据库表的习惯可能也会是一个对性能影响很大的因素。比如： COUNT() 在 MyISAM表中会非常快，而在InnoDB表下可能会很痛苦。而主键查询则在InnoDB下会相当相当的快，但需要小心的是如果我们的主键太长了也会导致性能问题。大批的inserts语句在MyISAM下会快一些，但是updates在InnoDB 下会更快一些——尤其在并发量大的时候。<br>所以，到底你检使用哪一个呢？根据经验来看，如果是一些小型的应用或项目，那么MyISAM也许会更适合。当然，在大型的环境下使用MyISAM也会有很大成功的时候，但却不总是这样的。如果你正在计划使用一个超大数据量的项目，而且需要事务处理或外键支持，那么你真的应该直接使用InnoDB方式。但需要记住InnoDB的表需要更多的内存和存储，转换100GB的MyISAM 表到InnoDB 表可能会让你有非常坏的体验。 </p>
+<h2 id="七、避免在-where-子句中使用-or-来连接"><a href="#七、避免在-where-子句中使用-or-来连接" class="headerlink" title="七、避免在 where 子句中使用 or 来连接"></a>七、避免在 where 子句中使用 or 来连接</h2><p>如果一个字段有索引，一个字段没有索引，将导致引擎放弃使用索引而进行全表扫描，如：</p>
+<pre><code>select id from t where num=10 or Name = &apos;admin&apos;
+</code></pre><p>可以这样查询：</p>
+<pre><code>select id from t where num = 10
+union all
+select id from t where Name = &apos;admin&apos;
+</code></pre><h2 id="八、多使用varchar-nvarchar"><a href="#八、多使用varchar-nvarchar" class="headerlink" title="八、多使用varchar/nvarchar"></a>八、多使用varchar/nvarchar</h2><p>使用varchar/nvarchar代替 char/nchar ，因为首先变长字段存储空间小，可以节省存储空间，其次对于查询来说，在一个相对较小的字段内搜索效率显然要高些。</p>
+<h2 id="九、避免大数据量返回"><a href="#九、避免大数据量返回" class="headerlink" title="九、避免大数据量返回"></a>九、避免大数据量返回</h2><p>这里要考虑使用limit，来限制返回的数据量，如果每次返回大量自己不需要的数据，也会降低查询速度。</p>
+<h2 id="十、where子句优化"><a href="#十、where子句优化" class="headerlink" title="十、where子句优化"></a>十、where子句优化</h2><p>where 子句中使用参数，会导致全表扫描,因为SQL只有在运行时才会解析局部变量，但优化程序不能将访问计划的选择推迟到运行时；它必须在编译时进行选择。然 而，如果在编译时建立访问计划，变量的值还是未知的，因而无法作为索引选择的输入项。<br>应尽量避免在 where 子句中对字段进行表达式操作，避免在where子句中对字段进行函数操作这将导致引擎放弃使用索引而进行全表扫描。不要在 where 子句中的“=”左边进行函数、算术运算或其他表达式运算，否则系统将可能无法正确使用索引。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-python进阶学习--参数" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/04/20/python进阶学习--参数/" class="article-date">
+      <time datetime="2017-04-20T12:00:00.000Z" itemprop="datePublished">2017-04-20</time>
+</a>
+
+ 
+    <a href="/2017/04/20/python进阶学习--参数/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/04/20/python进阶学习--参数/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/20/python进阶学习--参数/">Python进阶学习--*Arg、**kw和装饰器</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="arg（可变参数）"><a href="#arg（可变参数）" class="headerlink" title="*arg（可变参数）"></a>*arg（可变参数）</h2><p>主要用于预先并不知道, 函数使用者会传递多少个参数给你, 所以在这个场景下使用这两个关键字。 *args 是用来发送一个非键值对的可变数量的参数列表给一个函数.</p>
+<pre><code>def _abs(*arg):
+    sum = 0 
+    for i in arg:
+        sum = sum + i
+    return sum 
+
+print(_abs(1,2,3))    //6
+</code></pre><h2 id="kw-关键字参数"><a href="#kw-关键字参数" class="headerlink" title="**kw(关键字参数)"></a>**kw(关键字参数)</h2><p><strong>kwargs 允许你将不定长度的键值对, 作为参数传递给一个函数。 如果你想要在一个函数里处理带名字的参数, 你应该使用</strong>kwargs</p>
+<pre><code>def bian_li(**kwargs):
+for key, value in kwargs.items():
+    print(&quot;{0} == {1}&quot;.format(key, value))
+
+print(bian_li(name=&apos;huihi&apos;, age=10))
+// name == huihui
+// age == 10
+</code></pre><h2 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h2><h3 id="原函数"><a href="#原函数" class="headerlink" title="原函数"></a>原函数</h3><pre><code>def dec(func):
+    print(&quot;execute this program&quot;)
+    func()
+    print(&quot;func&apos;s name is %s()&quot; % func.__name__)
+    return func
+
+
+def fun():
+    print(&quot;my name is func()&quot;)
+
+
+_func = dec(fun)
+</code></pre><h3 id="语法糖-装饰原函数"><a href="#语法糖-装饰原函数" class="headerlink" title="语法糖@装饰原函数"></a>语法糖@装饰原函数</h3><pre><code>def dec(func):
+    print(&quot;execute this program&quot;)
+    func()
+    print(&quot;func&apos;s name is %s()&quot; % func.__name__)
+    return func
+
+
+@dec
+    def fun():
+    print(&quot;my name is func()&quot;)
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/未闻花名/">未闻花名</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-mysql自连接" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/04/18/mysql自连接/" class="article-date">
+      <time datetime="2017-04-18T12:00:00.000Z" itemprop="datePublished">2017-04-18</time>
+</a>
+
+ 
+    <a href="/2017/04/18/mysql自连接/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/04/18/mysql自连接/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/18/mysql自连接/">Mysql自连接与join关联</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="mysql自连接"><a href="#mysql自连接" class="headerlink" title="mysql自连接"></a>mysql自连接</h2><p>mysql有时在信息查询时需要进行对自身连接（自连接），所以我们需要为表定义别名。我们举例说明，下面是商品采购表，我们需要找到采购价格比惠惠高的所有信息。<br><img src="http://i4.buimg.com/591295/3f7790a5e853583c.png" alt=""></p>
+<p>一般情况我们看到这张表我们第一时间用语句进行操作：</p>
+<pre><code>SELECT * FROM shoping WHERE price&gt;27
+</code></pre><p>可想而知，这是有多么简单，假设你并不知道数据库表详细数据或者数据量相当庞大呢？作为一个数据库管理员，我们就要用别的方式迅速找出所需要的数据。</p>
+<h3 id="分步查询"><a href="#分步查询" class="headerlink" title="分步查询"></a>分步查询</h3><p>最简单的一种方式，也是最容易想到操作：</p>
+<pre><code>SELECT price FROM shopping WHERE name=&apos;惠惠&apos; //得出price查询结果为27
+SELECT * FROM shopping WHERE price&gt;27
+</code></pre><p>与采用自连接的方式相比，这种方法需要对中间结果进行人工干预，显然不利于程序中的自动处理操作。</p>
+<h3 id="自连接方式："><a href="#自连接方式：" class="headerlink" title="自连接方式："></a>自连接方式：</h3><pre><code>SELECT b.* 
+from shopping as a,shopping as b
+where a.name=&apos;惠惠&apos; 
+and a.price&lt;b.price 
+order by b.id
+</code></pre><p>我们可以获取到如下表信息：<br><img src="http://i4.buimg.com/591295/f09859af7f84cc99.png" alt=""></p>
+<p>注意点：</p>
+<ul>
+<li>别名 a,b虽然名称不同，但是同一个表，定义别名的目的是更方便在自身进行删选。</li>
+<li>执行select通过（中间表）所得到的b.*，，就是最终结果。</li>
+</ul>
+<h3 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h3><p>子查询也是常用的一种方式，就是在select里嵌套select。实现代码如下：</p>
+<pre><code>SELECT * FROM shopping 
+WHERE price&gt;(select price from &apos;shopping&apos; where name=&apos;惠惠&apos;)
+</code></pre><p>所得结果如下所示,可见两种方式所得结果相同：<br><img src="http://i4.buimg.com/591295/f09859af7f84cc99.png" alt=""></p>
+<h2 id="JOIN"><a href="#JOIN" class="headerlink" title="JOIN"></a>JOIN</h2><h3 id="INNER-JOIN"><a href="#INNER-JOIN" class="headerlink" title="INNER JOIN"></a>INNER JOIN</h3><p>内关联的主要作用是在表中存在至少一个匹配时，就返回结果集，这里的inner join和join作用相同，所以一起介绍。<br>下面给出两张表,分别为goods和category表：<br><img src="http://i1.piimg.com/591295/b0cbee9589b9dc4d.png" alt=""><br><img src="http://i1.piimg.com/591295/2e1eb7683642820f.png" alt=""></p>
+<pre><code>SELECT * FROM goods INNER JOIN category 
+ON goods.id=category.goods_id 
+ORDER BY gods.id
+</code></pre><p>结果如下所示：</p>
+<p><img src="http://i4.buimg.com/591295/f47b08e04584e5fd.png" alt=""></p>
+<h3 id="LEFT-JOIN"><a href="#LEFT-JOIN" class="headerlink" title="LEFT JOIN"></a>LEFT JOIN</h3><p>LEFT JOIN 关键字会从左表 (table_name1) 那里返回所有的行，即使在右表 (table_name2) 中没有匹配的行。做项目时建议使用左关联。但是存在很多表关联的，一个表对a是左连接，但同时对b是右连接，这时加上右连接，写起来可能方便一些。<br>套用一开始的两张表，进行左关联查询：</p>
+<pre><code>SELECT goods.*,category.cate_name 
+FROM goods LEFT JOIN category 
+ON goods.id=category.goods_id 
+ORDER BY goods.id
+</code></pre><p><img src="http://i2.muimg.com/591295/827570114f549bab.png" alt=""></p>
+<h3 id="RIGHT-JOIN"><a href="#RIGHT-JOIN" class="headerlink" title="RIGHT JOIN"></a>RIGHT JOIN</h3><p>RIGHT JOIN 关键字会右表 (table_name2) 那里返回所有的行，即使在左表 (table_name1) 中没有匹配的行。套用一开始的两张表进行右关联查询：</p>
+<pre><code>SELECT a.goods_name,a.price,b.*
+FROM goods as a
+RIGHT JOIN category as b
+ON a.id=b.goods_id
+ORDER BY b.id
+</code></pre><p><img src="http://i4.buimg.com/591295/da4f34c3a9aa9326.png" alt=""></p>
+<p>对于多表关联的情况，就是多加几条关联语句。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-用IIFE与let方法改写循环闭包" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/04/10/用IIFE与let方法改写循环闭包/" class="article-date">
+      <time datetime="2017-04-10T06:25:00.000Z" itemprop="datePublished">2017-04-10</time>
+</a>
+
+ 
+    <a href="/2017/04/10/用IIFE与let方法改写循环闭包/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/04/10/用IIFE与let方法改写循环闭包/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/10/用IIFE与let方法改写循环闭包/">用IIFE与let命令改写循环闭包</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>根据阮大的解释，闭包就是能够读取其他函数内部变量的函数，闭包的作用有两个，一个是可以读取函数内部的变量，另一个就是让这些变量的值始终保持在内存中。但是有时候变量值都保存在内存中不见得都是好事，所以我们要解决一些循环闭包中变量保存在内存中的问题。主要用到的方法包括IIFE（立即执行匿名函数），ES6中的let命令。</p>
+<h2 id="前言-来自牛客的思考"><a href="#前言-来自牛客的思考" class="headerlink" title="前言-来自牛客的思考"></a>前言-来自牛客的思考</h2><p>现在给出原题（略有改动）：</p>
+<pre><code>for(var i=0;i&lt;5;i++){
+    setTimeout(function (){
+        console.log(i+&apos;&apos;);
+    },100);
+}
+for(var j=0;j&lt;5;j++)
+    console.log(j);
+</code></pre><p>这题涉及到了setTimeout以及闭包的知识，如果掌握很好的的话，一眼就能看出答案是1-&gt;2,3,4-&gt;5-&gt;5,5,5,5(注意时间顺序)。现在我希望第一个for循环按顺序输出，方法主要有立即执行匿名函数和ES6中的let。</p>
+<h2 id="ES6–let"><a href="#ES6–let" class="headerlink" title="ES6–let"></a>ES6–let</h2><p>如果有做angular2的同志对ES6的语法是了解不过了。下面内容可以带过。<br>let的用法类似于var，但是所声明的变量，只在let命令所在的块级作用域内有效。</p>
+<pre><code>function f1() {
+  let n = 5;
+  if (true) {
+      let n = 10;
+      console.log(n); //10
+  }
+  console.log(n); // 5
+}
+</code></pre><p>上面的函数有两个代码块，都声明了变量n，运行后输出5。这表示外层代码块不受内层代码块的影响。如果使用var定义变量n，最后输出的值就是10。<br>下面我们改写之前的程序：</p>
+<pre><code>for(let i=0;i&lt;5;i++){
+    setTimeout(function (){
+        console.log(i+&apos;&apos;);
+    },100);
+}
+</code></pre><p>打开谷歌的控制台会发现结果已经变为0-&gt;1,2,3,4。正是let块级作用域的作用，使每个i变量都仅在对应的作用域内有效果。相应的下面程序也是一样的道理。</p>
+<pre><code>var elems = document.getElementsByTagName(&apos;a&apos;);
+for(let i = 0;i &lt; elems.length; i++ ) {
+    elems[i].addEventListener(&apos;click&apos;,function(e){
+        e.preventDefault();
+        alert(i)
+        },false);
+}
+</code></pre><h2 id="IIFE（立即执行函数表达式）"><a href="#IIFE（立即执行函数表达式）" class="headerlink" title="IIFE（立即执行函数表达式）"></a>IIFE（立即执行函数表达式）</h2><p>由于js中，在括号中进行函数声明无效，所以被括号包起来的函数称之为函数表达式。<br>IIFE的两种形式如下：当圆括号出现在匿名函数的末尾想要调用函数时，它会默认将函数当成是函数声明。当圆括号包裹函数时，它会默认将函数作为表达式去解析，而不是函数声明。</p>
+<pre><code>(function(){}());
+(function(){})();
+</code></pre><p>下面先来用牛客的一道题目来理解一下IIFE：</p>
+<pre><code>var myObject = {   
+    foo: &quot;bar&quot;,   
+    func: function() {     
+        var self = this;     
+          console.log(this.foo);          
+        console.log(self.foo);        
+          (function() {         
+            console.log(this.foo);      
+                console.log(self.foo);        
+          }());   
+}};
+    myObject.func();
+</code></pre><p>因为this指代的是myObject对象，所以第一个肯定输出bar，而self是this的变量，等于是this，所以第二个输出的还是bar，下面出现的就是我们上文定义的第一种IIFE形式，此时必须立即执行匿名函数，它的this指向的是window，所以输出undefined,最后的self在自己的块级作用域没有定义，所以向上找到父级作用域的self，因此第四个输出的还是bar。</p>
+<p>下面我们用两种IIFE的形式来改写最初的代码。</p>
+<pre><code>for(var i=0;i&lt;5;i++){
+    (function(e){
+        setTimeout(function (){
+            console.log(e+&apos;&apos;);
+        },100*i);
+//将i值锁定到e中，再输出相关结果
+    })(i)
+}
+</code></pre><p>在IIFE中，我们想要锁定哪个值就要将该值放在函数表达式的最外面那个括号里。此时就跟正常的for循环相同了。</p>
+<p>第二种方式：</p>
+<pre><code>for(var i=0;i&lt;5;i++){
+    (function(e){
+        setTimeout(function (){
+            console.log(new Date, e+&apos;&apos;);
+        },100*i);
+    }(i))
+}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-WEB-CSS布局" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/19/WEB-CSS布局/" class="article-date">
+      <time datetime="2017-03-19T12:00:00.000Z" itemprop="datePublished">2017-03-19</time>
+</a>
+
+ 
+    <a href="/2017/03/19/WEB-CSS布局/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/03/19/WEB-CSS布局/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/19/WEB-CSS布局/">WEB前端--CSS布局必备知识</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>对于前端学习来说，CSS是必不可缺的一部分。所以选择器、布局、属性和值对于前端学习者可谓重中之重。无论是初学者还是老手都会有一些帮助的。下面详细罗列一些十分<font color="red">重要的布局知识</font>。</p>
+<h2 id="margin-0-auto"><a href="#margin-0-auto" class="headerlink" title="margin: 0 auto"></a>margin: 0 auto</h2><p>在现代浏览器中，如果要把一些东西水平居中，使用 display:flex; justify-content: center; .<br>然而, 在一些老的浏览器，如IE8-9, 这些是不可用的. 想要把一个元素在其父元素中居中, 使用 margin: 0 auto;我们margin定义如下：</p>
+<pre><code>margin: 10px 5px 10px 5px   //margin: top left buttom right
+ margin: 10px 5px 10px        //margin: top (left right) buttom
+margin: 10px 5px            //margin: (top buttom) (right left)
+margin: 10px                //margin: (top left buttom right)
+</code></pre><p>margin: 0 auto 中auto对应的就是左右边框，所以它的作用就是水平对齐。</p>
+<h2 id="max-width"><a href="#max-width" class="headerlink" title="max-width"></a>max-width</h2><p>这是一个系列，其他还有max-height、min-width、min-height，感觉这个还是应该要提倡多用的。在这种情况下使用 max-width 替代 width 可以使浏览器更好地处理小窗口的情况。这点在移动设备上显得尤为重要。</p>
+<h2 id="display"><a href="#display" class="headerlink" title="display"></a>display</h2><p>这部分内容很多，不可能把每个知识点说清楚，针对display部分内容会推荐一些优质博客。</p>
+<h3 id="display-none"><a href="#display-none" class="headerlink" title="display:none"></a>display:none</h3><p>另一个常用的display值是 none 。一些特殊元素的默认 display 值是它，例如 script 。 display:none 通常被 JavaScript 用来在不删除元素的情况下隐藏或显示元素。<br>它和 visibility 属性不一样。把 display 设置成 none 元素不会占据它本来应该显示的空间，但是设置成 visibility: hidden; 还会占据空间。</p>
+<pre><code>&lt;div class=&quot;test1&quot; style=&quot;display:none&quot;&gt;
+    这是一个测试用例
+&lt;/div&gt;
+</code></pre><h3 id="display-block、display-inline、display-block-inline"><a href="#display-block、display-inline、display-block-inline" class="headerlink" title="display:block、display:inline、display:block-inline"></a>display:block、display:inline、display:block-inline</h3><p>display:block生成<font color="red">块级框</font>。除特殊声明外，所有的块级元素<font color="red">开始于新的一行，延展到其容器的宽度</font>。<br>display:inline生成一个或多个<font color="red">行内框</font>。就如名字般，行内级元素所占具的空间就是他的标签所定义的大小。<br>display:block-inline生成一个<font color="red">块级别框</font>，但是整个框的行为就像是一个内联元素。并且会<font color="red">调节窗口大小</font>,在很多情况下如果元素无法对齐，推荐使用display:block-inline,然后再来个高度自适应vertical-align:top。</p>
+<pre><code>&lt;div class=&quot;test2&quot;&gt;
+&lt;section class=&quot;block&quot;&gt;
+    &lt;header&gt;Block&lt;/header&gt;
+    &lt;p&gt;this is a test example,this is a test example&lt;/p&gt;
+    &lt;p&gt;this is a test example,this is a test example&lt;/p&gt;
+&lt;/section&gt;
+&lt;section class=&quot;inline-block&quot;&gt;
+    &lt;header&gt;Inline-block&lt;/header&gt;
+    &lt;p&gt;this is a test example,this is a test example&lt;/p&gt;
+    &lt;p&gt;this is a test example,this is a test example&lt;/p&gt;
+&lt;/section&gt;
+&lt;section class=&quot;inline&quot;&gt;
+    &lt;header&gt;Inline&lt;/header&gt;
+    &lt;p&gt;this is a test example,this is a test example&lt;/p&gt;
+    &lt;p&gt;this is a test example,this is a test example&lt;/p&gt;
+&lt;/section&gt;
+&lt;/div&gt;
+&lt;style&gt;
+.test2 {
+    font-family: &quot;Happy Monkey&quot;;
+    line-height: 1.5;
+    max-width: 600px;
+}
+section {
+    padding: 1em;
+}
+header {
+    font-family: &quot;Lemon&quot;;
+    margin-bottom: 1em;
+}
+.block {
+    background: #EEE;
+}
+.block p{
+    border: 1px dashed chocolate;
+}
+.inline-block {
+    background: yellowgreen;
+}
+.inline-block p{
+    display: inline-block;
+    border: 1px dashed firebrick;
+}
+.inline{
+    background: #EEE;
+}
+.inline p {
+    display: inline;
+    border: 1px dashed darkgreen;
+}
+&lt;/style&gt;
+</code></pre><p>结果如下所示：<br><img src="http://chuantu.biz/t5/50/1489896190x2728279020.png" alt=""></p>
+<h3 id="display-flex"><a href="#display-flex" class="headerlink" title="display:flex"></a>display:flex</h3><p>传统的display+position+float的盒状布局带来的限制比较多，而利用弹性布局：flex,可以创造更大灵活性。在使用了flex后，css中的float，clear，以及vertical-align都将无法使用。个人摘录的内容很粗略，推荐博客,讲的很好：<a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="external">Flex 布局教程：语法篇</a><br><a href="http://www.ruanyifeng.com/blog/2015/07/flex-examples.html" target="_blank" rel="external">Flex 布局教程：实例篇</a></p>
+<pre><code>Flex 布局教程：语法篇http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html
+Flex 布局教程：实例篇http://www.ruanyifeng.com/blog/2015/07/flex-examples.html
+</code></pre><h4 id="flex容器属性"><a href="#flex容器属性" class="headerlink" title="flex容器属性"></a>flex容器属性</h4><p>flex-direction的作用是主轴的方向,使用方式如下：</p>
+<pre><code>.box {
+      flex-direction: row | row-reverse | column | column-reverse;
+}
+row（默认值）：主轴为水平方向，起点在左端。
+row-reverse：主轴为水平方向，起点在右端。
+column：主轴为垂直方向，起点在上沿。
+column-reverse：主轴为垂直方向，起点在下沿。
+</code></pre><p>flex-wrap作用是如果一条轴线排不下，决定如何换行</p>
+<pre><code>.box{
+    flex-wrap: nowrap | wrap |wrap-reverse
+}
+nowrap:默认不换行
+wrap:换行，但是第一行在上方
+wrap-reverse:换行，但是第一行在下方
+</code></pre><p>flex-flow属性则是flex-direction和flex-wrap的结合体<br>    .box{<br>        flex-flow:(flex-direction)||(flex-wrap)<br>    }<br>justify-content属性定义了项目在主轴上的对齐方式。</p>
+<pre><code>.box {
+  justify-content: flex-start | flex-end | center | space-between | space-around;
+}
+</code></pre><p>align-items属性定义项目在交叉轴上如何对齐。</p>
+<pre><code>.box {
+  align-items: flex-start | flex-end | center | baseline | stretch;
+}
+flex-start（默认值）：左对齐
+flex-end：右对齐
+center： 居中
+space-between：两端对齐，项目之间的间隔都相等。
+space-around：每个项目两侧的间隔相等。所以，项目之间的间隔比项目与边框的间隔大一倍。
+</code></pre><p>align-items属性定义项目在交叉轴上如何对齐。</p>
+<pre><code>.box {
+  align-items: flex-start | flex-end | center | baseline | stretch;
+}
+flex-start：交叉轴的起点对齐。
+flex-end：交叉轴的终点对齐。
+center：交叉轴的中点对齐。
+baseline: 项目的第一行文字的基线对齐。
+stretch（默认值）：如果项目未设置高度或设为auto，将占满整个容器的高度。
+
+.box {
+  align-content: flex-start | flex-end | center | space-between | space-around | stretch;
+}
+</code></pre><p>align-content属性定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用。</p>
+<pre><code>.box {
+  align-content: flex-start | flex-end | center | space-between | space-around | stretch;
+}
+flex-start：与交叉轴的起点对齐。
+flex-end：与交叉轴的终点对齐。
+center：与交叉轴的中点对齐。
+space-between：与交叉轴两端对齐，轴线之间的间隔平均分布。
+space-around：每根轴线两侧的间隔都相等。所以，轴线之间的间隔比轴线与边框的间隔大一倍。
+stretch（默认值）：轴线占满整个交叉轴。
+</code></pre><h3 id="display-grid"><a href="#display-grid" class="headerlink" title="display:grid"></a>display:grid</h3><p>其实grid和flex的内容很多，学精不易，推荐几篇感觉不错的grid博客–<li><a href="https://www.w3cplus.com/css3/things-ive-learned-css-grid-layout.html" target="_blank" rel="external">原生CSS网格布局学习笔记</a><a href="https://www.w3cplus.com/css3/things-ive-learned-css-grid-layout.html" target="_blank" rel="external">https://www.w3cplus.com/css3/things-ive-learned-css-grid-layout.html</a></li></p>
+<li><br><a href="https://www.w3cplus.com/css3/solving-problems-with-css-grid-and-flexbox-the-card-ui.html" target="_blank" rel="external">使用CSS Grid和Flexbox制作Card</a><a href="https://www.w3cplus.com/css3/solving-problems-with-css-grid-and-flexbox-the-card-ui.html" target="_blank" rel="external">https://www.w3cplus.com/css3/solving-problems-with-css-grid-and-flexbox-the-card-ui.html</a></li>
+
+<h2 id="position"><a href="#position" class="headerlink" title="position"></a>position</h2><h3 id="static"><a href="#static" class="headerlink" title="static"></a>static</h3><p>static 是默认值。任意 position: static; 的元素不会被特殊的定位。一个 static 元素表示它不会被“positioned”，一个 position 属性被设置为其他值的元素表示它会被“positioned”。</p>
+<h3 id="relative"><a href="#relative" class="headerlink" title="relative"></a>relative</h3><p>在一个<font color="red">相对(相对于正常位置)</font>定位（position属性的值为relative）的元素上设置 top 、 right 、 bottom 和 left 属性会使其偏离其正常位置。其他的元素的位置则不会受该元素的影响发生位置改变来弥补它偏离后剩下的空隙。</p>
+<h3 id="fixed"><a href="#fixed" class="headerlink" title="fixed"></a>fixed</h3><p>一个固定定位（position属性的值为fixed）元素会相对于<font color="red">视窗(浏览器)</font>来定位，这意味着即便页面滚动，它还是会停留在相同的位置。和 relative 一样， top 、 right 、 bottom 和 left 属性都可用。</p>
+<h3 id="absolute"><a href="#absolute" class="headerlink" title="absolute"></a>absolute</h3><p>absolute 是最棘手的position值。 absolute 与 fixed 的表现类似，但是它不是相对于视窗而是相对于最近的“positioned”祖先元素。如果绝对定位（position属性的值为absolute）的元素没有“positioned”祖先元素，那么它是相对于文档的 body 元素，并且它会随着页面滚动而移动。生成绝对定位的元素，相对于<font color="red"> static 定位以外的第一个父元素</font>进行定位。<br>元素的位置通过 “left”, “top”, “right” 以及 “bottom” 属性进行规定。<br>如果对position有了一定的了解，可以自己改写代码分析其中原理。<br><img src="http://chuantu.biz/t5/50/1489903400x2890149451.png" alt=""></p>
+<pre><code>&lt;body class=&quot;test3&quot;&gt;
+&lt;p class=&quot;&quot;&gt;this is test example&lt;/p&gt;
+&lt;p class=&quot;relative1&quot;&gt;this is a text examle&lt;/p&gt;
+&lt;p class=&quot;relative2&quot;&gt;this is a text examle&lt;/p&gt;
+&lt;p class=&quot;static&quot;&gt;this is test example&lt;/p&gt;
+&lt;p class=&quot;fixed&quot;&gt;this is test example&lt;/p&gt;
+&lt;p class=&quot;absolute&quot;&gt;this is test example&lt;/p&gt;
+&lt;/body&gt;
+
+&lt;style&gt;
+    .test3{
+        margin-left: 50px;
+        max-width: 500px;
+        background: #EEE;
+    }
+    .relative1 {
+        color:red;
+        position:relative;
+        left:-20px
+    }
+    .relative2 {
+        color: blue;
+        position:relative;
+        left:20px;
+    }
+    .static{
+        color:greenyellow;
+        position: static;
+    }
+    .fixed{
+        color:blueviolet;
+        position: fixed;
+        left:150px;
+        top:100px;
+    }
+    .absolute{
+        color:orange;
+        position: absolute;
+        right:100px;
+        top: 0;
+    }
+&lt;/style&gt;
+</code></pre><h2 id="盒模型"><a href="#盒模型" class="headerlink" title="盒模型"></a>盒模型</h2><p>十分简单的一个布局模型，理解下图原理，此处不罗嗦，实在不理解自己多查阅资料。<br><img src="http://chuantu.biz/t5/50/1489903995x2728292215.png" alt=""></p>
+<h2 id="box-sizing"><a href="#box-sizing" class="headerlink" title="box-sizing"></a>box-sizing</h2><p>因为传统的盒模型不够直接，新增了一个叫做 box-sizing 的CSS属性。当你设置一个元素为 box-sizing: border-box; 时，此元素的内边距和边框不再会增加它的宽度。这里有一个与前一页相同的例子，唯一的区别是两个元素都设置了 box-sizing: border-box; </p>
+<pre><code>.box {
+  width: 500px;
+  margin: 20px auto;
+  padding: 50px;
+  border: solid blue 10px;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+        box-sizing: border-box;
+}
+</code></pre><p>box-sizing 是个很新的属性，目前还应该像上面例子中那样使用 -webkit- 和 -moz- 前缀。</p>
+<h2 id="float-浮动-、clear"><a href="#float-浮动-、clear" class="headerlink" title="float(浮动)、clear"></a>float(浮动)、clear</h2><p>这部分内容依然推荐几篇博客，都是精品。</p>
+<p><li><a href="http://www.cnblogs.com/iyangyuan/archive/2013/03/27/2983813.html" target="_blank" rel="external">CSS浮动通俗讲解</a></li></p>
+<p><li><a href="http://www.zhangxinxu.com/wordpress/2010/01/css-float%E6%B5%AE%E5%8A%A8%E7%9A%84%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%E3%80%81%E8%AF%A6%E8%A7%A3%E5%8F%8A%E6%8B%93%E5%B1%95%E4%B8%80/" target="_blank" rel="external">CSS float浮动的深入研究、详解及拓展(一)</a></li></p>
+<p><li><a href="http://www.zhangxinxu.com/wordpress/2010/01/css-float%E6%B5%AE%E5%8A%A8%E7%9A%84%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%E3%80%81%E8%AF%A6%E8%A7%A3%E5%8F%8A%E6%8B%93%E5%B1%95%E4%BA%8C/" target="_blank" rel="external">CSS float浮动的深入研究、详解及拓展(二)</a></li></p>
+<p><li><a href="http://www.iyunlu.com/view/css-xhtml/55.html" target="_blank" rel="external">那些年我们一起清除过的浮动</a></li></p>
+<h2 id="媒体查询"><a href="#媒体查询" class="headerlink" title="媒体查询"></a>媒体查询</h2><p>“响应式设计（Responsive Design” 是一种让网站针对不同的浏览器和设备“呈现”不同显示效果的策略，这样可以让网站在任何情况下显示的很棒！<br>媒体查询是做此事所需的最强大的工具。让我们使用百分比宽度来布局，然后在浏览器变窄到无法容纳侧边栏中的菜单时，把布局显示成一列。<br>可以使用 not，and 和 only 等逻辑操作符构建复杂的媒体查询。and 操作符用来把多个 媒体属性 组合成一条媒体查询。只有当每个属性都为真时，结果才为真。not 操作符用来对一条媒体查询的结果进行取反。only 操作符表示仅在媒体查询匹配成功的情况下应用指定样式。可以通过它让选中的样式在老式浏览器中不被应用。若使用了 not 或 only 操作符，必须明确指定一个媒体类型。<br>下面规定在媒体查询仅在浏览器屏幕，并且可视区域不小于600宽时有效。    </p>
+<pre><code>@media only screen and (min-width:600px) {
+  nav {
+    float: left;
+    width: 25%;
+  }
+  section {
+    margin-left: 25%;
+  }
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-JS回调函数" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -557,103 +1664,9 @@ body{
 
 
   
-    <article id="post-smarty模板引擎" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/03/11/smarty模板引擎/" class="article-date">
-      <time datetime="2017-03-11T02:14:00.000Z" itemprop="datePublished">2017-03-11</time>
-</a>
-
- 
-    <a href="/2017/03/11/smarty模板引擎/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/03/11/smarty模板引擎/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/11/smarty模板引擎/">Smarty模板引擎</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>所有模版标签用分隔符包围，默认为“{”和“}”。</p>
-<h2 id="模板注释"><a href="#模板注释" class="headerlink" title="模板注释"></a>模板注释</h2><p>模板注释被<em>星号包围，两边星号被定界符“{ }”包围，如 { </em> smarty <em> }<br>smarty注释不会在模板文件的最后输出中出现，这与<!-- HTML 注释-->不同（译注：html注释在页面源码中可见，而smarty注释则不能）。<br>如下简单代码片{</em>smarty*}在源码中不可见，而<!--smarty -->源码可见。</p>
-<figure class="highlight dust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span></div><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span></div><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">tltle</span>&gt;</span>smarty<span class="tag">&lt;/<span class="name">tltle</span>&gt;</span></span></div><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span></div><div class="line"><span class="xml"></span><span class="template-variable">&#123;*smarty*&#125;</span><span class="xml"></span></div><div class="line"><span class="xml">smarty</span></div><div class="line"><span class="xml"><span class="comment">&lt;!--smarty--&gt;</span></span></div><div class="line"><span class="xml"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span></div><div class="line"><span class="xml"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span></div><div class="line"><span class="xml"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span></div></pre></td></tr></table></figure>
-<h2 id="变量初步"><a href="#变量初步" class="headerlink" title="变量初步"></a>变量初步</h2><p>模板变量用美元符号$开始，可以包含数字、字母和下划线，这php很像。（注意：配置文件变量是一个不用美元符号$，而是用#号包围着变量（#hashmarks#），或者是一个$smarty.config形式的变量。）</p>
-<p>这里config不做说明，下面是变量示例：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&#123;$a+$b&#125;			<span class="comment">//最简单的变量处理方法</span></div><div class="line">&#123;$a=&#123;$b&#125;+<span class="number">1</span>&#125;		<span class="comment">//标签嵌套标签</span></div><div class="line">&#123;$array[$a]&#125;	<span class="comment">//变量做数组索引</span></div><div class="line">&#123;$assign <span class="keyword">var</span>=<span class="function"><span class="keyword">fun</span> value=$a+$b&#125;	//变量赋值</span></div><div class="line">&#123;$<span class="function"><span class="keyword">fun</span>="&#123;a&#125;"&#125;	//引号套用标签</span></div><div class="line"></div><div class="line">&#123;$assign <span class="keyword">var</span>=<span class="function"><span class="keyword">fun</span> value=[1,2,3]&#125;</span></div><div class="line">&#123;$assign <span class="keyword">var</span>=<span class="function"><span class="keyword">fun</span> value=[1,2,[3,4]]&#125;</span></div><div class="line">&#123;$assign <span class="keyword">var</span>=<span class="function"><span class="keyword">fun</span> value=[1=&gt;'one',2=&gt;'tow']&#125;		//数组定义</span></div><div class="line"></div><div class="line">&#123;$<span class="function"><span class="keyword">fun</span>=<span class="title">stlen</span><span class="params">($a)</span></span>&#125;</div><div class="line">&#123;<span class="function"><span class="keyword">fun</span>=<span class="title">function</span><span class="params">($a,$b)</span></span>&#125;			<span class="comment">//用作函数参数</span></div><div class="line"></div><div class="line">&#123;$array.a=<span class="number">1</span>&#125;</div><div class="line">&#123;$array.a.b.c($array[a][b][c])=<span class="number">1</span>&#125;	<span class="comment">//数组索引赋值</span></div><div class="line"></div><div class="line">&#123;$<span class="keyword">object</span>-&gt;method1($x)-&gt;method2($y)&#125;		<span class="comment">//对象链</span></div></pre></td></tr></table></figure>
-<h3 id="双引号中插入变量"><a href="#双引号中插入变量" class="headerlink" title="双引号中插入变量"></a>双引号中插入变量</h3><p>1、Smarty可以识别嵌入在双引号中的变量，只要此变量只包含数字、字母、下划线和中括号[]。<br>2、对于句号，数组和对象引用等的符号此变量必须用两个反引号`。<br>3、Smarty3增加了双引号对Smarty标签的支持。在需要包含调节器变量、插件、php函数返回值的情形中非常实用。 </p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;function <span class="keyword">var</span>=<span class="string">"test <span class="variable">$foo</span> test"</span>&#125;              <span class="comment">// 识别  $foo</span></div><div class="line">&#123;func <span class="keyword">var</span>=<span class="string">"test <span class="variable">$foo_bar</span> test"</span>&#125;             <span class="comment">// 识别  $foo_bar</span></div><div class="line">&#123;func <span class="keyword">var</span>=<span class="string">"test `<span class="variable">$foo</span>[0]` test"</span>&#125;          <span class="comment">// 识别  $foo[0]</span></div><div class="line">&#123;func <span class="keyword">var</span>=<span class="string">"test `<span class="variable">$foo</span>[bar]` test"</span>&#125;      <span class="comment">// 识别  $foo[bar]</span></div><div class="line"></div><div class="line"></div><div class="line">&#123;func <span class="keyword">var</span>=<span class="string">"test <span class="variable">$foo</span>.bar test"</span>&#125;             <span class="comment">// 识别   $foo (无法识别 $foo.bar) </span></div><div class="line">&#123;func <span class="keyword">var</span>=<span class="string">"test `<span class="variable">$foo</span>.bar` test"</span>&#125;        <span class="comment">// 识别  $foo.bar </span></div><div class="line">&#123;func <span class="keyword">var</span>=<span class="string">"test `<span class="variable">$foo</span>.bar` test"</span>|escape&#125; <span class="comment">//调节器在引号外</span></div><div class="line">&#123;func <span class="keyword">var</span>=<span class="string">"test &#123;<span class="variable">$foo</span>|escape&#125; test"</span>&#125;     <span class="comment">// 调节器在引号内</span></div><div class="line">&#123;func <span class="keyword">var</span>=<span class="string">"test &#123;time()&#125; test"</span>&#125;               <span class="comment">// PHP 函数识别</span></div><div class="line">&#123;func <span class="keyword">var</span>=<span class="string">"test &#123;counter&#125; test"</span>&#125;            <span class="comment">//标签识别</span></div></pre></td></tr></table></figure>
-<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>每一个smarty标签输出一个变量或者调用某种函数。在定界符内函数（一般定界符‘{}’包住）和其属性（同样在定界符内）将被处理和输出。例如: {function（函数名） attr1（变量名）=”val”（变量值） attr2=”val”}. </p>
-<figure class="highlight dust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="xml"></span><span class="template-variable">&#123;config_load file="colors.conf"&#125;</span><span class="xml"></span></div><div class="line"><span class="xml"></span><span class="template-variable">&#123;include file="header.tpl"&#125;</span><span class="xml"></span></div><div class="line"><span class="xml"></span><span class="template-variable">&#123;<span class="keyword">if</span> $highlight_name&#125;</span><span class="xml"></span></div><div class="line"><span class="xml">	Welcome, <span class="tag">&lt;<span class="name">font</span> <span class="attr">color</span>=<span class="string">"</span></span></span><span class="template-tag">&#123;#<span class="name">fontColor</span>#&#125;</span><span class="xml"><span class="tag"><span class="string">"</span>&gt;</span></span><span class="template-variable">&#123;$name&#125;</span><span class="xml">!<span class="tag">&lt;/<span class="name">font</span>&gt;</span>	</span></div><div class="line"><span class="xml"></span><span class="template-variable">&#123;else&#125;</span><span class="xml"></span></div><div class="line"><span class="xml">	Welcome, </span><span class="template-variable">&#123;$name&#125;</span><span class="xml">!</span></div><div class="line"><span class="xml"></span><span class="template-tag">&#123;/<span class="name">if</span>&#125;</span><span class="xml"></span></div><div class="line"><span class="xml"></span><span class="template-variable">&#123;include file="footer.tpl"&#125;</span><span class="xml"></span></div></pre></td></tr></table></figure>
-<p>1、在模板里无论是内置函数还是自定义函数都有相同的语法。<br>2、内置函数将在smarty内部工作,例如{if}、{section}和{strip}，不能修改他们。<br>3、自定义函数通过插件机制起作用，它们是附加函数。只要你喜欢，可以随意修改，你也可以自行添加。例如{html_options}和{html_select_date}。 </p>
-<h2 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h2><p>大多数函数都带有自己的属性以便于明确说明或者修改他们的行为，smarty函数的属性很像HTML中的属性。静态数值不需要加引号，但是字符串建议使用引号。可以使用普通smarty变量，也可以使用带调节器的变量作为属性值，它们也不用加引号。你甚至可以使用php函数返回值和复杂表达式作为属性值。</p>
-<h2 id="Math"><a href="#Math" class="headerlink" title="Math"></a>Math</h2><p>数学运算可以直接作用到变量值。</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="variable">$foo</span>+1&#125;</div><div class="line">&#123;<span class="variable">$foo</span>*<span class="variable">$bar</span>&#125;</div><div class="line">&#123;<span class="variable">$foo</span>|truncate:<span class="string">"`<span class="variable">$fooTruncCount</span>/<span class="variable">$barTruncFactor</span>-1`"</span>&#125;</div><div class="line">&#123;assign <span class="attribute">var</span>=<span class="string">"foo"</span> <span class="attribute">value</span>=<span class="string">"`<span class="variable">$foo</span>+<span class="variable">$bar</span>`"</span>&#125;</div></pre></td></tr></table></figure>
-<h2 id="忽略smarty语法"><a href="#忽略smarty语法" class="headerlink" title="忽略smarty语法"></a>忽略smarty语法</h2><p>忽略Smarty对某些语句段的解析很有必要。一种典型的情况是嵌入到模板中的javascript或Css代码。原因在于这些语言使用与Smarty默认定界符‘｛’和‘｝’一样的符号。</p>
-<p>方法：一个避免出现这种情况的好习惯是把你的javascript/css代码分离出来保存成一个独立文件，再用html方法链接到模版中。这样做也有利于浏览器缓存脚本。如果你想把Smarty变量、方法嵌入到javascript/css，请看下面的运用。</p>
-<p>在Smarty模版，如果‘｛’和‘｝’大括号里包含有空格那么整个{}内容会被忽略，你可以设置Smarty类变量$auto_literal=false来取消这种规则。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></div><div class="line"><span class="actionscript"><span class="comment">// the following braces are ignored by Smarty 以下大括号的内容会被Smarty忽略</span></span></div><div class="line"><span class="actionscript"><span class="comment">// since they are surrounded by whitespace 因为它们里面有空格</span></span></div><div class="line"><span class="actionscript"><span class="function"><span class="keyword">function</span> <span class="title">foobar</span> </span>&#123;</span></div><div class="line"><span class="actionscript">alert(<span class="string">'foobar!'</span>);</span></div><div class="line"><span class="undefined">&#125;</span></div><div class="line"><span class="actionscript"><span class="comment">// this one will need literal escapement 下面的内容会保持原义输出</span></span></div><div class="line"><span class="undefined">&#123;literal&#125;</span></div><div class="line"><span class="actionscript"><span class="function"><span class="keyword">function</span> <span class="title">bazzy</span> </span>&#123;alert(<span class="string">'foobar!'</span>);&#125;</span></div><div class="line"><span class="undefined">&#123;/literal&#125;</span></div><div class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>{literal}…{/literal}块被用来忽略模版语法的解析，你也可以用{idelim},{rdelim}标签或{$smarty.Idelim}、{$smarty.rdelim}变量来忽略个别大括号（译注：后面两种方法主要用来在模版中输出左右大括号）。</p>
-<blockquote>
-<p>最近访客</p>
-<div class="ds-recent-visitors" data-num-items="28" data-avatar-size="42" id="ds-recent-visitors"></div></blockquote>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
     </nav>
   
 </div>

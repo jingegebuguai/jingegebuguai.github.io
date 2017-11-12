@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="huiHui" />
+
+
+
+<meta name="description" content="Java Web TokenJSON Web Token（JWT）是一个非常轻巧的规范。这个规范允许我们使用JWT在用户和服务器之间传递安全可靠的信息。 JWT组成一个JWT实际上就是一个字符串，它由三部分组成，头部、载荷与签名。 荷载{ &amp;quot;iss&amp;quot;: &amp;quot;John Wu JWT&amp;quot;, &amp;quot;iat&amp;quot;: 1441593502, &amp;quot;exp">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring 整合Java Web Token">
+<meta property="og:url" content="http://huihui.kim/2017/11/06/Spring整合Java Web Token/index.html">
+<meta property="og:site_name" content="huiHui&#39;s blogs">
+<meta property="og:description" content="Java Web TokenJSON Web Token（JWT）是一个非常轻巧的规范。这个规范允许我们使用JWT在用户和服务器之间传递安全可靠的信息。 JWT组成一个JWT实际上就是一个字符串，它由三部分组成，头部、载荷与签名。 荷载{ &amp;quot;iss&amp;quot;: &amp;quot;John Wu JWT&amp;quot;, &amp;quot;iat&amp;quot;: 1441593502, &amp;quot;exp">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-06T07:07:18.392Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring 整合Java Web Token">
+<meta name="twitter:description" content="Java Web TokenJSON Web Token（JWT）是一个非常轻巧的规范。这个规范允许我们使用JWT在用户和服务器之间传递安全可靠的信息。 JWT组成一个JWT实际上就是一个字符串，它由三部分组成，头部、载荷与签名。 荷载{ &amp;quot;iss&amp;quot;: &amp;quot;John Wu JWT&amp;quot;, &amp;quot;iat&amp;quot;: 1441593502, &amp;quot;exp">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="huiHui&#39;s blogs" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Spring 整合Java Web Token | huiHui&#39;s blogs</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">huiHui</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://jingegebuguai.github.com/">GitHub</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于全栈</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">huiHui</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">huiHui</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" target="_blank" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Spring整合Java Web Token" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/06/Spring整合Java Web Token/" class="article-date">
+      <time datetime="2017-11-06T04:33:00.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Spring 整合Java Web Token
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Java-Web-Token"><a href="#Java-Web-Token" class="headerlink" title="Java Web Token"></a>Java Web Token</h2><p>JSON Web Token（JWT）是一个非常轻巧的规范。这个规范允许我们使用JWT在用户和服务器之间传递安全可靠的信息。</p>
+<h3 id="JWT组成"><a href="#JWT组成" class="headerlink" title="JWT组成"></a>JWT组成</h3><p>一个JWT实际上就是一个字符串，它由三部分组成，<span style="color:red">头部、载荷与签名。</span></p>
+<h3 id="荷载"><a href="#荷载" class="headerlink" title="荷载"></a>荷载</h3><pre><code>{
+&quot;iss&quot;: &quot;John Wu JWT&quot;,
+&quot;iat&quot;: 1441593502,
+&quot;exp&quot;: 1441594722,
+&quot;aud&quot;: &quot;www.example.com&quot;,
+&quot;sub&quot;: &quot;jrocket@example.com&quot;,
+&quot;from_user&quot;: &quot;B&quot;,
+&quot;target_user&quot;: &quot;A&quot;
+}
+</code></pre><p>这里面的前五个字段都是由JWT的标准所定义的。</p>
+<ul>
+<li>iss: 该JWT的签发者</li>
+<li>sub: 该JWT所面向的用户</li>
+<li>aud: 接收该JWT的一方</li>
+<li>exp(expires): 什么时候过期，这里是一个Unix时间戳</li>
+<li>iat(issued at): 在什么时候签发的</li>
+</ul>
+<p>这些定义都可以在标准中找到。</p>
+<p>将上面的JSON对象进行[base64编码]可以得到下面的字符串。这个字符串我们将它称作JWT的Payload（载荷）。</p>
+<pre><code>eyJpc3MiOiJKb2huIFd1IEpXVCIsImlhdCI6MTQ0MTU5MzUwMiwiZXhwIjoxNDQxNTk0NzIyLCJhdWQiOiJ3d3cuZXhhbXBsZS5jb20iLCJzdWIiOiJqcm9ja2V0QGV4YW1wbGUuY29tIiwiZnJvbV91c2VyIjoiQiIsInRhcmdldF91c2VyIjoiQSJ9
+</code></pre><h3 id="头部"><a href="#头部" class="headerlink" title="头部"></a>头部</h3><p>JWT还需要一个头部，头部用于描述关于该JWT的最基本的信息，例如其类型以及签名所用的算法等。这也可以被表示成一个JSON对象。</p>
+<pre><code>{
+</code></pre><p>  “typ”: “JWT”,<br>  “alg”: “HS256”<br>    }</p>
+<p>在这里，我们说明了这是一个JWT，并且我们所用的签名算法（后面会提到）是HS256算法。（算法根据实际情况而变）</p>
+<pre><code>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
+</code></pre><h3 id="签名"><a href="#签名" class="headerlink" title="签名"></a>签名</h3><p>签名就是将荷载和头部编码用.号连接在一起就形成了</p>
+<pre><code>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcm9tX3VzZXIiOiJCIiwidGFyZ2V0X3VzZXIiOiJBIn0
+</code></pre><p>我们将上面拼接完的字符串用HS256算法进行加密。在加密的时候，我们还需要提供一个密钥（secret）。如果我们用mystar作为密钥的话，那么就可以得到我们加密后的内容</p>
+<pre><code>rSWamyAYwuHCo7IFAgd1oRpSP7nzL7BF5t7ItqpKViM
+</code></pre><p>最后将这一部分签名也拼接在被签名的字符串后面，我们就得到了完整的JWT</p>
+<pre><code>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcm9tX3VzZXIiOiJCIiwidGFyZ2V0X3VzZXIiOiJBIn0.rSWamyAYwuHCo7IFAgd1oRpSP7nzL7BF5t7ItqpKViM
+</code></pre><h4 id="签名的目的"><a href="#签名的目的" class="headerlink" title="签名的目的"></a>签名的目的</h4><p>最后一步签名的过程，实际上是对头部以及载荷内容进行签名。一般而言，加密算法对于不同的输入产生的输出总是不一样的。对于两个不同的输入，产生同样的输出的概率极其地小（有可能比我成世界首富的概率还小）。所以，我们就把“不一样的输入产生不一样的输出”当做必然事件来看待吧。</p>
+<p>所以，如果有人对头部以及载荷的内容解码之后进行修改，再进行编码的话，那么新的头部和载荷的签名和之前的签名就将是不一样的。而且，如果不知道服务器加密的时候用的密钥的话，得出来的签名也一定会是不一样的。</p>
+<p>服务器应用在接受到JWT后，会首先对头部和载荷的内容用同一算法再次签名。那么服务器应用是怎么知道我们用的是哪一种算法呢？别忘了，我们在JWT的头部中已经用alg字段指明了我们的加密算法了。</p>
+<p>如果服务器应用对头部和载荷再次以同样方法签名之后发现，自己计算出来的签名和接受到的签名不一样，那么就说明这个Token的内容被别人动过的，我们应该拒绝这个Token，返回一个HTTP 401 Unauthorized响应。</p>
+<p>我们可以看到，JWT适合用于向Web应用传递一些非敏感信息。例如在上面提到的完成加好友的操作，还有诸如下订单的操作等等。</p>
+<p>其实JWT还经常用于设计用户认证和授权系统，甚至实现Web应用的单点登录。</p>
+<h2 id="Spring使用JWT"><a href="#Spring使用JWT" class="headerlink" title="Spring使用JWT"></a>Spring使用JWT</h2><h3 id="Maven配置方式"><a href="#Maven配置方式" class="headerlink" title="Maven配置方式"></a>Maven配置方式</h3><pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.auth0&lt;/groupId&gt;
+    &lt;artifactId&gt;java-jwt&lt;/artifactId&gt;
+    &lt;version&gt;3.2.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><h3 id="JWT算法-了解"><a href="#JWT算法-了解" class="headerlink" title="JWT算法(了解)"></a>JWT算法(了解)</h3><table>
+<thead>
+<tr>
+<th>JWS</th>
+<th style="text-align:center">算法</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HS256</td>
+<td style="text-align:center">HMAC256</td>
+<td>HMAC with SHA-256</td>
+</tr>
+<tr>
+<td>HS384</td>
+<td style="text-align:center">HMAC384</td>
+<td>HMAC with SHA-384</td>
+</tr>
+<tr>
+<td>HS512</td>
+<td style="text-align:center">HMAC512</td>
+<td>HMAC with SHA-512</td>
+</tr>
+<tr>
+<td>RS256</td>
+<td style="text-align:center">RSA256</td>
+<td>RSASSA-PKCS1-v1_5 with SHA-256</td>
+</tr>
+<tr>
+<td>RS384</td>
+<td style="text-align:center">RSA384</td>
+<td>RSASSA-PKCS1-v1_5 with SHA-384</td>
+</tr>
+<tr>
+<td>RS512</td>
+<td style="text-align:center">RSA512</td>
+<td>RSASSA-PKCS1-v1_5 with SHA-512</td>
+</tr>
+<tr>
+<td>ES256</td>
+<td style="text-align:center">ECDSA256</td>
+<td>ECDSA with curve P-256 and SHA-256</td>
+</tr>
+<tr>
+<td>ES384</td>
+<td style="text-align:center">ECDSA384</td>
+<td>ECDSA with curve P-384 and SHA-384</td>
+</tr>
+<tr>
+<td>ES512</td>
+<td style="text-align:center">ECDSA512</td>
+<td>ECDSA with curve P-521 and SHA-512</td>
+</tr>
+</tbody>
+</table>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><h4 id="选择算法"><a href="#选择算法" class="headerlink" title="选择算法"></a>选择算法</h4><p>算法定义了一个令牌是如何被签名和验证的。它可以用HMAC算法的原始值来实例化，也可以在RSA和ECDSA算法的情况下对密钥对或密钥提供程序进行实例化。创建后，该实例可用于令牌签名和验证操作。</p>
+<p>在使用RSA或ECDSA算法时，只需要签署JWTs，就可以通过传递null值来避免指定公钥。当您需要验证JWTs时，也可以使用私钥进行操作</p>
+<p>使用静态的字符密文或者key来获取算法器:</p>
+<pre><code>//HMAC
+Algorithm algorithmHS = Algorithm.HMAC256(&quot;secret&quot;);
+
+//RSA
+RSAPublicKey publicKey = //Get the key instance
+RSAPrivateKey privateKey = //Get the key instance
+Algorithm algorithmRS = Algorithm.RSA256(publicKey, privateKey);
+</code></pre><p>使用一个key提供者来获取算法:<br>  通过使用KeyProvider，您可以在运行时更改密钥，用于验证令牌签名或为RSA或ECDSA算法签署一个新的令牌。这是通过实现RSAKeyProvider或ECDSAKeyProvider方法实现的:</p>
+<ul>
+<li>getPublicKeyById(String kid): 它在令牌签名验证中调用，它应该返回用于验证令牌的密钥。如果使用了关键的轮换，例如JWK，它可以使用id来获取正确的轮换键(或者只是一直返回相同的键)。</li>
+<li>getPrivateKey(): 在令牌签名期间调用它，它应该返回用于签署JWT的密钥。</li>
+<li>getPrivateKeyId():在令牌签名期间调用它，它应该返回标识由getPrivateKey()返回的键的id的id。这个值比JWTCreator.Builder和keyid(String)方法中的值更受欢迎。如果您不需要设置孩子的值，就避免使用KeyProvider实例化算法。  </li>
+</ul>
+<h3 id="创建JWT"><a href="#创建JWT" class="headerlink" title="创建JWT"></a>创建JWT</h3><pre><code>try {
+Algorithm algorithm = Algorithm.HMAC256(&quot;secret&quot;);
+String token = JWT.create()
+    .withIssuer(&quot;auth0&quot;)
+    .sign(algorithm);
+} catch (UnsupportedEncodingException exception){
+    //UTF-8 encoding not supported
+} catch (JWTCreationException exception){
+    //Invalid Signing configuration / Couldn&apos;t convert Claims.
+}
+</code></pre><p>如果Claim不能转换为JSON，或者在签名过程中使用的密钥无效，那么将会抛出JWTCreationException异常。</p>
+<h3 id="验证令牌"><a href="#验证令牌" class="headerlink" title="验证令牌"></a>验证令牌</h3><p>首先需要通过调用jwt.require()和传递算法实例来创建一个JWTVerifier实例。如果您要求令牌具有特定的Claim值，请使用构建器来定义它们。方法build()返回的实例是可重用的，因此您可以定义一次，并使用它来验证不同的标记。最后调用verifier.verify()来验证token</p>
+<pre><code>String token = &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJhdXRoMCJ9.AbIJTDMFc7yUa5MhvcP03nJPyCPzZtQcGEp-zWfOkEE&quot;;
+try {
+    Algorithm algorithm = Algorithm.HMAC256(&quot;secret&quot;);
+    JWTVerifier verifier = JWT.require(algorithm)
+        .withIssuer(&quot;auth0&quot;)
+        .build(); //Reusable verifier instance
+    DecodedJWT jwt = verifier.verify(token);
+} catch (UnsupportedEncodingException exception){
+    //UTF-8 encoding not supported
+} catch (JWTVerificationException exception){
+    //Invalid signature/claims
+}
+</code></pre><h3 id="时间验证"><a href="#时间验证" class="headerlink" title="时间验证"></a>时间验证</h3><p>当验证一个令牌时，时间验证会自动发生，导致在值无效时抛出一个JWTVerificationException。如果前面的任何一个字段都丢失了，那么在这个验证中就不会考虑这些字段。</p>
+<p>要指定令牌仍然被认为有效的余地窗口，在JWTVerifier builder中使用accept回旋()方法，并传递一个正值的秒值。这适用于上面列出的每一项。</p>
+<pre><code>JWTVerifier verifier = JWT.require(algorithm)
+.acceptLeeway(1) // 1 sec for nbf, iat and exp
+.build();
+</code></pre><p>您还可以为给定的日期声明指定一个自定义值，并为该声明覆盖缺省值。</p>
+<pre><code>JWTVerifier verifier = JWT.require(algorithm)
+.acceptLeeway(1)   //1 sec for nbf and iat
+.acceptExpiresAt(5)   //5 secs for exp
+.build();
+</code></pre><h3 id="信息解析"><a href="#信息解析" class="headerlink" title="信息解析"></a>信息解析</h3><h4 id="Algorithm-“alg”"><a href="#Algorithm-“alg”" class="headerlink" title="Algorithm (“alg”)"></a>Algorithm (“alg”)</h4><p>返回jwt的算法值或,如果没有定义则返回null</p>
+<pre><code>String algorithm = jwt.getAlgorithm();
+</code></pre><p>如果您需要在您的lib/app中测试此行为，将验证实例转换为basever可视化，以获得verific.build()方法的可见性，该方法可以接受定制的时钟。例如:</p>
+<pre><code>BaseVerification verification = (BaseVerification) JWT.require(algorithm)
+.acceptLeeway(1)
+.acceptExpiresAt(5);
+Clock clock = new CustomClock(); //Must implement Clock interface
+JWTVerifier verifier = verification.build(clock);
+</code></pre><h4 id="Type-“typ”"><a href="#Type-“typ”" class="headerlink" title="Type (“typ”)"></a>Type (“typ”)</h4><p>返回jwt的类型值，如果没有定义则返回null（多数情况类型值为jwt）</p>
+<pre><code>String type = jwt.getType();
+</code></pre><h4 id="Content-Type-“cty”"><a href="#Content-Type-“cty”" class="headerlink" title="Content Type (“cty”)"></a>Content Type (“cty”)</h4><p>返回内容的类型,如果没有定义则返回null</p>
+<pre><code>String contentType = jwt.getContentType();
+</code></pre><h4 id="Key-Id-“kid”"><a href="#Key-Id-“kid”" class="headerlink" title="Key Id (“kid”)"></a>Key Id (“kid”)</h4><p>返回key的id值,如果没有定义则返回null</p>
+<pre><code>String keyId = jwt.getKeyId();
+</code></pre><h3 id="自定义字段"><a href="#自定义字段" class="headerlink" title="自定义字段"></a>自定义字段</h3><p>在令牌的头部中定义的附加声明可以通过调用getHeaderClaim() 获取,即使无法找到，也会返回。您可以通过调用claim.isNull()来检查声明的值是否为null。</p>
+<pre><code>Claim claim = jwt.getHeaderClaim(&quot;owner&quot;);
+</code></pre><p>当使用jwt.create()创建一个令牌时，您可以通过调用withHeader()来指定头声明，并同时传递声明的映射。</p>
+<pre><code>Map&lt;String, Object&gt; headerClaims = new HashMap();
+headerClaims.put(&quot;owner&quot;, &quot;auth0&quot;);
+String token = JWT.create()
+    .withHeader(headerClaims)
+    .sign(algorithm);
+</code></pre><p>提示:在签名过程之后，alg和typ值将始终包含在Header中。</p>
+<h4 id="JWT的负载-Payload-声明"><a href="#JWT的负载-Payload-声明" class="headerlink" title="JWT的负载(Payload)声明"></a>JWT的负载(Payload)声明</h4><pre><code>Issuer (&quot;iss&quot;)
+</code></pre><p>返回签发者的名称值,如果没有在负载中定义则返回null</p>
+<pre><code>String issuer = jwt.getIssuer();
+Subject (&quot;sub&quot;)
+</code></pre><p>返回jwt所面向的用户的值,如果没有在负载中定义则返回null</p>
+<pre><code>String subject = jwt.getSubject();
+Audience (&quot;aud&quot;)
+</code></pre><p>返回该jwt由谁接收,如果没有在负载中定义则返回null</p>
+<pre><code>List&lt;String&gt; audience = jwt.getAudience();
+Expiration Time (&quot;exp&quot;)
+</code></pre><p>返回该jwt的过期时间,如果在负载中没有定义则返回null</p>
+<pre><code>Date expiresAt = jwt.getExpiresAt();
+Not Before (&quot;nbf&quot;)
+</code></pre><p>Returns the Not Before value or null if it’s not defined in the Payload.</p>
+<pre><code>Date notBefore = jwt.getNotBefore();
+Issued At (&quot;iat&quot;)
+</code></pre><p>返回在什么时候签发的,如果在负载中没有定义则返回null</p>
+<pre><code>Date issuedAt = jwt.getIssuedAt();
+JWT ID (&quot;jti&quot;)
+</code></pre><p>返回该jwt的唯一标志,如果在负载中没有定义则返回null</p>
+<pre><code>String id = jwt.getId();
+</code></pre><h4 id="自定义声明"><a href="#自定义声明" class="headerlink" title="自定义声明"></a>自定义声明</h4><p>在令牌有效负载中定义的附加声明可以通过调用getClaims()或 getClaim()和传递声明名来获得。即使无法找到声明，也将会有返回值。您可以通过调用claim.isNull()来检查声明的值是否为null。</p>
+<pre><code>Map&lt;String, Claim&gt; claims = jwt.getClaims();    //Key is the Claim name
+Claim claim = claims.get(&quot;isAdmin&quot;);
+</code></pre><p>或者:</p>
+<pre><code>Claim claim = jwt.getClaim(&quot;isAdmin&quot;);
+</code></pre><p>当使用jwt.create()创建一个令牌时，您可以通过调用withClaim()来指定自定义声明，并同时传递名称和值。</p>
+<pre><code>String token = JWT.create()
+    .withClaim(&quot;name&quot;, 123)
+    .withArrayClaim(&quot;array&quot;, new Integer[]{1, 2, 3})
+    .sign(algorithm);
+</code></pre><p>您还可以通过调用withClaim()来验证jwt.require()的自定义声明，并传递该名称和所需的值。</p>
+<pre><code>JWTVerifier verifier = JWT.require(algorithm)
+    .withClaim(&quot;name&quot;, 123)
+    .withArrayClaim(&quot;array&quot;, 1, 2, 3)
+    .build();
+DecodedJWT jwt = verifier.verify(&quot;my.jwt.token&quot;);    
+</code></pre><h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><pre><code>package course.utils;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.google.common.collect.Maps;
+import course.pojo.User;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
+import java.util.Map;
+
+public class JwtUtils {
+
+    //创建token
+    public static String creatToken(User user) throws IllegalArgumentException, UnsupportedEncodingException{
+        Algorithm algorithm = Algorithm.HMAC256(&quot;secret&quot;);
+        String username = user.getUsername();
+        Map&lt;String, Object&gt; map = Maps.newHashMap();
+        map.put(&quot;alg&quot;, &quot;HS256&quot;);
+        map.put(&quot;typ&quot;, &quot;JWT&quot;);
+        String token = JWT.create().withHeader(map)
+                .withClaim(&quot;username&quot;, username)
+                .withExpiresAt(new Date(System.currentTimeMillis()+360000))
+                .sign(algorithm);
+        return token;
+    }
+
+    //验证jwt
+    public static DecodedJWT verifyJwt(String token){
+        DecodedJWT decodedJWT = null;
+        try{
+            Algorithm algorithm = Algorithm.HMAC256(&quot;secret&quot;);
+            JWTVerifier jwtVerifier = JWT.require(algorithm).build();
+            decodedJWT = jwtVerifier.verify(token);
+        }catch(IllegalArgumentException e){
+            e.printStackTrace();
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }catch(JWTVerificationException e) {
+            e.printStackTrace();
+        }
+        return decodedJWT;
+    }
+
+    public static void main(String[] args) throws UnsupportedEncodingException{
+//        String username = &quot;root&quot;;
+//        Integer id =1;
+//        System.out.println(creatToken(username,id));
+//        String token = &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MDgxMzgxNDAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyb290In0.OeRdHJZKmxFBqIN-A-uSNQK8JyKdzX-wcFR883oMqFA&quot;;
+//        System.out.println(verifyJwt(&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MDgxMzgxNDAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyb290In0.OeRdHJZKmxFBqIN-A-uSNQK8JyKdzX-wcFR883oMqFA&quot;));
+//        System.out.println(verifyJwt(token).getClaims().get(&quot;username&quot;).asString());
+    }
+}
+</code></pre>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/11/06/Spring整合Java Web Token/">Spring 整合Java Web Token</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">huiHui</a></p>
+        <p><span>发布时间:</span>2017-11-06, 12:33:00</p>
+        <p><span>最后更新:</span>2017-11-06, 15:07:18</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/11/06/Spring整合Java Web Token/" title="Spring 整合Java Web Token">http://huihui.kim/2017/11/06/Spring整合Java Web Token/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/11/06/Spring整合Java Web Token/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/11/06/Java MD5加密/">
+                    Java MD5加密
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/11/01/Java并发之线程池基础/">
+                    Java并发之线程池基础
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-Web-Token"><span class="toc-number">1.</span> <span class="toc-text">Java Web Token</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JWT组成"><span class="toc-number">1.1.</span> <span class="toc-text">JWT组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#荷载"><span class="toc-number">1.2.</span> <span class="toc-text">荷载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#头部"><span class="toc-number">1.3.</span> <span class="toc-text">头部</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#签名"><span class="toc-number">1.4.</span> <span class="toc-text">签名</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#签名的目的"><span class="toc-number">1.4.1.</span> <span class="toc-text">签名的目的</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring使用JWT"><span class="toc-number">2.</span> <span class="toc-text">Spring使用JWT</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Maven配置方式"><span class="toc-number">2.1.</span> <span class="toc-text">Maven配置方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JWT算法-了解"><span class="toc-number">2.2.</span> <span class="toc-text">JWT算法(了解)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方法"><span class="toc-number">2.3.</span> <span class="toc-text">使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#选择算法"><span class="toc-number">2.3.1.</span> <span class="toc-text">选择算法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建JWT"><span class="toc-number">2.4.</span> <span class="toc-text">创建JWT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#验证令牌"><span class="toc-number">2.5.</span> <span class="toc-text">验证令牌</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#时间验证"><span class="toc-number">2.6.</span> <span class="toc-text">时间验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#信息解析"><span class="toc-number">2.7.</span> <span class="toc-text">信息解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Algorithm-“alg”"><span class="toc-number">2.7.1.</span> <span class="toc-text">Algorithm (“alg”)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Type-“typ”"><span class="toc-number">2.7.2.</span> <span class="toc-text">Type (“typ”)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Type-“cty”"><span class="toc-number">2.7.3.</span> <span class="toc-text">Content Type (“cty”)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Key-Id-“kid”"><span class="toc-number">2.7.4.</span> <span class="toc-text">Key Id (“kid”)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义字段"><span class="toc-number">2.8.</span> <span class="toc-text">自定义字段</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#JWT的负载-Payload-声明"><span class="toc-number">2.8.1.</span> <span class="toc-text">JWT的负载(Payload)声明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#自定义声明"><span class="toc-number">2.8.2.</span> <span class="toc-text">自定义声明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例"><span class="toc-number">3.</span> <span class="toc-text">实例</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Spring 整合Java Web Token　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://huihui.kim/2017/11/06/Spring整合Java Web Token/';
+            this.page.identifier = '2017/11/06/Spring整合Java Web Token/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/11/06/Java MD5加密/" title="上一篇: Java MD5加密">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/11/01/Java并发之线程池基础/" title="下一篇: Java并发之线程池基础">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Java读写Properties属性/">Java读写Properties属性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Java MD5加密/">Java MD5加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Spring整合Java Web Token/">Spring 整合Java Web Token</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池基础/">Java并发之线程池基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/">Java并发之线程池—Callable,Future,FutureTask</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/">Java并发之线程池拓展—ExecutorService原理，静态工厂方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之阻塞队列/">Java并发之阻塞队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/LintCode题解--中等篇(1)/">LintCode题解——中等篇（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Java并发之ThreadLocal/">Java并发之ThreadLocal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/24/Java并发之Lock/">Java并发之Lock</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Django前端页面相关处理/">Django Html相关配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Spring基于注解的配置/">Spring基于注解的配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/SSM项目知识点总结/">SSM小项目知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Spring AOP切面/">Spring AOP切面编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Mybatis-generator详细配置demo/">Mybatis-Generator相关配置demo</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/LintCode题解（二）/">LintCode题解（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/01/LintCode题解（七）/">LintCode题解（七）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（一）/">LintCode题解（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java并发基础/">Java并发基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/springMVC基础/">SpringMVC中@RequestMapping等基础知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java数据库与事务处理机制/">Java数据库处理与事务机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/Spring属性配置细节/">Spring Bean配置细节</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/LintCode题解（四）/">LintCode题解（四）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/LintCode题解（三）/">LintCode题解（三）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/31/Java容器/">Java容器(集合)，持有对象总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/27/servlet实现网页重定向/">Servlet实现网页重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/servlet实现文件上传下载/">Servlet文件上传下载类</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/CSS预处理器比较/">有关CSS预处理器的比较选择(Sass&Less&Stylus)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/js内置对象——string&array/">Js内置对象进阶（一）——String&Array</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">Vue仿饿了么知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/web开发者必备http知识/">Web开发者必备Http基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/python中pip install中utf-8错误的解决方法/">Pip Install中utf-8编码问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/我们仍未知道那天所看见的list/">我们仍未知道那些天所看见的List</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/01/jquery实现樱花坠落插件/">Jquery实现web页面樱花坠落的特效</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/16/Angular2.0开发/">Angular2.0仿今日头条应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/24/后端学习angular--组件篇/">后端学angular2.0的痛苦历程--组件篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的Mysql数据库优化操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/python进阶学习--参数/">Python进阶学习--*Arg、**kw和装饰器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/mysql自连接/">Mysql自连接与join关联</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/10/用IIFE与let方法改写循环闭包/">用IIFE与let命令改写循环闭包</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/19/WEB-CSS布局/">WEB前端--CSS布局必备知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/16/JS回调函数/">JS回调函数详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/Hexo&Gituhub博客搭建/">Hexo&Github博客搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/smarty模板引擎/">Smarty模板引擎</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 huiHui
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

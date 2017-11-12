@@ -276,6 +276,999 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Django图片相关处理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/20/Django图片相关处理/" class="article-date">
+      <time datetime="2017-10-20T02:14:00.000Z" itemprop="datePublished">2017-10-20</time>
+</a>
+
+ 
+    <a href="/2017/10/20/Django图片相关处理/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/20/Django图片相关处理/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="前台访问后台图片"><a href="#前台访问后台图片" class="headerlink" title="前台访问后台图片"></a>前台访问后台图片</h3><p>对于ImageField类型的字段，需要进行特殊处理，相关处理配置如下所示：</p>
+<p>1、setting中配置MEDIA_URL和MEDIA_ROOT</p>
+<pre><code>MEDIA_URL=&quot;media&quot;
+#配置图片文件夹路径
+MEDIA_ROOT=(
+        os.path.join(BASE_DIR, &apos;&apos;media)
+    )
+</code></pre><p>2、如果使用加载，需要在setting的TEMPLATES中加上下面</p>
+<pre><code>&apos;django.template.context_processors.madia&apos;
+</code></pre><p>3、设置url</p>
+<pre><code>from django.views.static improt serve
+from project.setting import MEDIA_ROOT
+url(r&apos;^media/(?P&lt;path&gt;.*)&apos;, serve,{&apos;document_root&apos;:settings.MEDIA_ROOT}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Django前端页面相关处理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/19/Django前端页面相关处理/" class="article-date">
+      <time datetime="2017-10-19T02:14:00.000Z" itemprop="datePublished">2017-10-19</time>
+</a>
+
+ 
+    <a href="/2017/10/19/Django前端页面相关处理/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/19/Django前端页面相关处理/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/19/Django前端页面相关处理/">Django Html相关配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="静态文件加载"><a href="#静态文件加载" class="headerlink" title="静态文件加载"></a>静态文件加载</h2><p>html文件头要加上下面代码，意思要预加载配置文件中的staticfiles文件</p>
+<pre><code>{% load staticfiles %}
+</code></pre><h3 id="css，js，img文件配置"><a href="#css，js，img文件配置" class="headerlink" title="css，js，img文件配置"></a>css，js，img文件配置</h3><p>其中，static为配置文件目录</p>
+<pre><code>&lt;script scr={% static 'js/example.js' %}&gt;&lt;/script&gt;
+&lt;link rel=&quot;staticsheet&quot; type=&quot;text/css&quot; href={%static 'css/example.css'%}&gt;
+&lt;img src={% static 'images/example.jpg' %} /&gt;
+</code></pre><h3 id="url配置"><a href="#url配置" class="headerlink" title="url配置"></a>url配置</h3><pre><code>&lt;a href={% url 'login' %}&gt; 
+&lt;a href={% url 'register' %}&gt;
+action = /login/
+action = /register/
+</code></pre><h2 id="网站模板配置"><a href="#网站模板配置" class="headerlink" title="网站模板配置"></a>网站模板配置</h2><p>为了节省代码，导航，底部，访问统计等地方需要使用共同的html。<br>使用base.html来包含通用的文件</p>
+<pre><code>&lt;!DOCTYPE html5&gt;
+&lt;html&gt;
+    &lt;head&gt;&lt;title&gt;&lt;% block title %&gt;标题&lt;% endtitle %&gt;&lt;/title&gt;&lt;/head&gt;
+    &lt;body&gt;
+        &lt;% include &apos;nav.html&apos; %&gt;
+        &lt;% block main %&gt;
+        &lt;main-section /&gt;
+        &lt;% endblock %&gt;
+        &lt;% include &apos;foot.html&apos; %&gt;    
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>其中block为使继承的模板可以随意重写该部分，include作用是加载其他html文件。<br>我们可以通过继承或者说是扩展<br>extends原来的base.html文件，这样可以重写减少工作量</p>
+<pre><code>&lt;% extends &apos;base.html&apos; %&gt;
+&lt;% block title %&gt;new title&lt;% endblock %&gt;
+
+&lt;% block main %&gt;new main content&lt;% endblock %&gt;    
+</code></pre><p>一般模板放在app下的templates中，django会自动查找，我们一般使用类里加载html文件的形式.</p>
+<pre><code>return render(request, &apos;index.html&apos;)
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Spring基于注解的配置" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/19/Spring基于注解的配置/" class="article-date">
+      <time datetime="2017-10-19T02:14:00.000Z" itemprop="datePublished">2017-10-19</time>
+</a>
+
+ 
+    <a href="/2017/10/19/Spring基于注解的配置/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/19/Spring基于注解的配置/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/19/Spring基于注解的配置/">Spring基于注解的配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Annotation-注解"><a href="#Annotation-注解" class="headerlink" title="Annotation(注解)"></a>Annotation(注解)</h2><h3 id="标注Spring-Bean的Annotation"><a href="#标注Spring-Bean的Annotation" class="headerlink" title="标注Spring Bean的Annotation"></a>标注Spring Bean的Annotation</h3><ul>
+<li>@Component：标注一个普通的Spring Bean类</li>
+<li>@Service：标注一个控制器组件</li>
+<li>@Controller：标注一个业务逻辑组件类</li>
+<li>@Repository：标注一个DAO组件类</li>
+</ul>
+<p>下面为@Component的注解</p>
+<pre><code>package annotation;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class UserObject {
+
+    public void getUser(){
+        System.out.println(&quot;component  getUser...&quot;);
+    }
+}
+</code></pre><p>其在XML中配置方式很简单，只需加上下面</p>
+<pre><code>&lt;context:component-scan base-package=&quot;package(包路径)&quot;&gt;&lt;/context:component-scan&gt;
+</code></pre><p>可以添加<context:include-filter>和<context:exclude-filter>子元素更详细的指定Annotation标注。使用时需要添加type属性和expression.</context:exclude-filter></context:include-filter></p>
+<p>其中type可以指定下面四种过滤器</p>
+<ul>
+<li><p>annotation: 需要指定一个注解名，如下org.springframework.stereotype.Repository，过滤DAO注解</p>
+<p>  <context:component-scan base-package="annotation" use-default-filters="false"></context:component-scan></p>
+<pre><code>&lt;!--&lt;context:include-filter type=&quot;annotation&quot; expression=&quot;org.springframework.stereotype.Repository&quot;&gt;&lt;/context:include-filter&gt;
+</code></pre><p>  </p>
+</li>
+<li><p>regex：正则过滤器 ，指定正则表达式</p>
+</li>
+<li>assignable：类名过滤器，指定java类</li>
+<li><p>aspextJ:AspextJ过滤器</p>
+<p>其中annotaion和assignable最常用</p>
+<h3 id="Bean作用域的注解（annotation）"><a href="#Bean作用域的注解（annotation）" class="headerlink" title="Bean作用域的注解（annotation）"></a>Bean作用域的注解（annotation）</h3><p>没有指定Bean的Scope默认为singleton</p>
+<p>  @Scope(“prototype”)<br>  //为Bean实例指定person名<br>  @Component(“person”)<br>  public class Person(){…}</p>
+</li>
+</ul>
+<h3 id="Resource配置Bean依赖"><a href="#Resource配置Bean依赖" class="headerlink" title="@Resource配置Bean依赖"></a>@Resource配置Bean依赖</h3><p>一般XML的依赖配置：</p>
+<pre><code>&lt;bean id=&quot;person&quot; class=&quot;autowire.Person&quot; p:name=&quot;huihui&quot; p:address-ref=&quot;address2&quot; &gt;&lt;/bean&gt;
+</code></pre><p>注解的依赖配置        </p>
+<pre><code>@Component
+public Class Person{
+    private String name;
+    private Address address;
+    public void setName(String name){
+        this.name = name;
+    }
+    @resource(name=&quot;address&quot;)
+    public void setAddress(Address address){
+        this.address = address;
+    }
+    public void toString(){...}
+}
+</code></pre><p>将指定容器中的Bean作为参数传入，一般setter在XML方法是必须的，但是在注解中，@Resource可以修饰Field，可以省略name属性。在使用@Resource修饰Field时，Spring会直接使用java ee的Field注入。可以不使用setter方法。<br>@Resource修饰setter方法，省略name属性，则name属性是setter方法去掉前面set字串，首字母小写得到的字串。</p>
+<p>@PostConstruct，@PreDestroy定制生命周期行为<br>init-method（@PostConstruct）在Bean依赖关系注入完成后回调该方法，destroy-method（@PreDestroy）在销毁Bean之前回调该方法。</p>
+<pre><code>@Component
+public class Person{
+    private String name;
+    private Car car;
+    public void setName(String name){
+        this.name = name;
+    }
+    @Resource
+    public void setCar(Car car){
+        this.car = car
+    }
+    @PostConstruct
+    public void init(){...}
+    @PreDestriy
+    public void destroy(){...}
+    public void toString(){...}
+}
+</code></pre><h3 id="DependsOn-Lazy"><a href="#DependsOn-Lazy" class="headerlink" title="@DependsOn,@Lazy"></a>@DependsOn,@Lazy</h3><p>@Depends（depends-on）用于强制初始化其他Bean，@Lazy(lazy-init)用于指定该Bean是否取消预初始化.</p>
+<pre><code>@Lazy(true)
+@DependsOn({&apos;car&apos;, &apos;address&apos;})
+@Conponent
+public class Person{...}
+</code></pre><p>上面代码使用@DependsOn修饰Person类，强制初始化car和address两个Bean,使用@Lazy实现懒初始化。</p>
+<h3 id="Autowired"><a href="#Autowired" class="headerlink" title="@Autowired"></a>@Autowired</h3><p>实现自动装配，标注setter方法，普通方法，Field和构造器，个人倾向显式指定依赖。<br>@QUALIfier根据Bean标识zhiding自动装配。</p>
+<h3 id="Value"><a href="#Value" class="headerlink" title="@Value"></a>@Value</h3><p>Spring提供了注解@Value，用于在程序中获取properties配置文件属性值。例如：</p>
+<ol>
+<li><p>applicationContext.xml中指定配置文件。</p>
+ <context:property-placeholder location="classpath:xxx.properties" ignore-unresolvable="true">
+
+<ol>
+<li><p>Spring bean中使用@Value注解获取指定参数。</p>
+<p>// xxx.properties配置项：<br>// server.ip=192.168.1.1<br>// server.port=8080</p>
+<p>@Value(“${server.ip}”)<br>private String ip;</p>
+<p>@Value(“${server.port}”)<br>private int port;</p>
+</li>
+</ol>
+</context:property-placeholder></li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-SSM项目知识点总结" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/13/SSM项目知识点总结/" class="article-date">
+      <time datetime="2017-10-13T02:14:00.000Z" itemprop="datePublished">2017-10-13</time>
+</a>
+
+ 
+    <a href="/2017/10/13/SSM项目知识点总结/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/13/SSM项目知识点总结/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/13/SSM项目知识点总结/">SSM小项目知识点总结</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="读取Java配置文件——Properties类"><a href="#读取Java配置文件——Properties类" class="headerlink" title="读取Java配置文件——Properties类"></a>读取Java配置文件——Properties类</h2><p>Java中Java.Util.Properties类主要用于读取Java的配置文件，在项目中若要读取resouce文件下的配置，这是非常方便的。</p>
+<h3 id="Properties的继承关系"><a href="#Properties的继承关系" class="headerlink" title="Properties的继承关系"></a>Properties的继承关系</h3><pre><code>Java.lang.Object--&gt;java.util.Dictionary--&gt;java.util.Hashtable&lt;Object, Object&gt;--&gt;java.util.Properties
+</code></pre><p>主要方法：</p>
+<ul>
+<li>getProperty(String Key):用指定的键在属性列表中搜索属性</li>
+<li>load(InputStream inStream):从输入流中读取属性列表，通过指定文件进行装载获取文件的键值对</li>
+<li>setProperty(String key, String value):调用Hashtable的方法put，设置键值对</li>
+<li>store(OutputStream, String comments):将Properties表中属性写入输出流，与load方法相反</li>
+<li>close():清除所有装载的键值对</li>
+</ul>
+<h3 id="读取Properties文件"><a href="#读取Properties文件" class="headerlink" title="读取Properties文件"></a>读取Properties文件</h3><p>最常用的方法是通过java.lang.Class类的getResouceAsStream(String name)读取文件。</p>
+<pre><code>static{
+    InputStreamRead inputRead = new InputStreamRead(PropertiesUtil.Class.getResourceAsStream(fileName));
+    //做异常处理
+    props = new Properties();
+    props.load(inputRead);
+}
+public static String getProperty(String key, String defaultValue){
+    String value = props.getProperty(key.trim());
+    if(StringUtils.isBlank(value))
+        value = defaultValue;
+    return value.trim();    
+}
+</code></pre><h2 id="Java日期和字符串相互转换——joda-Time的使用"><a href="#Java日期和字符串相互转换——joda-Time的使用" class="headerlink" title="Java日期和字符串相互转换——joda-Time的使用"></a>Java日期和字符串相互转换——joda-Time的使用</h2><p>需要Maven导入</p>
+<ul>
+<li>DateTime():无参构造函数会创建当前系统所在时区的时间</li>
+<li>DateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute)：这个构造方法方便快速地构造一个指定的时间</li>
+<li>DateTime(long instant)：这个构造方法创建出来的实例，是通过一个long类型的时间戳，它表示这个时间戳距1970-01-01T00:00:00Z的毫秒数</li>
+<li>DateTime(Object instant)：这个构造方法可以通过一个Object对象构造一个实例。这个Object对象可以是这些类型：ReadableInstant, String, Calendar和Date。</li>
+</ul>
+<h3 id="str-lt-–-gt-date"><a href="#str-lt-–-gt-date" class="headerlink" title="str&lt;–&gt;date"></a>str&lt;–&gt;date</h3><pre><code>DateTimeFormatter format = DateTimeFormat .forPattern(&quot;yyyy-MM-dd HH:mm:ss&quot;);  
+//时间解析  
+DateTime dateTime = DateTime.parseDateTime(&quot;2012-12-21 23:22:45&quot;, format);  
+System.out.println(dateTime.toDate());
+//时间格式化，输出==&gt; 2012/12/21 23:22:45 Fri  
+String string_u = dateTime.toString(&quot;yyyy/MM/dd HH:mm:ss EE&quot;);  
+System.out.println(string_u);  
+//格式化带Locale，输出==&gt; 2012年12月21日 23:22:45 星期五  
+String string_c = dateTime.toString(&quot;yyyy年MM月dd日 HH:mm:ss EE&quot;,Locale.CHINESE);  
+System.out.println(string_c); 
+</code></pre><h2 id="VO-PO-BO-JO-POJO-DTO-QO-DAO概念"><a href="#VO-PO-BO-JO-POJO-DTO-QO-DAO概念" class="headerlink" title="VO,PO,BO,JO,POJO,DTO,QO,DAO概念"></a>VO,PO,BO,JO,POJO,DTO,QO,DAO概念</h2><h3 id="PO-persistant-object-持久对象"><a href="#PO-persistant-object-持久对象" class="headerlink" title="PO(persistant object) 持久对象"></a>PO(persistant object) 持久对象</h3><p>在 o/r 映射的时候出现的概念，如果没有 o/r 映射，没有这个概念存在了。通常对应数据模型 ( 数据库 ), 本身还有部分业务逻辑的处理。可以看成是与数据库中的表相映射的 java 对象。最简单的 PO 就是对应数据库中某个表中的一条记录，多个记录可以用 PO 的集合。 PO 中应该不包含任何对数据库的操作。</p>
+<h3 id="DO（Domain-Object）领域对象"><a href="#DO（Domain-Object）领域对象" class="headerlink" title="DO（Domain Object）领域对象"></a>DO（Domain Object）领域对象</h3><p>就是从现实世界中抽象出来的有形或无形的业务实体。一般和数据中的表结构对应。</p>
+<h3 id="TO-Transfer-Object-，数据传输对象"><a href="#TO-Transfer-Object-，数据传输对象" class="headerlink" title="TO(Transfer Object) ，数据传输对象"></a>TO(Transfer Object) ，数据传输对象</h3><p>在应用程序不同 tie( 关系 ) 之间传输的对象</p>
+<h3 id="DTO（Data-Transfer-Object）数据传输对象"><a href="#DTO（Data-Transfer-Object）数据传输对象" class="headerlink" title="DTO（Data Transfer Object）数据传输对象"></a>DTO（Data Transfer Object）数据传输对象</h3><p>这个概念来源于J2EE的设计模式，原来的目的是为了EJB的分布式应用提供粗粒度的数据实体，以减少分布式调用的次数，从而提高分布式调用的性能和降低网络负载，但在这里，我泛指用于展示层与服务层之间的数据传输对象。<br>比如我们一张表有100个字段，那么对应的PO就有100个属性。<br>但是我们界面上只要显示10个字段，<br>客户端用WEB service来获取数据，没有必要把整个PO对象传递到客户端，<br>这时我们就可以用只有这10个属性的DTO来传递结果到客户端，这样也不会暴露服务端表结构.到达客户端以后，如果用这个对象来对应界面显示，那此时它的身份就转为VO</p>
+<h3 id="VO-value-object-值对象-ViewObject-视图对象"><a href="#VO-value-object-值对象-ViewObject-视图对象" class="headerlink" title="VO(value object) 值对象(ViewObject)视图对象"></a>VO(value object) 值对象(ViewObject)视图对象</h3><p>视图对象，用于展示层，它的作用是把某个指定页面（或组件）的所有数据封装起来。</p>
+<h3 id="BO-business-object-业务对象"><a href="#BO-business-object-业务对象" class="headerlink" title="BO(business object) 业务对象"></a>BO(business object) 业务对象</h3><p>从业务模型的角度看 , 见 UML 元件领域模型中的领域对象。封装业务逻辑的 java 对象 , 通过调用 DAO 方法 , 结合 PO,VO 进行业务操作。 business object: 业务对象 主要作用是把业务逻辑封装为一个对象。这个对象可以包括一个或多个其它的对象。 比如一个简历，有教育经历、工作经历、社会关系等等。 我们可以把教育经历对应一个 PO ，工作经历对应一个 PO ，社会关系对应一个 PO 。 建立一个对应简历的 BO 对象处理简历，每个 BO 包含这些 PO 。 这样处理业务逻辑时，我们就可以针对 BO 去处理。</p>
+<h3 id="POJO-plain-ordinary-java-object-简单无规则-java-对象"><a href="#POJO-plain-ordinary-java-object-简单无规则-java-对象" class="headerlink" title="POJO(plain ordinary java object) 简单无规则 java 对象"></a>POJO(plain ordinary java object) 简单无规则 java 对象</h3><p>纯的传统意义的 java 对象。就是说在一些 Object/Relation Mapping 工具中，能够做到维护数据库表记录的 persisent object 完全是一个符合 Java Bean 规范的纯 Java 对象，没有增加别的属性和方法。我的理解就是最基本的 Java Bean ，只有属性字段及 setter 和 getter 方法！。</p>
+<p>DAO(data access object) 数据访问对象</p>
+<p>是一个 sun 的一个标准 j2ee 设计模式， 这个模式中有个接口就是 DAO ，它负持久层的操作。为业务层提供接口。此对象用于访问数据库。通常和 PO 结合使用， DAO 中包含了各种数据库的操作方法。通过它的方法 , 结合 PO 对数据库进行相关的操作。夹在业务逻辑与数据库资源中间。配合 VO, 提供数据库的 CRUD 操作</p>
+<h2 id="文件上传基础"><a href="#文件上传基础" class="headerlink" title="文件上传基础"></a>文件上传基础</h2><p>SpringMVC配置如下:</p>
+<pre><code>&lt;!-- 上传文件 --&gt;  
+&lt;bean id=&quot;multipartResolver&quot; class=&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;&gt;  
+    &lt;property name=&quot;defaultEncoding&quot; value=&quot;utf-8&quot;/&gt;  
+    &lt;!-- 最大内存大小 --&gt;  
+    &lt;property name=&quot;maxInMemorySize&quot; value=&quot;10240&quot;/&gt;  
+    &lt;!-- 最大文件大小，-1为不限制大小 --&gt;  
+    &lt;property name=&quot;maxUploadSize&quot; value=&quot;-1&quot;/&gt;  
+&lt;/bean&gt;
+</code></pre><p>Maven配置如下：</p>
+<pre><code>&lt;dependency&gt;  
+    &lt;groupId&gt;commons-fileupload&lt;/groupId&gt;  
+    &lt;artifactId&gt;commons-fileupload&lt;/artifactId&gt;  
+    &lt;version&gt;1.3.1&lt;/version&gt;  
+&lt;/dependency&gt;  
+&lt;dependency&gt;  
+    &lt;groupId&gt;commons-io&lt;/groupId&gt;  
+    &lt;artifactId&gt;commons-io&lt;/artifactId&gt;  
+    &lt;version&gt;2.4&lt;/version&gt;  
+&lt;/dependency&gt;
+</code></pre><p>图片上传核心代码如下</p>
+<pre><code>@RequestMapping(value=&quot;uploadImage&quot;, method=RequestMethod.POST)
+@ResponseBody
+private String findUpload(User user, @RequestParam(value=&quot;file&quot;, requires=false) MultipartFile file, HttpServletRequest request){
+    //获取物理路径WEB-APP的路径
+    String pathRoot = request.getSession().getServletContext().getRealPath(&quot;&quot;);
+    String Path = &quot;&quot;;
+    if(file!=null){
+        //生成UUID作为文件名称
+        String uuid = UUID.randomUUID.toString().replace(&quot;-&quot;, &quot;&quot;);
+        //获取文件类型
+        String contentType = file.getContentType();
+        //获取文件后缀名称
+        String imageName = contentType.subString(contentType.indexOf(&quot;/&quot;)+1);
+        path = &quot;/upload/&quot;+uuid+imageName;
+        file.transferTo(new File(pathRoot+path));
+    }
+    request.setAttribute(&quot;imagesPath&quot;, path);
+}
+</code></pre><p>若是多文件上传：</p>
+<pre><code>String pathRoot = request.getSession().getServletContext().getRealPath(&quot;&quot;);  
+String path=&quot;&quot;;  
+List&lt;String&gt; listImagePath=new ArrayList&lt;String&gt;();  
+    for (MultipartFile mf : file) {  
+        if(!mf.isEmpty()){  
+            //生成uuid作为文件名称  
+            String uuid = UUID.randomUUID().toString().replaceAll(&quot;-&quot;,&quot;&quot;);  
+            //获得文件类型（可以判断如果不是图片，禁止上传）  
+            String contentType=mf.getContentType();  
+            //获得文件后缀名称  
+            String imageName=contentType.substring(contentType.indexOf(&quot;/&quot;)+1);  
+            path=&quot;/static/images/&quot;+uuid+&quot;.&quot;+imageName;  
+            mf.transferTo(new File(pathRoot+path));  
+            listImagePath.add(path);  
+        }  
+    }  
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Spring AOP切面" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/11/Spring AOP切面/" class="article-date">
+      <time datetime="2017-10-11T02:14:00.000Z" itemprop="datePublished">2017-10-11</time>
+</a>
+
+ 
+    <a href="/2017/10/11/Spring AOP切面/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/11/Spring AOP切面/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/11/Spring AOP切面/">Spring AOP切面编程</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <a id="more"></a>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><h3 id="AOP术语"><a href="#AOP术语" class="headerlink" title="AOP术语"></a>AOP术语</h3><p>作用：保证各步骤之间的良好隔离性，保证源代码的无关性。<br>AOP处理具有横切性质的系统级服务，如事务管理、安全检查、缓存、对象池管理</p>
+<ul>
+<li>切面（Aspect）：业务流程运行的某个特定步骤，应用运行过程的关注点，通常称为横切关注点</li>
+<li>连接点（JoinPoint）：程序执行过程中明确的点，如方法的调用，异常的抛出<br>-增强处理（Advice）：AOP特点切入点执行的增强处理，如before、around等</li>
+<li>切入点（PointCut）：可以插入增强处理的连接点</li>
+</ul>
+<h3 id="Annotation方式的AOP"><a href="#Annotation方式的AOP" class="headerlink" title="Annotation方式的AOP"></a>Annotation方式的AOP</h3><p>首先保证XML配置文件有下面一句来启动AspectJ支持：</p>
+<pre><code>&lt;aop:aspectj-autoproxy/&gt;
+</code></pre><p>或者不在XML中配置，但要在配置文件中加上</p>
+<pre><code>&lt;bean class=&quot;org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator&quot;&gt;
+</code></pre><h4 id="Aspect"><a href="#Aspect" class="headerlink" title="Aspect"></a>Aspect</h4><p>使用@Aspect注解即可</p>
+<h4 id="增强处理"><a href="#增强处理" class="headerlink" title="增强处理"></a>增强处理</h4><h6 id="Before"><a href="#Before" class="headerlink" title="Before"></a>Before</h6><p>使用Before时需要指定Value值，表示切入点</p>
+<pre><code>@Aspect
+public class BeforeAdvice{
+    @Before(&quot;execution(* org.crazyint.app.service.impl.*.*(...))&quot;)
+    public void before(){...}
+}
+</code></pre><p>@Before会在程序执行前加入增强…一切都是在主程序无知条件下进行的</p>
+<h5 id="AfterReturning"><a href="#AfterReturning" class="headerlink" title="AfterReturning"></a>AfterReturning</h5><p>在目标方法正常完成后被加入,依然要指定value(PointCut),可以指定returning，可通过该形参访问目标方法返回值</p>
+<pre><code>@Aspect
+public class AfterReturningAdvice{
+    @AfterReturing(returning=&quot;rvt&quot;,pointcut=execution(org.crazyint.app.service.impl.*.*(...))&quot;)
+    public void log(Object rvt){
+        System.out.println(rvt);
+    }
+</code></pre><h5 id="AfterThrowing"><a href="#AfterThrowing" class="headerlink" title="AfterThrowing"></a>AfterThrowing</h5><p>用于处理程序中未处理的异常，也需要指定value，并需要指定throwing，用来访问目标方法所抛出的异常</p>
+<pre><code>@Aspect
+public class AfterThrowingAdvice{
+    @AfterThrowing(throwing=&quot;ex&quot;,pointcut=&quot;exectution(..)&quot;)
+    public void Throwing(Throwable ex){System.out.println(ex)}
+}
+</code></pre><h5 id="After"><a href="#After" class="headerlink" title="After"></a>After</h5><p>用于目标方法成功完成后加入，和Before相似，不叙述</p>
+<h5 id="Around"><a href="#Around" class="headerlink" title="Around"></a>Around</h5><p>功能十分强大，近似于Before和AfterThrowing，但是需要在线程安全的环境中使用，没有必要使用Around增强处理<br>使用Around时，需要将第一个参数定义为ProceedingJoinPoint，为JoinPoint的子类</p>
+<h4 id="访问目标方法参数"><a href="#访问目标方法参数" class="headerlink" title="访问目标方法参数"></a>访问目标方法参数</h4><p>访问目标方法需要将定义增强处理方法时将第一个参数定义为JoinPoint类型<br>，JointPoint有如下常用方法</p>
+<ul>
+<li>Object[] getArgs():返回执行目标方法时的参数</li>
+<li>Signature getSignature():返回被增强的方法的相关信息</li>
+<li>Object getTarget(): 返回被加入增强处理的目标对象</li>
+<li>Object getThis():返回AOP框架为目标对象生成的代理对象</li>
+</ul>
+<h4 id="定义切入点"><a href="#定义切入点" class="headerlink" title="定义切入点"></a>定义切入点</h4><pre><code>@Aspect 
+public class SystemArchitecture{
+    @PointCut(&quot;exectution(* org.crazyint.app.service.impl.Chain*.say(...))&quot;)
+    public void myPoint(){
+
+    }
+}
+</code></pre><p>引用切入点</p>
+<pre><code>@Aspect
+public class usePoint{
+    @before(pointcut=&quot;SystemArchitecture.myPoint()&quot;)
+    public void example(){...}
+}
+</code></pre><h4 id="切入点指示符"><a href="#切入点指示符" class="headerlink" title="切入点指示符"></a>切入点指示符</h4><ul>
+<li>execution    :匹配执行方法的连接点，用于表达式开头</li>
+<li>modifiers-pattern :指定方法修饰符，支持通配符，可以省略</li>
+<li>ret-type-pattern :指定方法返回值类型，可以用*表示</li>
+<li>declare-type-pattern :指定方法所属的类，可以省略</li>
+<li>name-pattern :指定匹配的方法名，用*匹配所有方法</li>
+<li>param-pattern ：指定方法声明的形参列表，支持两个通配符，*和…</li>
+<li>throws-pattern :指定方法抛出的异常</li>
+<li>within ：限定匹配类型的连接点</li>
+<li>this ：用于限定AOP代理必须是指定类型的实例，匹配对象所有连接点</li>
+<li>target ：限定目标对象必须是指定类型的实例，匹配对象所有的连接点</li>
+<li>args ：要求参数类型是指定类型的实例</li>
+<li>&amp;&amp; ：要求连接点同时匹配两个切入点表达式</li>
+<li>||：要求连接点匹配任意一个切入点表达式</li>
+<li>！：要求连接点不匹配指定切入点表达式</li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Mybatis-generator详细配置demo" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/08/Mybatis-generator详细配置demo/" class="article-date">
+      <time datetime="2017-10-08T02:14:00.000Z" itemprop="datePublished">2017-10-08</time>
+</a>
+
+ 
+    <a href="/2017/10/08/Mybatis-generator详细配置demo/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/08/Mybatis-generator详细配置demo/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/08/Mybatis-generator详细配置demo/">Mybatis-Generator相关配置demo</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="generatorConfig-xml配置信息"><a href="#generatorConfig-xml配置信息" class="headerlink" title="generatorConfig.xml配置信息"></a>generatorConfig.xml配置信息</h2><p>首先在resource中配置好datasource.propertise文件,包括数据库信息和mysql-connector的jar包位置。</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE generatorConfiguration
+        PUBLIC &quot;-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN&quot;
+        &quot;http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd&quot;&gt;
+
+&lt;generatorConfiguration&gt;
+    &lt;!--导入属性配置--&gt;
+    &lt;properties resource=&quot;datasource.properties&quot;&gt;&lt;/properties&gt;
+
+    &lt;!--指定特定数据库的jdbc驱动jar包的位置--&gt;
+    &lt;classPathEntry location=&quot;${db.driverLocation}&quot;/&gt;
+
+    &lt;context id=&quot;default&quot; targetRuntime=&quot;MyBatis3&quot;&gt;
+
+        &lt;!-- optional，旨在创建class时，对注释进行控制 --&gt;
+        &lt;commentGenerator&gt;
+            &lt;property name=&quot;suppressDate&quot; value=&quot;true&quot;/&gt;
+            &lt;property name=&quot;suppressAllComments&quot; value=&quot;true&quot;/&gt;
+        &lt;/commentGenerator&gt;
+
+        &lt;!--jdbc的数据库连接 --&gt;
+        &lt;jdbcConnection
+                driverClass=&quot;${db.driverClassName}&quot;
+                connectionURL=&quot;${db.url}&quot;
+                userId=&quot;${db.username}&quot;
+                password=&quot;${db.password}&quot;&gt;
+        &lt;/jdbcConnection&gt;
+
+
+        &lt;!-- 非必需，类型处理器，在数据库类型和java类型之间的转换控制--&gt;
+        &lt;javaTypeResolver&gt;
+            &lt;property name=&quot;forceBigDecimals&quot; value=&quot;false&quot;/&gt;
+        &lt;/javaTypeResolver&gt;
+
+
+        &lt;!-- Model模型生成器,用来生成含有主键key的类，记录类 以及查询Example类
+            targetPackage     指定生成的model生成所在的包名
+            targetProject     指定在该项目下所在的路径
+        --&gt;
+        &lt;!--&lt;javaModelGenerator targetPackage=&quot;com.huihui.pojo&quot; targetProject=&quot;.\src\main\java&quot;&gt;--&gt;
+        &lt;javaModelGenerator targetPackage=&quot;com.huihui.pojo&quot; targetProject=&quot;./src/main/java&quot;&gt;
+            &lt;!-- 是否允许子包，即targetPackage.schemaName.tableName --&gt;
+            &lt;property name=&quot;enableSubPackages&quot; value=&quot;false&quot;/&gt;
+            &lt;!-- 是否对model添加 构造函数 --&gt;
+            &lt;property name=&quot;constructorBased&quot; value=&quot;true&quot;/&gt;
+            &lt;!-- 是否对类CHAR类型的列的数据进行trim操作 --&gt;
+            &lt;property name=&quot;trimStrings&quot; value=&quot;true&quot;/&gt;
+            &lt;!-- 建立的Model对象是否 不可改变  即生成的Model对象不会有 setter方法，只有构造方法 --&gt;
+            &lt;property name=&quot;immutable&quot; value=&quot;false&quot;/&gt;
+        &lt;/javaModelGenerator&gt;
+
+        &lt;!--mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 --&gt;
+        &lt;!--&lt;sqlMapGenerator targetPackage=&quot;mappers&quot; targetProject=&quot;.\src\main\resources&quot;&gt;--&gt;
+        &lt;sqlMapGenerator targetPackage=&quot;mappers&quot; targetProject=&quot;./src/main/resources&quot;&gt;
+            &lt;property name=&quot;enableSubPackages&quot; value=&quot;false&quot;/&gt;
+        &lt;/sqlMapGenerator&gt;
+
+        &lt;!-- 客户端代码，生成易于使用的针对Model对象和XML配置文件 的代码
+                type=&quot;ANNOTATEDMAPPER&quot;,生成Java Model 和基于注解的Mapper对象
+                type=&quot;MIXEDMAPPER&quot;,生成基于注解的Java Model 和相应的Mapper对象
+                type=&quot;XMLMAPPER&quot;,生成SQLMap XML文件和独立的Mapper接口
+        --&gt;
+
+        &lt;!-- targetPackage：mapper接口dao生成的位置 --&gt;
+        &lt;!--&lt;javaClientGenerator type=&quot;XMLMAPPER&quot; targetPackage=&quot;com.mmall.dao&quot; targetProject=&quot;.\src\main\java&quot;&gt;--&gt;
+        &lt;javaClientGenerator type=&quot;XMLMAPPER&quot; targetPackage=&quot;com.mmall.dao&quot; targetProject=&quot;./src/main/java&quot;&gt;
+            &lt;!-- enableSubPackages:是否让schema作为包的后缀 --&gt;
+            &lt;property name=&quot;enableSubPackages&quot; value=&quot;false&quot; /&gt;
+        &lt;/javaClientGenerator&gt;
+
+        &lt;!--配置数据库表相关信息，注意一定要和原表名相同--&gt;
+        &lt;table tableName=&quot;shipping&quot; domainObjectName=&quot;Shipping&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;cart&quot; domainObjectName=&quot;Cart&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;cart_item&quot; domainObjectName=&quot;CartItem&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;category&quot; domainObjectName=&quot;Category&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;order&quot; domainObjectName=&quot;Order&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;order_item&quot; domainObjectName=&quot;OrderItem&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;pay_info&quot; domainObjectName=&quot;PayInfo&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+        &lt;table tableName=&quot;product&quot; domainObjectName=&quot;Product&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;
+            &lt;columnOverride column=&quot;detail&quot; jdbcType=&quot;VARCHAR&quot; /&gt;
+            &lt;columnOverride column=&quot;sub_images&quot; jdbcType=&quot;VARCHAR&quot; /&gt;
+        &lt;/table&gt;
+        &lt;table tableName=&quot;user&quot; domainObjectName=&quot;User&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;false&quot; selectByExampleQueryId=&quot;false&quot;&gt;&lt;/table&gt;
+
+
+        &lt;!-- geelynote mybatis插件的搭建 --&gt;
+    &lt;/context&gt;
+&lt;/generatorConfiguration&gt;
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-CentOS下jdk、tomcat配置" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/06/CentOS下jdk、tomcat配置/" class="article-date">
+      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+
+ 
+    <a href="/2017/10/06/CentOS下jdk、tomcat配置/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下jdk、tomcat配置/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Centos下jdk安装配置"><a href="#Centos下jdk安装配置" class="headerlink" title="Centos下jdk安装配置"></a>Centos下jdk安装配置</h2><h3 id="查看jdk版本"><a href="#查看jdk版本" class="headerlink" title="查看jdk版本"></a>查看jdk版本</h3><pre><code>java -version
+</code></pre><h3 id="查看jdk信息"><a href="#查看jdk信息" class="headerlink" title="查看jdk信息"></a>查看jdk信息</h3><pre><code>[root@localhost ~]#  rpm -qa | grep java
+javapackages-tools-3.4.1-6.el7_0.noarch
+tzdata-java-2014i-1.el7.noarch
+java-1.7.0-openjdk-headless-1.7.0.71-2.5.3.1.el7_0.x86_64
+java-1.7.0-openjdk-1.7.0.71-2.5.3.1.el7_0.x86_64
+python-javapackages-3.4.1-6.el7_0.noarch
+</code></pre><h3 id="卸载OpenJDK"><a href="#卸载OpenJDK" class="headerlink" title="卸载OpenJDK"></a>卸载OpenJDK</h3><p>执行以下操作：</p>
+<pre><code>[root@localhost ~]# rpm -e --nodeps tzdata-java-2014i-1.el7.noarch
+[root@localhost ~]# rpm -e --nodeps java-1.7.0-openjdk-headless-1.7.0.71-2.5.3.1.el7_0.x86_64
+[root@localhost ~]# rpm -e --nodeps java-1.7.0-openjdk-1.7.0.71-2.5.3.1.el7_0.x86_64
+</code></pre><h3 id="安装jdk"><a href="#安装jdk" class="headerlink" title="安装jdk"></a>安装jdk</h3><pre><code>[root@zck local]# rpm -ivh jdk-8u25-linux-x64.rpm    
+</code></pre><p>默认安装在/usr/java目录下。</p>
+<h3 id="查看jdk路径"><a href="#查看jdk路径" class="headerlink" title="查看jdk路径"></a>查看jdk路径</h3><pre><code>whereis java
+which java    
+echo $JAVA_HOME
+echo $PATH
+</code></pre><h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><p>vim下进入/etc/profile<br>在profile文件最后加入如下：</p>
+<pre><code>export JAVA_HOME=/usr/bin/java
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar                    
+</code></pre><p>具体配置还需根据各自对应的版本而变动</p>
+<h2 id="CentOS下Tomacat安装"><a href="#CentOS下Tomacat安装" class="headerlink" title="CentOS下Tomacat安装"></a>CentOS下Tomacat安装</h2><p>安装tomcat之前需要配置好jdk</p>
+<h3 id="下载tomcat-9-0"><a href="#下载tomcat-9-0" class="headerlink" title="下载tomcat 9.0"></a>下载tomcat 9.0</h3><p>前往<a href="https://tomcat.apache.org/download-90.cgi进行复制tar.gz链接地址，在centos中进行下载，并且解压缩" target="_blank" rel="external">https://tomcat.apache.org/download-90.cgi进行复制tar.gz链接地址，在centos中进行下载，并且解压缩</a></p>
+<pre><code>tar -zxvf apache-tomcat-9.0.1.tar.gz
+</code></pre><h3 id="配置UTF-8字符集"><a href="#配置UTF-8字符集" class="headerlink" title="配置UTF-8字符集"></a>配置UTF-8字符集</h3><p>进入tomcat安装的conf文件夹，编辑server.xml</p>
+<pre><code>sudo vim server.xml
+</code></pre><p>找到配置8080默认端口的位置，在xml节点末尾增加URIEncoding=”UTF-8”.</p>
+<h3 id="tomcat验证"><a href="#tomcat验证" class="headerlink" title="tomcat验证"></a>tomcat验证</h3><p>先进入系统解压缩后的tomcat目录，进入bin目录，执行./startup.sh.<br>打开启动tomcat机器的ip地址和默认8080端口，如果是其他机器访问，找到此机器的ip地址，进行访问</p>
+<h2 id="Maven安装配置"><a href="#Maven安装配置" class="headerlink" title="Maven安装配置"></a>Maven安装配置</h2><p>安装版本为3.0.5，安装之前需要确保电脑上配置好tomcat，用以下镜像下载</p>
+<pre><code>https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.0.5/binaries
+</code></pre><h3 id="解压缩Maven"><a href="#解压缩Maven" class="headerlink" title="解压缩Maven"></a>解压缩Maven</h3><pre><code>tar-zxvf apache-maven-3.0.5-bin.tar.gz
+</code></pre><h3 id="配置环境变量-1"><a href="#配置环境变量-1" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><pre><code>sudo vim /etc/profile
+//在最下面增加Maven环境变量
+export MAVEN_HOME=/developer/apache-maven-3.0.5
+export PATH=$PATH:$JAVA_HOME/bin:$MAVEN_HOME/bin
+//执行source /etc/profile
+</code></pre><h3 id="进行验证"><a href="#进行验证" class="headerlink" title="进行验证"></a>进行验证</h3><pre><code>mvn -version
+</code></pre><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><p>清除命令</p>
+<pre><code>mvn clean
+</code></pre><p>编译命令</p>
+<pre><code>mvn compile
+</code></pre><p>打包命令</p>
+<pre><code>mvn package
+</code></pre><p>跳过单元测试</p>
+<pre><code>mvn clean package -Dmaven.test.skip=true 
+</code></pre><h2 id="vsftpd安装"><a href="#vsftpd安装" class="headerlink" title="vsftpd安装"></a>vsftpd安装</h2><p>执行yum -y install vsftpd<br>注意：</p>
+<ul>
+<li>是否使用sudo权限执行请根据就环境决定</li>
+<li>rpm -qa | grep vsftpd可通过这个检查是否已经安装vsftpd</li>
+<li>默认配置文件在/etc/vsftpd/vsftpd.conf</li>
+</ul>
+<h3 id="创建虚拟用户"><a href="#创建虚拟用户" class="headerlink" title="创建虚拟用户"></a>创建虚拟用户</h3><ul>
+<li>选择在根或者用户目录下创建ftp文件夹：mkdir ftpfile,如/ftpfile</li>
+<li>添加匿名用户：useradd ftpuser -d /ftpfile -s /sbin/nologin</li>
+<li>修改ftpfile权限：chown -R ftpuser.ftpuser /ftpfile</li>
+<li>重设ftpuser密码：passwd ftpuser</li>
+</ul>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><pre><code>cd /etc/vsftpd
+sudo vim chroot_list
+</code></pre><p>将刚才新增的虚拟用户添加到此配置文件，后续引用</p>
+<pre><code>sudo vim /etc/selinux/config
+</code></pre><p>修改为SELINUX=disabledu<br>如果验证的时候出现550拒绝访问执行</p>
+<pre><code>sudo setsebool -P ftp_home_dir 1
+</code></pre><p>重启linux服务器，执行reboot命令</p>
+<pre><code>sudo vim /etc/vsftpd/vsftpd.conf
+</code></pre><h3 id="防火墙配置"><a href="#防火墙配置" class="headerlink" title="防火墙配置"></a>防火墙配置</h3><pre><code>sudo vim /etc/sysconfig/iptables-config
+</code></pre><p>将以下配置添加到防火墙配置中</p>
+<pre><code>-A INPUT -p TCP --dport 61001:62000 -j ACCEPT
+-A OUTPUT -p TCP --sport 61001:62000 -j ACCEPT
+-A INPUT -p TCP --dport 20 -j ACCEPT
+-A OUTPUT -p TCP --sport 20 -j ACCEPT
+-A INPUT -p TCP --dport 21 -j ACCEPT
+-A OUTPUT -p TCP --sport 21 -j ACCEPT
+</code></pre><p>重启防火墙<br>centos7以下版本</p>
+<pre><code>sudo service iptables restart
+</code></pre><p>centos7</p>
+<pre><code>systemctl start filewalld.service #开启防火墙
+firewall-cmd --reload #重启firewall
+systemctl stop firewalld.service #停止firewall
+systemctl disable firewalld.service #禁止firewall开机启动
+</code></pre><h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><pre><code>sudo service vsftpd restart
+//cebtos7
+sudo systemctl restart vsftpd.service
+</code></pre><p>第一次启动时shutting down vsftpd是failed没关系，这是重启命令，保证starting vsftpd是ok即可</p>
+<h3 id="设置selinux"><a href="#设置selinux" class="headerlink" title="设置selinux"></a>设置selinux</h3><pre><code># sudo vim /etc/selinux/config
+# 注释SELINUX=enforcing
+SELINUX=disable
+# 保存退出
+setenforce 0
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-CentOS下安装配置mysql" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -315,6 +1308,139 @@
       
           
         
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-CentOS下nginx的安装配置" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/06/CentOS下nginx的安装配置/" class="article-date">
+      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+
+ 
+    <a href="/2017/10/06/CentOS下nginx的安装配置/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下nginx的安装配置/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Nginx是一款轻量级Web服务器，也是反向代理服务器</p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ul>
+<li>直接支持Rails和PHP的程序</li>
+<li>作为Http反向代理服务器</li>
+<li>作为负载均衡服务器</li>
+<li>作为邮件代理服务器</li>
+<li>帮助实现前端动静分离</li>
+</ul>
+<h2 id="安装Nginx依赖"><a href="#安装Nginx依赖" class="headerlink" title="安装Nginx依赖"></a>安装Nginx依赖</h2><p>1、安装cc</p>
+<pre><code># 输入gcc -v查询版本信息，看系统是否自带安装
+yum install gcc
+</code></pre><p>2、安装pcre</p>
+<pre><code>yum install pcre-devel
+</code></pre><p>3、安装zlib</p>
+<pre><code>yum install zlib zlib-devel    
+</code></pre><p>4、选择安装openssl</p>
+<pre><code>yum install openssl openssl-devel
+</code></pre><p>5、一键综合安装</p>
+<pre><code>yum -y install gcc zlib zlib-devel pcre-devel openssl openssl-devel
+</code></pre><h2 id="下载源码包解压缩"><a href="#下载源码包解压缩" class="headerlink" title="下载源码包解压缩"></a>下载源码包解压缩</h2><p><a href="http://www/nginx.org/" target="_blank" rel="external">http://www/nginx.org/</a></p>
+<pre><code>tar -zxvf nginx-*.tar.gz
+</code></pre><h2 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a>nginx安装</h2><p>进入nginx目录执行./configure</p>
+<ul>
+<li>也可以制定安装目录，增加参数–prefix=/usr/nginx</li>
+<li>如果不指定路径，也可以通过whereis nginx进行查询</li>
+<li>默认安装在/usr/local/nginx</li>
+</ul>
+<p>继续执行make，续集执行make install</p>
+<h2 id="nginx常用命令"><a href="#nginx常用命令" class="headerlink" title="nginx常用命令"></a>nginx常用命令</h2><p>测试配置文件</p>
+<pre><code>安装路径下的/nginx/sbin/nginx -t
+</code></pre><p>启动命令</p>
+<pre><code>安装路径下的/nginx/sbin/nginx
+</code></pre><p>停止命令</p>
+<pre><code>安装路径下的/nginx/sbin/nginx -s stop
+或者是 nginx -s quit
+</code></pre><p>重启命令</p>
+<pre><code>安装路径下的/nginx/sbin/nginx -s reload
+</code></pre><p>查看进程命令</p>
+<pre><code>ps -ef | grep nginx
+</code></pre><p>平滑重启</p>
+<pre><code>kill -HUP 【nginx主进程号(即查看进程命令查到的PID)】
+</code></pre><h2 id="增加防火墙访问权限"><a href="#增加防火墙访问权限" class="headerlink" title="增加防火墙访问权限"></a>增加防火墙访问权限</h2><p>1、sudo vim /etc.sysconfig/iptables-config<br>2、- A INPUT -p tcp -m state –state NEW<br>   -m tcp –dport 80 -j ACCEPT<br>3、重启防火墙</p>
+<h2 id="虚拟域名配置测试验证"><a href="#虚拟域名配置测试验证" class="headerlink" title="虚拟域名配置测试验证"></a>虚拟域名配置测试验证</h2><p>1、编辑sudo vim /usr/local/nginx/conf/nginx.conf<br>增加include vhost/*.conf<br>2、在/usr/local/nginx/conf目录创建vhost文件夹<br>3、配置<br>sudo vim /etc/hosts所对应的域名.conf<br>如：sudo vim /usr/local/nginx/conf/vhost www.huihui.com.conf<br>将如下配置写入到该文件下</p>
+<pre><code>server {
+     listen 80;
+     autoindex on;
+     server_name www.huihui.com;
+     access_log /usr/local/nginx/logs/access.log combined; 
+     index index.html index.htm index.jsp index.php; 
+     #error_page 404 /404.html;
+     if ( $query_string ~* &quot;.*[\;&apos;\&lt;\&gt;].*&quot; )
+            { 
+                    return 404;
+            }
+     location / {
+            proxy_pass http://172.0.0.1:8080;
+            add_header Access-Control-Allow-Origin *;
+            }
+ }
+</code></pre><p>4、重启验证<br>启动${nginx}/sbin/nginx<br>重启${nginx}/sbin/nginx -s reload,如sudo ./nginx -s reload<br>${nginx}为安装在系统中的路径，如/usr/local/nginx<br>5、访问验证<br>使用默认80端口访问验证<a href="http://localhost:80" target="_blank" rel="external">http://localhost:80</a></p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>可以配置域名转发，但是请一定要配置host，并且host生效之后才可以，设置完成后腰重启浏览器<br>1、linux<br>sudo vim /etc/hosts<br>添加好对应的域名及ip<br>保存退出</p>
+
       
     </div>
     
@@ -577,1799 +1703,9 @@
 
 
   
-    <article id="post-LintCode题解（七）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/01/LintCode题解（七）/" class="article-date">
-      <time datetime="2017-10-01T02:14:00.000Z" itemprop="datePublished">2017-10-01</time>
-</a>
-
- 
-    <a href="/2017/10/01/LintCode题解（七）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/01/LintCode题解（七）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/01/LintCode题解（七）/">LintCode题解（七）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <hr>
-<h2 id="判断数独是否合法"><a href="#判断数独是否合法" class="headerlink" title="判断数独是否合法"></a>判断数独是否合法</h2><p>请判定一个数独是否有效。</p>
-<p>该数独可能只填充了部分数字，其中缺少的数字用 . 表示。</p>
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>一个合法的数独（仅部分填充）并不一定是可解的。我们仅需使填充的空格有效即可。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
-    /*
-     * @param board: the board
-     * @return: whether the Sudoku is valid
-     */
-    public boolean isValidSudoku(char[][] board) {
-        // write your code here
-        boolean[] index = new boolean[9];
-
-        for(int j = 0; j&lt;9; j++){
-            Arrays.fill(index, false);
-            for(int i = 0; i&lt;9; i++){
-                if(!checkSudoku(index, board[j][i]))
-                    return false;
-            }
-        }
-
-        for(int i = 0; i&lt;9; i++){
-            Arrays.fill(index, false);
-            for(int j = 0; j&lt;9; j++){
-                if(!checkSudoku(index, board[i][j]))
-                    return false;
-            }
-        }
-
-        for(int i=0; i&lt;9; i=i+3){
-            for(int j = 0; j&lt;9; j=j+3){
-                Arrays.fill(index, false);
-                for(int k = 0; k&lt;9; k++){
-                    if(!checkSudoku(index, board[i+k/3][j+k%3]))
-                        return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public boolean checkSudoku(boolean[] index, char num){
-        if(num == &apos;.&apos;)
-            return true;
-        int _num = num-&apos;0&apos;;    
-        if(num&gt;9||num&lt;0||index[_num-1])
-            return false;
-
-        index[_num-1] = true;
-        return true;    
-    }
-}
-</code></pre><h2 id="平面列表"><a href="#平面列表" class="headerlink" title="平面列表"></a>平面列表</h2><p>给定一个列表，该列表中的每个要素要么是个列表，要么是整数。将其变成一个只包含整数的简单列表。</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给定 [1,2,[1,2]]，返回 [1,2,1,2]。</p>
-<p>给定 [4,[3,[2,[1]]]]，返回 [4,3,2,1]。</p>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p>使用递归</p>
-<pre><code> /**
- * // This is the interface that allows for creating nested lists.
- * // You should not implement it, or speculate about its implementation
- * public interface NestedInteger {
- *
- *     // @return true if this NestedInteger holds a single integer,
- *     // rather than a nested list.
- *     public boolean isInteger();
- *
- *     // @return the single integer that this NestedInteger holds,
- *     // if it holds a single integer
- *     // Return null if this NestedInteger holds a nested list
- *     public Integer getInteger();
- *
- *     // @return the nested list that this NestedInteger holds,
- *     // if it holds a nested list
- *     // Return null if this NestedInteger holds a single integer
- *     public List&lt;NestedInteger&gt; getList();
- * }
- */
-public class Solution {
-
-    // @param nestedList a list of NestedInteger
-    // @return a list of integer
-    public List&lt;Integer&gt; flatten(List&lt;NestedInteger&gt; nestedList) {
-        // Write your code here
-
-        List&lt;Integer&gt; list = new ArrayList&lt;Integer&gt;();
-        for(NestedInteger ele:nestedList){
-            if(ele.isInteger())
-                list.add(ele.getInteger());
-            else
-                list.addAll(flatten(ele.getList()));
-
-        }
-        return list;
-    }
-
-}
-</code></pre><h2 id="克隆二叉树"><a href="#克隆二叉树" class="headerlink" title="克隆二叉树"></a>克隆二叉树</h2><p>深度复制一个二叉树。</p>
-<p>给定一个二叉树，返回一个他的 克隆品 </p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定一颗二叉树</p>
-<pre><code>    1                
-   /  \
-  2    3     
- / \
-4   5
-    =&gt;
-    1
-   /  \
-  2    3
- / \
-4   5
-</code></pre><h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><pre><code>/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
-public class Solution {
-    /**
-     * @param root: The root of binary tree
-     * @return root of new tree
-     */
-    public TreeNode cloneTree(TreeNode root) {
-        // Write your code here
-        if(root==null)
-            return null;
-        TreeNode _root = new TreeNode(root.val);
-        if(root.left!=null)
-            _root.left = cloneTree(root.left);
-        if(root.right!=null)
-            _root.right = cloneTree(root.right);
-        return _root;    
-    }
-}
-</code></pre><h2 id="序号排列"><a href="#序号排列" class="headerlink" title="序号排列"></a>序号排列</h2><p>排列序号</p>
-<p>给出一个不含重复数字的排列，求这些数字的所有排列按字典序排序后该排列的编号。其中，编号从1开始。</p>
-<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>例如，排列[1,2,4]是第1个排列。</p>
-<h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p>原谅我一开始题目意思都没有理解。<br>对于一个数321，三个数的排列有3！种，知道第一个数，排列有2！种，知道第二个数，排列有1！知道第三个数，排列有0！；<br>第一位后小于第一位的数为x，第二位后小于第二位的数有y，第三位后为0，所以最后排列序号的结果为index = x<em>2!+y</em>1!。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-LintCode题解（一）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/30/LintCode题解（一）/" class="article-date">
-      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
-</a>
-
- 
-    <a href="/2017/09/30/LintCode题解（一）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（一）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/30/LintCode题解（一）/">LintCode题解（一）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="单例singleton（题号204）"><a href="#单例singleton（题号204）" class="headerlink" title="单例singleton（题号204）"></a>单例singleton（题号204）</h2><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>单例 是最为最常见的设计模式之一。对于任何时刻，如果某个类只存在且最多存在一个具体的实例，那么我们称这种设计模式为单例。例如，对于 class Mouse (不是动物的mouse哦)，我们应将其设计为 singleton 模式。</p>
-<p>你的任务是设计一个 getInstance 方法，对于给定的类，每次调用 getInstance 时，都可得到同一个实例。</p>
-<p>样例（Java中）：</p>
-<pre><code>A a = A.getInstance();
-A b = A.getInstance();
-</code></pre><p>a应等于b。</p>
-<h3 id="解答过程"><a href="#解答过程" class="headerlink" title="解答过程"></a>解答过程</h3><p>若是看过设计模式的应该都清楚，单例是一种创建型模式。并且单例类只能有一个实例，必须自己创建自己的唯一实例，必须给其他对象提供这一实例。一般有如下几种实现方式：</p>
-<p>懒汉式，线程不安全：</p>
-<pre><code>public class Singleton{
-    private static Singleton instance;
-    private Singletion(){}
-    public static Singleton getInstance(){
-        if(instance==null){
-            instance = new Singletan();
-        }
-    } 
-}
-</code></pre><p>懒汉式，线程安全：</p>
-<pre><code>public class Singleton{
-    private static Singleton instance;
-    private Singletion(){}
-    public static synchronized Singleton getInstance(){
-        if(instance==null){
-            instance = new Singletan();
-        }
-    } 
-}    
-</code></pre><p>饿汉式(最常用)：</p>
-<pre><code>public class Singleton{
-    private static Singleton instance = new Singleton();
-    private Singletion(){}
-    public static Singleton getInstance(){
-        return instance;
-    } 
-}    
-</code></pre><p>双重锁（DCL）：</p>
-<pre><code>public class Singleton{
-    private volatile static Singleton singleton;
-    private Singletion(){}
-    public static Singleton getInstance(){
-        if(singleton==null){
-            synchronized(Singleton.class){
-                if(singleton == null){
-                    singleton = new Singleton();
-                }
-            }
-        }
-        return singleton;
-    } 
-}    
-</code></pre><h2 id="二叉树的路径和（题号376）"><a href="#二叉树的路径和（题号376）" class="headerlink" title="二叉树的路径和（题号376）"></a>二叉树的路径和（题号376）</h2><h3 id="问题描述-1"><a href="#问题描述-1" class="headerlink" title="问题描述"></a>问题描述</h3><p>给定一个二叉树，找出所有路径中各节点相加总和等于给定 目标值 的路径。</p>
-<p>一个有效的路径，指的是从根节点到叶节点的路径。<br>    1<br>    / \<br>   2   4<br>  / \<br> 2   3<br>返回：<br> [<br>  [1, 2, 2],<br>  [1, 4]<br>]</p>
-<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>读取树的路径最先想到的应该是树的遍历，这里的遍历方式是先序遍历，其次，最简单的就是使用DFS（深度优先遍历）。<br>DFS的遍历顺序为1-&gt;2-&gt;2-&gt;3-&gt;4,逻辑自然明了。<br>下面给出邻接矩阵模型类AMWGraph.java，其中depthFirstSearch(),broadFirstSearch<br>()分别代表深度优先和广度优先遍历。</p>
-<pre><code>import java.util.ArrayList;
-import java.util.LinkedList;
-/**
- * @description 邻接矩阵模型类
- * @author beanlam
- * @time 2015.4.17 
- */
-public class AMWGraph {
-    private ArrayList vertexList;//存储点的链表
-    private int[][] edges;//邻接矩阵，用来存储边
-    private int numOfEdges;//边的数目
-
-    public AMWGraph(int n) {
-        //初始化矩阵，一维数组，和边的数目
-        edges=new int[n][n];
-        vertexList=new ArrayList(n);
-        numOfEdges=0;
-    }
-
-    //得到结点的个数
-    public int getNumOfVertex() {
-        return vertexList.size();
-    }
-
-    //得到边的数目
-    public int getNumOfEdges() {
-        return numOfEdges;
-    }
-
-    //返回结点i的数据
-    public Object getValueByIndex(int i) {
-        return vertexList.get(i);
-    }
-
-    //返回v1,v2的权值
-    public int getWeight(int v1,int v2) {
-        return edges[v1][v2];
-    }
-
-    //插入结点
-    public void insertVertex(Object vertex) {
-        vertexList.add(vertexList.size(),vertex);
-    }
-
-    //插入结点
-    public void insertEdge(int v1,int v2,int weight) {
-        edges[v1][v2]=weight;
-        numOfEdges++;
-    }
-
-    //删除结点
-    public void deleteEdge(int v1,int v2) {
-        edges[v1][v2]=0;
-        numOfEdges--;
-    }
-
-    //得到第一个邻接结点的下标
-    public int getFirstNeighbor(int index) {
-        for(int j=0;j&lt;vertexList.size();j++) {
-            if (edges[index][j]&gt;0) {
-                return j;
-            }
-        }
-        return -1;
-    }
-
-    //根据前一个邻接结点的下标来取得下一个邻接结点
-    public int getNextNeighbor(int v1,int v2) {
-        for (int j=v2+1;j&lt;vertexList.size();j++) {
-            if (edges[v1][j]&gt;0) {
-                return j;
-            }
-        }
-        return -1;
-    }
-
-    //私有函数，深度优先遍历
-    private void depthFirstSearch(boolean[] isVisited,int  i) {
-        //首先访问该结点，在控制台打印出来
-        System.out.print(getValueByIndex(i)+&quot;  &quot;);
-        //置该结点为已访问
-        isVisited[i]=true;
-
-        int w=getFirstNeighbor(i);//
-        while (w!=-1) {
-            if (!isVisited[w]) {
-                depthFirstSearch(isVisited,w);
-            }
-            w=getNextNeighbor(i, w);
-        }
-    }
-
-    //对外公开函数，深度优先遍历，与其同名私有函数属于方法重载
-    public void depthFirstSearch() {
-        for(int i=0;i&lt;getNumOfVertex();i++) {
-            //因为对于非连通图来说，并不是通过一个结点就一定可以遍历所有结点的。
-            if (!isVisited[i]) {
-                depthFirstSearch(isVisited,i);
-            }
-        }
-    }
-
-    //私有函数，广度优先遍历
-    private void broadFirstSearch(boolean[] isVisited,int i) {
-        int u,w;
-        LinkedList queue=new LinkedList();
-
-        //访问结点i
-        System.out.print(getValueByIndex(i)+&quot;  &quot;);
-        isVisited[i]=true;
-        //结点入队列
-        queue.addlast(i);
-        while (!queue.isEmpty()) {
-            u=((Integer)queue.removeFirst()).intValue();
-            w=getFirstNeighbor(u);
-            while(w!=-1) {
-                if(!isVisited[w]) {
-                    //访问该结点
-                    System.out.print(getValueByIndex(w)+&quot;  &quot;);
-                    //标记已被访问
-                    isVisited[w]=true;
-                    //入队列
-                    queue.addLast(w);
-                }
-                //寻找下一个邻接结点
-                w=getNextNeighbor(u, w);
-            }
-        }
-    }
-
-    //对外公开函数，广度优先遍历
-    public void broadFirstSearch() {
-        for(int i=0;i&lt;getNumOfVertex();i++) {
-            if(!isVisited[i]) {
-                broadFirstSearch(isVisited, i);
-            }
-        }
-    }
-}
-</code></pre><p>这里给出另一种解法：</p>
-<pre><code>/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
-public class Solution {
-    /**
-     * @param root the root of binary tree
-     * @param target an integer
-     * @return all valid paths
-     */
-    public List&lt;List&lt;Integer&gt;&gt; binaryTreePathSum(TreeNode root, int target) {
-        // Write your code here
-        List&lt;List&lt;Integer&gt;&gt; list = new ArrayList&lt;List&lt;Integer&gt;&gt;();
-        if(root==null)
-            return list;
-        if(root.left==null&amp;&amp;root.right==null){
-            if(root.val==target){
-                 List&lt;Integer&gt; _list = new ArrayList&lt;Integer&gt;();
-                 _list.add(root.val);
-                 list.add(_list);
-            }
-            return list;
-       }
-       list.addAll(binaryTreePathSum(root.left,target-root.val));
-       list.addAll(binaryTreePathSum(root.right,target-root.val));
-        for(List&lt;Integer&gt; i :list)
-            i.add(0,root.val);
-           return list;    
-    }
- }
-</code></pre><h2 id="字符串置换（题号211）"><a href="#字符串置换（题号211）" class="headerlink" title="字符串置换（题号211）"></a>字符串置换（题号211）</h2><p>给定两个字符串，请设计一个方法来判定其中一个字符串是否为另一个字符串的置换。</p>
-<p>置换的意思是，通过改变顺序可以使得两个字符串相等。<br>“abc” 为 “cba” 的置换。</p>
-<p>“aabc” 不是 “abcc” 的置换。</p>
-<pre><code>public class Solution {
-/*
- * @param A: a string
- * @param B: a string
- * @return: a boolean
- */
-    public boolean Permutation(String A, String B) {
-        // write your code here
-        int index =0;
-        if(A.length()==0&amp;&amp;B.length()==0)
-            return true;
-        if(A.length() == B.length()){
-        String _A[] = A.split(&quot;&quot;);
-        String _B[] = B.split(&quot;&quot;);
-        Map&lt;String,Integer&gt; mapA = new TreeMap&lt;String,Integer&gt;();
-        Map&lt;String,Integer&gt; mapB = new TreeMap&lt;String,Integer&gt;();
-        for(int i = 0;i&lt;_A.length;i++){
-            Integer num_A = mapA.get(_A[i]);
-            Integer num_B = mapB.get(_B[i]);
-            mapA.put(_A[i],num_A==null?1:num_A+1);
-            mapB.put(_B[i],num_B==null?1:num_B+1);      
-        }
-        Iterator&lt;String&gt; iter = mapA.keySet().iterator();
-        while(iter.hasNext()){
-            String key = (String)iter.next();
-            if(!mapA.get(key).equals(mapB.get(key)))
-                break;
-            else
-                index++;
-        }
-        if(index==mapA.keySet().size())
-            return true;
-        else
-            return false;
-    }else
-        return false;
-    }
-}
-</code></pre><h2 id="回文数（题号491）"><a href="#回文数（题号491）" class="headerlink" title="回文数（题号491）"></a>回文数（题号491）</h2><p>判断一个正整数是不是回文数。</p>
-<p>回文数的定义是，将这个数反转之后，得到的数仍然是同一个数。<br>11, 121, 1, 12321 这些是回文数。</p>
-<p>23, 32, 1232 这些不是回文数。</p>
-<p>很简单，思想也很多，这里贴出其中一种算法：</p>
-<pre><code>public class Solution {
-/*
- * @param num: a positive number
- * @return: true if it&apos;s a palindrome or false
- */
-    public boolean isPalindrome(int num) {
-        // write your code here
-        LinkedList&lt;String&gt; list = new LinkedList&lt;String&gt;();
-        String s = Integer.toString(num);
-        String _s[] = s.split(&quot;&quot;);
-        list.addAll(Arrays.asList(_s));
-        while(list.size()&gt;1){
-            if(list.getFirst().equals(list.getLast())){
-                    list.removeFirst();
-                    list.removeLast();
-                }else
-                    break;;
-        }
-        if(list.size()&gt;1)
-            return false;
-        else
-            return true;
-}
-}
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-LintCode题解（五）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/30/LintCode题解（五）/" class="article-date">
-      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
-</a>
-
- 
-    <a href="/2017/09/30/LintCode题解（五）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（五）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="岛屿个数"><a href="#岛屿个数" class="headerlink" title="岛屿个数"></a>岛屿个数</h2><p>给一个01矩阵，求不同的岛屿的个数。</p>
-<p>0代表海，1代表岛，如果两个1相邻，那么这两个1属于同一个岛。我们只考虑上下左右为相邻。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><pre><code>[
-  [1, 1, 0, 0, 0],
-  [0, 1, 0, 0, 1],
-  [0, 0, 0, 1, 1],
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1]
-]
-</code></pre><p>如上矩阵有3个岛屿。</p>
-<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>这题比较复杂，需要使用到深度遍历，使用递归将已确定的岛屿由true转化为false。并且递归他的四周其他岛屿。</p>
-<pre><code>public class Solution {
-/**
- * @param grid a boolean 2D matrix
- * @return an integer
- */
-    public int numIslands(boolean[][] grid) {
-        // Write your code here
-        if(grid.length==0)
-            return 0;
-        int row = grid.length;
-        int column = grid[0].length;
-        int count = 0;
-
-        for(int i = 0;i &lt; row;i++){
-            for(int j  = 0;j &lt; column;j++){
-                if(grid[i][j]==true){
-                    dfs_Islands(grid,i,j);
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-    private void dfs_Islands(boolean[][] grid, int i, int j){
-        if(i&lt;0||j&lt;0||i&gt;=grid.length||j&gt;=grid[0].length)
-            return; 
-        if(grid[i][j]==true){
-            grid[i][j]=false;
-            dfs_Islands(grid, i-1, j);
-            dfs_Islands(grid, i+1, j);
-            dfs_Islands(grid, i, j-1);
-            dfs_Islands(grid, i, j+1);
-        }    
-    }
-}
-</code></pre><h2 id="有效回文串"><a href="#有效回文串" class="headerlink" title="有效回文串"></a>有效回文串</h2><p>给定一个字符串，判断其是否为一个回文串。只包含字母和数字，忽略大小写。</p>
-<p> 注意事项</p>
-<p>你是否考虑过，字符串有可能是空字符串？这是面试过程中，面试官常常会问的问题。</p>
-<p>在这个题目中，我们将空字符串判定为有效回文。</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>“A man, a plan, a canal: Panama” 是一个回文。</p>
-<p>“race a car” 不是一个回文。</p>
-<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
-/*
- * @param s: A string
- * @return: Whether the string is a valid palindrome
- */
-    public static boolean isPalindrome(String s) {
-        // write your code here
-        boolean index = true;
-        if(s.length()==0)
-            return index;
-        String[] str = s。toLowerCase.split(&quot;&quot;);
-        int low = 0;
-        int high = s.length()-1;
-        while(low&lt;high){
-            if(str[low].matches(&quot;\\w&quot;)&amp;&amp;str[high].matches(&quot;\\w&quot;)){
-                if(str[low].equals(str[high])&amp;&amp;low==high-1)
-                    low = low+1;
-                else if(str[low].equals(str[high])&amp;&amp;low!=high+1){
-                    low = low+1;    
-                    high = high-1;
-                }
-                else if(!str[low].equals(str[high]))
-                    break;
-            }else{
-                if(!str[low].matches(&quot;\\w&quot;))
-                    low = low+1;
-                else if(!str[high].matches(&quot;\\w&quot;))
-                    high = high-1;
-            }
-        }
-        if(low==high)
-            index=true;
-        else
-            index=false;
-        return index;    
-    }
-}
-</code></pre><p>上面的算法完全是我凑出来的，汗颜啊。<br>下面是别人写的，给予参考：</p>
-<pre><code>public class Solution {
-/**
- * @param s A string
- * @return Whether the string is a valid palindrome
- */
-    public boolean isPalindrome(String s) {
-        // Write your code here
-        if(s.equals(&quot;&quot;)) return true;
-        int len = s.length();
-        int left = 0;
-        int right = len - 1;
-        s = s.toLowerCase();
-        while(left &lt; right){
-            char leftchar = s.charAt( left );
-            char rightchar = s.charAt( right );
-            while(!isValid(leftchar)){
-                left ++;
-                leftchar = s.charAt( left );
-                if(left&gt;=right) return true;
-            }
-            while(!isValid(rightchar)){
-                right --;
-                rightchar = s.charAt( right );
-                if(right&lt;=left) return true;
-            }
-            if(leftchar != rightchar)
-                return false;
-            left ++;
-            right --;
-        }
-
-        return true;
-
-    }
-    public boolean isValid(char ch){
-        if(ch&gt;=&apos;a&apos; &amp;&amp; ch &lt;= &apos;z&apos;)
-            return true;
-        if(ch &gt;=&apos;0&apos; &amp;&amp; ch &lt;= &apos;9&apos;)
-            return true;
-        return false;
-    }
-}    
-</code></pre><h2 id="最长上升子序列"><a href="#最长上升子序列" class="headerlink" title="最长上升子序列"></a>最长上升子序列</h2><p>给定一个整数数组（下标从 0 到 n-1， n 表示整个数组的规模），请找出该数组中的最长上升连续子序列。（最长上升连续子序列可以定义为从右到左或从左到右的序列。）</p>
-<p> 注意事项</p>
-<p>time</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 [5, 4, 2, 1, 3], 其最长上升连续子序列（LICS）为 [5, 4, 2, 1], 返回 4.</p>
-<p>给定 [5, 1, 2, 3, 4], 其最长上升连续子序列（LICS）为 [1, 2, 3, 4], 返回 4.</p>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
-    /*
-     * @param A: An array of Integer
-     * @return: an integer
-     */
-    public int longestIncreasingContinuousSubsequence(int[] A) {
-        // write your code here
-        if(A.length==0)
-            return 0;
-        int up = 1;
-        int _up =1;
-        int _down=1;
-        int down=1;
-        for(int i=1;i&lt;A.length;i++){
-            if(A[i]&gt;A[i-1]){
-                _up = _up+1;
-                if(_down&gt;=down){
-                    down = _down;
-                    _down = 1;
-                }else
-                    _down =1;
-            }
-            if(A[i]&lt;A[i-1]){
-                _down = _down+1;
-                if(_up&gt;=up){
-                    up = _up;
-                    _up = 1;
-                }else
-                    _up=1;
-            }
-        }
-        if(_up&gt;=up)
-            up = _up;
-        if(_down&gt;=down)
-            down = _down;
-        if(down&gt;=up)
-            return down;
-        else
-            return up;
-    }
-}    
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-LintCode题解（六）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/30/LintCode题解（六）/" class="article-date">
-      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
-</a>
-
- 
-    <a href="/2017/09/30/LintCode题解（六）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（六）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="奇偶分割数组"><a href="#奇偶分割数组" class="headerlink" title="奇偶分割数组"></a>奇偶分割数组</h2><p>分割一个整数数组，使得奇数在前偶数在后。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>给定 [1, 2, 3, 4]，返回 [1, 3, 2, 4]。</p>
-<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>这题还是比较简单的，方法很多很多，我们将数组循环遍历，将遍历中的偶数和奇数相互交换就ok了。</p>
-<pre><code>public class Solution {
-/*
- * @param nums: an array of integers
- * @return: nothing
- */
-    public void partitionArray(int[] nums) {
-        // write your code here
-        int length = nums.length;
-        int temp = 0;
-        int index = 0;
-        if(length==0)
-            return;
-        for(int i=0;i&lt;length;i++){
-            if(nums[i]%2==0){
-                index = i;
-                while(nums[index]%2==0){
-                    if(index!=length-1)
-                        index=index+1;
-                    else
-                        break;
-                }
-                temp = nums[i];
-                nums[i] = nums[index];
-                nums[index] = temp;
-            }
-        }
-    }
-}
-</code></pre><h2 id="二进制中1个数"><a href="#二进制中1个数" class="headerlink" title="二进制中1个数"></a>二进制中1个数</h2><p>计算在一个 32 位的整数的二进制表示中有多少个 1.</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给定 32 (100000)，返回 1</p>
-<p>给定 5 (101)，返回 2</p>
-<p>给定 1023 (111111111)，返回 9    </p>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p>按与计算<br>1&amp;1==1，1&amp;0==0，0&amp;&amp;0==0；下面是很巧妙的一个方法。</p>
-<pre><code>public class Solution {
-/*
- * @param num: An integer
- * @return: An integer
- */
-    public int countOnes(int num) {
-        // write your code here
-        int count = 0;
-        while(num!=0){
-            num = num &amp; (num-1);
-            count++;
-        }
-        return count;       
-    }
-}
-</code></pre><h2 id="反转整数"><a href="#反转整数" class="headerlink" title="反转整数"></a>反转整数</h2><p>将一个整数中的数字进行颠倒，当颠倒后的整数溢出时，返回 0 (标记为 32 位整数)。</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 x = 123，返回 321</p>
-<p>给定 x = -123，返回 -321</p>
-<h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><p>反转很简单，难点在于颠倒后证书溢出判断，int32位范围是-2^31~2^31-1,这里使用temp/10与reversed_n进行判断，当temp溢出时，/10不等于reversed_n，所以可判断溢出成立。</p>
-<pre><code>public class Solution {
-    /*
-     * @param n: the integer to be reversed
-     * @return: the reversed integer
-     */
-    public int reverseInteger(int n) {
-        // Write your code here
-        int reversed_n = 0;
-
-        while (n != 0) {
-            int temp = reversed_n * 10 + n % 10;
-            n = n / 10;
-            if (temp / 10 != reversed_n) {
-                reversed_n = 0;
-                break;
-            }
-            reversed_n = temp;
-        }
-        return reversed_n;
-    }
-}
-</code></pre><h2 id="加一"><a href="#加一" class="headerlink" title="加一"></a>加一</h2><p>给定一个非负数，表示一个数字数组，在该数的基础上+1，返回一个新的数组。</p>
-<p>该数字按照大小进行排列，最大的数在列表的最前面。</p>
-<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>给定 [1,2,3] 表示 123, 返回 [1,2,4].</p>
-<p>给定 [9,9,9] 表示 999, 返回 [1,0,0,0].</p>
-<h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p>google的题，哪道没有陷阱，第一次被坑了。<br>注意不要把数组转为int型整数，因为不确定数组大小会导致溢出。<br>本题思想是，若数组值都为9，则增加数组length，首位设为1，其他位为0；否则，末位加1，结束返回。</p>
-<pre><code>public class Solution {
-    /*
-     * @param digits: a number represented as an array of digits
-     * @return: the result
-     */
-    public static int[] plusOne(int[] digits) {
-        // write your code here
-        boolean index = true;
-        for(int n=0; n&lt;digits.length;n++){
-            if(digits[n]!=9)
-                index = false;
-        }
-        if(index==true){
-            int[] num = new int[digits.length+1];
-            num[0] = 1;
-            for(int m=1;m&lt;digits.length+1;m++)
-                num[m] = 0;
-            return num;
-        }
-        for(int i=digits.length-1;i&gt;=0;i--){
-            if(digits[i]!=9){
-                digits[i] = digits[i]+1;
-                break;
-            }else{
-                digits[i] = 0;
-            }
-        }
-        return digits;
-    }
-}
-</code></pre><h2 id="把排序数组转换为高度最小的二叉搜索树"><a href="#把排序数组转换为高度最小的二叉搜索树" class="headerlink" title="把排序数组转换为高度最小的二叉搜索树"></a>把排序数组转换为高度最小的二叉搜索树</h2><p>给一个排序数组（从小到大），将其转换为一棵高度最小的排序二叉树。</p>
-<h3 id="样例-4"><a href="#样例-4" class="headerlink" title="样例"></a>样例</h3><p>给出数组 [1,2,3,4,5,6,7], 返回</p>
-<pre><code>     4
-   /   \
-  2     6
- / \    / \
-1   3  5   7
-</code></pre><h2 id="算法-4"><a href="#算法-4" class="headerlink" title="算法"></a>算法</h2><pre><code>/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */ 
-public class Solution(){
-    /**
-     * @param nums: an integer array
-     * @return: a tree node
-     */
-    public TreeNode sortArrayToBST(int[] A){
-        if(A==null)
-            return null;
-        return bulidTree(A, 0, A.length-1);    
-    }
-
-    public void buildTree(int[] A, int start, int end){
-        if(start&gt;end)
-            return null;
-        int middle = (start+end)/2;
-        TreeNode root = new TreeNode(A[middle]);
-        A.left = buildTree(A, start, middle-1);
-        A.right = buildTree(A, middle+1, end);     
-    }
-}
-</code></pre><h2 id="二进制求和"><a href="#二进制求和" class="headerlink" title="二进制求和"></a>二进制求和</h2><p>给定两个二进制字符串，返回他们的和（用二进制表示）。</p>
-<h2 id="样例-5"><a href="#样例-5" class="headerlink" title="样例"></a>样例</h2><p>a = 11</p>
-<p>b = 1</p>
-<p>返回 100</p>
-<h2 id="算法-5"><a href="#算法-5" class="headerlink" title="算法"></a>算法</h2><p>这种题千万不要将二进制转化为整数，这样转化复杂度将提高几何倍数。<br>注意如果相应位相加结果为2（1+1），则结果设为1，这时要设一个哨兵，相应位溢出时，哨兵设为1；结果为3（1+1+哨兵）时，相同道理。</p>
-<pre><code>public class Solution {
-    /*
-     * @param a: a number
-     * @param b: a number
-     * @return: the result
-     */
-    public String addBinary(String a, String b) {
-        // write your code here
-        if(b.length()==0&amp;&amp;a.length()==0)
-            return null;
-        String str = &quot;&quot;;
-        int index = 0;
-        int i = 0;
-        int middle = 0;
-        String[] A = a.split(&quot;&quot;);
-        String[] B = b.split(&quot;&quot;);
-        while(i&lt;A.length||i&lt;B.length) {
-            if (i &gt;= A.length &amp;&amp; i &lt; B.length)
-                middle = Integer.valueOf(B[B.length-1-i]) + index;
-            else if (i &gt;= B.length &amp;&amp; i &lt; A.length)
-                middle = Integer.valueOf(A[A.length-1-i]) + index;
-            else if (i &lt; A.length &amp;&amp; i &lt; B.length)
-                middle = Integer.valueOf(A[A.length-1-i]) + Integer.valueOf(B[B.length-1-i]) + index;
-            if (middle == 3) {
-                str = 1 + str;
-                index = 1;
-                //i=i+1;
-            } else if (middle == 2) {
-                str = 0 + str;
-                index = 1;
-            } else if (middle == 0 || middle == 1) {
-                str = middle + str;
-                index = 0;
-            }
-            i = i + 1;
-        }
-        if(index==1)
-            str = index+str;
-        return str;
-    }
-}    
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-走近Java并发" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/29/走近Java并发/" class="article-date">
-      <time datetime="2017-09-29T12:00:00.000Z" itemprop="datePublished">2017-09-29</time>
-</a>
-
- 
-    <a href="/2017/09/29/走近Java并发/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/29/走近Java并发/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/29/走近Java并发/">认识Java并发艺术——基础</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p>可以说并发是Java开发工程师面试时最常见的面试题了，关于并发的书籍也有很多，比如Java并发编程实战，Java并发编程艺术等。下面的几篇文章目的用最浅显的内容来解释并发的基础内容、并发的三大特性、线程池、并发容器、锁机制、相关源码分析等内容。并且会在每一篇章最后总结出常见的面试题。<br>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/09/29/走近Java并发/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-springMVC基础" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/29/springMVC基础/" class="article-date">
-      <time datetime="2017-09-29T12:00:00.000Z" itemprop="datePublished">2017-09-29</time>
-</a>
-
- 
-    <a href="/2017/09/29/springMVC基础/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/29/springMVC基础/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/29/springMVC基础/">SpringMVC中@RequestMapping等基础知识</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>Spring MVC使用@RequestMApping注解为控制器指定可以处理哪些URL请求<br>在控制器的类定义及方法定义处都可标注<br>@RequestMapping</p>
-<ul>
-<li>类定义处：提供初步的请求映射信息。相对于WEB应用的根目录</li>
-<li>方法处：提供进一步的细分映射信息，相对于类定义处的URL。若类定义处标注@RequestMapping,则方法处标记的URL相对于WEB应用的根目录</li>
-</ul>
-<p>DispatcherServlet截获请求后，就通过控制器上@RequestMapping提供的映射信息确定请求所对应的处理方法。</p>
-<h3 id="请求参数，方法，请求头"><a href="#请求参数，方法，请求头" class="headerlink" title="请求参数，方法，请求头"></a>请求参数，方法，请求头</h3><p>@RequestMapping除了可以使用请求URL映射请求外…<br>@RequestMapping的value，method，params及heads分别表示请求url，请求方法，请求参数和请求头的映射条件，他们之间是与的关系，联合使用可以更加精确化。</p>
-<h4 id="params和heads"><a href="#params和heads" class="headerlink" title="params和heads"></a>params和heads</h4><ul>
-<li>param1：表示请求必须包含名为params1的请求参数</li>
-<li>!param1：表示请求不能包含名为param1的请求参数</li>
-<li>param1!=value1:表示请求包含名为param1的请求参数，但其值不能为value1</li>
-<li><p>{“param1=value1”, “param2”}:请求必须包含名为param1和param2的两个请求参数，且param1的参数的值必须为value1</p>
-<p>  @RequestMapping(value = “method”, method = RequestMethod.POST)<br>  public String method(){</p>
-<pre><code>System.out.println(&quot;method_POST&quot;);
-return SUCCESS;
-</code></pre><p>  }</p>
-</li>
-</ul>
-<h3 id="Ant风格资源地址通配符"><a href="#Ant风格资源地址通配符" class="headerlink" title="Ant风格资源地址通配符"></a>Ant风格资源地址通配符</h3><ul>
-<li>？：匹配文件名中的一个字符</li>
-<li>*：匹配文件名中的任意字符</li>
-<li><strong>:</strong>：匹配多层路径</li>
-</ul>
-<p>Ant风格的URL</p>
-<ul>
-<li>/user/*/createUser：匹配/user/aaa/createUser、/user/bbb/createUser等URL</li>
-<li>/user/**/createUser:匹配/user/createUser、/user/aaa/bbb/createUser等URL</li>
-<li>/user/createUser??:匹配/user/createUseraa、/user/createUserbb等URL</li>
-</ul>
-<h3 id="PathVariable映射URL绑定的占位符"><a href="#PathVariable映射URL绑定的占位符" class="headerlink" title="@PathVariable映射URL绑定的占位符"></a>@PathVariable映射URL绑定的占位符</h3><p>带占位符的URL是spring3.0新增的功能，该功能在SpringMVC向REST目标挺进发展过程中具有里程碑的意义<br>通过@PathVariable可以将URL中占位符参数绑定到控制器处理方法的入参中：URL的{XXX}占位符可以通过@PathVariable(“XXX”)绑定到操作方法的入参中</p>
-<p>示例代码如下</p>
-<pre><code>@RequestMapping(value=&quot;/variable/{id}&quot;)
-public String testVariable(@PathVariable(&quot;id&quot;) Integer id){
-    System.out.println(&quot;PathVariable:&quot;+id);
-    return SUCCESS;
-}
-&lt;a href=&quot;/springMVC/variable/1&quot;&gt;pathVariable&lt;/a&gt;
-</code></pre><h3 id="REST处理"><a href="#REST处理" class="headerlink" title="REST处理"></a>REST处理</h3><p>GET:获取数据<br>POST:添加数据<br>PUT:新增数据<br>DELETE:删除数据<br>需要在web.xml加上配置</p>
-<pre><code>&lt;filter&gt;
-    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;
-    &lt;filter-class&gt;org.springframework.web.filter.HiddenHttpMethodFilter&lt;/filter-class&gt;
-&lt;/filter&gt;
-&lt;filter-mapping&gt;
-    &lt;filter-name&gt;HiddenHttpMethodFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
-&lt;/filter-mapping&gt;
-</code></pre><p>简单示例</p>
-<pre><code>@RequestMapping(value = &quot;testRest/{id}&quot;, method = RequestMethod.PUT)
-public String testRestDelete(@PathVariable(&quot;id&quot;) Integer id){
-    System.out.println(&quot;testRest PUT：&quot;+id);
-    return SUCCESS;
- }    
-</code></pre><h3 id="RequestParam绑定请求参数值"><a href="#RequestParam绑定请求参数值" class="headerlink" title="@RequestParam绑定请求参数值"></a>@RequestParam绑定请求参数值</h3><p> 在处理方法入参处使用@RequestParam可以把请求参数传递给请求方法</p>
-<ul>
-<li>val  ue： 参数名</li>
-<li><p>required： 不是必须，默认为true，表示请求参数中必须包含对应的参数，若不存在，将抛出异常</p>
-<p>   @RequestMapping(“/testRequestParam”)<br> public String testRequestParam(@RequestParam(value = “username”) String str, @RequestParam(value = “age”, required = false, defaultValue = “18”) Integer age){</p>
-<pre><code>System.out.println(&quot;RequestParam: username:&quot;+str+&quot;age:&quot;+age);
-return SUCCESS;
-</code></pre><p> }</p>
-</li>
-</ul>
-<h3 id="CookieValue"><a href="#CookieValue" class="headerlink" title="@CookieValue"></a>@CookieValue</h3><p>@CookieValue可以让处理方法入参绑定某个Cookie值</p>
-<pre><code>@requestMapping(&quot;/handle6&quot;)
-public String handle6(@CookieValue(value=&quot;sessionId&quot;, required=false)String sessionId, @RequestParam(&quot;age&quot;) int age)
-return &quot;...&quot;;
-</code></pre><h3 id="使用POJO对象绑定顶请求参数值"><a href="#使用POJO对象绑定顶请求参数值" class="headerlink" title="使用POJO对象绑定顶请求参数值"></a>使用POJO对象绑定顶请求参数值</h3><p>Spring MVC会按请求参数名和POJO属性名进行自动匹配，自动为该对象填充属性值，支持级联属性。</p>
-<h3 id="MVC的Handler方法接受ServletAPI类型的参数"><a href="#MVC的Handler方法接受ServletAPI类型的参数" class="headerlink" title="MVC的Handler方法接受ServletAPI类型的参数"></a>MVC的Handler方法接受ServletAPI类型的参数</h3><pre><code>HttpServletRequest
-HttpServletResponse
-HttpSeession
-java.security.Principal
-Lacale
-InputStream
-OutPutStream
-Reader
-Writer
-</code></pre><h3 id="处理模型数据"><a href="#处理模型数据" class="headerlink" title="处理模型数据"></a>处理模型数据</h3><p>Spring MVC提供以下几种途径输出模型数据：</p>
-<ul>
-<li>ModelAndView：处理方法返回值类型为ModelAndView时，方法体即可通过该对象添加模型数据</li>
-<li>Mao及Model：入参为org.springframework.ui.Model、org.springfreamework.ui.ModelMap或java.uti.Map时，处理方法返回时，Map中的数据会自动添加到模型中。</li>
-<li>@SessionAttributes：将模型中的某个属性暂存到HttpSession中，以便多个请求之间可以共享这个属性</li>
-<li>@modelAttribute：方法入参标注注解后，入参的对象会放到数据模型中</li>
-</ul>
-<h4 id="ModelAndView"><a href="#ModelAndView" class="headerlink" title="ModelAndView"></a>ModelAndView</h4><p>控制器处理方法返回值如果为ModelAndView，则即包含视图信息，也包含模型数据信息<br>添加模型数据：</p>
-<ul>
-<li>ModelAndView addObject(String attributeName, Object attributeValue)</li>
-<li>ModelAndView addAllObject(Map<string, ?=""> modelMap)</string,></li>
-</ul>
-<p>设置视图：</p>
-<ul>
-<li>void setView(View view)</li>
-<li>void setViewName(String viewName)</li>
-</ul>
-<p>目标方法返回值可以是ModelAndView类型<br>其中可以包含视图和模型信息<br>SpringMVC会把模型ModelAndView的Model中数据放到request域对象。</p>
-<pre><code>@RequestMapping(&quot;/testModelAndView&quot;)
-public ModelAndView testModelAndView(){
-    String viewName = SUCCESS;
-    ModelAndView modelAndView = new ModelAndView(viewName);
-    modelAndView.addObject(&quot;time&quot;, new Date());
-    return modelAndView;
-}
-</code></pre><h3 id="SessionAttributes"><a href="#SessionAttributes" class="headerlink" title="@SessionAttributes"></a>@SessionAttributes</h3><p>若希望在多个请求之间共用某个模型属性数据，则可以在控制器类上标注一个@SessionAttributes，SpringMVC将在模型中对应的属性暂存到HttpSession中。<br>@SessionAttributes除了可以通过属性名制定需要放到会话的属性外（value），还可以通过模型属性的对象类型制定那些模型需要放到会话中（type）</p>
-<ul>
-<li>SessionAttributes(types=User.class)会将隐含模型中所有类型为User.class的属性添加到会话中。</li>
-<li>@SessionAttributes(value={“user1”, “User2”})</li>
-<li>@SessionAttributes(types={User.class, Dept.class})</li>
-<li>@SessionAttribute(value={“user1”, “user2”}, types={Dept.class})</li>
-</ul>
-<h3 id="ModelAttribute"><a href="#ModelAttribute" class="headerlink" title="@ModelAttribute"></a>@ModelAttribute</h3><p>可被应用在方法或方法参数上<br>标注在方法上的@ModelAttribute说明方法是用于添加一个或多个属性到model上。这样的方法能接受与@RequestMapping标注相同的参数类型，只不过不能直接被映射到具体的请求<br>在同一个控制器中，标注了@ModelAttribute的方法实际上会在@RequestMapping方法之前被调用。</p>
-<pre><code>// Add one attribute
-// The return value of the method is added to the model under the name &quot;account&quot;
-// You can customize the name via @ModelAttribute(&quot;myAccount&quot;)
-
-@ModelAttribute
-public Account addAccount(@RequestParam String number) {
-    return accountManager.findAccount(number);
-}
-
-// Add multiple attributes
-
-@ModelAttribute
-public void populateModel(@RequestParam String number, Model model) {
-    model.addAttribute(accountManager.findAccount(number));
-    // add more ...
-}
-</code></pre><p>@ModelAttribute标注方法有两种风格：</p>
-<ul>
-<li>在第一种写法中，方法通过返回值的方式默认地将添加一个属性；</li>
-<li>在第二种写法中，方法接收一个Model对象，然后可以向其中添加任意数量的属性。<br>可以在根据需要，在两种风格中选择合适的一种。</li>
-</ul>
-<p>一个控制器可以拥有多个@ModelAttribute方法。同个控制器内的所有这些方法，都会在@RequestMapping方法之前被调用。</p>
-<pre><code>@Controller
-public class HelloModelController{
-    @ModelAttribute
-    public void populateModel(@RequestParam String abc, Model){
-        model.addAttribute(&quot;attributeName&quot;, abc);
-    }
-
-    @RequestMapping(&quot;/helloWorld&quot;)
-    public String helloWorld(){
-        return &quot;helloWorld.jsp&quot;;
-    }
-}
-</code></pre><p>@ModelAttribute的作用如下：</p>
-<ul>
-<li>绑定请求参数到命令对象：放到功能处理方法的入参上时，用于将多个请求参数绑定到一个命令对象，从而简化绑定流程，而且自动暴露为模型数据用于视图页面展示时使用</li>
-</ul>
-<pre><code>public String test(@ModelAttribute(&quot;user&quot;) UserModel user)
-</code></pre><p>我们可以在视图页面使用${user.username}来绑定的命令对象的属性</p>
-<ul>
-<li><p>暴露@RequestMapping方法返回值为模型数据：放到功能处理方法的返回值上，是暴露功能处理方法返回值为模型数据，用于视图页面展示时使用</p>
-<p>  public @ModelAttribute(“user2”) UserModel test3(@ModelAttribute(“user2”) UserModel user)     </p>
-</li>
-</ul>
-<h3 id="视图解析流程"><a href="#视图解析流程" class="headerlink" title="视图解析流程"></a>视图解析流程</h3><p>请求处理方法执行完成后，最终返回一个ModelAndView对象。对于那些返回String，View或者ModelMap等类型的处理方法，Spring MVC也会在内部将她们装配成一个ModelAndVIew对象，它包含了逻辑名和模型对象的视图<br>Spring MVC借助视图解析器（ViewResolver）得到最终的视图对象（View），最终的视图是jsp，也可能是其他形式的视图<br>处理器工作重点聚焦在生产模型数据的工作上，从而实现MVC的充分解耦。<br>视图不存在线程安全问题<br>实现类：</p>
-<ul>
-<li>InternalResourceView:将JSP或其他资源封装成一个视图，是InternalResourceViewResolver默认使用的视图实现类    </li>
-<li>JstlView：jsp使用Jstl国际化标签功能，需要使用高视图类</li>
-<li>AbstrctExcelView：Excel文档视图的抽象类 </li>
-<li>MappingJacksonJsonView:将模型数据jackson开源框架的ObjectMapper以JSON方式输出</li>
-<li>报表试图若干</li>
-</ul>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Java数据库与事务处理机制" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/29/Java数据库与事务处理机制/" class="article-date">
-      <time datetime="2017-09-29T02:14:00.000Z" itemprop="datePublished">2017-09-29</time>
-</a>
-
- 
-    <a href="/2017/09/29/Java数据库与事务处理机制/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/29/Java数据库与事务处理机制/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/29/Java数据库与事务处理机制/">Java数据库处理与事务机制</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="数据库连接"><a href="#数据库连接" class="headerlink" title="数据库连接"></a>数据库连接</h2><p>数据库连接步骤如下：</p>
-<ul>
-<li>下载mysql-connector-java的jar包，并导入</li>
-<li>加载注册驱动程序，Class.forName(“com.mysql.jdbc.Driver”)</li>
-<li><p>连接数据库</p>
-<p>  conn = DriverManager.getCOnnection(DB_URL,USER,PASS)</p>
-</li>
-<li><p>执行sql语句</p>
-<p>  //创建用于执行sql语句的Statement对象<br>  stmt = (Stattement)conn.createStatement();<br>  //执行查询语句，返回查询结果<br>  ResultSet rs = stmt.executeQuery(“SELECT id,name FROM test”);<br>  while(rs.next()){</p>
-<pre><code>int id = rs.getInt(&quot;id&quot;);
-String name = rs.getString(&quot;name&quot;);
-out.println(&quot;...&quot;+id+&quot;...&quot;+name);
-out.println(&quot;&lt;br /&gt;&quot;)
-</code></pre><p>  }<br>  //执行插入语句，返回插入行数<br>  String 失去了= “INSERT INTO test …VALUES(…)”<br>  stmt = (Statement)conn.create.Statement();<br>  int count = stmt.executeUpdate(sql);<br>  //数据库更新(删除)和插入相似</p>
-</li>
-</ul>
-<ul>
-<li><p>关闭数据库连接</p>
-<p>  rs.close();<br>  stmt.close();<br>  conn.close();    </p>
-</li>
-<li><p>PrepareStatement<br>是Statement的子接口，可以传入带占位符的sqlyuju，提供补充占位符变量的方法</p>
-<p>  String sql = “insert into mysql_test values(?,?,?)”<br>  PrepareStatement ps = conn.preprareStatement(sql);<br>  ps.setString(1, ‘’);<br>  ps.setString(2, ‘’);<br>  ps.setString(3, ‘’);<br>  ps.execteUpdate();</p>
-</li>
-</ul>
-<h3 id="Java事务处理"><a href="#Java事务处理" class="headerlink" title="Java事务处理"></a>Java事务处理</h3><p>何为事物： 所有的操作要么同时完成，要么同时失败。在mysql中提供Commit和Rollback命令进行事务的提交与回滚。</p>
-<p>java的事务处理类型有三种，JDBC、JTA（Java Transaction API）事务、容器事务。容器事务多用于Spring中。</p>
-<h4 id="JDBC事务处理机制"><a href="#JDBC事务处理机制" class="headerlink" title="JDBC事务处理机制"></a>JDBC事务处理机制</h4><p>JDBC一切行为包括事务是基于一个connection的.<br>JDBC事务处理步骤：</p>
-<ul>
-<li><p>取消JDBC的自动提交</p>
-<p>  void setAutoCommit(bollean autoCommit)=&gt;setAutoCommit(false)</p>
-</li>
-<li><p>执行各个sql语句，加入到批处理之中    </p>
-</li>
-<li><p>如若所有语句都执行成功，则提交事务commit(),如果出现错误，则回滚：roolback()</p>
-</li>
-</ul>
-<p>基本核心如下：</p>
-<pre><code>//取消自动提交
-conn.setAutoCommit(false)
-//将sql加入到批处理
-stmt.addBatch();
-stmt.addBatch();
-//执行批处理操作
-stmt.execteBatch();
-//提交事务
-commit();
-//发生错误
-try{
-    rollback();
-}
-</code></pre><p>优缺点：</p>
-<ul>
-<li>可以将多个sql语句放到同一个事务中，保证ACID特性，API比较简单，性能好 </li>
-<li>局限是：一个JDBC事务不能跨多个数据库</li>
-</ul>
-<p>实例如下所示：</p>
-<pre><code>public static void example(){
-    Connection conn = null;
-}try{
-    Class.forName(&quot;com.mysql.jdbc.Driver&quot;);
-    conn = DreiverManager.getConnection(&quot;jdbc:ysql://localhost:3306/mysqltest&quot;, USSR, PASS);
-    conn.setAutoCommit(false);//取消自动提交，改为手动提交
-    String sql_1 = &quot;update test_table set name=&apos;...&apos; where name=&apos;...&apos;&quot;;
-    String sql_2 = &quot;insert test_table (name,url) values(&apos;...&apos;,&apos;&apos;),(&apos;&apos;,&apos;&apos;)&quot;;
-    stmt = (Statement)conn.create.Statement();
-    int count = stmt.executeUpdate(sql_1);
-    //若所有结果执行完成，则执行提交事务
-    stmt.execteUpdate(sql_2);
-    conn.commit();
-    ps.close();
-    conn.close()
-    catch(ClassNotFoundException e){
-        e.printStackTrace();
-    }catch(SQLException e){
-        e.printStackTrace();
-        try{
-            //只要有一个sql语句错误，则事务回滚
-            conn.rollback();
-        }catch(SQLException e){
-            e.printStackTrace();    
-        }    
-    }
-}    
-</code></pre><h3 id="JTA事务处理"><a href="#JTA事务处理" class="headerlink" title="JTA事务处理"></a>JTA事务处理</h3><p>JDBC事务无法满足分布式数据库的处理，所以使用JTA，JTA是一个java企业版的应用程序接口，在java中，允许完成跨越多个XA资源的分布式事务<br>XA（数据库与事务管理器的接口标准，Oracle，DB2，Sybase提供XA支持）</p>
-<p>JTA提供了java.transaction.UserTansaction,主要方法为：</p>
-<ul>
-<li>begin:开启一个事务</li>
-<li>commit：提交当前事务</li>
-<li>rollback：回滚当前事务</li>
-<li>setRollbackOnly：把当前事务标记为回滚</li>
-<li>setTransactionTimeout:设置事务的事件，就是抛出异常，回滚事务</li>
-</ul>
-<p>要想使用用 JTA 事务，那么就需要有一个实现 javax.sql.XADataSource 、 javax.sql.XAConnection 和 javax.sql.XAResource 接口的 JDBC 驱动程序。一个实现了这些接口的驱动程序将可以参与 JTA 事务。一个 XADataSource 对象就是一个 XAConnection 对象的工厂。XAConnection 是参与 JTA 事务的 JDBC 连接。</p>
-<p>要使用JTA事务，必须使用XADataSource来产生数据库连接，产生的连接为一个XA连接。</p>
-<p>XA连接（javax.sql.XAConnection）和非XA（java.sql.Connection）连接的区别在于：XA可以参与JTA的事务，而且不支持自动提交。</p>
-<pre><code>public void JtaTransfer() { 
-        javax.transaction.UserTransaction tx = null;
-        java.sql.Connection conn = null;
-         try{ 
-             tx = (javax.transaction.UserTransaction) context.lookup(&quot;java:comp/UserTransaction&quot;);  //取得JTA事务，本例中是由Jboss容器管理
-             javax.sql.DataSource ds = (javax.sql.DataSource) context.lookup(&quot;java:/XAOracleDS&quot;);  //取得数据库连接池，必须有支持XA的数据库、驱动程序  
-             tx.begin();
-            conn = ds.getConnection();
-
-             // 将自动提交设置为 false，
-             //若设置为 true 则数据库将会把每一次数据更新认定为一个事务并自动提交
-             conn.setAutoCommit(false);
-
-             stmt = conn.createStatement(); 
-             // 将 A 账户中的金额减少 500 
-             stmt.execute(&quot;\
-             update t_account set amount = amount - 500 where account_id = &apos;A&apos;&quot;);
-             // 将 B 账户中的金额增加 500 
-             stmt.execute(&quot;\
-             update t_account set amount = amount + 500 where account_id = &apos;B&apos;&quot;);
-
-             // 提交事务
-             tx.commit();
-             // 事务提交：转账的两步操作同时成功
-         } catch(SQLException sqle){            
-             try{ 
-                 // 发生异常，回滚在本事务中的操做
-              tx.rollback();
-                 // 事务回滚：转账的两步操作完全撤销
-                 stmt.close(); 
-                 conn.close(); 
-             }catch(Exception ignore){ 
-
-             } 
-             sqle.printStackTrace(); 
-         } 
-     }
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/" class="article-date">
-      <time datetime="2017-09-28T02:14:00.000Z" itemprop="datePublished">2017-09-28</time>
-</a>
-
- 
-    <a href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="Spring’s-Annotations区别"><a href="#Spring’s-Annotations区别" class="headerlink" title="Spring’s Annotations区别"></a>Spring’s Annotations区别</h2><ul>
-<li>Component泛指组件，如果组件无法分类，可以使用该组件</li>
-<li>Service用于标注业务层组件</li>
-<li>Repository用于标注持久层组件，DAO组件</li>
-<li>Controller用于标注控制层组件</li>
-</ul>
-<p>配置<br>我们需要在component-scan标签默认情况下自动扫描指定路径下的包（含所有的包），将@Component、@Service、@Repository、@Controller注入到spring容器。</p>
-<pre><code>&lt;context:component-scan base-package=&quot;com.spring.package&quot; /&gt;
-</code></pre><h2 id="Autowired和-Resource"><a href="#Autowired和-Resource" class="headerlink" title="@Autowired和@Resource"></a>@Autowired和@Resource</h2><p>我们可以通过注解@Autowired和@Resource完成注入依赖，二者具有一定的差别。</p>
-<ul>
-<li>@Resource默认是按照名称来装配注入的，只有当找不到与名称匹配的bean才会按照类型来装配注入；</li>
-<li>@Autowired默认是按照类型装配注入的，如果想按照名称来转配注入，则需要结合@Qualifier一起使用；</li>
-<li>@Resource注解是又J2EE提供，而@Autowired是由Spring提供，故减少系统对spring的依赖建议使用  @Resource的方式；</li>
-<li>@Resource和@Autowired都可以书写标注在字段或者该字段的setter方法之上</li>
-</ul>
-<p>我们可以发现我们实际开发中，使用最多的还是@Autowired</p>
-<h3 id="AutoWired"><a href="#AutoWired" class="headerlink" title="@AutoWired"></a>@AutoWired</h3><p>首先看看xml配置方式下是如何注入依赖的</p>
-<pre><code>&lt;bean id=&quot;Person&quot; class=&quot;Test.Person&quot;&gt;
-    &lt;property name=&quot;car&quot; ref=&quot;car&quot; /&gt;
-    &lt;property name=&quot;address&quot; ref=&quot;address&quot; /&gt;
-&lt;/bean&gt;
-&lt;bean id=&quot;car&quot; class=&quot;Test.Car&quot;&gt;
-    &lt;propery name=&quot;price&quot; value=&quot;30000&quot; /&gt;
-&lt;/bean&gt;
-&lt;bean id=&quot;address&quot; class=&quot;Test.Address&quot;&gt;
-    &lt;property name=&quot;street&quot; value=&quot;XianLin&quot; /&gt;
-&lt;/bean&gt;        
-</code></pre><p>一般，@AutoWired可以对类成员变量、方法和构造函数进行自动装配工作，如下所示对成员变量进行自动装配</p>
-<pre><code>import org.springframework.beans.factory.annotation.Autowired; 
-@Component
-public class Person{
-    @AutoWired
-    private Car car;
-    @AutoWired
-    private Address address;
-
-    ...
-}
-</code></pre><p>此外，还可以将@AutoWired标注在setter方法上</p>
-<pre><code>import org.springframework.beans.factory.annotation.Autowired; 
-@Component
-public class Person{
-    private Car car;
-    private Address address;
-
-    @Autowired
-    public void setCar(Car car){
-        this.car = car;
-    }
-    @Autowired
-    public void setAddress(Address address){
-        this.Address = address;
-    }
-    ...
-}        
-</code></pre><p>@AutoWired标注在构造函数上</p>
-<pre><code>import org.springframework.beans.factory.annotation.Autowired; 
-@Component
-public class Person{
-    private Car car;
-    private Address address;
-
-    @Autowired
-    public Person(Car car, Address address){
-        super();
-        this.car = car;
-        this.address = address;
-    }
-    ...
-}
-</code></pre><p>如果我们在容器中配置了两个类型相同的Bean时，我们需要加上@Qulifier进行识别具体是哪个bean被需求，比如有下面两个Bean。<br>第一个Bean：</p>
-<pre><code>@Component(&quot;car1&quot;)
-public class Car{
-    @value(&quot;${Car.price1}&quot;)
-    private double price;
-
-    ...
-}
-</code></pre><p>第二个Bean：</p>
-<pre><code>@Component(&quot;car2&quot;)
-public class Car{
-    @value(&quot;${Car.price2}&quot;)
-    private double price;
-
-    ...
-}
-</code></pre><p>此时我们需要在要使用Car这个Bean时，加上@Qulifier</p>
-<pre><code>public Class Person{
-    private Car car;
-    private Address address;
-
-
-    @AutoWired
-    public void setCar(@qulifier(&quot;car1&quot;) Car car){
-        this.car = car;
-    }
-
-    public void setAddress(Address address){
-        this.address = address;
-    }
-}
-</code></pre><p>成员变量和构造函数的注入依赖方式与setter基本相似。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>

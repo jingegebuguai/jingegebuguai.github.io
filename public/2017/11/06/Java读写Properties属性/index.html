@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="huiHui" />
+
+
+
+<meta name="description" content="PropertiesProperties属性文件在JAVA应用程序中是经常可以看得见的，也是特别重要的一类文件。它用来配置应用程序的一些信息，不过这些信息一般都是比较少的数据，没有必要使用数据库文件来保存，而使用一般的文本文件来保存，如果是通过File直接保存的话，可能在存储和读取上都不是很方便，但如果保存为Properties文件就不一样了，属性文件都有键值对应的，在JAVA的包中，有提供专门的">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java读写Properties属性">
+<meta property="og:url" content="http://huihui.kim/2017/11/06/Java读写Properties属性/index.html">
+<meta property="og:site_name" content="huiHui&#39;s blogs">
+<meta property="og:description" content="PropertiesProperties属性文件在JAVA应用程序中是经常可以看得见的，也是特别重要的一类文件。它用来配置应用程序的一些信息，不过这些信息一般都是比较少的数据，没有必要使用数据库文件来保存，而使用一般的文本文件来保存，如果是通过File直接保存的话，可能在存储和读取上都不是很方便，但如果保存为Properties文件就不一样了，属性文件都有键值对应的，在JAVA的包中，有提供专门的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-06T07:05:03.044Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java读写Properties属性">
+<meta name="twitter:description" content="PropertiesProperties属性文件在JAVA应用程序中是经常可以看得见的，也是特别重要的一类文件。它用来配置应用程序的一些信息，不过这些信息一般都是比较少的数据，没有必要使用数据库文件来保存，而使用一般的文本文件来保存，如果是通过File直接保存的话，可能在存储和读取上都不是很方便，但如果保存为Properties文件就不一样了，属性文件都有键值对应的，在JAVA的包中，有提供专门的">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="huiHui&#39;s blogs" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Java读写Properties属性 | huiHui&#39;s blogs</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">huiHui</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://jingegebuguai.github.com/">GitHub</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于全栈</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">huiHui</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">huiHui</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">Java&amp;Python&amp;PHP&amp;Vue&amp;Angular全栈工程师</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/975715385@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/jingegebuguai" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa bilibili" target="_blank" href="http://bilibili.com" title="bilibili"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Java读写Properties属性" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/06/Java读写Properties属性/" class="article-date">
+      <time datetime="2017-11-06T10:33:00.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java读写Properties属性
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h2><p>Properties属性文件在JAVA应用程序中是经常可以看得见的，也是特别重要的一类文件。它用来配置应用程序的一些信息，不过这些信息一般都是比较少的数据，没有必要使用数据库文件来保存，而使用一般的文本文件来保存，如果是通过File直接保存的话，可能在存储和读取上都不是很方便，但如果保存为Properties文件就不一样了，属性文件都有键值对应的，在JAVA的包中，有提供专门的操作属性文件的类。这个类就是 java.uitl.Properties类，由于Properties类是一个集合类，所以，Properties会将属性以集合的方式读写。 </p>
+<p>Properties类继承字Hashtable类，采用键值对应的存储方式.</p>
+<h3 id="读写方法"><a href="#读写方法" class="headerlink" title="读写方法"></a>读写方法</h3><pre><code>public void load(InputStream isStream) throws IOExpection {}
+public void store(OutputStream out, String comments) throws IOExpection {}
+</code></pre><h3 id="创建一个course-properties文件"><a href="#创建一个course-properties文件" class="headerlink" title="创建一个course.properties文件"></a>创建一个course.properties文件</h3><pre><code>ftp.server.ip=10.160.105.135
+ftp.user=ftpuser
+ftp.pass=123456
+ftp.server.http.prefix=http://image.huihui.com/
+
+alipay.callback.url=http://www.huihui.com/order/alipay_callback.do
+
+password.salt = geelysdafaqj23ou89ZXcj@#$@#$#@KJdjklj;D../dSF.,
+</code></pre><h3 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h3><pre><code>Properties prop = new Properties();//属性集合对象    
+FileInputStream fis = new FileInputStream(&quot;course.properties&quot;);//属性文件流    
+prop.load(fis);//将属性文件流装载到Properties对象中  
+</code></pre><p>上面代码是读取文件最基本的方式，但是如果我们在ssm框架中使用该怎么写呢？</p>
+<pre><code>props.load(new InputStreamReader(PropertiesUtil.class.getClassLoader().getResourceAsStream(&quot;course.properties&quot;),&quot;UTF-8&quot;));
+</code></pre><p>Tools.class.getClassLoader().getResourceAsStream(file); </p>
+<p>首先，调用对象的getClass()方法是获得对象当前的类类型，这部分数据存在方法区中，而后在类类型上调用getClassLoader()方法是得到当前类型的类加载器，在Java中所有的类都是通过加载器加载到虚拟机中的，而且类加载器之间存在父子关系，就是子知道父，父不知道子，这样不同的子加载的类型之间是无法访问的（虽然它们都被放在方法区中），所以在这里通过当前类的加载器来加载资源也就是保证是和类类型同一个加载器加载的。<br>最后调用了类加载器的getResourceAsStream()方法来加载文件资源</p>
+<p>ClassLoader.getResourceAsStream() 与 Class.getResourceAsStream()的区别</p>
+<pre><code>Class.getResourceAsStream() 会指定要加载的资源路径与当前类所在包的路径一致。
+</code></pre><p> 例如你写了一个MyTest类在包com.test.mycode 下，那么MyTest.class.getResourceAsStream(“name”) 会在com.test.mycode包下查找相应的资源。    </p>
+<h3 id="读取键值方法"><a href="#读取键值方法" class="headerlink" title="读取键值方法"></a>读取键值方法</h3><ul>
+<li>Properties类提供了getProperty(String key)方法用来通过键名读取键值，</li>
+<li>当key在属性集合中找不到时又想为key在程序中赋予一个值时可以使用public String getProperty(String key, String defaultValue)方法，这个方法的意思就是用指定的键在属性列表中搜索属性。如果在属性列表中未找到该键，则接着递归检查默认属性列表及其默认值。如果未找到属性，则此方法返回默认值变量： </li>
+</ul>
+<h3 id="设置（写）属性"><a href="#设置（写）属性" class="headerlink" title="设置（写）属性"></a>设置（写）属性</h3><p>setProperty(String key, String value)，这个方法就是当属性集合中存在指定的key时，就修改这个key的值，如果不存在，就新建一个key，同样是通过键值关系保存的，但值得注意的是，Properties类继承自Hashtable，所以也可以用Hashtable的put和putAll方法保存，但强烈反对使用这两个方法，因为它们允许调用方插入其键或值不是 Strings 的项。相反，应该使用 setProperty 方法。</p>
+<pre><code>//修改sitename的属性值 
+prop.setProperty(&quot;sitename&quot;, &quot;Boxcode&quot;); 
+//添加一个新的属性studio 
+prop.setProperty(&quot;studio&quot;, &quot;Boxcode Studio&quot;); 
+//文件输出流 
+FileOutputStream fos = new FileOutputStream(&quot;prop.properties&quot;); 
+//将Properties集合保存到流中 
+prop.store(fos, &quot;Copyright (c) Boxcode Studio&quot;); 
+fos.close();//关闭流 
+</code></pre><p>我们一般使用的多为读取属性，写了解便可。</p>
+<h3 id="读接口示例"><a href="#读接口示例" class="headerlink" title="读接口示例"></a>读接口示例</h3><pre><code>public class PropertiesUtil {
+
+    private static Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
+
+    private static Properties props;
+
+    static {
+        String fileName = &quot;course.properties&quot;;
+        props = new Properties();
+        try {
+            props.load(new InputStreamReader(PropertiesUtil.class.getClassLoader()
+                .getResourceAsStream(fileName),&quot;UTF-8&quot;));
+        } catch (IOException e) {
+            logger.error(&quot;配置文件读取异常&quot;,e);
+        }
+    }
+
+    public static String getProperty(String key){
+        String value = props.getProperty(key.trim());
+        if(StringUtils.isBlank(value)){
+            return null;
+        }
+        return value.trim();
+    }
+
+    public static String getProperty(String key,String defaultValue){
+
+        String value = props.getProperty(key.trim());
+        if(StringUtils.isBlank(value)){
+            value = defaultValue;
+        }
+        return value.trim();
+    }
+
+}
+</code></pre>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/11/06/Java读写Properties属性/">Java读写Properties属性</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">huiHui</a></p>
+        <p><span>发布时间:</span>2017-11-06, 18:33:00</p>
+        <p><span>最后更新:</span>2017-11-06, 15:05:03</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/11/06/Java读写Properties属性/" title="Java读写Properties属性">http://huihui.kim/2017/11/06/Java读写Properties属性/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://huihui.kim/2017/11/06/Java读写Properties属性/　　作者: huiHui" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/11/06/Java MD5加密/">
+                    Java MD5加密
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Properties"><span class="toc-number">1.</span> <span class="toc-text">Properties</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#读写方法"><span class="toc-number">1.1.</span> <span class="toc-text">读写方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个course-properties文件"><span class="toc-number">1.2.</span> <span class="toc-text">创建一个course.properties文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#读取文件"><span class="toc-number">1.3.</span> <span class="toc-text">读取文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#读取键值方法"><span class="toc-number">1.4.</span> <span class="toc-text">读取键值方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置（写）属性"><span class="toc-number">1.5.</span> <span class="toc-text">设置（写）属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#读接口示例"><span class="toc-number">1.6.</span> <span class="toc-text">读接口示例</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Java读写Properties属性　| huiHui's blogs　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://huihui.kim/2017/11/06/Java读写Properties属性/';
+            this.page.identifier = '2017/11/06/Java读写Properties属性/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/11/06/Java MD5加密/" title="下一篇: Java MD5加密">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Java读写Properties属性/">Java读写Properties属性</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Java MD5加密/">Java MD5加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/06/Spring整合Java Web Token/">Spring 整合Java Web Token</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池基础/">Java并发之线程池基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/">Java并发之线程池—Callable,Future,FutureTask</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/">Java并发之线程池拓展—ExecutorService原理，静态工厂方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/01/Java并发之阻塞队列/">Java并发之阻塞队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/LintCode题解--中等篇(1)/">LintCode题解——中等篇（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/26/Java并发之ThreadLocal/">Java并发之ThreadLocal</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/24/Java并发之Lock/">Java并发之Lock</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/20/Django图片相关处理/">Django图片相关处理方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Django前端页面相关处理/">Django Html相关配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/19/Spring基于注解的配置/">Spring基于注解的配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/SSM项目知识点总结/">SSM小项目知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/11/Spring AOP切面/">Spring AOP切面编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Mybatis-generator详细配置demo/">Mybatis-Generator相关配置demo</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/LintCode题解（二）/">LintCode题解（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/01/LintCode题解（七）/">LintCode题解（七）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（一）/">LintCode题解（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java并发基础/">Java并发基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/springMVC基础/">SpringMVC中@RequestMapping等基础知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Java数据库与事务处理机制/">Java数据库处理与事务机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/17/Spring属性配置细节/">Spring Bean配置细节</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/LintCode题解（四）/">LintCode题解（四）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/LintCode题解（三）/">LintCode题解（三）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/31/Java容器/">Java容器(集合)，持有对象总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/27/servlet实现网页重定向/">Servlet实现网页重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/servlet实现文件上传下载/">Servlet文件上传下载类</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/CSS预处理器比较/">有关CSS预处理器的比较选择(Sass&Less&Stylus)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/js内置对象——string&array/">Js内置对象进阶（一）——String&Array</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">Vue仿饿了么知识点总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/22/web开发者必备http知识/">Web开发者必备Http基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/21/python中pip install中utf-8错误的解决方法/">Pip Install中utf-8编码问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/20/我们仍未知道那天所看见的list/">我们仍未知道那些天所看见的List</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/01/jquery实现樱花坠落插件/">Jquery实现web页面樱花坠落的特效</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/16/Angular2.0开发/">Angular2.0仿今日头条应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/24/后端学习angular--组件篇/">后端学angular2.0的痛苦历程--组件篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/总结常见MYSQL数据库优化操作/">总结常见的Mysql数据库优化操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/20/python进阶学习--参数/">Python进阶学习--*Arg、**kw和装饰器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/mysql自连接/">Mysql自连接与join关联</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/10/用IIFE与let方法改写循环闭包/">用IIFE与let命令改写循环闭包</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/19/WEB-CSS布局/">WEB前端--CSS布局必备知识</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/16/JS回调函数/">JS回调函数详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/Hexo&Gituhub博客搭建/">Hexo&Github博客搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/smarty模板引擎/">Smarty模板引擎</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 huiHui
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
