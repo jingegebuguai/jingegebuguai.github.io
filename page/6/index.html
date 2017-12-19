@@ -276,6 +276,141 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Hexo&amp;Gituhub博客搭建" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/11/Hexo&Gituhub博客搭建/" class="article-date">
+      <time datetime="2017-03-11T10:33:00.000Z" itemprop="datePublished">2017-03-11</time>
+</a>
+
+ 
+    <a href="/2017/03/11/Hexo&Gituhub博客搭建/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/03/11/Hexo&amp;Gituhub博客搭建/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/11/Hexo&Gituhub博客搭建/">Hexo&amp;Github博客搭建</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="Hexo与Github连接"><a href="#Hexo与Github连接" class="headerlink" title="Hexo与Github连接"></a>Hexo与Github连接</h1><h2 id="deploy部署"><a href="#deploy部署" class="headerlink" title="deploy部署"></a>deploy部署</h2><pre><code>deploy:
+      type: git
+      repo: git@github.com:###/###.github.io.git
+     branch: master
+</code></pre><p>其中###为github账户名，流程开始：</p>
+<ul>
+<li>在git博客到gihub前在git bush中写一行如下代码，避免出错</li>
+</ul>
+<p>如下所示：</p>
+<pre><code>$ npm install hexo-deployer-git --save
+</code></pre><ul>
+<li>再次进行git部署</li>
+</ul>
+<p>这次是保险起见，因为在根目录配置文件下部署经常失效，如下所示：</p>
+<pre><code>$ cd d:/hexo/blog
+$ git clone https://github.com/###/###.github.io.git .deploy/###.github.io
+</code></pre><ul>
+<li>博客导入github详细过程</li>
+</ul>
+<p>由于我们每次新建（$hexo new “file”）所产生的<font color="#FF0000"> <strong>.md</strong> </font>文件都在<strong>\hexo\blog\source\_posts</strong>目录下面,之后可以利用markdown进行编辑。所以我们创建一个deploy脚本文件，如下</p>
+<pre><code>hexo generate
+cp -R public/* .deploy/###.github.io
+cd .deploy/###.github.io
+git add .
+git commit -m “update”
+git push origin master
+</code></pre><p>hexo generate将我们之前的<font color="#FF0000"> <strong>.md</strong> </font>生成public文件夹下的新内容，然后将其拷贝(cp -R)至###.github.io的git目录下，然后使用git commit命令提交代码到###.github.io这个repo的master branch上。这个时候再去github就能看到写的博客，而利用域名的话，如果已经拥有域名，只要将域名解析再添加到<font color="#FF0000">###.github.io/setting/Custom domain/</font>即可。<br><img src="./images/github1.png" alt=""></p>
+<h2 id="关于Hexo—admin"><a href="#关于Hexo—admin" class="headerlink" title="关于Hexo—admin"></a>关于Hexo—admin</h2><p>这是一款与<a href="http://markdownpad.com/" target="_blank" rel="external">Markdown</a>性质一样的插件，但是比Markdown更加兼容Hexo通过这款插件，可以很方便地管理所有的文章。可能会有人问，这样子和简书之类的博客不就相同了吗，管理上更像了，但是也更方便了。<br>写在前面，如果使用时linux系统，这款插件很完美，如果使用的windows系统，建议不要使用这款插件，会出各种各样的问题。</p>
+<pre><code>cd yourblog
+npm install --save hexo-admin
+hexo server -d
+</code></pre><p>这时打开<a href="http://localhost:4000/admin/就能看到相应的界面，提交也只要输入&#39;deploy&#39;,就可以直接上传到Github。" target="_blank" rel="external">http://localhost:4000/admin/就能看到相应的界面，提交也只要输入&#39;deploy&#39;,就可以直接上传到Github。</a></p>
+<h2 id="有关Next主题的美化"><a href="#有关Next主题的美化" class="headerlink" title="有关Next主题的美化"></a>有关Next主题的美化</h2><p>###canvas-nest.js特效<br>就像本博客背景那些粒子一般，设置很简单，但是新手也难免绕很大一个弯。先去<span style="border-bottom:2px dashed red;"><a href="https://github.com/hustcc/canvas-nest.js" target="_blank" rel="external">博客</a></span>clone<font color="#FF0000"> canvas-nest.js</font>包，然后将canvas.js置于\themes\next\source\js\src下，再在\themes\next\layout\_lanyot.swig文件下添加如下代码</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot; color=&quot;255,127,80&quot; opacity=&apos;0.7&apos; zIndex=&quot;-2&quot; count=&quot;150&quot; src=&quot;//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js&quot;&gt;
+&lt;/script&gt;
+</code></pre><p>其中颜色尺寸数量根据自己喜好配置就行，但是这很占内存。最后执行下面命令效果就会出现。</p>
+<pre><code>hexo clean
+hexo -g
+hexo -s
+</code></pre><p>###Next主题色彩等配置<br>打开hexo/themes/next/source/css/_variables/base.styl，代码如下：</p>
+<pre><code>$whitesmoke    = #f5f5f5
+ $gainsboro     = #eee           //这个是边栏头像外框颜色，
+  $gray-lighter  = #ddd           //文章中插入图片边框颜色
+  $grey-light    = #ccc           //文章分割线、下划线颜色
+  $grey          = #bbb           //页面选中圆点颜色
+$grey-dark     = #999
+$grey-dim      = #FF6666     //侧边栏目录字体颜色
+$black-light   = #6699CC     //修改文章字体颜色
+$black-dim     = #333
+$black-deep    = #6699CC     //修改主题的颜色
+$red           = #ff2a2a
+$blue-bright   = #87daff
+$blue          = #0684bd
+$blue-deep     = #262a30
+$orange        = #fc6423     //浏览文章，目录选中的颜色
+</code></pre><h3 id="背景图片色彩"><a href="#背景图片色彩" class="headerlink" title="背景图片色彩"></a>背景图片色彩</h3><p>打开hexo/themes/next/source/css/_custom/custom.stl，没有的话新建一个，添加代码，如下：<br>背景颜色直接更改即可：body { background: #F0F0F0; }<br>添加背景：body { background: url（’/images/background.jpg’); }(将背景图片放到hexo/source/images中即可。</p>
+<pre><code>// Custom styles.
+body{
+    background-color:#F5F6EB 
+     #background: url（&apos;/images/background.jpg&apos;)
+}
+</code></pre><p>二者最好取一，因为可能会有覆盖。</p>
+<p>###About，404页面<br>很多博客都有，下面贴上我的<span style="border-bottom:2px dashed red;"><a href="http://huihui.kim/404.html">404页面</a></span><br><img src="./images/404.png" alt=""><br>其他标签比如RSS等，都有很多<span style="border-bottom:2px dashed red;"><a href="http://hanhailong.com/2015/10/08/Hexo%E2%80%94%E6%AD%A3%E7%A1%AE%E6%B7%BB%E5%8A%A0RSS%E8%AE%A2%E9%98%85/" target="_blank" rel="external">教程</a></span>。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-smarty模板引擎" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">

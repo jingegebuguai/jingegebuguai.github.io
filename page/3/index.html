@@ -276,6 +276,235 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-LintCode题解（二）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/02/LintCode题解（二）/" class="article-date">
+      <time datetime="2017-10-02T02:14:00.000Z" itemprop="datePublished">2017-10-02</time>
+</a>
+
+ 
+    <a href="/2017/10/02/LintCode题解（二）/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/02/LintCode题解（二）/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/02/LintCode题解（二）/">LintCode题解（二）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="最长回文串"><a href="#最长回文串" class="headerlink" title="最长回文串"></a>最长回文串</h2><p>给出一个包含大小写字母的字符串。求出由这些字母构成的最长的回文串的长度是多少。</p>
+<p>数据是大小写敏感的，也就是说，”Aa” 并不会被认为是一个回文串。</p>
+<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>给出 s = “abccccdd” 返回 7</p>
+<p>一种可以构建出来的最长回文串方案是 “dccaccd”。</p>
+<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>这道算法考的是键值对关系，一个字符无法构成回文，但是当每个字符大于2时，就会产生回文对。这时也要同时考虑到相同字符个数的奇偶性是否影响回文串的长度。这里使用java的Map来解答，以字符作为键名，相应字符的数量作为键值。</p>
+<pre><code>public class Solution {
+/*
+ * @param s: a string which consists of lowercase or uppercase letters
+ * @return: the length of the longest palindromes that can be built
+ */
+    public int longestPalindrome(String s) {
+        // write your code here
+        int index = 0;
+        if(s.length()==0)
+            return 0;
+        String[] _s = s.split(&quot;&quot;);
+        HashMap&lt;String,Integer&gt;map = new HashMap&lt;String,Integer&gt;();
+        for(String str:_s){
+            Integer num = map.get(str);
+            map.put(str,num==null?1:num+1);
+        }
+        Iterator&lt;String&gt; iter = map.keySet().iterator();
+        while(iter.hasNext()){
+            String key = (String)iter.next();
+            if(map.get(key)&gt;=2&amp;&amp;map.get(key)%2==0)
+                index = index+map.get(key);
+            else if(map.get(key)&gt;=2&amp;&amp;map.get(key)%2!=0)
+                index = index+map.get(key)-1;
+        }
+        if((s.length()-index)&gt;0)
+            return index+1;
+        else
+            return index;
+    }
+}
+</code></pre><h2 id="Strings-Homomorphism"><a href="#Strings-Homomorphism" class="headerlink" title="Strings Homomorphism"></a>Strings Homomorphism</h2><p>Given two strings s and t, determine if they are isomorphic.</p>
+<p>Two strings are isomorphic if the characters in s can be replaced to get t.</p>
+<p>All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character but a character may map to itself.</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>Given s = “egg”, t = “add”, return true.</p>
+<p>Given s = “foo”, t = “bar”, return false.</p>
+<p>Given s = “paper”, t = “title”, return true.</p>
+<h3 id="算法题解"><a href="#算法题解" class="headerlink" title="算法题解"></a>算法题解</h3><p>这题的目的是为了判断两个字符串是否结构相同，显然要用到键值对关系去判断</p>
+<pre><code>public class Solution {  
+/** 
+ * @param s a string 
+ * @param t a string 
+ * @return true if the characters in s can be replaced to get t or false 
+ */  
+    public boolean isIsomorphic(String s, String t) {  
+        // Write your code here  
+        HashMap&lt;Character , Character&gt; record = new HashMap&lt;&gt;();  
+        HashSet&lt;Character&gt; repeat = new HashSet&lt;&gt;();  
+        for(int i = 0;i&lt;s.length();i++){  
+            if(!record.containsKey(s.charAt(i))){  
+                if(repeat.contains(t.charAt(i))){  
+                    return false;  
+                }  
+                record.put(s.charAt(i) , t.charAt(i));  
+                repeat.add(t.charAt(i));  
+
+            }else{  
+                if(record.get(s.charAt(i)) != t.charAt(i)){  
+                    return false;  
+                }  
+            }  
+        }  
+        return true;  
+    }  
+}  
+</code></pre><h2 id="First-Position-Unique-Character"><a href="#First-Position-Unique-Character" class="headerlink" title="First Position Unique Character"></a>First Position Unique Character</h2><p>Given a string, find the first non-repeating character in it and return it’s index. If it doesn’t exist, return -1.</p>
+<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>Given s = “lintcode”, return 0.</p>
+<p>Given s = “lovelintcode”, return 2.</p>
+<h3 id="算法题解-1"><a href="#算法题解-1" class="headerlink" title="算法题解"></a>算法题解</h3><p>找没有重复字符的索引，太简单，代码如下：</p>
+<pre><code>public class Solution {
+/*
+ * @param s: a string
+ * @return: it&apos;s index
+ */
+    public int firstUniqChar(String s) {
+        // write your code here
+        int index = -1;
+        Map&lt;Character,Integer&gt; map = new LinkedHashMap&lt;Character,Integer&gt;();
+        for(int i=0;i&lt;s.length();i++){
+            Integer num = map.get(s.charAt(i));
+            map.put(s.charAt(i),num==null?1:num+1);
+        }
+        Iterator&lt;Character&gt; iter = map.keySet().iterator();
+        while(iter.hasNext()){
+            Character cha = iter.next();
+            if(map.get(cha)==1){
+                index = s.indexOf(cha);
+                break;
+            }
+        }
+        return index;
+    }
+}
+</code></pre><h2 id="两数组交集（2）"><a href="#两数组交集（2）" class="headerlink" title="两数组交集（2）"></a>两数组交集（2）</h2><p>nums1 = [1, 2, 2, 1], nums2 = [2, 2], 返回 [2, 2].</p>
+<pre><code>public class Solution {
+/**
+ * @param nums1 an integer array
+ * @param nums2 an integer array
+ * @return an integer array
+ */
+ public int[] intersection(int[] nums1, int[] nums2) {
+      List&lt;Integer&gt; list = new ArrayList&lt;Integer&gt;();
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        int i = 0, j = 0;
+        while (i &lt; nums1.length &amp;&amp; j &lt; nums2.length) {
+            if(nums1[i] &lt; nums2[j]){
+                i++;
+            }else if(nums1[i] == nums2[j]){
+                list.add(nums1[i]);
+                i++;
+                j++;
+            }else{
+                j++;
+            }
+        }
+        int[] inter = new int[list.size()];
+        for (i = 0; i &lt; inter.length; i++) {
+            inter[i] = list.get(i);
+        }
+        return inter;
+    }
+}
+</code></pre><h2 id="两数组交集（1）"><a href="#两数组交集（1）" class="headerlink" title="两数组交集（1）"></a>两数组交集（1）</h2><p>样例<br>nums1 = [1, 2, 2, 1], nums2 = [2, 2], 返回 [2].</p>
+<pre><code>public class Solution {
+/**
+ * @param nums1 an integer array
+ * @param nums2 an integer array
+ * @return an integer array
+ */
+   public static int[] intersection(int[] nums1, int[] nums2) {
+
+        // Write your code here
+        Set&lt;Integer&gt; set = new HashSet&lt;Integer&gt;();
+        for (int m = 0; m &lt; nums1.length; m++)
+            set.add(nums1[m]);
+        List&lt;Integer&gt; array = new LinkedList&lt;Integer&gt;();
+        for (int i = 0; i &lt; nums2.length; i++) {
+            if (set.contains(nums2[i])) {
+                array.add(nums2[i]);
+            }
+        }
+        int _index = 0;
+        Set&lt;Integer&gt; _set = new HashSet&lt;Integer&gt;(array);
+        int[] _array = new int[_set.size()];
+        Iterator&lt;Integer&gt; iter = _set.iterator();
+        while (iter.hasNext()){
+            _array[_index]=iter.next().intValue();
+            _index = _index+1;
+        }
+        return _array;
+    }
+ }
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-LintCode题解（七）" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -456,6 +685,256 @@ public class Solution {
 <h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>例如，排列[1,2,4]是第1个排列。</p>
 <h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p>原谅我一开始题目意思都没有理解。<br>对于一个数321，三个数的排列有3！种，知道第一个数，排列有2！种，知道第二个数，排列有1！知道第三个数，排列有0！；<br>第一位后小于第一位的数为x，第二位后小于第二位的数有y，第三位后为0，所以最后排列序号的结果为index = x<em>2!+y</em>1!。</p>
 
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-LintCode题解（五）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/30/LintCode题解（五）/" class="article-date">
+      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
+</a>
+
+ 
+    <a href="/2017/09/30/LintCode题解（五）/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（五）/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="岛屿个数"><a href="#岛屿个数" class="headerlink" title="岛屿个数"></a>岛屿个数</h2><p>给一个01矩阵，求不同的岛屿的个数。</p>
+<p>0代表海，1代表岛，如果两个1相邻，那么这两个1属于同一个岛。我们只考虑上下左右为相邻。</p>
+<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><pre><code>[
+  [1, 1, 0, 0, 0],
+  [0, 1, 0, 0, 1],
+  [0, 0, 0, 1, 1],
+  [0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1]
+]
+</code></pre><p>如上矩阵有3个岛屿。</p>
+<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>这题比较复杂，需要使用到深度遍历，使用递归将已确定的岛屿由true转化为false。并且递归他的四周其他岛屿。</p>
+<pre><code>public class Solution {
+/**
+ * @param grid a boolean 2D matrix
+ * @return an integer
+ */
+    public int numIslands(boolean[][] grid) {
+        // Write your code here
+        if(grid.length==0)
+            return 0;
+        int row = grid.length;
+        int column = grid[0].length;
+        int count = 0;
+
+        for(int i = 0;i &lt; row;i++){
+            for(int j  = 0;j &lt; column;j++){
+                if(grid[i][j]==true){
+                    dfs_Islands(grid,i,j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    private void dfs_Islands(boolean[][] grid, int i, int j){
+        if(i&lt;0||j&lt;0||i&gt;=grid.length||j&gt;=grid[0].length)
+            return; 
+        if(grid[i][j]==true){
+            grid[i][j]=false;
+            dfs_Islands(grid, i-1, j);
+            dfs_Islands(grid, i+1, j);
+            dfs_Islands(grid, i, j-1);
+            dfs_Islands(grid, i, j+1);
+        }    
+    }
+}
+</code></pre><h2 id="有效回文串"><a href="#有效回文串" class="headerlink" title="有效回文串"></a>有效回文串</h2><p>给定一个字符串，判断其是否为一个回文串。只包含字母和数字，忽略大小写。</p>
+<p> 注意事项</p>
+<p>你是否考虑过，字符串有可能是空字符串？这是面试过程中，面试官常常会问的问题。</p>
+<p>在这个题目中，我们将空字符串判定为有效回文。</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>“A man, a plan, a canal: Panama” 是一个回文。</p>
+<p>“race a car” 不是一个回文。</p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
+/*
+ * @param s: A string
+ * @return: Whether the string is a valid palindrome
+ */
+    public static boolean isPalindrome(String s) {
+        // write your code here
+        boolean index = true;
+        if(s.length()==0)
+            return index;
+        String[] str = s。toLowerCase.split(&quot;&quot;);
+        int low = 0;
+        int high = s.length()-1;
+        while(low&lt;high){
+            if(str[low].matches(&quot;\\w&quot;)&amp;&amp;str[high].matches(&quot;\\w&quot;)){
+                if(str[low].equals(str[high])&amp;&amp;low==high-1)
+                    low = low+1;
+                else if(str[low].equals(str[high])&amp;&amp;low!=high+1){
+                    low = low+1;    
+                    high = high-1;
+                }
+                else if(!str[low].equals(str[high]))
+                    break;
+            }else{
+                if(!str[low].matches(&quot;\\w&quot;))
+                    low = low+1;
+                else if(!str[high].matches(&quot;\\w&quot;))
+                    high = high-1;
+            }
+        }
+        if(low==high)
+            index=true;
+        else
+            index=false;
+        return index;    
+    }
+}
+</code></pre><p>上面的算法完全是我凑出来的，汗颜啊。<br>下面是别人写的，给予参考：</p>
+<pre><code>public class Solution {
+/**
+ * @param s A string
+ * @return Whether the string is a valid palindrome
+ */
+    public boolean isPalindrome(String s) {
+        // Write your code here
+        if(s.equals(&quot;&quot;)) return true;
+        int len = s.length();
+        int left = 0;
+        int right = len - 1;
+        s = s.toLowerCase();
+        while(left &lt; right){
+            char leftchar = s.charAt( left );
+            char rightchar = s.charAt( right );
+            while(!isValid(leftchar)){
+                left ++;
+                leftchar = s.charAt( left );
+                if(left&gt;=right) return true;
+            }
+            while(!isValid(rightchar)){
+                right --;
+                rightchar = s.charAt( right );
+                if(right&lt;=left) return true;
+            }
+            if(leftchar != rightchar)
+                return false;
+            left ++;
+            right --;
+        }
+
+        return true;
+
+    }
+    public boolean isValid(char ch){
+        if(ch&gt;=&apos;a&apos; &amp;&amp; ch &lt;= &apos;z&apos;)
+            return true;
+        if(ch &gt;=&apos;0&apos; &amp;&amp; ch &lt;= &apos;9&apos;)
+            return true;
+        return false;
+    }
+}    
+</code></pre><h2 id="最长上升子序列"><a href="#最长上升子序列" class="headerlink" title="最长上升子序列"></a>最长上升子序列</h2><p>给定一个整数数组（下标从 0 到 n-1， n 表示整个数组的规模），请找出该数组中的最长上升连续子序列。（最长上升连续子序列可以定义为从右到左或从左到右的序列。）</p>
+<p> 注意事项</p>
+<p>time</p>
+<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 [5, 4, 2, 1, 3], 其最长上升连续子序列（LICS）为 [5, 4, 2, 1], 返回 4.</p>
+<p>给定 [5, 1, 2, 3, 4], 其最长上升连续子序列（LICS）为 [1, 2, 3, 4], 返回 4.</p>
+<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
+    /*
+     * @param A: An array of Integer
+     * @return: an integer
+     */
+    public int longestIncreasingContinuousSubsequence(int[] A) {
+        // write your code here
+        if(A.length==0)
+            return 0;
+        int up = 1;
+        int _up =1;
+        int _down=1;
+        int down=1;
+        for(int i=1;i&lt;A.length;i++){
+            if(A[i]&gt;A[i-1]){
+                _up = _up+1;
+                if(_down&gt;=down){
+                    down = _down;
+                    _down = 1;
+                }else
+                    _down =1;
+            }
+            if(A[i]&lt;A[i-1]){
+                _down = _down+1;
+                if(_up&gt;=up){
+                    up = _up;
+                    _up = 1;
+                }else
+                    _up=1;
+            }
+        }
+        if(_up&gt;=up)
+            up = _up;
+        if(_down&gt;=down)
+            down = _down;
+        if(down&gt;=up)
+            return down;
+        else
+            return up;
+    }
+}    
+</code></pre>
       
     </div>
     
@@ -826,256 +1305,6 @@ public class Solution {
             return true;
 }
 }
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-LintCode题解（五）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/30/LintCode题解（五）/" class="article-date">
-      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
-</a>
-
- 
-    <a href="/2017/09/30/LintCode题解（五）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（五）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="岛屿个数"><a href="#岛屿个数" class="headerlink" title="岛屿个数"></a>岛屿个数</h2><p>给一个01矩阵，求不同的岛屿的个数。</p>
-<p>0代表海，1代表岛，如果两个1相邻，那么这两个1属于同一个岛。我们只考虑上下左右为相邻。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><pre><code>[
-  [1, 1, 0, 0, 0],
-  [0, 1, 0, 0, 1],
-  [0, 0, 0, 1, 1],
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1]
-]
-</code></pre><p>如上矩阵有3个岛屿。</p>
-<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>这题比较复杂，需要使用到深度遍历，使用递归将已确定的岛屿由true转化为false。并且递归他的四周其他岛屿。</p>
-<pre><code>public class Solution {
-/**
- * @param grid a boolean 2D matrix
- * @return an integer
- */
-    public int numIslands(boolean[][] grid) {
-        // Write your code here
-        if(grid.length==0)
-            return 0;
-        int row = grid.length;
-        int column = grid[0].length;
-        int count = 0;
-
-        for(int i = 0;i &lt; row;i++){
-            for(int j  = 0;j &lt; column;j++){
-                if(grid[i][j]==true){
-                    dfs_Islands(grid,i,j);
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-    private void dfs_Islands(boolean[][] grid, int i, int j){
-        if(i&lt;0||j&lt;0||i&gt;=grid.length||j&gt;=grid[0].length)
-            return; 
-        if(grid[i][j]==true){
-            grid[i][j]=false;
-            dfs_Islands(grid, i-1, j);
-            dfs_Islands(grid, i+1, j);
-            dfs_Islands(grid, i, j-1);
-            dfs_Islands(grid, i, j+1);
-        }    
-    }
-}
-</code></pre><h2 id="有效回文串"><a href="#有效回文串" class="headerlink" title="有效回文串"></a>有效回文串</h2><p>给定一个字符串，判断其是否为一个回文串。只包含字母和数字，忽略大小写。</p>
-<p> 注意事项</p>
-<p>你是否考虑过，字符串有可能是空字符串？这是面试过程中，面试官常常会问的问题。</p>
-<p>在这个题目中，我们将空字符串判定为有效回文。</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>“A man, a plan, a canal: Panama” 是一个回文。</p>
-<p>“race a car” 不是一个回文。</p>
-<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
-/*
- * @param s: A string
- * @return: Whether the string is a valid palindrome
- */
-    public static boolean isPalindrome(String s) {
-        // write your code here
-        boolean index = true;
-        if(s.length()==0)
-            return index;
-        String[] str = s。toLowerCase.split(&quot;&quot;);
-        int low = 0;
-        int high = s.length()-1;
-        while(low&lt;high){
-            if(str[low].matches(&quot;\\w&quot;)&amp;&amp;str[high].matches(&quot;\\w&quot;)){
-                if(str[low].equals(str[high])&amp;&amp;low==high-1)
-                    low = low+1;
-                else if(str[low].equals(str[high])&amp;&amp;low!=high+1){
-                    low = low+1;    
-                    high = high-1;
-                }
-                else if(!str[low].equals(str[high]))
-                    break;
-            }else{
-                if(!str[low].matches(&quot;\\w&quot;))
-                    low = low+1;
-                else if(!str[high].matches(&quot;\\w&quot;))
-                    high = high-1;
-            }
-        }
-        if(low==high)
-            index=true;
-        else
-            index=false;
-        return index;    
-    }
-}
-</code></pre><p>上面的算法完全是我凑出来的，汗颜啊。<br>下面是别人写的，给予参考：</p>
-<pre><code>public class Solution {
-/**
- * @param s A string
- * @return Whether the string is a valid palindrome
- */
-    public boolean isPalindrome(String s) {
-        // Write your code here
-        if(s.equals(&quot;&quot;)) return true;
-        int len = s.length();
-        int left = 0;
-        int right = len - 1;
-        s = s.toLowerCase();
-        while(left &lt; right){
-            char leftchar = s.charAt( left );
-            char rightchar = s.charAt( right );
-            while(!isValid(leftchar)){
-                left ++;
-                leftchar = s.charAt( left );
-                if(left&gt;=right) return true;
-            }
-            while(!isValid(rightchar)){
-                right --;
-                rightchar = s.charAt( right );
-                if(right&lt;=left) return true;
-            }
-            if(leftchar != rightchar)
-                return false;
-            left ++;
-            right --;
-        }
-
-        return true;
-
-    }
-    public boolean isValid(char ch){
-        if(ch&gt;=&apos;a&apos; &amp;&amp; ch &lt;= &apos;z&apos;)
-            return true;
-        if(ch &gt;=&apos;0&apos; &amp;&amp; ch &lt;= &apos;9&apos;)
-            return true;
-        return false;
-    }
-}    
-</code></pre><h2 id="最长上升子序列"><a href="#最长上升子序列" class="headerlink" title="最长上升子序列"></a>最长上升子序列</h2><p>给定一个整数数组（下标从 0 到 n-1， n 表示整个数组的规模），请找出该数组中的最长上升连续子序列。（最长上升连续子序列可以定义为从右到左或从左到右的序列。）</p>
-<p> 注意事项</p>
-<p>time</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 [5, 4, 2, 1, 3], 其最长上升连续子序列（LICS）为 [5, 4, 2, 1], 返回 4.</p>
-<p>给定 [5, 1, 2, 3, 4], 其最长上升连续子序列（LICS）为 [1, 2, 3, 4], 返回 4.</p>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
-    /*
-     * @param A: An array of Integer
-     * @return: an integer
-     */
-    public int longestIncreasingContinuousSubsequence(int[] A) {
-        // write your code here
-        if(A.length==0)
-            return 0;
-        int up = 1;
-        int _up =1;
-        int _down=1;
-        int down=1;
-        for(int i=1;i&lt;A.length;i++){
-            if(A[i]&gt;A[i-1]){
-                _up = _up+1;
-                if(_down&gt;=down){
-                    down = _down;
-                    _down = 1;
-                }else
-                    _down =1;
-            }
-            if(A[i]&lt;A[i-1]){
-                _down = _down+1;
-                if(_up&gt;=up){
-                    up = _up;
-                    _up = 1;
-                }else
-                    _up=1;
-            }
-        }
-        if(_up&gt;=up)
-            up = _up;
-        if(_down&gt;=down)
-            down = _down;
-        if(down&gt;=up)
-            return down;
-        else
-            return up;
-    }
-}    
 </code></pre>
       
     </div>
@@ -2204,259 +2433,6 @@ public class Car{
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-LintCode题解（四）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/06/LintCode题解（四）/" class="article-date">
-      <time datetime="2017-09-06T02:14:00.000Z" itemprop="datePublished">2017-09-06</time>
-</a>
-
- 
-    <a href="/2017/09/06/LintCode题解（四）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/06/LintCode题解（四）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/06/LintCode题解（四）/">LintCode题解（四）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="栅栏染色"><a href="#栅栏染色" class="headerlink" title="栅栏染色"></a>栅栏染色</h2><p>我们有一个栅栏，它有n个柱子，现在要给柱子染色，有k种颜色可以染。<br>必须保证不存在超过2个相邻的柱子颜色相同，求有多少种染色方案。</p>
-<h2 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h2><p>n = 3, k = 2, return 6</p>
-<pre><code>      post 1,   post 2, post 3
-way1    0         0       1 
-way2    0         1       0
-way3    0         1       1
-way4    1         0       0
-way5    1         0       1
-way6    1         1       0
-</code></pre><h2 id="算法题解"><a href="#算法题解" class="headerlink" title="算法题解"></a>算法题解</h2><p>这种数学类的题目绝大多数，使用递归解题。<br>递归的要求有两个：</p>
-<ul>
-<li>临界条件，这里的临界条件是柱子n个数为0时，返回0；柱子n个数为1时，则有k种染色方法；柱子数为2时，则有k^2种染色方法。</li>
-<li><p>递归体，这里的递归体要自下而上去考虑，可以分为两种情况，当最后两根柱子颜色相同时，倒数第三根柱子的染色方法则有k-1种，可表示为numWays(n-2,k)<em>(k-1);若是要求最后两根柱子颜色不同，则在前n-<br>根柱子已经部署好的情况下，最后一根柱子的染色方法为k-1种，则可表示为numWanys(n-1,k)</em>(k-1)。</p>
-<p>  public class Solution {<br>  /*</p>
-<ul>
-<li>@param n: non-negative integer, n posts</li>
-<li>@param k: non-negative integer, k colors</li>
-<li>@return: an integer, the total number of ways<br>*/<pre><code>public static int numWays(int n, int k) {
- // write your code here
- if(n&gt;2&amp;&amp;k==1){
-     return 0;
- }
- if(n==0)
-     return 0;
- if(n==1)
-     return k;
- if(n==2)
-     return k*k;
- else
-     return numWays(n-1,k)*(k-1)+numWays(n-2,k)*(k-1);
-</code></pre> }<br>}</li>
-</ul>
-</li>
-</ul>
-<h2 id="快乐数"><a href="#快乐数" class="headerlink" title="快乐数"></a>快乐数</h2><p>写一个算法来判断一个数是不是”快乐数”。</p>
-<p>一个数是不是快乐是这么定义的：对于一个正整数，每一次将该数替换为他每个位置上的数字的平方和，然后重复这个过程直到这个数变为1，或是无限循环但始终变不到1。如果可以变为1，那么这个数就是快乐数。</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>19为一个快乐数。</p>
-<pre><code>1^2 + 9^2 = 82
-8^2 + 2^2 = 68
-6^2 + 8^2 = 100
-1^2 + 0^2 + 0^2 = 1
-</code></pre><h3 id="算法题解-1"><a href="#算法题解-1" class="headerlink" title="算法题解"></a>算法题解</h3><p>这题我的算法写的并不是很严谨，不论时间复杂度还是对死循环的处理，可能都不好，但是很暴力有木有。</p>
-<p>我的思想是将每个数转化为字符数组，再从数组中提取每个数字字符，转化为整形，平方相加得到新值，然后依次循环下去，直到数值为1为止。</p>
-<pre><code>public class Solution {
-/*
- * @param n: An integer
- * @return: true if this is a happy number or false
- */
-    public static boolean isHappy(int n) {
-        // write your code
-        boolean index = false;
-        int _index = 0;
-        while(n!=1){
-            String s = String.valueOf(n);
-            String _s[] = s.split(&quot;&quot;);
-            n = 0;
-            for(int i = 0;i&lt;_s.length;i++){
-                int num = Integer.valueOf(_s[i]);
-                n = n + num*num;
-            }
-            if(_index==32767)
-                break;
-            _index = _index+1;     
-        }
-        if(n==1)
-            index = true;
-        return index;
-    }
-}
-</code></pre><h2 id="二叉树的所有路径"><a href="#二叉树的所有路径" class="headerlink" title="二叉树的所有路径"></a>二叉树的所有路径</h2><p>给一棵二叉树，找出从根节点到叶子节点的所有路径。</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给出下面这棵二叉树：</p>
-<pre><code>   1
- /   \
-2     3
- \
-  5    
-</code></pre><p>所有根到叶子的路径为：</p>
-<pre><code>[
-  &quot;1-&gt;2-&gt;5&quot;,
-  &quot;1-&gt;3&quot;
-]
-</code></pre><h3 id="算法题解-2"><a href="#算法题解-2" class="headerlink" title="算法题解"></a>算法题解</h3><p>看输出内容可知，这是前序遍历，所以按照根左右的方式，使用递归即可。</p>
-<pre><code>/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
-public class Solution {
-    /*
-     * @param root: the root of the binary tree
-     * @return: all root-to-leaf paths
-     */
-    public List&lt;String&gt; binaryTreePaths(TreeNode root) {
-        // write your code here
-        List&lt;String&gt; list = new LinkedList&lt;String&gt;();
-        if(root!=null)
-            addPath(root, String.valueOf(root.val),list);
-        return list;
-    }    
-    public void addPath(TreeNode root, String path, List&lt;String&gt; list){    
-        if(root==null)
-            list.addAll(Arrays.asList());
-        if(root.right==null&amp;&amp;root.left==null)
-            list.add(path);
-        if(root.left!=null)
-            addPath(root.left, path+&quot;-&gt;&quot;+String.valueOf(root.left.val), list);
-        if(root.right!=null)
-            addPath(root.right, path+&quot;-&gt;&quot;+String.valueOf(root.right.val),list);
-    }
-}
-</code></pre><h2 id="Rotate-Words-新题"><a href="#Rotate-Words-新题" class="headerlink" title="Rotate Words(新题)"></a>Rotate Words(新题)</h2><p>The words are same rotate words if rotate the word to the right by loop, and get another. Count how many different rotate word sets in dictionary.</p>
-<p>E.g. picture and turepic are same rotate words.</p>
-<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>Given dict = [“picture”, “turepic”, “icturep”, “word”, “ordw”, “lint”]<br>return 3.</p>
-<p>“picture”, “turepic”, “icturep” are same ratote words.<br>“word”, “ordw” are same too.<br>“lint” is the third word that different from the previous two words.</p>
-<h3 id="算法题解-3"><a href="#算法题解-3" class="headerlink" title="算法题解"></a>算法题解</h3><p>我只会笨方法，哈哈。<br>第一步，将List转化为Set<br>第二步，判断Set是否为空，不为空，则以此读取里面的字符串。需要判断，Set里是否contains每个字符串的不同旋转组合</p>
-<pre><code>public static int countRotateWords(List&lt;String&gt; list){
-   int index =0;
-   Set&lt;String&gt; set = new LinkedHashSet&lt;String&gt;();
-   set.addAll(list);
-   if(list.isEmpty())
-       return 0;
-   else {
-       while (!set.isEmpty()) {
-           String str = set.iterator().next();
-           for (int i = 0; i &lt; str.length(); i++) {
-               if (set.contains(str.substring(i, str.length()) + str.substring(0, i)))
-                   set.remove(str.substring(i, str.length()) + str.substring(0, i));
-           }
-           index = index + 1;
-       }
-   }
-   return index;
-}
-</code></pre><h2 id="等价二叉树"><a href="#等价二叉树" class="headerlink" title="等价二叉树"></a>等价二叉树</h2><p>检查两棵二叉树是否等价。等价的意思是说，首先两棵二叉树必须拥有相同的结构，并且每个对应位置上的节点上的数都相等。</p>
-<h3 id="样例-4"><a href="#样例-4" class="headerlink" title="样例"></a>样例</h3><pre><code>    1             1
-   / \           / \
-  2   2   and   2   2
- /             /
-4             4
-</code></pre><p>就是两棵等价的二叉树。</p>
-<pre><code>    1             1
-   / \           / \
-  2   3   and   2   3
- /               \
-4                 4
-</code></pre><p>就不是等价的。</p>
-<h3 id="算法题解-4"><a href="#算法题解-4" class="headerlink" title="算法题解"></a>算法题解</h3><pre><code>/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */
-
-
-public class Solution {
-
-    /*
-     * @param a: the root of binary tree a.
-     * @param b: the root of binary tree b.
-     * @return: true if they are identical, or false.
-     */
-    public boolean isIdentical(TreeNode a, TreeNode b) {
-        // write your code here
-        if(a==null&amp;&amp;b==null)
-            return true;
-        if(a==null&amp;&amp;b!=null||a!=null&amp;&amp;b==null||a.val!=b.val)  
-            return false;
-        return isIdentical(a.left,b.left)&amp;&amp;isIdentical(a.right,b.right);
-    }
-}
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lintcode/">Lintcode</a></li></ul>
     </div>
 
       

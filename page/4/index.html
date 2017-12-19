@@ -276,6 +276,259 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-LintCode题解（四）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/06/LintCode题解（四）/" class="article-date">
+      <time datetime="2017-09-06T02:14:00.000Z" itemprop="datePublished">2017-09-06</time>
+</a>
+
+ 
+    <a href="/2017/09/06/LintCode题解（四）/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/06/LintCode题解（四）/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/06/LintCode题解（四）/">LintCode题解（四）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="栅栏染色"><a href="#栅栏染色" class="headerlink" title="栅栏染色"></a>栅栏染色</h2><p>我们有一个栅栏，它有n个柱子，现在要给柱子染色，有k种颜色可以染。<br>必须保证不存在超过2个相邻的柱子颜色相同，求有多少种染色方案。</p>
+<h2 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h2><p>n = 3, k = 2, return 6</p>
+<pre><code>      post 1,   post 2, post 3
+way1    0         0       1 
+way2    0         1       0
+way3    0         1       1
+way4    1         0       0
+way5    1         0       1
+way6    1         1       0
+</code></pre><h2 id="算法题解"><a href="#算法题解" class="headerlink" title="算法题解"></a>算法题解</h2><p>这种数学类的题目绝大多数，使用递归解题。<br>递归的要求有两个：</p>
+<ul>
+<li>临界条件，这里的临界条件是柱子n个数为0时，返回0；柱子n个数为1时，则有k种染色方法；柱子数为2时，则有k^2种染色方法。</li>
+<li><p>递归体，这里的递归体要自下而上去考虑，可以分为两种情况，当最后两根柱子颜色相同时，倒数第三根柱子的染色方法则有k-1种，可表示为numWays(n-2,k)<em>(k-1);若是要求最后两根柱子颜色不同，则在前n-<br>根柱子已经部署好的情况下，最后一根柱子的染色方法为k-1种，则可表示为numWanys(n-1,k)</em>(k-1)。</p>
+<p>  public class Solution {<br>  /*</p>
+<ul>
+<li>@param n: non-negative integer, n posts</li>
+<li>@param k: non-negative integer, k colors</li>
+<li>@return: an integer, the total number of ways<br>*/<pre><code>public static int numWays(int n, int k) {
+ // write your code here
+ if(n&gt;2&amp;&amp;k==1){
+     return 0;
+ }
+ if(n==0)
+     return 0;
+ if(n==1)
+     return k;
+ if(n==2)
+     return k*k;
+ else
+     return numWays(n-1,k)*(k-1)+numWays(n-2,k)*(k-1);
+</code></pre> }<br>}</li>
+</ul>
+</li>
+</ul>
+<h2 id="快乐数"><a href="#快乐数" class="headerlink" title="快乐数"></a>快乐数</h2><p>写一个算法来判断一个数是不是”快乐数”。</p>
+<p>一个数是不是快乐是这么定义的：对于一个正整数，每一次将该数替换为他每个位置上的数字的平方和，然后重复这个过程直到这个数变为1，或是无限循环但始终变不到1。如果可以变为1，那么这个数就是快乐数。</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>19为一个快乐数。</p>
+<pre><code>1^2 + 9^2 = 82
+8^2 + 2^2 = 68
+6^2 + 8^2 = 100
+1^2 + 0^2 + 0^2 = 1
+</code></pre><h3 id="算法题解-1"><a href="#算法题解-1" class="headerlink" title="算法题解"></a>算法题解</h3><p>这题我的算法写的并不是很严谨，不论时间复杂度还是对死循环的处理，可能都不好，但是很暴力有木有。</p>
+<p>我的思想是将每个数转化为字符数组，再从数组中提取每个数字字符，转化为整形，平方相加得到新值，然后依次循环下去，直到数值为1为止。</p>
+<pre><code>public class Solution {
+/*
+ * @param n: An integer
+ * @return: true if this is a happy number or false
+ */
+    public static boolean isHappy(int n) {
+        // write your code
+        boolean index = false;
+        int _index = 0;
+        while(n!=1){
+            String s = String.valueOf(n);
+            String _s[] = s.split(&quot;&quot;);
+            n = 0;
+            for(int i = 0;i&lt;_s.length;i++){
+                int num = Integer.valueOf(_s[i]);
+                n = n + num*num;
+            }
+            if(_index==32767)
+                break;
+            _index = _index+1;     
+        }
+        if(n==1)
+            index = true;
+        return index;
+    }
+}
+</code></pre><h2 id="二叉树的所有路径"><a href="#二叉树的所有路径" class="headerlink" title="二叉树的所有路径"></a>二叉树的所有路径</h2><p>给一棵二叉树，找出从根节点到叶子节点的所有路径。</p>
+<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给出下面这棵二叉树：</p>
+<pre><code>   1
+ /   \
+2     3
+ \
+  5    
+</code></pre><p>所有根到叶子的路径为：</p>
+<pre><code>[
+  &quot;1-&gt;2-&gt;5&quot;,
+  &quot;1-&gt;3&quot;
+]
+</code></pre><h3 id="算法题解-2"><a href="#算法题解-2" class="headerlink" title="算法题解"></a>算法题解</h3><p>看输出内容可知，这是前序遍历，所以按照根左右的方式，使用递归即可。</p>
+<pre><code>/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+public class Solution {
+    /*
+     * @param root: the root of the binary tree
+     * @return: all root-to-leaf paths
+     */
+    public List&lt;String&gt; binaryTreePaths(TreeNode root) {
+        // write your code here
+        List&lt;String&gt; list = new LinkedList&lt;String&gt;();
+        if(root!=null)
+            addPath(root, String.valueOf(root.val),list);
+        return list;
+    }    
+    public void addPath(TreeNode root, String path, List&lt;String&gt; list){    
+        if(root==null)
+            list.addAll(Arrays.asList());
+        if(root.right==null&amp;&amp;root.left==null)
+            list.add(path);
+        if(root.left!=null)
+            addPath(root.left, path+&quot;-&gt;&quot;+String.valueOf(root.left.val), list);
+        if(root.right!=null)
+            addPath(root.right, path+&quot;-&gt;&quot;+String.valueOf(root.right.val),list);
+    }
+}
+</code></pre><h2 id="Rotate-Words-新题"><a href="#Rotate-Words-新题" class="headerlink" title="Rotate Words(新题)"></a>Rotate Words(新题)</h2><p>The words are same rotate words if rotate the word to the right by loop, and get another. Count how many different rotate word sets in dictionary.</p>
+<p>E.g. picture and turepic are same rotate words.</p>
+<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>Given dict = [“picture”, “turepic”, “icturep”, “word”, “ordw”, “lint”]<br>return 3.</p>
+<p>“picture”, “turepic”, “icturep” are same ratote words.<br>“word”, “ordw” are same too.<br>“lint” is the third word that different from the previous two words.</p>
+<h3 id="算法题解-3"><a href="#算法题解-3" class="headerlink" title="算法题解"></a>算法题解</h3><p>我只会笨方法，哈哈。<br>第一步，将List转化为Set<br>第二步，判断Set是否为空，不为空，则以此读取里面的字符串。需要判断，Set里是否contains每个字符串的不同旋转组合</p>
+<pre><code>public static int countRotateWords(List&lt;String&gt; list){
+   int index =0;
+   Set&lt;String&gt; set = new LinkedHashSet&lt;String&gt;();
+   set.addAll(list);
+   if(list.isEmpty())
+       return 0;
+   else {
+       while (!set.isEmpty()) {
+           String str = set.iterator().next();
+           for (int i = 0; i &lt; str.length(); i++) {
+               if (set.contains(str.substring(i, str.length()) + str.substring(0, i)))
+                   set.remove(str.substring(i, str.length()) + str.substring(0, i));
+           }
+           index = index + 1;
+       }
+   }
+   return index;
+}
+</code></pre><h2 id="等价二叉树"><a href="#等价二叉树" class="headerlink" title="等价二叉树"></a>等价二叉树</h2><p>检查两棵二叉树是否等价。等价的意思是说，首先两棵二叉树必须拥有相同的结构，并且每个对应位置上的节点上的数都相等。</p>
+<h3 id="样例-4"><a href="#样例-4" class="headerlink" title="样例"></a>样例</h3><pre><code>    1             1
+   / \           / \
+  2   2   and   2   2
+ /             /
+4             4
+</code></pre><p>就是两棵等价的二叉树。</p>
+<pre><code>    1             1
+   / \           / \
+  2   3   and   2   3
+ /               \
+4                 4
+</code></pre><p>就不是等价的。</p>
+<h3 id="算法题解-4"><a href="#算法题解-4" class="headerlink" title="算法题解"></a>算法题解</h3><pre><code>/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+
+public class Solution {
+
+    /*
+     * @param a: the root of binary tree a.
+     * @param b: the root of binary tree b.
+     * @return: true if they are identical, or false.
+     */
+    public boolean isIdentical(TreeNode a, TreeNode b) {
+        // write your code here
+        if(a==null&amp;&amp;b==null)
+            return true;
+        if(a==null&amp;&amp;b!=null||a!=null&amp;&amp;b==null||a.val!=b.val)  
+            return false;
+        return isIdentical(a.left,b.left)&amp;&amp;isIdentical(a.right,b.right);
+    }
+}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lintcode/">Lintcode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-LintCode题解（三）" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -2091,161 +2344,6 @@ Vue.nextTick(function(){
 chcp 437    //换成美国英语
 </code></pre><p>这里我们执行chcp 437即可，然后再pip install pillow就不会再报这个错误。其他类型的错误解决方法其他博客都有提及，不再累述。</p>
 
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-我们仍未知道那天所看见的list" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/06/20/我们仍未知道那天所看见的list/" class="article-date">
-      <time datetime="2017-06-20T12:00:00.000Z" itemprop="datePublished">2017-06-20</time>
-</a>
-
- 
-    <a href="/2017/06/20/我们仍未知道那天所看见的list/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/06/20/我们仍未知道那天所看见的list/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/20/我们仍未知道那天所看见的list/">我们仍未知道那些天所看见的List</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="列表函数"><a href="#列表函数" class="headerlink" title="列表函数"></a>列表函数</h2><h3 id="list函数"><a href="#list函数" class="headerlink" title="list函数"></a>list函数</h3><p>features：将字符串转化为列表</p>
-<pre><code>&gt;&gt;&gt; name = &apos;huihui&apos;
-&gt;&gt;&gt; name = list(name)
-&gt;&gt;&gt; print(name)
-[&apos;h&apos;, &apos;u&apos;, &apos;i&apos;, &apos;h&apos;, &apos;u&apos;, &apos;i&apos;]
-</code></pre><h3 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h3><p>观察下面两段代码的不同<br>代码片段1</p>
-<pre><code>&gt;&gt;&gt; list1 = [&apos;h&apos;, &apos;e&apos;, &apos;l&apos;, &apos;l&apos;, &apos;o&apos;]
-&gt;&gt;&gt; list1[2:2] = &apos;hui&apos;
-&gt;&gt;&gt; print(list1)
-[&apos;h&apos;, &apos;e&apos;, &apos;h&apos;, &apos;u&apos;,&apos;i&apos;, l&apos;, &apos;l&apos;, &apos;o&apos;]
-</code></pre><p>代码片段2</p>
-<pre><code>&gt;&gt;&gt; list2 = [&apos;h&apos;, &apos;e&apos;, &apos;l&apos;, &apos;l&apos;, &apos;o&apos;]
-&gt;&gt;&gt; list2.insert(2, &apos;hui&apos;)
-&gt;&gt;&gt; print(list2)
-[&apos;h&apos;, &apos;e&apos;, &apos;hui&apos;, &apos;l&apos;, &apos;l&apos;, &apos;o&apos;]
-</code></pre><p>以上插入操作最大的不同，代码1插入的是字符串每个字符元素，代码2作为一整个字符串插入    </p>
-<h3 id="count函数"><a href="#count函数" class="headerlink" title="count函数"></a>count函数</h3><p>features: 统计字符出现次数</p>
-<pre><code>&gt;&gt;&gt; name = &apos;huihui&apos;
-&gt;&gt;&gt; name = list(name)
-&gt;&gt;&gt; count(&apos;h&apos;)
-2
-</code></pre><h3 id="len函数"><a href="#len函数" class="headerlink" title="len函数"></a>len函数</h3><p>features：计算列表长度</p>
-<pre><code>&gt;&gt;&gt; name = &apos;huihui&apos;    
-&gt;&gt;&gt; name = list(name)
-&gt;&gt;&gt; len(name)
-6
-</code></pre><h3 id="append函数"><a href="#append函数" class="headerlink" title="append函数"></a>append函数</h3><p>features: 在列表尾部插入元素</p>
-<pre><code>&gt;&gt;&gt; name = [&apos;h&apos;, &apos;u&apos;, &apos;i&apos;, &apos;h&apos;, &apos;u&apos;, &apos;i&apos;]
-&gt;&gt;&gt; name.append(&apos;hello&apos;)
-[&apos;h&apos;, &apos;u&apos;, &apos;i&apos;, &apos;h&apos;, &apos;u&apos;, &apos;i&apos;, &apos;h&apos;, &apos;e&apos;, &apos;l&apos;, &apos;l&apos;, &apos;o&apos;]
-</code></pre><h3 id="insert函数"><a href="#insert函数" class="headerlink" title="insert函数"></a>insert函数</h3><p>见插入操作相关内容</p>
-<h3 id="extend函数"><a href="#extend函数" class="headerlink" title="extend函数"></a>extend函数</h3><p>features： 链接两个列表序列</p>
-<pre><code>&gt;&gt;&gt; name = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;]
-&gt;&gt;&gt; age = [20]
-&gt;&gt;&gt; name.extend(age)
-[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, 20]
-</code></pre><p>相似操作：可以使用+号也可以达到链接列表功能，而且+号不限制列表个数</p>
-<h3 id="pop函数"><a href="#pop函数" class="headerlink" title="pop函数"></a>pop函数</h3><p>features: 删除元素(默认删除最后一个元素)</p>
-<pre><code>&gt;&gt;&gt; name = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;]
-&gt;&gt;&gt; name.pop(1)
-&gt;&gt;&gt; print(name)
-[&apos;a&apos;, &apos;c&apos;]
-</code></pre><h3 id="remove函数"><a href="#remove函数" class="headerlink" title="remove函数"></a>remove函数</h3><p>features: 删除所指定的第一个元素</p>
-<pre><code>&gt;&gt;&gt; name = list(&apos;huihui&apos;)
-&gt;&gt;&gt; name.remove(&apos;u&apos;)
-[&apos;h&apos;, &apos;i&apos;, &apos;h&apos;, &apos;u&apos;, &apos;i&apos;]
-</code></pre><p>删除所有指定元素</p>
-<pre><code>&gt;&gt;&gt; while &apos;u&apos; in name
-&gt;&gt;&gt; name.remove(&apos;u&apos;)
-[&apos;h&apos;, &apos;i&apos;, &apos;h&apos;, &apos;i&apos;]
-</code></pre><h3 id="index函数"><a href="#index函数" class="headerlink" title="index函数"></a>index函数</h3><p>features：从列表找出所匹配的第一个元素位置</p>
-<pre><code>&gt;&gt;&gt; name = list(&apos;huihui&apos;)
-&gt;&gt;&gt; name.index(&apos;h&apos;)
-0
-</code></pre><h3 id="reverse函数"><a href="#reverse函数" class="headerlink" title="reverse函数"></a>reverse函数</h3><p>features：序列反转</p>
-<pre><code>&gt;&gt;&gt; name = list(&apos;hui&apos;)
-&gt;&gt;&gt; name.reverse()
-[&apos;i&apos;, &apos;u&apos;, &apos;h&apos;]
-</code></pre><h3 id="sort函数"><a href="#sort函数" class="headerlink" title="sort函数"></a>sort函数</h3><p>features: 序列排序</p>
-<pre><code>&gt;&gt;&gt; name = [20, 10, 3, 5]
-&gt;&gt;&gt; name.sort()
-[3, 5, 10, 20]        
-</code></pre><p>关键字排序</p>
-<pre><code>&gt;&gt;&gt; name.sort(reverse = True)
-[20, 10, 5, 3]
-</code></pre><h3 id="set函数"><a href="#set函数" class="headerlink" title="set函数"></a>set函数</h3><p>features: 去重</p>
-<pre><code>&gt;&gt;&gt; name = list(&apos;huihui&apos;)
-&gt;&gt;&gt; a = set(name)
-{&apos;i&apos;, &apos;u&apos;, &apos;h&apos;}
-</code></pre><h2 id="设置固长list"><a href="#设置固长list" class="headerlink" title="设置固长list"></a>设置固长list</h2><p>通常有以下几种方式(设定固长为3)</p>
-<pre><code>&gt;&gt;&gt; a = [0]*3
-[0, 0, 0]
-&gt;&gt;&gt; b = list(range(3))
-[0, 1, 2]
-&gt;&gt;&gt; c= [0 for i in range(3)]
-[0, 0, 0]
-&gt;&gt;&gt; def test():
-    d = []
-    for i in range(3):
-    d.append(i)
-    # d = d+[i]
-&gt;&gt;&gt; print(d)
-[0, 1, 2]
-</code></pre><h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2>
       
     </div>
     

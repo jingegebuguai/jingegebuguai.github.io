@@ -276,6 +276,86 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Java并发之Lock" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/24/Java并发之Lock/" class="article-date">
+      <time datetime="2017-10-24T12:00:00.000Z" itemprop="datePublished">2017-10-24</time>
+</a>
+
+ 
+    <a href="/2017/10/24/Java并发之Lock/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/24/Java并发之Lock/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/24/Java并发之Lock/">Java并发之Lock</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h2 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h2><h3 id="Lock与Synchronized区别"><a href="#Lock与Synchronized区别" class="headerlink" title="Lock与Synchronized区别"></a>Lock与Synchronized区别</h3><ul>
+<li>Lock非Java内置特性，而Synchronized是Java语言的关键字，因此是内置特性。Lock是一个接口，通过这个接口可以实现同步访问。</li>
+<li>Synchronized不需要手动释放锁，当Synchronized方法或代码块执行完成后，系统会自动让线程释放对锁的占用；Lock需要用户手动释放锁，如果没有释放锁，会导致死锁现象。</li>
+</ul>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/24/Java并发之Lock/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Django图片相关处理" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1455,235 +1535,6 @@ yum install gcc
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-LintCode题解（二）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/02/LintCode题解（二）/" class="article-date">
-      <time datetime="2017-10-02T02:14:00.000Z" itemprop="datePublished">2017-10-02</time>
-</a>
-
- 
-    <a href="/2017/10/02/LintCode题解（二）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/02/LintCode题解（二）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/02/LintCode题解（二）/">LintCode题解（二）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="最长回文串"><a href="#最长回文串" class="headerlink" title="最长回文串"></a>最长回文串</h2><p>给出一个包含大小写字母的字符串。求出由这些字母构成的最长的回文串的长度是多少。</p>
-<p>数据是大小写敏感的，也就是说，”Aa” 并不会被认为是一个回文串。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>给出 s = “abccccdd” 返回 7</p>
-<p>一种可以构建出来的最长回文串方案是 “dccaccd”。</p>
-<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>这道算法考的是键值对关系，一个字符无法构成回文，但是当每个字符大于2时，就会产生回文对。这时也要同时考虑到相同字符个数的奇偶性是否影响回文串的长度。这里使用java的Map来解答，以字符作为键名，相应字符的数量作为键值。</p>
-<pre><code>public class Solution {
-/*
- * @param s: a string which consists of lowercase or uppercase letters
- * @return: the length of the longest palindromes that can be built
- */
-    public int longestPalindrome(String s) {
-        // write your code here
-        int index = 0;
-        if(s.length()==0)
-            return 0;
-        String[] _s = s.split(&quot;&quot;);
-        HashMap&lt;String,Integer&gt;map = new HashMap&lt;String,Integer&gt;();
-        for(String str:_s){
-            Integer num = map.get(str);
-            map.put(str,num==null?1:num+1);
-        }
-        Iterator&lt;String&gt; iter = map.keySet().iterator();
-        while(iter.hasNext()){
-            String key = (String)iter.next();
-            if(map.get(key)&gt;=2&amp;&amp;map.get(key)%2==0)
-                index = index+map.get(key);
-            else if(map.get(key)&gt;=2&amp;&amp;map.get(key)%2!=0)
-                index = index+map.get(key)-1;
-        }
-        if((s.length()-index)&gt;0)
-            return index+1;
-        else
-            return index;
-    }
-}
-</code></pre><h2 id="Strings-Homomorphism"><a href="#Strings-Homomorphism" class="headerlink" title="Strings Homomorphism"></a>Strings Homomorphism</h2><p>Given two strings s and t, determine if they are isomorphic.</p>
-<p>Two strings are isomorphic if the characters in s can be replaced to get t.</p>
-<p>All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character but a character may map to itself.</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>Given s = “egg”, t = “add”, return true.</p>
-<p>Given s = “foo”, t = “bar”, return false.</p>
-<p>Given s = “paper”, t = “title”, return true.</p>
-<h3 id="算法题解"><a href="#算法题解" class="headerlink" title="算法题解"></a>算法题解</h3><p>这题的目的是为了判断两个字符串是否结构相同，显然要用到键值对关系去判断</p>
-<pre><code>public class Solution {  
-/** 
- * @param s a string 
- * @param t a string 
- * @return true if the characters in s can be replaced to get t or false 
- */  
-    public boolean isIsomorphic(String s, String t) {  
-        // Write your code here  
-        HashMap&lt;Character , Character&gt; record = new HashMap&lt;&gt;();  
-        HashSet&lt;Character&gt; repeat = new HashSet&lt;&gt;();  
-        for(int i = 0;i&lt;s.length();i++){  
-            if(!record.containsKey(s.charAt(i))){  
-                if(repeat.contains(t.charAt(i))){  
-                    return false;  
-                }  
-                record.put(s.charAt(i) , t.charAt(i));  
-                repeat.add(t.charAt(i));  
-
-            }else{  
-                if(record.get(s.charAt(i)) != t.charAt(i)){  
-                    return false;  
-                }  
-            }  
-        }  
-        return true;  
-    }  
-}  
-</code></pre><h2 id="First-Position-Unique-Character"><a href="#First-Position-Unique-Character" class="headerlink" title="First Position Unique Character"></a>First Position Unique Character</h2><p>Given a string, find the first non-repeating character in it and return it’s index. If it doesn’t exist, return -1.</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>Given s = “lintcode”, return 0.</p>
-<p>Given s = “lovelintcode”, return 2.</p>
-<h3 id="算法题解-1"><a href="#算法题解-1" class="headerlink" title="算法题解"></a>算法题解</h3><p>找没有重复字符的索引，太简单，代码如下：</p>
-<pre><code>public class Solution {
-/*
- * @param s: a string
- * @return: it&apos;s index
- */
-    public int firstUniqChar(String s) {
-        // write your code here
-        int index = -1;
-        Map&lt;Character,Integer&gt; map = new LinkedHashMap&lt;Character,Integer&gt;();
-        for(int i=0;i&lt;s.length();i++){
-            Integer num = map.get(s.charAt(i));
-            map.put(s.charAt(i),num==null?1:num+1);
-        }
-        Iterator&lt;Character&gt; iter = map.keySet().iterator();
-        while(iter.hasNext()){
-            Character cha = iter.next();
-            if(map.get(cha)==1){
-                index = s.indexOf(cha);
-                break;
-            }
-        }
-        return index;
-    }
-}
-</code></pre><h2 id="两数组交集（2）"><a href="#两数组交集（2）" class="headerlink" title="两数组交集（2）"></a>两数组交集（2）</h2><p>nums1 = [1, 2, 2, 1], nums2 = [2, 2], 返回 [2, 2].</p>
-<pre><code>public class Solution {
-/**
- * @param nums1 an integer array
- * @param nums2 an integer array
- * @return an integer array
- */
- public int[] intersection(int[] nums1, int[] nums2) {
-      List&lt;Integer&gt; list = new ArrayList&lt;Integer&gt;();
-        Arrays.sort(nums1);
-        Arrays.sort(nums2);
-        int i = 0, j = 0;
-        while (i &lt; nums1.length &amp;&amp; j &lt; nums2.length) {
-            if(nums1[i] &lt; nums2[j]){
-                i++;
-            }else if(nums1[i] == nums2[j]){
-                list.add(nums1[i]);
-                i++;
-                j++;
-            }else{
-                j++;
-            }
-        }
-        int[] inter = new int[list.size()];
-        for (i = 0; i &lt; inter.length; i++) {
-            inter[i] = list.get(i);
-        }
-        return inter;
-    }
-}
-</code></pre><h2 id="两数组交集（1）"><a href="#两数组交集（1）" class="headerlink" title="两数组交集（1）"></a>两数组交集（1）</h2><p>样例<br>nums1 = [1, 2, 2, 1], nums2 = [2, 2], 返回 [2].</p>
-<pre><code>public class Solution {
-/**
- * @param nums1 an integer array
- * @param nums2 an integer array
- * @return an integer array
- */
-   public static int[] intersection(int[] nums1, int[] nums2) {
-
-        // Write your code here
-        Set&lt;Integer&gt; set = new HashSet&lt;Integer&gt;();
-        for (int m = 0; m &lt; nums1.length; m++)
-            set.add(nums1[m]);
-        List&lt;Integer&gt; array = new LinkedList&lt;Integer&gt;();
-        for (int i = 0; i &lt; nums2.length; i++) {
-            if (set.contains(nums2[i])) {
-                array.add(nums2[i]);
-            }
-        }
-        int _index = 0;
-        Set&lt;Integer&gt; _set = new HashSet&lt;Integer&gt;(array);
-        int[] _array = new int[_set.size()];
-        Iterator&lt;Integer&gt; iter = _set.iterator();
-        while (iter.hasNext()){
-            _array[_index]=iter.next().intValue();
-            _index = _index+1;
-        }
-        return _array;
-    }
- }
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
     </div>
 
       

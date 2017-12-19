@@ -276,6 +276,253 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Java Spring使用restTemplate调用其他接口" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/12/19/Java Spring使用restTemplate调用其他接口/" class="article-date">
+      <time datetime="2017-12-19T10:33:00.000Z" itemprop="datePublished">2017-12-19</time>
+</a>
+
+ 
+    <a href="/2017/12/19/Java Spring使用restTemplate调用其他接口/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/12/19/Java Spring使用restTemplate调用其他接口/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/19/Java Spring使用restTemplate调用其他接口/">Java Spring使用restTemplate实现调用其他接口</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>公司里经常会碰到不同项目之间互相调用接口的情况，一般而言接口都是提供给前端调用，在查询资料后我发现Spring中有一种很便利的方法可以访问接口。</p>
+<h3 id="RestTemplate"><a href="#RestTemplate" class="headerlink" title="RestTemplate"></a>RestTemplate</h3><p>RestTemplate是Spring提供的用于访问Rest服务的客户端，RestTemplate提供了多种便捷<font style="color:red">访问远程Http服务的方法</font>，能够大大提高客户端的编写效率。</p>
+<p>调用RestTemplate的默认构造函数，RestTemplate对象在底层通过使用java.net包下的实现创建HTTP 请求，可以通过使用ClientHttpRequestFactory指定不同的HTTP请求方式。<br>ClientHttpRequestFactory接口主要提供了两种实现方式</p>
+<ul>
+<li>一种是SimpleClientHttpRequestFactory，使用J2SE提供的方式（既java.net包提供的方式）创建底层的Http请求连接。</li>
+<li><p>一种方式是使用HttpComponentsClientHttpRequestFactory方式，底层使用HttpClient访问远程的Http服务，使用HttpClient可以配置连接池和证书等信息。</p>
+<p>RestTemplate默认是使用SimpleClientHttpRequestFactory，内部是调用jdk的HttpConnection，默认超时为-1</p>
+<h3 id="配置方法"><a href="#配置方法" class="headerlink" title="配置方法"></a>配置方法</h3><h4 id="基于jdk的spring的RestTemplate"><a href="#基于jdk的spring的RestTemplate" class="headerlink" title="基于jdk的spring的RestTemplate"></a>基于jdk的spring的RestTemplate</h4><p>  &lt;?xml version=”1.0” encoding=”UTF-8”?&gt;</p>
+  <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd" default-autowire="byName" default-lazy-init="true"><br><br>      <!--方式一、使用jdk的实现--><br>      <bean id="ky.requestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory"><br>          <property name="readTimeout" value="10000"><br>          <property name="connectTimeout" value="5000"><br>      </property></property></bean><br><br>      <bean id="simpleRestTemplate" class="org.springframework.web.client.RestTemplate"><br>          <constructor-arg ref="ky.requestFactory"><br>          <property name="messageConverters"><br>              <list><br>                  <bean class="org.springframework.http.converter.FormHttpMessageConverter"><br>                  <bean class="org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter"><br>                  <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"><br>                  <bean class="org.springframework.http.converter.StringHttpMessageConverter"><br>                      <property name="supportedMediaTypes"><br>                          <list><br>                              <value>text/plain;charset=UTF-8</value><br>                          </list><br>                      </property><br>                  </bean><br>              </bean></bean></bean></list><br>          </property><br>      </constructor-arg></bean><br><br>  </beans>
+
+</li>
+</ul>
+<h4 id="HttpClient连接池方法"><a href="#HttpClient连接池方法" class="headerlink" title="HttpClient连接池方法"></a>HttpClient连接池方法</h4><pre><code>&lt;!--使用httpclient的实现，带连接池--&gt;
+&lt;!--在httpclient4.3版本后才有--&gt;
+&lt;bean id=&quot;httpClientBuilder&quot; class=&quot;org.apache.http.impl.client.HttpClientBuilder&quot; factory-method=&quot;create&quot;&gt;
+    &lt;property name=&quot;connectionManager&quot;&gt;
+        &lt;bean class=&quot;org.apache.http.impl.conn.PoolingHttpClientConnectionManager&quot;&gt;
+            &lt;!--整个连接池的并发--&gt;
+            &lt;property name=&quot;maxTotal&quot; value=&quot;50&quot;/&gt;
+            &lt;!--每个主机的并发--&gt;
+            &lt;property name=&quot;defaultMaxPerRoute&quot; value=&quot;50&quot;/&gt;
+        &lt;/bean&gt;
+    &lt;/property&gt;
+    &lt;!--开启重试--&gt;
+    &lt;property name=&quot;retryHandler&quot;&gt;
+        &lt;bean class=&quot;org.apache.http.impl.client.DefaultHttpRequestRetryHandler&quot;&gt;
+            &lt;constructor-arg value=&quot;2&quot;/&gt;
+            &lt;constructor-arg value=&quot;true&quot;/&gt;
+        &lt;/bean&gt;
+    &lt;/property&gt;
+    &lt;property name=&quot;defaultHeaders&quot;&gt;
+        &lt;list&gt;
+            &lt;bean class=&quot;org.apache.http.message.BasicHeader&quot;&gt;
+            &lt;constructor-arg value=&quot;Content-Type&quot;/&gt;
+            &lt;constructor-arg value=&quot;text/html;charset=UTF-8&quot;/&gt;
+        &lt;/bean&gt;
+        &lt;bean class=&quot;org.apache.http.message.BasicHeader&quot;&gt;
+            &lt;constructor-arg value=&quot;Accept-Encoding&quot;/&gt;
+            &lt;constructor-arg value=&quot;gzip,deflate&quot;/&gt;
+        &lt;/bean&gt;
+        &lt;bean class=&quot;org.apache.http.message.BasicHeader&quot;&gt;
+            &lt;constructor-arg value=&quot;Accept-Language&quot;/&gt;
+            &lt;constructor-arg value=&quot;zh-CN&quot;/&gt;
+        &lt;/bean&gt;
+    &lt;/list&gt;
+&lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;bean id=&quot;httpClient&quot; factory-bean=&quot;httpClientBuilder&quot; factory-method=&quot;build&quot;/&gt;
+
+&lt;bean id=&quot;restTemplate&quot; class=&quot;org.springframework.web.client.RestTemplate&quot;&gt;
+    &lt;property name=&quot;messageConverters&quot;&gt;
+        &lt;list value-type=&quot;org.springframework.http.converter.HttpMessageConverter&quot;&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.StringHttpMessageConverter&quot;&gt;
+                &lt;property name=&quot;supportedMediaTypes&quot;&gt;
+                    &lt;value&gt;text/html;charset=UTF-8&lt;/value&gt;
+                &lt;/property&gt;
+            &lt;/bean&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.json.MappingJackson2HttpMessageConverter&quot;&gt;
+                &lt;property name=&quot;supportedMediaTypes&quot;&gt;
+                    &lt;value&gt;application/json;charset=UTF-8&lt;/value&gt;
+                &lt;/property&gt;
+            &lt;/bean&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.ResourceHttpMessageConverter&quot;/&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter&quot;/&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.FormHttpMessageConverter&quot;/&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter&quot;/&gt;
+        &lt;/list&gt;
+    &lt;/property&gt;
+    &lt;property name=&quot;requestFactory&quot;&gt;
+        &lt;bean class=&quot;org.springframework.http.client.HttpComponentsClientHttpRequestFactory&quot;&gt;
+            &lt;constructor-arg ref=&quot;httpClient&quot;/&gt;
+            &lt;!--连接时间(毫秒)--&gt;
+            &lt;property name=&quot;connectTimeout&quot; value=&quot;20000&quot;/&gt;
+            &lt;!--读取时间(毫秒)--&gt;
+            &lt;property name=&quot;readTimeout&quot; value=&quot;20000&quot;/&gt;
+        &lt;/bean&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre><h3 id="对调POST接口"><a href="#对调POST接口" class="headerlink" title="对调POST接口"></a>对调POST接口</h3><pre><code>public &lt;T&gt; T postForObject(String url, Object request, Class&lt;T&gt; responseType, Object... uriVariables)
+        throws RestClientException
+
+public &lt;T&gt; T postForObject(String url, Object request, Class&lt;T&gt; responseType, Map&lt;String, ?&gt; uriVariables)
+            throws RestClientException
+
+public &lt;T&gt; T postForObject(URI url, Object request, Class&lt;T&gt; responseType) throws RestClientException
+</code></pre><p>上面三个是常用的调用POST接口的方法</p>
+<ul>
+<li>url：请求的url接口</li>
+<li>request：请求参数，通常为json格式</li>
+<li>responseType：响应的类型</li>
+</ul>
+<h4 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h4><pre><code>//设置请求头
+HttpHeaders headers = new HttpHeaders();
+headers.setContentType(MediaType.parseMediaType(&quot;application/json;charset=UTF-8&quot;));
+headers.add(&quot;Accept&quot;, MediaType.APPLICATION_JSON.toString());
+
+MultiValueMap&lt;String, String&gt; postParameters = new LinkedMultiValueMap&lt;String, String&gt;();
+postParameters.add(&quot;owner&quot;, &quot;11&quot;);
+postParameters.add(&quot;subdomain&quot;, &quot;aoa&quot;);
+postParameters.add(&quot;comment&quot;, &quot;&quot;);
+
+//对post请求参数进行封装
+String bodyData = new String(Base64Util.encodeData(JSON.toJSONString(postParameters)).getBytes(&quot;UTF-8&quot;), &quot;UTF-8&quot;);
+
+//表示一个HTTP请求或响应实体，由标题和正文组成。
+HttpEntity&lt;MultiValueMap&lt;String, String&gt;&gt; requestEntity  = new HttpEntity&lt;MultiValueMap&lt;String, String&gt;&gt;(bodyData, headers);
+
+ParseResultVo exchange = null;
+try {
+    exchange = restTemplate.postForObject(&quot;http://l-dnsutil1.ops.beta.cn6.qunar.com:10085/v1/cnames/tts.piao&quot;,  requestEntity, ParseResultVo.class);
+    logger.info(exchange.toString());
+} catch (RestClientException e) {
+    logger.info(&quot;。。。。&quot;);
+</code></pre><p>}</p>
+<p>一般在spring中，我们将url设置为属性文件，通过注解@Value(value=”@properties.url”)获取。</p>
+<h3 id="对调GET接口"><a href="#对调GET接口" class="headerlink" title="对调GET接口"></a>对调GET接口</h3><pre><code>public &lt;T&gt; T getForObject(String url, Class&lt;T&gt; responseType, Object... urlVariables) throws RestClientException 
+
+public &lt;T&gt; T getForObject(String url, Class&lt;T&gt; responseType, Map&lt;String, ?&gt; urlVariables) throws RestClientException
+
+public &lt;T&gt; T getForObject(URI url, Class&lt;T&gt; responseType) throws RestClientException
+</code></pre><h4 id="一般形式"><a href="#一般形式" class="headerlink" title="一般形式"></a>一般形式</h4><pre><code>String result = restTemplate.getForObject(&quot;http://example.com/hotels/{hotel}/bookings/{booking}&quot;, String.class,&quot;42&quot;, &quot;21&quot;);
+
+String message = restTemplate.getForObject(&quot;http://localhost:8080/yongbarservice/appstore/appgoods/restTemplate?name=zhaoshijie&amp;id=80&quot;, String.class );
+</code></pre><h4 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h4><p>返回数据格式如下：</p>
+<pre><code>{
+&quot;ret&quot;: 0,
+&quot;msg&quot;: &quot;success&quot;,
+&quot;bankQuota&quot;: [
+    {
+        &quot;frontBankCode&quot;: &quot;4033&quot;,
+        &quot;bankName&quot;: &quot;工行&quot;,
+        &quot;singleLimitAmount&quot;: &quot;xx万&quot;,
+        &quot;dailyLimitAmount&quot;: &quot;xx万&quot;,
+        &quot;monthlyLimitAmount&quot;: &quot;无限额&quot;,
+        &quot;pcQuota&quot;: &quot;单笔xx万&quot;,
+        &quot;orderNo&quot;: null
+    },
+    {
+        &quot;frontBankCode&quot;: &quot;4011&quot;,
+        &quot;bankName&quot;: &quot;建行&quot;,
+        &quot;singleLimitAmount&quot;: &quot;yy万&quot;,
+        &quot;dailyLimitAmount&quot;: &quot;yy万&quot;,
+        &quot;monthlyLimitAmount&quot;: &quot;无限额&quot;,
+        &quot;pcQuota&quot;: &quot;单笔yy万&quot;,
+        &quot;orderNo&quot;: null
+    }
+}
+</code></pre><p>请求代码：</p>
+<pre><code>@RequestMapping(&quot;queryBankLimit&quot;)
+@ResponseBody
+public  List&lt;BankLimitVo&gt; queryBankLimit(){
+    RestTemplate restTemplate = new RestTemplate();
+    BankLimitResponse limitResponse = restTemplate.getForObject
+            (&quot;https://dubai.com/xx/query?sp=12&amp;from=0.0.0&quot;,
+                  BankLimitResponse.class);
+    List&lt;BankLimitVo&gt; result = limitResponse.getBankQuota();
+    return result;
+}
+</code></pre><p>响应类：</p>
+<pre><code>public class BankLimitResponse {
+private int ret;
+private String msg;
+private List&lt;BankLimitVo&gt; bankQuota;
+.....getter和setter方法
+}
+</code></pre><p>vo类</p>
+<pre><code>public class BankLimitVo {
+String frontBankCode;
+String bankName;
+String singleLimitAmount;
+String dailyLimitAmount;
+String monthlyLimitAmount;
+ .... getter和setter方法
+}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Java读写Properties属性" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -2290,86 +2537,6 @@ public class Solution {
       
         <p class="article-more-link">
           <a href="/2017/10/26/Java并发之ThreadLocal/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Java并发之Lock" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/24/Java并发之Lock/" class="article-date">
-      <time datetime="2017-10-24T12:00:00.000Z" itemprop="datePublished">2017-10-24</time>
-</a>
-
- 
-    <a href="/2017/10/24/Java并发之Lock/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/24/Java并发之Lock/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/24/Java并发之Lock/">Java并发之Lock</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h2 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h2><h3 id="Lock与Synchronized区别"><a href="#Lock与Synchronized区别" class="headerlink" title="Lock与Synchronized区别"></a>Lock与Synchronized区别</h3><ul>
-<li>Lock非Java内置特性，而Synchronized是Java语言的关键字，因此是内置特性。Lock是一个接口，通过这个接口可以实现同步访问。</li>
-<li>Synchronized不需要手动释放锁，当Synchronized方法或代码块执行完成后，系统会自动让线程释放对锁的占用；Lock需要用户手动释放锁，如果没有释放锁，会导致死锁现象。</li>
-</ul>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/10/24/Java并发之Lock/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>
