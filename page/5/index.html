@@ -197,7 +197,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
                     </div>
                 </section>
                 
@@ -275,6 +275,82 @@
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-python中pip install中utf-8错误的解决方法" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/06/21/python中pip install中utf-8错误的解决方法/" class="article-date">
+      <time datetime="2017-06-21T13:00:00.000Z" itemprop="datePublished">2017-06-21</time>
+</a>
+
+ 
+    <a href="/2017/06/21/python中pip install中utf-8错误的解决方法/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/06/21/python中pip install中utf-8错误的解决方法/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/21/python中pip install中utf-8错误的解决方法/">Pip Install中utf-8编码问题</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="pip-install中UnicodeDecodeError-‘utf-8’-codec-can’t-decode-byte-0xd5-in-position-55-invalid-continuation-byte完美解决"><a href="#pip-install中UnicodeDecodeError-‘utf-8’-codec-can’t-decode-byte-0xd5-in-position-55-invalid-continuation-byte完美解决" class="headerlink" title="pip install中UnicodeDecodeError: ‘utf-8’ codec can’t decode byte 0xd5 in position 55: invalid continuation byte完美解决"></a>pip install中UnicodeDecodeError: ‘utf-8’ codec can’t decode byte 0xd5 in position 55: invalid continuation byte完美解决</h2><p>UnicodeDecodeError: ‘utf-8’ codec can’t decode byte 0xd5 in position 55: invalid continuation byte如何解决,试了很多办法都已失败而告终。<br>说到底还是编码的问题，因为windows下dos的默认编码是gbk936，我们可以将dos的代码页进行更改，更改命令如下：</p>
+<pre><code>chcp 65001  //换成65001代码页
+chcp 437    //换成美国英语
+</code></pre><p>这里我们执行chcp 437即可，然后再pip install pillow就不会再报这个错误。其他类型的错误解决方法其他博客都有提及，不再累述。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-我们仍未知道那天所看见的list" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -1519,152 +1595,6 @@ stretch（默认值）：轴线占满整个交叉轴。
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-JS回调函数" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/03/16/JS回调函数/" class="article-date">
-      <time datetime="2017-03-15T16:00:00.000Z" itemprop="datePublished">2017-03-16</time>
-</a>
-
- 
-    <a href="/2017/03/16/JS回调函数/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/03/16/JS回调函数/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/16/JS回调函数/">JS回调函数详解</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="JS回调函数"><a href="#JS回调函数" class="headerlink" title="JS回调函数"></a>JS回调函数</h2><p>何为回调函数，官方解释：当程序跑起来时，一般情况下，应用程序（application program）会时常通过API调用库里所预先备好的函数。但是有些库函数（library function）却要求应用先传给它一个函数，好在合适的时候调用，以完成目标任务。这个被传入的、后又被调用的函数就称为回调函数（callback function）。</p>
-<p>通常将一个函数B传入另一个函数A，并且在<font color="red">需要</font>的时候再调用函数A。</p>
-<p>说白了，回调就是回溯，先定义好将要使用的函数体，然后在需要使用时再调用这个函数，我们通常把callback作为一个参数传入先定义的那个函数。下面我们先来看一段jquery代码：</p>
-<pre><code>$(&quot;p&quot;).hide(1000,function(){
-alert(&quot;The paragraph is now hidden&quot;);
-});
-</code></pre><p>上面jquery就是一个回调函数，首先它在执行完hide效果后，接着调用function回调函数。</p>
-<p>我们再来看一段JS代码，看看回调函数是如何实现的：</p>
-<pre><code>function Buy(name,goods1,callback) {
-    alert(name+&apos; buy &apos;+goods1);
-    if(callback&amp;&amp;typeof(callback)===&quot;function&quot;)
-        callback();
-}
-Buy(&apos;xiaoming&apos;,&apos;apple&apos;,function(){
-    alert(&quot;shopping finish&quot;);
-});
-</code></pre><p>一个很简单的代码，一开始不知道要买啥，等到买到东西，立即把之前定义好的函数调用出来，最好加上判断规则，因为一切前提是callback必须是一个函数，输出结果为:</p>
-<pre><code>xiaoming buy apple
-shopping finish
-</code></pre><h3 id="闭包与回调"><a href="#闭包与回调" class="headerlink" title="闭包与回调"></a>闭包与回调</h3><p>下面看一道闭包的题目，分别点击第一个和第四个节点，执行结果：</p>
-<pre><code>var nodes = document.getElementsByTagName(&apos;button&apos;);
-for (var i = 0; i &lt; nodes.length; i++) {
-    nodes[i].addEventListener(&apos;click&apos;, function() {
-        console.log(&apos;You clicked element #&apos; + i);
-   });
-}
-</code></pre><p>这里虽然主要考的是闭包，addEventListener是一个闭包，而匿名函数是一个回调函数，i是在闭包中的变量。在addEventListener的回调执行时，循环已经结束，此时的变量i被赋值为node.length，node.length为总节点数。所以结果就是</p>
-<pre><code>You clicked element # node.length
-</code></pre><p>那要怎么改，将其返回值改成函数，既然i变量的值会被释放，那我们就引入i，让每次循环的值都保存在内存中，就可以了：</p>
-<pre><code>var nodes = document.getElementsByTagName(&apos;button&apos;);
-for (var i = 0; i &lt; nodes.length; i++) {
-(function(i) {
-    nodes[i].addEventListener(&apos;click&apos;, function () {
-        console.log(&apos;You clicked element #&apos; + i);
-        })
-       })(i);
-}
-</code></pre><h2 id="PHP回调函数"><a href="#PHP回调函数" class="headerlink" title="PHP回调函数"></a>PHP回调函数</h2><p>下面略说一下php中回调函数如何实现(结果为1，2，3，4)：</p>
-<pre><code>&lt;?php
-    $array=array(1,2,3,4);
-    array_walk($array,function($value){
-        echo $value;});
-?&gt;
-</code></pre><p>php对每个传入的数组元素作回调处理，下面再看看php的闭包,使用use关键字继承作用域外的变量：</p>
-<pre><code>&lt;?php
-    function getcouter(){
-        $i=0
-        return function() use($i)(
-            echo $i++;
-        )};
-    }
-    $counter=getcounter();
-    echo $counter();
-    echo $counter();
-?&gt;
-</code></pre><p>返回结果为：</p>
-<pre><code>1，1
-</code></pre><h3 id="官方php使用方法"><a href="#官方php使用方法" class="headerlink" title="官方php使用方法"></a>官方php使用方法</h3><pre><code>class hello {
-function callback($a,$b) {
-echo &quot;$a,$b&quot;;
-}
-static function callback($c,$d){
-echo &quot;$c,$d&quot;;        
-}
-}
-//将类名作为参数
-call_user_func(array(&apos;hello&apos;,&apos;callback&apos;),&quot;hello&quot;,&quot;world&quot;);
-//输出 hello,world
-//将对象作为参数
-call_user_func(array(new hello(),&apos;callback&apos;),&quot;hello&quot;,&quot;world&quot;);
-//将静态方法作为参数
-call_user_func(hello::callback,&quot;hello&quot;,&quot;world&quot;);
-//输出 hello,world
-</code></pre><p>其实就原理来说，JS和php都是差不多的，都是先定义好函数，然后需要的时候就调用过来。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
     </div>
 
       

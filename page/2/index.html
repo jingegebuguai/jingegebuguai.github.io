@@ -197,7 +197,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
                     </div>
                 </section>
                 
@@ -275,6 +275,83 @@
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-Java并发之ThreadLocal" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/26/Java并发之ThreadLocal/" class="article-date">
+      <time datetime="2017-10-26T12:00:00.000Z" itemprop="datePublished">2017-10-26</time>
+</a>
+
+ 
+    <a href="/2017/10/26/Java并发之ThreadLocal/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/26/Java并发之ThreadLocal/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/26/Java并发之ThreadLocal/">Java并发之ThreadLocal</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p>Java中的ThreadLocal类允许我们创建只能被同一个线程读写的变量。因此，如果一段代码含有一个ThreadLocal变量的引用，即使两个线程同时执行这段代码，它们也无法访问到对方的ThreadLocal变量。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/10/26/Java并发之ThreadLocal/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-Java并发之Lock" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -407,107 +484,6 @@ MEDIA_ROOT=(
 <pre><code>from django.views.static improt serve
 from project.setting import MEDIA_ROOT
 url(r&apos;^media/(?P&lt;path&gt;.*)&apos;, serve,{&apos;document_root&apos;:settings.MEDIA_ROOT}
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Django前端页面相关处理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/19/Django前端页面相关处理/" class="article-date">
-      <time datetime="2017-10-19T02:14:00.000Z" itemprop="datePublished">2017-10-19</time>
-</a>
-
- 
-    <a href="/2017/10/19/Django前端页面相关处理/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/19/Django前端页面相关处理/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/19/Django前端页面相关处理/">Django Html相关配置</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="静态文件加载"><a href="#静态文件加载" class="headerlink" title="静态文件加载"></a>静态文件加载</h2><p>html文件头要加上下面代码，意思要预加载配置文件中的staticfiles文件</p>
-<pre><code>{% load staticfiles %}
-</code></pre><h3 id="css，js，img文件配置"><a href="#css，js，img文件配置" class="headerlink" title="css，js，img文件配置"></a>css，js，img文件配置</h3><p>其中，static为配置文件目录</p>
-<pre><code>&lt;script scr={% static 'js/example.js' %}&gt;&lt;/script&gt;
-&lt;link rel=&quot;staticsheet&quot; type=&quot;text/css&quot; href={%static 'css/example.css'%}&gt;
-&lt;img src={% static 'images/example.jpg' %} /&gt;
-</code></pre><h3 id="url配置"><a href="#url配置" class="headerlink" title="url配置"></a>url配置</h3><pre><code>&lt;a href={% url 'login' %}&gt; 
-&lt;a href={% url 'register' %}&gt;
-action = /login/
-action = /register/
-</code></pre><h2 id="网站模板配置"><a href="#网站模板配置" class="headerlink" title="网站模板配置"></a>网站模板配置</h2><p>为了节省代码，导航，底部，访问统计等地方需要使用共同的html。<br>使用base.html来包含通用的文件</p>
-<pre><code>&lt;!DOCTYPE html5&gt;
-&lt;html&gt;
-    &lt;head&gt;&lt;title&gt;&lt;% block title %&gt;标题&lt;% endtitle %&gt;&lt;/title&gt;&lt;/head&gt;
-    &lt;body&gt;
-        &lt;% include &apos;nav.html&apos; %&gt;
-        &lt;% block main %&gt;
-        &lt;main-section /&gt;
-        &lt;% endblock %&gt;
-        &lt;% include &apos;foot.html&apos; %&gt;    
-    &lt;/body&gt;
-&lt;/html&gt;
-</code></pre><p>其中block为使继承的模板可以随意重写该部分，include作用是加载其他html文件。<br>我们可以通过继承或者说是扩展<br>extends原来的base.html文件，这样可以重写减少工作量</p>
-<pre><code>&lt;% extends &apos;base.html&apos; %&gt;
-&lt;% block title %&gt;new title&lt;% endblock %&gt;
-
-&lt;% block main %&gt;new main content&lt;% endblock %&gt;    
-</code></pre><p>一般模板放在app下的templates中，django会自动查找，我们一般使用类里加载html文件的形式.</p>
-<pre><code>return render(request, &apos;index.html&apos;)
 </code></pre>
       
     </div>
@@ -688,6 +664,107 @@ public class Person{...}
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Django前端页面相关处理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/19/Django前端页面相关处理/" class="article-date">
+      <time datetime="2017-10-19T02:14:00.000Z" itemprop="datePublished">2017-10-19</time>
+</a>
+
+ 
+    <a href="/2017/10/19/Django前端页面相关处理/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/19/Django前端页面相关处理/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/19/Django前端页面相关处理/">Django Html相关配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="静态文件加载"><a href="#静态文件加载" class="headerlink" title="静态文件加载"></a>静态文件加载</h2><p>html文件头要加上下面代码，意思要预加载配置文件中的staticfiles文件</p>
+<pre><code>{% load staticfiles %}
+</code></pre><h3 id="css，js，img文件配置"><a href="#css，js，img文件配置" class="headerlink" title="css，js，img文件配置"></a>css，js，img文件配置</h3><p>其中，static为配置文件目录</p>
+<pre><code>&lt;script scr={% static 'js/example.js' %}&gt;&lt;/script&gt;
+&lt;link rel=&quot;staticsheet&quot; type=&quot;text/css&quot; href={%static 'css/example.css'%}&gt;
+&lt;img src={% static 'images/example.jpg' %} /&gt;
+</code></pre><h3 id="url配置"><a href="#url配置" class="headerlink" title="url配置"></a>url配置</h3><pre><code>&lt;a href={% url 'login' %}&gt; 
+&lt;a href={% url 'register' %}&gt;
+action = /login/
+action = /register/
+</code></pre><h2 id="网站模板配置"><a href="#网站模板配置" class="headerlink" title="网站模板配置"></a>网站模板配置</h2><p>为了节省代码，导航，底部，访问统计等地方需要使用共同的html。<br>使用base.html来包含通用的文件</p>
+<pre><code>&lt;!DOCTYPE html5&gt;
+&lt;html&gt;
+    &lt;head&gt;&lt;title&gt;&lt;% block title %&gt;标题&lt;% endtitle %&gt;&lt;/title&gt;&lt;/head&gt;
+    &lt;body&gt;
+        &lt;% include &apos;nav.html&apos; %&gt;
+        &lt;% block main %&gt;
+        &lt;main-section /&gt;
+        &lt;% endblock %&gt;
+        &lt;% include &apos;foot.html&apos; %&gt;    
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>其中block为使继承的模板可以随意重写该部分，include作用是加载其他html文件。<br>我们可以通过继承或者说是扩展<br>extends原来的base.html文件，这样可以重写减少工作量</p>
+<pre><code>&lt;% extends &apos;base.html&apos; %&gt;
+&lt;% block title %&gt;new title&lt;% endblock %&gt;
+
+&lt;% block main %&gt;new main content&lt;% endblock %&gt;    
+</code></pre><p>一般模板放在app下的templates中，django会自动查找，我们一般使用类里加载html文件的形式.</p>
+<pre><code>return render(request, &apos;index.html&apos;)
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
     </div>
 
       
@@ -1187,6 +1264,78 @@ public class usePoint{
 
 
   
+    <article id="post-CentOS下安装配置mysql" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/06/CentOS下安装配置mysql/" class="article-date">
+      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+
+ 
+    <a href="/2017/10/06/CentOS下安装配置mysql/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下安装配置mysql/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-CentOS下jdk、tomcat配置" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1316,211 +1465,6 @@ SELINUX=disable
 # 保存退出
 setenforce 0
 </code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-CentOS下安装配置mysql" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/06/CentOS下安装配置mysql/" class="article-date">
-      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
-</a>
-
- 
-    <a href="/2017/10/06/CentOS下安装配置mysql/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下安装配置mysql/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-CentOS下nginx的安装配置" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/06/CentOS下nginx的安装配置/" class="article-date">
-      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
-</a>
-
- 
-    <a href="/2017/10/06/CentOS下nginx的安装配置/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下nginx的安装配置/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Nginx是一款轻量级Web服务器，也是反向代理服务器</p>
-<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ul>
-<li>直接支持Rails和PHP的程序</li>
-<li>作为Http反向代理服务器</li>
-<li>作为负载均衡服务器</li>
-<li>作为邮件代理服务器</li>
-<li>帮助实现前端动静分离</li>
-</ul>
-<h2 id="安装Nginx依赖"><a href="#安装Nginx依赖" class="headerlink" title="安装Nginx依赖"></a>安装Nginx依赖</h2><p>1、安装cc</p>
-<pre><code># 输入gcc -v查询版本信息，看系统是否自带安装
-yum install gcc
-</code></pre><p>2、安装pcre</p>
-<pre><code>yum install pcre-devel
-</code></pre><p>3、安装zlib</p>
-<pre><code>yum install zlib zlib-devel    
-</code></pre><p>4、选择安装openssl</p>
-<pre><code>yum install openssl openssl-devel
-</code></pre><p>5、一键综合安装</p>
-<pre><code>yum -y install gcc zlib zlib-devel pcre-devel openssl openssl-devel
-</code></pre><h2 id="下载源码包解压缩"><a href="#下载源码包解压缩" class="headerlink" title="下载源码包解压缩"></a>下载源码包解压缩</h2><p><a href="http://www/nginx.org/" target="_blank" rel="external">http://www/nginx.org/</a></p>
-<pre><code>tar -zxvf nginx-*.tar.gz
-</code></pre><h2 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a>nginx安装</h2><p>进入nginx目录执行./configure</p>
-<ul>
-<li>也可以制定安装目录，增加参数–prefix=/usr/nginx</li>
-<li>如果不指定路径，也可以通过whereis nginx进行查询</li>
-<li>默认安装在/usr/local/nginx</li>
-</ul>
-<p>继续执行make，续集执行make install</p>
-<h2 id="nginx常用命令"><a href="#nginx常用命令" class="headerlink" title="nginx常用命令"></a>nginx常用命令</h2><p>测试配置文件</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -t
-</code></pre><p>启动命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx
-</code></pre><p>停止命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -s stop
-或者是 nginx -s quit
-</code></pre><p>重启命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -s reload
-</code></pre><p>查看进程命令</p>
-<pre><code>ps -ef | grep nginx
-</code></pre><p>平滑重启</p>
-<pre><code>kill -HUP 【nginx主进程号(即查看进程命令查到的PID)】
-</code></pre><h2 id="增加防火墙访问权限"><a href="#增加防火墙访问权限" class="headerlink" title="增加防火墙访问权限"></a>增加防火墙访问权限</h2><p>1、sudo vim /etc.sysconfig/iptables-config<br>2、- A INPUT -p tcp -m state –state NEW<br>   -m tcp –dport 80 -j ACCEPT<br>3、重启防火墙</p>
-<h2 id="虚拟域名配置测试验证"><a href="#虚拟域名配置测试验证" class="headerlink" title="虚拟域名配置测试验证"></a>虚拟域名配置测试验证</h2><p>1、编辑sudo vim /usr/local/nginx/conf/nginx.conf<br>增加include vhost/*.conf<br>2、在/usr/local/nginx/conf目录创建vhost文件夹<br>3、配置<br>sudo vim /etc/hosts所对应的域名.conf<br>如：sudo vim /usr/local/nginx/conf/vhost www.huihui.com.conf<br>将如下配置写入到该文件下</p>
-<pre><code>server {
-     listen 80;
-     autoindex on;
-     server_name www.huihui.com;
-     access_log /usr/local/nginx/logs/access.log combined; 
-     index index.html index.htm index.jsp index.php; 
-     #error_page 404 /404.html;
-     if ( $query_string ~* &quot;.*[\;&apos;\&lt;\&gt;].*&quot; )
-            { 
-                    return 404;
-            }
-     location / {
-            proxy_pass http://172.0.0.1:8080;
-            add_header Access-Control-Allow-Origin *;
-            }
- }
-</code></pre><p>4、重启验证<br>启动${nginx}/sbin/nginx<br>重启${nginx}/sbin/nginx -s reload,如sudo ./nginx -s reload<br>${nginx}为安装在系统中的路径，如/usr/local/nginx<br>5、访问验证<br>使用默认80端口访问验证<a href="http://localhost:80" target="_blank" rel="external">http://localhost:80</a></p>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>可以配置域名转发，但是请一定要配置host，并且host生效之后才可以，设置完成后腰重启浏览器<br>1、linux<br>sudo vim /etc/hosts<br>添加好对应的域名及ip<br>保存退出</p>
-
       
     </div>
     

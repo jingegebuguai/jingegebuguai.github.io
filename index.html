@@ -197,7 +197,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jquery/">Jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LintCode/">LintCode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lintcode/">Lintcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js-angular/">js,angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li></ul>
                     </div>
                 </section>
                 
@@ -275,6 +275,82 @@
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-git常用命令" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/12/19/git常用命令/" class="article-date">
+      <time datetime="2017-12-19T10:39:00.000Z" itemprop="datePublished">2017-12-19</time>
+</a>
+
+ 
+    <a href="/2017/12/19/git常用命令/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/12/19/git常用命令/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/19/git常用命令/">工作中常用的Git命令</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Git常用命令"><a href="#Git常用命令" class="headerlink" title="Git常用命令"></a>Git常用命令</h2><p>学生时期很早就开始玩git了，但是一直都是那几个命令玩来玩去，一直都没有真正的理解学会使用他们。</p>
+<p>直到实习后，我们所写的代码都是需要提交到公司仓库，这正好弥补我之前的不足，我将在公司中常用的git命令总结如下。</p>
+<h5 id="git-init——初始化本地git仓库，建立新仓库"><a href="#git-init——初始化本地git仓库，建立新仓库" class="headerlink" title="git init——初始化本地git仓库，建立新仓库"></a>git init——初始化本地git仓库，建立新仓库</h5><h5 id="git-clone——克隆远程仓库"><a href="#git-clone——克隆远程仓库" class="headerlink" title="git clone——克隆远程仓库"></a>git clone——克隆远程仓库</h5><h5 id="git-status——查看当前状态，看是否修改，哪些文件发生了变动"><a href="#git-status——查看当前状态，看是否修改，哪些文件发生了变动" class="headerlink" title="git status——查看当前状态，看是否修改，哪些文件发生了变动"></a>git status——查看当前状态，看是否修改，哪些文件发生了变动</h5><h5 id="git-add-–all——添加所有变动的文件至index"><a href="#git-add-–all——添加所有变动的文件至index" class="headerlink" title="git add –all——添加所有变动的文件至index"></a>git add –all——添加所有变动的文件至index</h5><h5 id="git-commit-m-“-“——提交"><a href="#git-commit-m-“-“——提交" class="headerlink" title="git commit -m “*“——提交"></a>git commit -m “<em>*</em>“——提交</h5><h5 id="git-push-origin-master-或分支名-——将当前分支push到远程分支"><a href="#git-push-origin-master-或分支名-——将当前分支push到远程分支" class="headerlink" title="git push origin master(或分支名)——将当前分支push到远程分支"></a>git push origin master(或分支名)——将当前分支push到远程分支</h5><h5 id="git-pull"><a href="#git-pull" class="headerlink" title="git pull"></a>git pull</h5><p>获取远程分支，并merge到本地分支，有时候一个仓库并不是你一个提交，经常会多人提交，所以在每次提交之前需要pull一下，更新自己的本地分支数据。</p>
+<h5 id="git-fetch"><a href="#git-fetch" class="headerlink" title="git fetch"></a>git fetch</h5><p>获取所有远程分支（不更新本地分支，另需merge）,需要严格与git pull区分开来。</p>
+<h5 id="git-branch——显示所有本地分支"><a href="#git-branch——显示所有本地分支" class="headerlink" title="git branch——显示所有本地分支"></a>git branch——显示所有本地分支</h5><h5 id="git-branch-a-——显示所有分支"><a href="#git-branch-a-——显示所有分支" class="headerlink" title="git branch -a ——显示所有分支"></a>git branch -a ——显示所有分支</h5><h5 id="git-branch-r-——显示所有原创分支"><a href="#git-branch-r-——显示所有原创分支" class="headerlink" title="git branch -r ——显示所有原创分支"></a>git branch -r ——显示所有原创分支</h5><h5 id="git-checkout-branch分支名-——创建分支"><a href="#git-checkout-branch分支名-——创建分支" class="headerlink" title="git checkout (branch分支名)——创建分支"></a>git checkout (branch分支名)——创建分支</h5><h5 id="git-diff——显示所有未添加至index的变更"><a href="#git-diff——显示所有未添加至index的变更" class="headerlink" title="git diff——显示所有未添加至index的变更"></a>git diff——显示所有未添加至index的变更</h5><h5 id="git-log——显示提交日志"><a href="#git-log——显示提交日志" class="headerlink" title="git log——显示提交日志"></a>git log——显示提交日志</h5>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-Java Spring使用restTemplate调用其他接口" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -2489,83 +2565,6 @@ public class Solution {
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
     </div>
 
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Java并发之ThreadLocal" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/26/Java并发之ThreadLocal/" class="article-date">
-      <time datetime="2017-10-26T12:00:00.000Z" itemprop="datePublished">2017-10-26</time>
-</a>
-
- 
-    <a href="/2017/10/26/Java并发之ThreadLocal/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/26/Java并发之ThreadLocal/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/26/Java并发之ThreadLocal/">Java并发之ThreadLocal</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p>Java中的ThreadLocal类允许我们创建只能被同一个线程读写的变量。因此，如果一段代码含有一个ThreadLocal变量的引用，即使两个线程同时执行这段代码，它们也无法访问到对方的ThreadLocal变量。</p>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/10/26/Java并发之ThreadLocal/#more">阅读全文 >></a>
-        </p>
       
       <div class="clearfix"></div>
     </div>
