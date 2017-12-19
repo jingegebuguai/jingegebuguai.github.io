@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="huiHui&#39;s blogs">
 <meta property="og:description" content="公司里经常会碰到不同项目之间互相调用接口的情况，一般而言接口都是提供给前端调用，在查询资料后我发现Spring中有一种很便利的方法可以访问接口。 RestTemplateRestTemplate是Spring提供的用于访问Rest服务的客户端，RestTemplate提供了多种便捷访问远程Http服务的方法，能够大大提高客户端的编写效率。 调用RestTemplate的默认构造函数，RestTem">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-19T09:16:28.079Z">
+<meta property="og:updated_time" content="2017-12-19T09:20:54.015Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Spring使用restTemplate实现调用其他接口">
 <meta name="twitter:description" content="公司里经常会碰到不同项目之间互相调用接口的情况，一般而言接口都是提供给前端调用，在查询资料后我发现Spring中有一种很便利的方法可以访问接口。 RestTemplateRestTemplate是Spring提供的用于访问Rest服务的客户端，RestTemplate提供了多种便捷访问远程Http服务的方法，能够大大提高客户端的编写效率。 调用RestTemplate的默认构造函数，RestTem">
@@ -322,13 +322,40 @@
 <li>一种是SimpleClientHttpRequestFactory，使用J2SE提供的方式（既java.net包提供的方式）创建底层的Http请求连接。</li>
 <li><p>一种方式是使用HttpComponentsClientHttpRequestFactory方式，底层使用HttpClient访问远程的Http服务，使用HttpClient可以配置连接池和证书等信息。</p>
 <p>RestTemplate默认是使用SimpleClientHttpRequestFactory，内部是调用jdk的HttpConnection，默认超时为-1</p>
-<h3 id="配置方法"><a href="#配置方法" class="headerlink" title="配置方法"></a>配置方法</h3><h4 id="基于jdk的spring的RestTemplate"><a href="#基于jdk的spring的RestTemplate" class="headerlink" title="基于jdk的spring的RestTemplate"></a>基于jdk的spring的RestTemplate</h4><p>  //我不得不打注释，否则下面代码或被屏蔽，无奈！</p>
-  <!-- <?xml version="1.0" encoding="UTF-8"?> -->
-  <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd" default-autowire="byName" default-lazy-init="true"><br><br>      <!--方式一、使用jdk的实现--><br>      <bean id="ky.requestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory"><br>          <property name="readTimeout" value="10000"><br>          <property name="connectTimeout" value="5000"><br>      </property></property></bean><br><br>      <bean id="simpleRestTemplate" class="org.springframework.web.client.RestTemplate"><br>          <constructor-arg ref="ky.requestFactory"><br>          <property name="messageConverters"><br>              <list><br>                  <bean class="org.springframework.http.converter.FormHttpMessageConverter"><br>                  <bean class="org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter"><br>                  <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"><br>                  <bean class="org.springframework.http.converter.StringHttpMessageConverter"><br>                      <property name="supportedMediaTypes"><br>                          <list><br>                              <value>text/plain;charset=UTF-8</value><br>                          </list><br>                      </property><br>                  </bean><br>              </bean></bean></bean></list><br>          </property><br>      </constructor-arg></bean><br>  </beans>
-
 </li>
 </ul>
-<h4 id="HttpClient连接池方法"><a href="#HttpClient连接池方法" class="headerlink" title="HttpClient连接池方法"></a>HttpClient连接池方法</h4><pre><code>&lt;!--使用httpclient的实现，带连接池--&gt;
+<h3 id="配置方法"><a href="#配置方法" class="headerlink" title="配置方法"></a>配置方法</h3><h4 id="基于jdk的spring的RestTemplate"><a href="#基于jdk的spring的RestTemplate" class="headerlink" title="基于jdk的spring的RestTemplate"></a>基于jdk的spring的RestTemplate</h4><pre><code>//我不得不打注释，否则下面代码或被屏蔽，无奈！
+&lt;!-- &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; --&gt;
+&lt;beans  xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd&quot;
+    default-autowire=&quot;byName&quot; default-lazy-init=&quot;true&quot;&gt;
+
+    &lt;!--方式一、使用jdk的实现--&gt;
+    &lt;bean id=&quot;ky.requestFactory&quot; class=&quot;org.springframework.http.client.SimpleClientHttpRequestFactory&quot;&gt;
+        &lt;property name=&quot;readTimeout&quot; value=&quot;10000&quot;/&gt;
+        &lt;property name=&quot;connectTimeout&quot; value=&quot;5000&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id=&quot;simpleRestTemplate&quot; class=&quot;org.springframework.web.client.RestTemplate&quot;&gt;
+        &lt;constructor-arg ref=&quot;ky.requestFactory&quot;/&gt;
+        &lt;property name=&quot;messageConverters&quot;&gt;
+            &lt;list&gt;
+                &lt;bean class=&quot;org.springframework.http.converter.FormHttpMessageConverter&quot;/&gt;
+                &lt;bean class=&quot;org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter&quot;/&gt;
+                &lt;bean class=&quot;org.springframework.http.converter.json.MappingJackson2HttpMessageConverter&quot;/&gt;
+                &lt;bean class=&quot;org.springframework.http.converter.StringHttpMessageConverter&quot;&gt;
+                    &lt;property name=&quot;supportedMediaTypes&quot;&gt;
+                        &lt;list&gt;
+                            &lt;value&gt;text/plain;charset=UTF-8&lt;/value&gt;
+                        &lt;/list&gt;
+                    &lt;/property&gt;
+                &lt;/bean&gt;
+            &lt;/list&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre><h4 id="HttpClient连接池方法"><a href="#HttpClient连接池方法" class="headerlink" title="HttpClient连接池方法"></a>HttpClient连接池方法</h4><pre><code>&lt;!--使用httpclient的实现，带连接池--&gt;
 &lt;!--在httpclient4.3版本后才有--&gt;
 &lt;bean id=&quot;httpClientBuilder&quot; class=&quot;org.apache.http.impl.client.HttpClientBuilder&quot; factory-method=&quot;create&quot;&gt;
     &lt;property name=&quot;connectionManager&quot;&gt;
@@ -502,7 +529,7 @@ String monthlyLimitAmount;
         <p><span>本文标题:</span><a href="/2017/12/19/Java Spring使用restTemplate调用其他接口/">Java Spring使用restTemplate实现调用其他接口</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Sams_ara Jin</a></p>
         <p><span>发布时间:</span>2017-12-19, 18:33:00</p>
-        <p><span>最后更新:</span>2017-12-19, 17:16:28</p>
+        <p><span>最后更新:</span>2017-12-19, 17:20:54</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2017/12/19/Java Spring使用restTemplate调用其他接口/" title="Java Spring使用restTemplate实现调用其他接口">http://huilove.top/2017/12/19/Java Spring使用restTemplate调用其他接口/</a>
             <span class="copy-path" data-clipboard-text="原文: http://huilove.top/2017/12/19/Java Spring使用restTemplate调用其他接口/　　作者: Sams_ara Jin" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
