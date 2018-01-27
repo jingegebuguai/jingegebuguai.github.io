@@ -276,6 +276,219 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-NEC自适应布局" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/01/27/NEC自适应布局/" class="article-date">
+      <time datetime="2018-01-27T12:00:00.000Z" itemprop="datePublished">2018-01-27</time>
+</a>
+
+ 
+    <a href="/2018/01/27/NEC自适应布局/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2018/01/27/NEC自适应布局/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/27/NEC自适应布局/">NEC定宽自适应布局</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>NEC是什么？<br>NEC是Nice Easy Css的简称，是网易（杭州）前端CSS开源项目代号，她为您提供漂亮简单的样式解决方案。</p>
+<p>她包括了规范、框架、代码库、插件等内容，致力于为前端开发人员提供高效率高质量的前端页面开发解决方案，提高多人协作效率，也为非专业人员提供快速制作网页的解决方案。</p>
+<ul>
+<li>读规范，让你的代码更具智慧和美丽的方法</li>
+<li>用框架，选择一份合适的HTML和CSS基础代码</li>
+<li>找代码，在这里找到她，或给你启发，或她就是你的</li>
+<li>装插件，帮助你快速有效的使用代码库</li>
+</ul>
+<p>今天特地学习了NEC自适应相关的布局，下面是主要的使用示例。</p>
+<h3 id="两列左侧定款，右侧自适应布局"><a href="#两列左侧定款，右侧自适应布局" class="headerlink" title="两列左侧定款，右侧自适应布局"></a>两列左侧定款，右侧自适应布局</h3><pre><code>&lt;div class=&quot;g-bd1 f-cb&quot;&gt;
+    &lt;div class=&quot;g-sd1&quot;&gt;
+        &lt;p&gt;左侧定宽&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;g-mn1&quot;&gt;
+        &lt;div class=&quot;g-mn1c&quot;&gt;
+            &lt;p&gt;右侧自适应&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;style&gt;
+    .g-bd1{margin:0 0 10px;}
+    .g-sd1{position:relative;float:left;width:190px;margin-right:-190px;}
+    .g-mn1{float:right;width:100%;}
+    .g-mn1c{margin-left:200px;}
+    p{height: 150px;padding: 10px;color: #fff;background: orange;}
+&lt;/style&gt;
+</code></pre><p><img src="http://chuantu.biz/t6/216/1517034723x-1404758503.png" alt=""></p>
+<p>其中左侧定宽，设置相对定位，左浮动脱离文档流，右移定宽的负值；</p>
+<p>右侧设为右浮动，宽为100%，右侧margin-left设为左侧定宽+隔开距离；</p>
+<p>注意：这里负边距如果低于左侧宽度，将会无法满足右侧100%宽度要求，需要自己动手实验哈。</p>
+<h3 id="两列右侧定宽，左侧自适应布局"><a href="#两列右侧定宽，左侧自适应布局" class="headerlink" title="两列右侧定宽，左侧自适应布局"></a>两列右侧定宽，左侧自适应布局</h3><pre><code>&lt;div class=&quot;zell-dm2 g-bd2 f-cb&quot;&gt;
+    &lt;div class=&quot;g-mn2&quot;&gt;
+        &lt;div class=&quot;g-mn2c&quot;&gt;
+            &lt;p&gt;
+                我是左侧
+            &lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;g-sd2&quot;&gt;
+        &lt;p&gt;
+            我是右侧
+        &lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;style&gt;
+.g-sd2{float: right;position: relative;width:240px;margin-left:-240px;}
+.g-mn2 {float: left;width:100%;}
+.g-mn2c {margin-right: 280px;}
+.zell-dm2 p{background: pink;height:300px;padding:5px;}
+&lt;/style&gt;
+</code></pre><p><img src="http://i4.bvimg.com/591295/4a6d2f7cdd112c11.png" alt=""></p>
+<p>和上一个思路相同。</p>
+<h3 id="三列左侧自适应布局"><a href="#三列左侧自适应布局" class="headerlink" title="三列左侧自适应布局"></a>三列左侧自适应布局</h3><pre><code>&lt;div id=&quot;demo&quot;&gt;
+    &lt;div class=&quot;g-bd4 f-cb&quot;&gt;
+        &lt;div class=&quot;g-sd41&quot;&gt;
+            &lt;p&gt;右侧定宽1&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;g-sd42&quot;&gt;
+            &lt;p&gt;右侧定宽2&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;g-mn4&quot;&gt;
+            &lt;div class=&quot;g-mn4c&quot;&gt;
+                &lt;p&gt;左侧自适应&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+    #demo{
+        width:980px;margin:auto;
+        margin-top: 45px;
+    }
+    .g-bd4{
+        border:1px solid black;
+    }
+    .g-sd41,.g-sd42{
+        position: relative;float: right;width:230px;
+    }
+    .g-sd42{
+        width:190px;margin-right: 10px;
+    }
+    .g-mn4{
+        float: left;width:100%;margin-right: -430px;
+    }
+    .g-mn4c{
+        margin-right:440px;
+    }
+    .g-bd4 p{
+        padding:5px;background-color: orange;
+        height:140px;
+    }
+&lt;/style&gt;
+</code></pre><p><img src="http://i4.bvimg.com/591295/0bf31a28acc6013e.png" alt=""></p>
+<p>原理依然使用负边距消除溢出。</p>
+<h3 id="三列左侧右侧定宽，中间自适应"><a href="#三列左侧右侧定宽，中间自适应" class="headerlink" title="三列左侧右侧定宽，中间自适应"></a>三列左侧右侧定宽，中间自适应</h3><pre><code>&lt;div class=&quot;g-bd5 f-cb&quot;&gt;
+    &lt;div class=&quot;g-sd51&quot;&gt;
+        &lt;p&gt;
+            左侧定宽
+        &lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;g-mn5&quot;&gt;
+        &lt;div class=&quot;g-mn5c&quot;&gt;
+            &lt;p&gt;
+                中间自适应
+            &lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;g-sd52&quot;&gt;
+        &lt;p&gt;
+            右侧定宽
+        &lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;style&gt;
+    .g-bd5 {
+        margin: 45px 0 0 0;
+    }
+    .g-sd51,.g-sd52{
+        position: relative;width:240px;
+        margin: 0 -240px 0 0;
+        float: left;
+    }
+    .g-sd52{
+        float: right;
+        margin:0 0 0 -240px;
+    }
+    .g-mn5 {
+        float: left;
+        width:100%;
+    }
+    .g-mn5c{
+        margin:0 250px 0 250px;
+    }
+    .g-bd5 p{
+        height:120px;
+        background-color:pink;
+        padding:5px;
+    }
+&lt;/style&gt;
+</code></pre><p><img src="http://i4.bvimg.com/591295/65647995e909b08a.png" alt=""></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-git常用命令" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1719,271 +1932,6 @@ public static ExecutorService newCachedThreadPool() {
 
 
   
-    <article id="post-Java并发之线程池拓展—Callable，Future，FutureTask" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/" class="article-date">
-      <time datetime="2017-11-01T02:35:00.000Z" itemprop="datePublished">2017-11-01</time>
-</a>
-
- 
-    <a href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/">Java并发之线程池—Callable,Future,FutureTask</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="AbstractExecutorService类源码分析"><a href="#AbstractExecutorService类源码分析" class="headerlink" title="AbstractExecutorService类源码分析"></a>AbstractExecutorService类源码分析</h2><p>线程池ThreadPoolExecutor继承于AbstractorExecutorService类，所以分析该类的构成很有必要。</p>
-<p>上一篇博文提到ExecutorService是JDK并发工具包提供的一个核心接口，相当于一个线程池，提供执行任务和管理生命周期的方法。AbstractExecutorService主要实现了这个接口。 处理后的源码如下：</p>
-<pre><code>public abstract class AbstractExecutorService implements ExecutorService {
-    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) {
-        return new FutureTask&lt;T&gt;(runnable, value);
-    }
-    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) {
-        return new FutureTask&lt;T&gt;(callable);
-    }
-    //submit函数1
-    public Future&lt;?&gt; submit(Runnable task) {
-        if (task == null) throw new NullPointerException();
-        RunnableFuture&lt;Void&gt; ftask = newTaskFor(task, null);
-        execute(ftask);
-        return ftask;
-    }
-    //submit函数2
-    public &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result) {
-        if (task == null) throw new NullPointerException();
-        RunnableFuture&lt;T&gt; ftask = newTaskFor(task, result);
-        execute(ftask);
-        return ftask;
-    }
-    //submit函数3
-    public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {
-        if (task == null) throw new NullPointerException();
-        RunnableFuture&lt;T&gt; ftask = newTaskFor(task);
-        execute(ftask);
-        return ftask;
-    }
-    private &lt;T&gt; T doInvokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,boolean timed, long nanos) throws InterruptedException, ExecutionException, TimeoutException {······}
-    public &lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException, ExecutionException, TimeoutException {······}
-    public &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException {
-}
-</code></pre><h3 id="submit-方法源码分析"><a href="#submit-方法源码分析" class="headerlink" title="submit()方法源码分析"></a>submit()方法源码分析</h3><p>下面三个submit()方法是ExecutorService接口中的，并且由AbstructExecutorService类具体实现。    </p>
-<pre><code>public Future&lt;?&gt; submit(Runnable task) {···}
-
-public &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result) {···}
-
-public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {···}
-</code></pre><h4 id="Callable-接口源码"><a href="#Callable-接口源码" class="headerlink" title="Callable()接口源码"></a>Callable()接口源码</h4><pre><code>@FunctionalInterface
-public interface Callable&lt;V&gt; {
-    //计算结果
-    V call() throws Exception;
-}
-</code></pre><h4 id="newTaskFor-方法源码"><a href="#newTaskFor-方法源码" class="headerlink" title="newTaskFor()方法源码"></a>newTaskFor()方法源码</h4><pre><code>protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) {
-        return new FutureTask&lt;T&gt;(runnable, value);
-    }
-protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) {
-        return new FutureTask&lt;T&gt;(callable);
-    }
-</code></pre><h4 id="FutureTask类部分源码"><a href="#FutureTask类部分源码" class="headerlink" title="FutureTask类部分源码"></a>FutureTask类部分源码</h4><pre><code>public class FutureTask&lt;V&gt; implements RunnableFuture&lt;V&gt; {
-    ···
-    public FutureTask(Callable&lt;V&gt; callable) {···}
-    public FutureTask(Runnable runnable, V result) {···}
-    ···
-}
-</code></pre><h4 id="RunnableFuture接口源码"><a href="#RunnableFuture接口源码" class="headerlink" title="RunnableFuture接口源码"></a>RunnableFuture接口源码</h4><pre><code>public interface RunnableFuture&lt;V&gt; extends Runnable, Future&lt;V&gt; {
-    void run();
-}
-</code></pre><h4 id="Runnable接口源码"><a href="#Runnable接口源码" class="headerlink" title="Runnable接口源码"></a>Runnable接口源码</h4><pre><code>@FunctionalInterface
-public interface Runnable {
-    public abstract void run();
-}
-</code></pre><h4 id="Future接口源码"><a href="#Future接口源码" class="headerlink" title="Future接口源码"></a>Future接口源码</h4><pre><code>public interface Future&lt;V&gt; {
-    //试图取消对任务的执行,参数为true表示可以取消正在执行的任务
-    boolean cancel(boolean mayInterruptIfRunning);
-    //任务是否取消成功
-    boolean isCancelled();
-    //任务是否已经完成
-    boolean isDone();
-    //获取执行结果，会产生阻塞，等到任务执行完再返回结果
-    V get() throws InterruptedException, ExecutionException;
-    //在指定时间内未返回结果，则返回null
-    V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
-}
-</code></pre><p>从上述源码可知，想要分析submit()方法，转接这需要分析很多FutureTask类和若干接口。梳理一下如下所示</p>
-<pre><code>ThreadPoolExecutor--&gt;(extends)AbstractExecutorService
-AbstractExecutorService--&gt;具有三个submit()方法,参数类型包括Runnable,Callable
-submit()--&gt;返回FutureTask类对象--&gt;(implements)RunnableFuture--&gt;(extends)Runnable,Future
-</code></pre><p>我们来看Callable接口，从源码可知，这个接口只有一个call()方法，用以调用并返回结果，和Runnable相似，用以返回一个对象或异常。</p>
-<p>Call接口使用泛型定义返回类型，Executors类提供了一些有用的方法在线程池中执行Callable内的任务。由于Callable任务是并行的（并行就是整体看上去是并行的，其实在某个时间点只有一个线程在执行），我们必须等待它返回的结果。</p>
-<p>java.util.concurrent.Future对象为我们解决了这个问题。在线程池提交Callable任务后返回了一个Future对象，使用它可以知道Callable任务的状态和得到Callable返回的执行结果。Future提供了get()方法让我们可以等待Callable结束并获取它的执行结果。</p>
-<p>可以用ExecutorService接口中的submit()方法实现这个功能,submit()负责向线程池提交Callable任务,然后返回Future对象，我们在借助Future对象的get()方法获取Callable接口中call()方法的结果：</p>
-<pre><code>&lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task);
-</code></pre><h5 id="submit-具体实现源码"><a href="#submit-具体实现源码" class="headerlink" title="submit()具体实现源码"></a>submit()具体实现源码</h5><pre><code>public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {
-    //Callable任务为空，抛出无参异常
-    if (task == null) throw new NullPointerException();
-    //返回FutureTask类对象,
-    RunnableFuture&lt;T&gt; ftask = newTaskFor(task);
-    //向线程池提交一个任务
-    execute(ftask);
-    //返回处理后的任务
-    return ftask;
-}
-</code></pre><p>我们分析的是传入Callable类型参数的submit方法，其实其他两个源码都类似， 注解基本都已经备注好，第一步判断参数的有无，我们来看看第二步返回是FutureTask类的对象，注意这个类实现的是RunnableFuture接口，而这个接口继承的又是Runnable和Future接口<span style="color:red">(接口也是可以extends接口的哦！)</span>。所以它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值。来看第二步代码FutureTask类的构造函数源码：</p>
-<pre><code>public FutureTask(Callable&lt;V&gt; callable) {
-    if (callable == null)
-        throw new NullPointerException();
-    this.callable = callable;
-    this.state = NEW;      
-}
-</code></pre><p>FutureTask类实现了Future接口的一系列方法，如get()。第三步是向线程池提交任务，最后返回这个任务，下面看一个实例：</p>
-<h5 id="Callable-Future示例"><a href="#Callable-Future示例" class="headerlink" title="Callable,Future示例"></a>Callable,Future示例</h5><pre><code>public class Test {
-    public static void main(String[] args) {
-        //建议使用Executors类中的方法构建线程池，具体使用方法和源码分析看我关于线程池本主题的其他博文
-        ExecutorService executor = Executors.newCachedThreadPool();
-        Task task = new Task();
-        Future&lt;Integer&gt; result = executor.submit(task);
-        executor.shutdown();
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
-        }
-
-        System.out.println(&quot;主线程在执行任务&quot;);
-
-        try {
-            System.out.println(&quot;task运行结果&quot;+result.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(&quot;所有任务执行完毕&quot;);
-    }
-}
-class Task implements Callable&lt;Integer&gt;{
-    @Override
-    public Integer call() throws Exception {
-        System.out.println(&quot;子线程在进行计算&quot;);
-        Thread.sleep(3000);
-        int sum = 0;
-        for(int i=0;i&lt;100;i++)
-            sum += i;
-        return sum;
-    }
-}
-</code></pre><p>执行结果如下：</p>
-<pre><code>子线程在进行计算
-主线程在执行任务
-task运行结果4950
-所有任务执行完毕
-</code></pre><h5 id="Callable-FutureTask示例"><a href="#Callable-FutureTask示例" class="headerlink" title="Callable,FutureTask示例"></a>Callable,FutureTask示例</h5><pre><code>public class Test {
-    public static void main(String[] args) {
-        //第一种方式，线程池方式
-        ExecutorService executor = Executors.newCachedThreadPool();
-        Task task = new Task();
-        FutureTask&lt;Integer&gt; futureTask = new FutureTask&lt;Integer&gt;(task);
-        executor.submit(futureTask);
-        executor.shutdown();
-
-        //第二种方式，注意这种方式和第一种方式效果是类似的，只不过一个使用的是ExecutorService，一个使用的是Thread
-        /*Task task = new Task();
-        FutureTask&lt;Integer&gt; futureTask = new FutureTask&lt;Integer&gt;(task);
-        Thread thread = new Thread(futureTask);
-        thread.start();*/
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
-        }
-
-        System.out.println(&quot;主线程在执行任务&quot;);
-
-        try {
-            System.out.println(&quot;task运行结果&quot;+futureTask.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(&quot;所有任务执行完毕&quot;);
-    }
-}
-class Task implements Callable&lt;Integer&gt;{
-    @Override
-    public Integer call() throws Exception {
-        System.out.println(&quot;子线程在进行计算&quot;);
-        Thread.sleep(3000);
-        int sum = 0;
-        for(int i=0;i&lt;100;i++)
-            sum += i;
-        return sum;
-    }
-}
-</code></pre><p>上面一段代码是对Callable+FutureTask方法的演示，若是Runnable+FutureTask也可以用此调用方式，只是task类中的不是call方法，而是实现run方法。</p>
-<p>如果为了可取消性而使用 Future 但又不提供可用的结果，则可以声明 Future&lt;?&gt; 形式类型、并返回 null 作为底层任务的结果。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-Java并发之线程池拓展—ExecutorService原理与静态工厂方法" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -2297,20 +2245,20 @@ public ArrayBlockingQueue(int capacity, boolean fair,
 
 
   
-    <article id="post-LintCode题解--中等篇(1)" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Java并发之线程池拓展—Callable，Future，FutureTask" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/27/LintCode题解--中等篇(1)/" class="article-date">
-      <time datetime="2017-10-27T06:14:00.000Z" itemprop="datePublished">2017-10-27</time>
+      <a href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/" class="article-date">
+      <time datetime="2017-11-01T02:35:00.000Z" itemprop="datePublished">2017-11-01</time>
 </a>
 
  
-    <a href="/2017/10/27/LintCode题解--中等篇(1)/#comments" title="查看评论">
+    <a href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/27/LintCode题解--中等篇(1)/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/"></span>
         
     </a>
 
@@ -2325,7 +2273,7 @@ public ArrayBlockingQueue(int capacity, boolean fair,
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/27/LintCode题解--中等篇(1)/">LintCode题解——中等篇（一）</a>
+      <a class="article-title" href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/">Java并发之线程池—Callable,Future,FutureTask</a>
     </h1>
   
 
@@ -2335,220 +2283,200 @@ public ArrayBlockingQueue(int capacity, boolean fair,
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>容易题刷烂了，略感无趣</p>
-<h2 id="三角形计数"><a href="#三角形计数" class="headerlink" title="三角形计数"></a>三角形计数</h2><p>给定一个整数数组，在该数组中，寻找三个数，分别代表三角形三条边的长度，问，可以寻找到多少组这样的三个数来组成三角形？</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>例如，给定数组 S = {3,4,6,7}，返回 3</p>
-<p>其中我们可以找到的三个三角形为：</p>
-<pre><code>{3,4,6}
-{3,6,7}
-{4,6,7}
-</code></pre><p>给定数组 S = {4,4,4,4}, 返回 4</p>
-<p>其中我们可以找到的三个三角形为：</p>
-<pre><code>{4(1),4(2),4(3)}
-{4(1),4(2),4(4)}
-{4(1),4(3),4(4)}
-{4(2),4(3),4(4)}
-</code></pre><h3 id="算法详解"><a href="#算法详解" class="headerlink" title="算法详解"></a>算法详解</h3><p>这题按道理算不上是中等题，其实最暴力的方法就是来个三重for循环，每次取三个数，把所有数的组合都尝试一遍，判断每个组合是否符合三角形的定义。</p>
-<pre><code>public class Solution {
-    /*
-     * @param S: A list of integers
-     * @return: An integer
-     */
-    public int triangleCount(int[] S) {
-        // write your code here
-        int index = 0;
-        for(int i=0; i&lt;S.length-2; i++){
-            for(int j=i+1; j&lt;S.length-1;j++){
-                for(int k=j+1;k&lt;S.length;k++){
-                    if(isTriangle(S[i],S[j],S[k]))
-                        index++;
-                }
-            }
-        }
-        return index;
+        <h2 id="AbstractExecutorService类源码分析"><a href="#AbstractExecutorService类源码分析" class="headerlink" title="AbstractExecutorService类源码分析"></a>AbstractExecutorService类源码分析</h2><p>线程池ThreadPoolExecutor继承于AbstractorExecutorService类，所以分析该类的构成很有必要。</p>
+<p>上一篇博文提到ExecutorService是JDK并发工具包提供的一个核心接口，相当于一个线程池，提供执行任务和管理生命周期的方法。AbstractExecutorService主要实现了这个接口。 处理后的源码如下：</p>
+<pre><code>public abstract class AbstractExecutorService implements ExecutorService {
+    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) {
+        return new FutureTask&lt;T&gt;(runnable, value);
     }
+    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) {
+        return new FutureTask&lt;T&gt;(callable);
+    }
+    //submit函数1
+    public Future&lt;?&gt; submit(Runnable task) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;Void&gt; ftask = newTaskFor(task, null);
+        execute(ftask);
+        return ftask;
+    }
+    //submit函数2
+    public &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;T&gt; ftask = newTaskFor(task, result);
+        execute(ftask);
+        return ftask;
+    }
+    //submit函数3
+    public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;T&gt; ftask = newTaskFor(task);
+        execute(ftask);
+        return ftask;
+    }
+    private &lt;T&gt; T doInvokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,boolean timed, long nanos) throws InterruptedException, ExecutionException, TimeoutException {······}
+    public &lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException, ExecutionException, TimeoutException {······}
+    public &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException {
+}
+</code></pre><h3 id="submit-方法源码分析"><a href="#submit-方法源码分析" class="headerlink" title="submit()方法源码分析"></a>submit()方法源码分析</h3><p>下面三个submit()方法是ExecutorService接口中的，并且由AbstructExecutorService类具体实现。    </p>
+<pre><code>public Future&lt;?&gt; submit(Runnable task) {···}
 
-    public static boolean isTriangle(int a, int b, int c){
-        if(a+b&gt;c&amp;&amp;a+c&gt;b&amp;&amp;b+c&gt;a)
-            return true;
-        else
-            return false;
+public &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result) {···}
+
+public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {···}
+</code></pre><h4 id="Callable-接口源码"><a href="#Callable-接口源码" class="headerlink" title="Callable()接口源码"></a>Callable()接口源码</h4><pre><code>@FunctionalInterface
+public interface Callable&lt;V&gt; {
+    //计算结果
+    V call() throws Exception;
+}
+</code></pre><h4 id="newTaskFor-方法源码"><a href="#newTaskFor-方法源码" class="headerlink" title="newTaskFor()方法源码"></a>newTaskFor()方法源码</h4><pre><code>protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) {
+        return new FutureTask&lt;T&gt;(runnable, value);
+    }
+protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) {
+        return new FutureTask&lt;T&gt;(callable);
+    }
+</code></pre><h4 id="FutureTask类部分源码"><a href="#FutureTask类部分源码" class="headerlink" title="FutureTask类部分源码"></a>FutureTask类部分源码</h4><pre><code>public class FutureTask&lt;V&gt; implements RunnableFuture&lt;V&gt; {
+    ···
+    public FutureTask(Callable&lt;V&gt; callable) {···}
+    public FutureTask(Runnable runnable, V result) {···}
+    ···
+}
+</code></pre><h4 id="RunnableFuture接口源码"><a href="#RunnableFuture接口源码" class="headerlink" title="RunnableFuture接口源码"></a>RunnableFuture接口源码</h4><pre><code>public interface RunnableFuture&lt;V&gt; extends Runnable, Future&lt;V&gt; {
+    void run();
+}
+</code></pre><h4 id="Runnable接口源码"><a href="#Runnable接口源码" class="headerlink" title="Runnable接口源码"></a>Runnable接口源码</h4><pre><code>@FunctionalInterface
+public interface Runnable {
+    public abstract void run();
+}
+</code></pre><h4 id="Future接口源码"><a href="#Future接口源码" class="headerlink" title="Future接口源码"></a>Future接口源码</h4><pre><code>public interface Future&lt;V&gt; {
+    //试图取消对任务的执行,参数为true表示可以取消正在执行的任务
+    boolean cancel(boolean mayInterruptIfRunning);
+    //任务是否取消成功
+    boolean isCancelled();
+    //任务是否已经完成
+    boolean isDone();
+    //获取执行结果，会产生阻塞，等到任务执行完再返回结果
+    V get() throws InterruptedException, ExecutionException;
+    //在指定时间内未返回结果，则返回null
+    V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
+}
+</code></pre><p>从上述源码可知，想要分析submit()方法，转接这需要分析很多FutureTask类和若干接口。梳理一下如下所示</p>
+<pre><code>ThreadPoolExecutor--&gt;(extends)AbstractExecutorService
+AbstractExecutorService--&gt;具有三个submit()方法,参数类型包括Runnable,Callable
+submit()--&gt;返回FutureTask类对象--&gt;(implements)RunnableFuture--&gt;(extends)Runnable,Future
+</code></pre><p>我们来看Callable接口，从源码可知，这个接口只有一个call()方法，用以调用并返回结果，和Runnable相似，用以返回一个对象或异常。</p>
+<p>Call接口使用泛型定义返回类型，Executors类提供了一些有用的方法在线程池中执行Callable内的任务。由于Callable任务是并行的（并行就是整体看上去是并行的，其实在某个时间点只有一个线程在执行），我们必须等待它返回的结果。</p>
+<p>java.util.concurrent.Future对象为我们解决了这个问题。在线程池提交Callable任务后返回了一个Future对象，使用它可以知道Callable任务的状态和得到Callable返回的执行结果。Future提供了get()方法让我们可以等待Callable结束并获取它的执行结果。</p>
+<p>可以用ExecutorService接口中的submit()方法实现这个功能,submit()负责向线程池提交Callable任务,然后返回Future对象，我们在借助Future对象的get()方法获取Callable接口中call()方法的结果：</p>
+<pre><code>&lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task);
+</code></pre><h5 id="submit-具体实现源码"><a href="#submit-具体实现源码" class="headerlink" title="submit()具体实现源码"></a>submit()具体实现源码</h5><pre><code>public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {
+    //Callable任务为空，抛出无参异常
+    if (task == null) throw new NullPointerException();
+    //返回FutureTask类对象,
+    RunnableFuture&lt;T&gt; ftask = newTaskFor(task);
+    //向线程池提交一个任务
+    execute(ftask);
+    //返回处理后的任务
+    return ftask;
+}
+</code></pre><p>我们分析的是传入Callable类型参数的submit方法，其实其他两个源码都类似， 注解基本都已经备注好，第一步判断参数的有无，我们来看看第二步返回是FutureTask类的对象，注意这个类实现的是RunnableFuture接口，而这个接口继承的又是Runnable和Future接口<span style="color:red">(接口也是可以extends接口的哦！)</span>。所以它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值。来看第二步代码FutureTask类的构造函数源码：</p>
+<pre><code>public FutureTask(Callable&lt;V&gt; callable) {
+    if (callable == null)
+        throw new NullPointerException();
+    this.callable = callable;
+    this.state = NEW;      
+}
+</code></pre><p>FutureTask类实现了Future接口的一系列方法，如get()。第三步是向线程池提交任务，最后返回这个任务，下面看一个实例：</p>
+<h5 id="Callable-Future示例"><a href="#Callable-Future示例" class="headerlink" title="Callable,Future示例"></a>Callable,Future示例</h5><pre><code>public class Test {
+    public static void main(String[] args) {
+        //建议使用Executors类中的方法构建线程池，具体使用方法和源码分析看我关于线程池本主题的其他博文
+        ExecutorService executor = Executors.newCachedThreadPool();
+        Task task = new Task();
+        Future&lt;Integer&gt; result = executor.submit(task);
+        executor.shutdown();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
+
+        System.out.println(&quot;主线程在执行任务&quot;);
+
+        try {
+            System.out.println(&quot;task运行结果&quot;+result.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(&quot;所有任务执行完毕&quot;);
     }
 }
-</code></pre><p>解法二：<br>三角形两边之和大于第三边，先将数组排序，然后定位最长边与最短边，然后寻找第三条边的数量，第三条边满足：</p>
-<p>最长边 &gt;= 第三条边 &gt; 最长边 - 最短边<br>可以利用二分查找寻找最短的第三条边的下标，然后和最长边下标之差就是第三条边的数量<br>最后继续定位定位最长边与最短边</p>
-<pre><code>class Solution {
-public:
-    /*
-     * @param : A list of integers
-     * @return: An integer
-     */
-    int triangleCount(vector&lt;int&gt; S) {
-        // write your code here
-        int size = S.size();
-        if (size &lt;= 0) {
-            return 0;
-        }
-
-        int result = 0;
-        sort(S.begin(), S.end());
-        for (int i = 0; i &lt; size - 1; i++) {
-            for (int j = i + 1; j &lt; size; j++) {
-                int third = S[j] - S[i];
-                int low = i + 1, high = j;
-                while (low &lt; high) {
-                    int mid = low + (high - low) / 2;
-                    if (S[mid] &gt; third) {
-                        high = mid;
-                    }
-                    else {
-                        low = mid + 1;
-                    }
-                }
-                result += (j - low);
-            }
-        }
-        return result;
-    }
-};
-</code></pre><h2 id="计算最大值"><a href="#计算最大值" class="headerlink" title="计算最大值"></a>计算最大值</h2><p>给一个字符串类型的数字, 写一个方法去找到最大值, 你可以在任意两个数字间加 + 或 *</p>
-<p>您在真实的面试中是否遇到过这个题？ Yes</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给出 str = 01231, 返回 10 ((((0 + 1) + 2) <em> 3) + 1) = 10 我们得到了最大值 10<br>给出 str = 891, 返回 73 因为 8 </em> 9 <em> 1 = 72 和 8 </em> 9 + 1 = 73, 所以73是最大值</p>
-<pre><code>public class Solution {
-    /*
-     * @param : the given string
-     * @return: the maximum value
-     */
-    public int calcMaxValue(String str) {
-        // write your code here
-        if(str.equals(&quot;&quot;))
-            return 0;
-        String[] array = str.split(&quot;&quot;);
-        int max_result = Integer.parseInt(array[0]);
-        for(int i=0;i&lt;array.length-1;i++){
-            int add = max_result+Integer.parseInt(array[i+1]);
-            int multify = max_result*Integer.parseInt(array[i+1]);
-            if(add&gt;=max_result&amp;&amp;add&gt;=multify)
-                max_result = add;
-            if(multify&gt;=max_result&amp;&amp;multify&gt;add)
-                max_result = multify;
-        }
-        return max_result;
-    }
-};
-</code></pre><h2 id="重复子串"><a href="#重复子串" class="headerlink" title="重复子串"></a>重复子串</h2><p>写一个方法, 给一个由 N 个字符构成的字符串 A和一个由 M 个字符构成的字符串 B, 返回 A 必须重复的次数，使得 B 是重复字符串的子串.如果 B 不可能为重复字符串的子串, 则返回 -1.</p>
-<p> 注意事项</p>
-<p>Assume that 0 &lt;= N &lt;= 1000, 1 &lt;= M &lt;= 1000</p>
-<p>您在真实的面试中是否遇到过这个题？ Yes</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给出 A = abcd, B = cdabcdab<br>你的方法需要返回 3, 因为在重复字符串 A 3次之后我们得到了字串 abcdabcdabcd. 字符串B是这个字符串的一个子串.</p>
-<h3 id="算法详解-1"><a href="#算法详解-1" class="headerlink" title="算法详解"></a>算法详解</h3><p>先把B中间包含A的部分全部去除，看两端剩下几个字符串，如果大于两个则return -1，若是两个或一个，则再判断这两个或一个字串是否能被包含在A中。</p>
-<pre><code>import java.util.LinkedList;
-import java.util.List;
-
-public class Solution {
-    /*
-     * @param : string A to be repeated
-     * @param : string B
-     * @return: the minimum number of times A has to be repeated
-     */
-    public static int repeatedString(String A, String B) {
-        // write your code here
-        if(A.length()==0)
-            return -1;
-        if(A.length()&gt;=B.length())
-            if(A.contains(B))
-                return 1;
-        String[] b = B.split(A);
-        int index = -1;
-        List&lt;String&gt; list = new LinkedList&lt;&gt;();
-        for(int i=0;i&lt;b.length;i++) {
-            if (!b[i].equals(&quot;&quot;))
-                list.add(b[i]);
-        }
-        if(A.length()&lt;B.length()){
-            if(list.size()&gt;2)
-                return -1;
-            else {
-                if (list.size() == 1)
-                    if (B.substring(0, 4).equals(A) || B.substring(B.length() - 4, B.length()).equals(A)) {
-                        if(!B.substring(0,4).equals(A)){
-                            if(A.substring(A.length()-list.get(0).length(),A.length()).equals(list.get(0)))
-                                index = 1 + (B.length() - list.get(0).length()) / A.length();
-                        }
-                        if(!B.substring(B.length() - 4, B.length()).equals(A)){
-                            if(A.substring(0, list.get(0).length()).equals(list.get(0)))
-                                index = 1 + (B.length() - list.get(0).length()) / A.length();
-                        }
-                    }
-                if (list.size() == 2)
-                    if (!B.substring(0, 4).equals(A) &amp;&amp; !B.substring(B.length() - 4, B.length()).equals(A)) {
-                        if(A.substring(A.length()-list.get(0).length(),A.length()).equals(list.get(0))&amp;&amp;A.substring(0, list.get(1).length()).equals(list.get(1)))
-                            index = 2 + (B.length() - list.get(0).length() - list.get(1).length()) / A.length();
-                    }
-                if(list.size() == 0)
-                    index = B.length()/A.length();
-            }
-        }
-        return index;
+class Task implements Callable&lt;Integer&gt;{
+    @Override
+    public Integer call() throws Exception {
+        System.out.println(&quot;子线程在进行计算&quot;);
+        Thread.sleep(3000);
+        int sum = 0;
+        for(int i=0;i&lt;100;i++)
+            sum += i;
+        return sum;
     }
 }
-</code></pre><h2 id="二进制时间"><a href="#二进制时间" class="headerlink" title="二进制时间"></a>二进制时间</h2><p>给了一个二进制显示时间的手表和一个非负整数 n, n 代表在给定时间表上 1 的数量, 返回所有可能的时间</p>
-<p> 注意事项</p>
-<p>输出的顺序没有要求.<br>小时不能包含前导零, 比如 “01:00” 是不允许的, 应该为 “1:00”.<br>分钟必须由两位数组成, 可能包含前导零, 比如 “10:2” 是无效的, 应该为 “10:02”.</p>
-<p>您在真实的面试中是否遇到过这个题？ Yes</p>
-<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>给出 n = 1<br>返回 [“1:00”, “2:00”, “4:00”, “8:00”, “0:01”, “0:02”, “0:04”, “0:08”, “0:16”, “0:32”]</p>
-<h3 id="算法详解-2"><a href="#算法详解-2" class="headerlink" title="算法详解"></a>算法详解</h3><p>这是一道非常有意思的题目，当然给出一个数，分别把这个数分到时和分里再细分，形成组合。这里给出两个附带的静态函数，具体代码实现很容易懂：</p>
-<pre><code>import java.util.LinkedList;
-import java.util.List;
+</code></pre><p>执行结果如下：</p>
+<pre><code>子线程在进行计算
+主线程在执行任务
+task运行结果4950
+所有任务执行完毕
+</code></pre><h5 id="Callable-FutureTask示例"><a href="#Callable-FutureTask示例" class="headerlink" title="Callable,FutureTask示例"></a>Callable,FutureTask示例</h5><pre><code>public class Test {
+    public static void main(String[] args) {
+        //第一种方式，线程池方式
+        ExecutorService executor = Executors.newCachedThreadPool();
+        Task task = new Task();
+        FutureTask&lt;Integer&gt; futureTask = new FutureTask&lt;Integer&gt;(task);
+        executor.submit(futureTask);
+        executor.shutdown();
 
-public class Solution {
-    /*
-     * @param : the number of &quot;1&quot;s on a given timetable
-     * @return: all possible time
-     */
-    public static List&lt;String&gt; binaryTime(int num) {
-        // Write your code here
-        List&lt;String&gt; list = new LinkedList&lt;&gt;();
-        for(int i=0;i&lt;=num;i++){
-            List&lt;String&gt; list1 = binarylist(i, true);
-            List&lt;String&gt; list2 = binarylist(num-i, false);
-            for(String _list1 : list1){
-                for(String _list2 : list2){
-                    list.add(_list1+&quot;:&quot;+_list2);
-                }
-            }
+        //第二种方式，注意这种方式和第一种方式效果是类似的，只不过一个使用的是ExecutorService，一个使用的是Thread
+        /*Task task = new Task();
+        FutureTask&lt;Integer&gt; futureTask = new FutureTask&lt;Integer&gt;(task);
+        Thread thread = new Thread(futureTask);
+        thread.start();*/
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
         }
-        return list;
-    }
 
-    public static List&lt;String&gt; binarylist(int _num, boolean index) {
-        List&lt;String&gt; list = new LinkedList&lt;&gt;();
-        if(index == false)
-            for(int k=0;k&lt;60;k++){
-                if(_num==binaryOneNum(k)&amp;&amp;k&lt;10)
-                    list.add(&quot;0&quot;+k);
-                if(_num==binaryOneNum(k)&amp;&amp;k&gt;=10)
-                    list.add(String.valueOf(k));
-            }
-        else
-            for(int j=0;j&lt;12;j++){
-                if(_num==binaryOneNum(j))
-                    list.add(String.valueOf(j));
-            }
-        return list;
-    }
+        System.out.println(&quot;主线程在执行任务&quot;);
 
-    public static int binaryOneNum(int timeNum) {
-        int num = 0;
-        while (timeNum != 0) {
-            if (timeNum % 2 == 1)
-                num = num + 1;
-             timeNum = timeNum/2;
+        try {
+            System.out.println(&quot;task运行结果&quot;+futureTask.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-        return num;
+
+        System.out.println(&quot;所有任务执行完毕&quot;);
     }
-};
-</code></pre>
+}
+class Task implements Callable&lt;Integer&gt;{
+    @Override
+    public Integer call() throws Exception {
+        System.out.println(&quot;子线程在进行计算&quot;);
+        Thread.sleep(3000);
+        int sum = 0;
+        for(int i=0;i&lt;100;i++)
+            sum += i;
+        return sum;
+    }
+}
+</code></pre><p>上面一段代码是对Callable+FutureTask方法的演示，若是Runnable+FutureTask也可以用此调用方式，只是task类中的不是call方法，而是实现run方法。</p>
+<p>如果为了可取消性而使用 Future 但又不提供可用的结果，则可以声明 Future&lt;?&gt; 形式类型、并返回 null 作为底层任务的结果。</p>
+
       
     </div>
     
@@ -2562,7 +2490,7 @@ public class Solution {
 
       
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
     </div>
 
       
@@ -2593,7 +2521,7 @@ public class Solution {
         <div id="footer-info">
             <div class="footer-left">
                 <i class="fa fa-copyright"></i> 
-                2016-2017 Sams_ara Jin
+                2016-2018 Sams_ara Jin
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>

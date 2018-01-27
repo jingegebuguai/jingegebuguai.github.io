@@ -276,20 +276,20 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-CentOS下nginx的安装配置" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-CentOS下jdk、tomcat配置" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/06/CentOS下nginx的安装配置/" class="article-date">
+      <a href="/2017/10/06/CentOS下jdk、tomcat配置/" class="article-date">
       <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
 </a>
 
  
-    <a href="/2017/10/06/CentOS下nginx的安装配置/#comments" title="查看评论">
+    <a href="/2017/10/06/CentOS下jdk、tomcat配置/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下nginx的安装配置/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下jdk、tomcat配置/"></span>
         
     </a>
 
@@ -304,7 +304,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a>
+      <a class="article-title" href="/2017/10/06/CentOS下jdk、tomcat配置/">CentOS下jdk、tomcat、vsftpd的安装配置</a>
     </h1>
   
 
@@ -314,68 +314,169 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Nginx是一款轻量级Web服务器，也是反向代理服务器</p>
-<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ul>
-<li>直接支持Rails和PHP的程序</li>
-<li>作为Http反向代理服务器</li>
-<li>作为负载均衡服务器</li>
-<li>作为邮件代理服务器</li>
-<li>帮助实现前端动静分离</li>
-</ul>
-<h2 id="安装Nginx依赖"><a href="#安装Nginx依赖" class="headerlink" title="安装Nginx依赖"></a>安装Nginx依赖</h2><p>1、安装cc</p>
-<pre><code># 输入gcc -v查询版本信息，看系统是否自带安装
-yum install gcc
-</code></pre><p>2、安装pcre</p>
-<pre><code>yum install pcre-devel
-</code></pre><p>3、安装zlib</p>
-<pre><code>yum install zlib zlib-devel    
-</code></pre><p>4、选择安装openssl</p>
-<pre><code>yum install openssl openssl-devel
-</code></pre><p>5、一键综合安装</p>
-<pre><code>yum -y install gcc zlib zlib-devel pcre-devel openssl openssl-devel
-</code></pre><h2 id="下载源码包解压缩"><a href="#下载源码包解压缩" class="headerlink" title="下载源码包解压缩"></a>下载源码包解压缩</h2><p><a href="http://www/nginx.org/" target="_blank" rel="external">http://www/nginx.org/</a></p>
-<pre><code>tar -zxvf nginx-*.tar.gz
-</code></pre><h2 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a>nginx安装</h2><p>进入nginx目录执行./configure</p>
+        <h2 id="Centos下jdk安装配置"><a href="#Centos下jdk安装配置" class="headerlink" title="Centos下jdk安装配置"></a>Centos下jdk安装配置</h2><h3 id="查看jdk版本"><a href="#查看jdk版本" class="headerlink" title="查看jdk版本"></a>查看jdk版本</h3><pre><code>java -version
+</code></pre><h3 id="查看jdk信息"><a href="#查看jdk信息" class="headerlink" title="查看jdk信息"></a>查看jdk信息</h3><pre><code>[root@localhost ~]#  rpm -qa | grep java
+javapackages-tools-3.4.1-6.el7_0.noarch
+tzdata-java-2014i-1.el7.noarch
+java-1.7.0-openjdk-headless-1.7.0.71-2.5.3.1.el7_0.x86_64
+java-1.7.0-openjdk-1.7.0.71-2.5.3.1.el7_0.x86_64
+python-javapackages-3.4.1-6.el7_0.noarch
+</code></pre><h3 id="卸载OpenJDK"><a href="#卸载OpenJDK" class="headerlink" title="卸载OpenJDK"></a>卸载OpenJDK</h3><p>执行以下操作：</p>
+<pre><code>[root@localhost ~]# rpm -e --nodeps tzdata-java-2014i-1.el7.noarch
+[root@localhost ~]# rpm -e --nodeps java-1.7.0-openjdk-headless-1.7.0.71-2.5.3.1.el7_0.x86_64
+[root@localhost ~]# rpm -e --nodeps java-1.7.0-openjdk-1.7.0.71-2.5.3.1.el7_0.x86_64
+</code></pre><h3 id="安装jdk"><a href="#安装jdk" class="headerlink" title="安装jdk"></a>安装jdk</h3><pre><code>[root@zck local]# rpm -ivh jdk-8u25-linux-x64.rpm    
+</code></pre><p>默认安装在/usr/java目录下。</p>
+<h3 id="查看jdk路径"><a href="#查看jdk路径" class="headerlink" title="查看jdk路径"></a>查看jdk路径</h3><pre><code>whereis java
+which java    
+echo $JAVA_HOME
+echo $PATH
+</code></pre><h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><p>vim下进入/etc/profile<br>在profile文件最后加入如下：</p>
+<pre><code>export JAVA_HOME=/usr/bin/java
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar                    
+</code></pre><p>具体配置还需根据各自对应的版本而变动</p>
+<h2 id="CentOS下Tomacat安装"><a href="#CentOS下Tomacat安装" class="headerlink" title="CentOS下Tomacat安装"></a>CentOS下Tomacat安装</h2><p>安装tomcat之前需要配置好jdk</p>
+<h3 id="下载tomcat-9-0"><a href="#下载tomcat-9-0" class="headerlink" title="下载tomcat 9.0"></a>下载tomcat 9.0</h3><p>前往<a href="https://tomcat.apache.org/download-90.cgi进行复制tar.gz链接地址，在centos中进行下载，并且解压缩" target="_blank" rel="external">https://tomcat.apache.org/download-90.cgi进行复制tar.gz链接地址，在centos中进行下载，并且解压缩</a></p>
+<pre><code>tar -zxvf apache-tomcat-9.0.1.tar.gz
+</code></pre><h3 id="配置UTF-8字符集"><a href="#配置UTF-8字符集" class="headerlink" title="配置UTF-8字符集"></a>配置UTF-8字符集</h3><p>进入tomcat安装的conf文件夹，编辑server.xml</p>
+<pre><code>sudo vim server.xml
+</code></pre><p>找到配置8080默认端口的位置，在xml节点末尾增加URIEncoding=”UTF-8”.</p>
+<h3 id="tomcat验证"><a href="#tomcat验证" class="headerlink" title="tomcat验证"></a>tomcat验证</h3><p>先进入系统解压缩后的tomcat目录，进入bin目录，执行./startup.sh.<br>打开启动tomcat机器的ip地址和默认8080端口，如果是其他机器访问，找到此机器的ip地址，进行访问</p>
+<h2 id="Maven安装配置"><a href="#Maven安装配置" class="headerlink" title="Maven安装配置"></a>Maven安装配置</h2><p>安装版本为3.0.5，安装之前需要确保电脑上配置好tomcat，用以下镜像下载</p>
+<pre><code>https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.0.5/binaries
+</code></pre><h3 id="解压缩Maven"><a href="#解压缩Maven" class="headerlink" title="解压缩Maven"></a>解压缩Maven</h3><pre><code>tar-zxvf apache-maven-3.0.5-bin.tar.gz
+</code></pre><h3 id="配置环境变量-1"><a href="#配置环境变量-1" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><pre><code>sudo vim /etc/profile
+//在最下面增加Maven环境变量
+export MAVEN_HOME=/developer/apache-maven-3.0.5
+export PATH=$PATH:$JAVA_HOME/bin:$MAVEN_HOME/bin
+//执行source /etc/profile
+</code></pre><h3 id="进行验证"><a href="#进行验证" class="headerlink" title="进行验证"></a>进行验证</h3><pre><code>mvn -version
+</code></pre><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><p>清除命令</p>
+<pre><code>mvn clean
+</code></pre><p>编译命令</p>
+<pre><code>mvn compile
+</code></pre><p>打包命令</p>
+<pre><code>mvn package
+</code></pre><p>跳过单元测试</p>
+<pre><code>mvn clean package -Dmaven.test.skip=true 
+</code></pre><h2 id="vsftpd安装"><a href="#vsftpd安装" class="headerlink" title="vsftpd安装"></a>vsftpd安装</h2><p>执行yum -y install vsftpd<br>注意：</p>
 <ul>
-<li>也可以制定安装目录，增加参数–prefix=/usr/nginx</li>
-<li>如果不指定路径，也可以通过whereis nginx进行查询</li>
-<li>默认安装在/usr/local/nginx</li>
+<li>是否使用sudo权限执行请根据就环境决定</li>
+<li>rpm -qa | grep vsftpd可通过这个检查是否已经安装vsftpd</li>
+<li>默认配置文件在/etc/vsftpd/vsftpd.conf</li>
 </ul>
-<p>继续执行make，续集执行make install</p>
-<h2 id="nginx常用命令"><a href="#nginx常用命令" class="headerlink" title="nginx常用命令"></a>nginx常用命令</h2><p>测试配置文件</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -t
-</code></pre><p>启动命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx
-</code></pre><p>停止命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -s stop
-或者是 nginx -s quit
-</code></pre><p>重启命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -s reload
-</code></pre><p>查看进程命令</p>
-<pre><code>ps -ef | grep nginx
-</code></pre><p>平滑重启</p>
-<pre><code>kill -HUP 【nginx主进程号(即查看进程命令查到的PID)】
-</code></pre><h2 id="增加防火墙访问权限"><a href="#增加防火墙访问权限" class="headerlink" title="增加防火墙访问权限"></a>增加防火墙访问权限</h2><p>1、sudo vim /etc.sysconfig/iptables-config<br>2、- A INPUT -p tcp -m state –state NEW<br>   -m tcp –dport 80 -j ACCEPT<br>3、重启防火墙</p>
-<h2 id="虚拟域名配置测试验证"><a href="#虚拟域名配置测试验证" class="headerlink" title="虚拟域名配置测试验证"></a>虚拟域名配置测试验证</h2><p>1、编辑sudo vim /usr/local/nginx/conf/nginx.conf<br>增加include vhost/*.conf<br>2、在/usr/local/nginx/conf目录创建vhost文件夹<br>3、配置<br>sudo vim /etc/hosts所对应的域名.conf<br>如：sudo vim /usr/local/nginx/conf/vhost www.huihui.com.conf<br>将如下配置写入到该文件下</p>
-<pre><code>server {
-     listen 80;
-     autoindex on;
-     server_name www.huihui.com;
-     access_log /usr/local/nginx/logs/access.log combined; 
-     index index.html index.htm index.jsp index.php; 
-     #error_page 404 /404.html;
-     if ( $query_string ~* &quot;.*[\;&apos;\&lt;\&gt;].*&quot; )
-            { 
-                    return 404;
-            }
-     location / {
-            proxy_pass http://172.0.0.1:8080;
-            add_header Access-Control-Allow-Origin *;
-            }
- }
-</code></pre><p>4、重启验证<br>启动${nginx}/sbin/nginx<br>重启${nginx}/sbin/nginx -s reload,如sudo ./nginx -s reload<br>${nginx}为安装在系统中的路径，如/usr/local/nginx<br>5、访问验证<br>使用默认80端口访问验证<a href="http://localhost:80" target="_blank" rel="external">http://localhost:80</a></p>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>可以配置域名转发，但是请一定要配置host，并且host生效之后才可以，设置完成后腰重启浏览器<br>1、linux<br>sudo vim /etc/hosts<br>添加好对应的域名及ip<br>保存退出</p>
+<h3 id="创建虚拟用户"><a href="#创建虚拟用户" class="headerlink" title="创建虚拟用户"></a>创建虚拟用户</h3><ul>
+<li>选择在根或者用户目录下创建ftp文件夹：mkdir ftpfile,如/ftpfile</li>
+<li>添加匿名用户：useradd ftpuser -d /ftpfile -s /sbin/nologin</li>
+<li>修改ftpfile权限：chown -R ftpuser.ftpuser /ftpfile</li>
+<li>重设ftpuser密码：passwd ftpuser</li>
+</ul>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><pre><code>cd /etc/vsftpd
+sudo vim chroot_list
+</code></pre><p>将刚才新增的虚拟用户添加到此配置文件，后续引用</p>
+<pre><code>sudo vim /etc/selinux/config
+</code></pre><p>修改为SELINUX=disabledu<br>如果验证的时候出现550拒绝访问执行</p>
+<pre><code>sudo setsebool -P ftp_home_dir 1
+</code></pre><p>重启linux服务器，执行reboot命令</p>
+<pre><code>sudo vim /etc/vsftpd/vsftpd.conf
+</code></pre><h3 id="防火墙配置"><a href="#防火墙配置" class="headerlink" title="防火墙配置"></a>防火墙配置</h3><pre><code>sudo vim /etc/sysconfig/iptables-config
+</code></pre><p>将以下配置添加到防火墙配置中</p>
+<pre><code>-A INPUT -p TCP --dport 61001:62000 -j ACCEPT
+-A OUTPUT -p TCP --sport 61001:62000 -j ACCEPT
+-A INPUT -p TCP --dport 20 -j ACCEPT
+-A OUTPUT -p TCP --sport 20 -j ACCEPT
+-A INPUT -p TCP --dport 21 -j ACCEPT
+-A OUTPUT -p TCP --sport 21 -j ACCEPT
+</code></pre><p>重启防火墙<br>centos7以下版本</p>
+<pre><code>sudo service iptables restart
+</code></pre><p>centos7</p>
+<pre><code>systemctl start filewalld.service #开启防火墙
+firewall-cmd --reload #重启firewall
+systemctl stop firewalld.service #停止firewall
+systemctl disable firewalld.service #禁止firewall开机启动
+</code></pre><h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><pre><code>sudo service vsftpd restart
+//cebtos7
+sudo systemctl restart vsftpd.service
+</code></pre><p>第一次启动时shutting down vsftpd是failed没关系，这是重启命令，保证starting vsftpd是ok即可</p>
+<h3 id="设置selinux"><a href="#设置selinux" class="headerlink" title="设置selinux"></a>设置selinux</h3><pre><code># sudo vim /etc/selinux/config
+# 注释SELINUX=enforcing
+SELINUX=disable
+# 保存退出
+setenforce 0
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
 
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-CentOS下安装配置mysql" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/06/CentOS下安装配置mysql/" class="article-date">
+      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+
+ 
+    <a href="/2017/10/06/CentOS下安装配置mysql/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下安装配置mysql/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        
       
     </div>
     
@@ -851,6 +952,256 @@ public class Solution {
 
 
   
+    <article id="post-LintCode题解（五）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/30/LintCode题解（五）/" class="article-date">
+      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
+</a>
+
+ 
+    <a href="/2017/09/30/LintCode题解（五）/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（五）/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="岛屿个数"><a href="#岛屿个数" class="headerlink" title="岛屿个数"></a>岛屿个数</h2><p>给一个01矩阵，求不同的岛屿的个数。</p>
+<p>0代表海，1代表岛，如果两个1相邻，那么这两个1属于同一个岛。我们只考虑上下左右为相邻。</p>
+<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><pre><code>[
+  [1, 1, 0, 0, 0],
+  [0, 1, 0, 0, 1],
+  [0, 0, 0, 1, 1],
+  [0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1]
+]
+</code></pre><p>如上矩阵有3个岛屿。</p>
+<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>这题比较复杂，需要使用到深度遍历，使用递归将已确定的岛屿由true转化为false。并且递归他的四周其他岛屿。</p>
+<pre><code>public class Solution {
+/**
+ * @param grid a boolean 2D matrix
+ * @return an integer
+ */
+    public int numIslands(boolean[][] grid) {
+        // Write your code here
+        if(grid.length==0)
+            return 0;
+        int row = grid.length;
+        int column = grid[0].length;
+        int count = 0;
+
+        for(int i = 0;i &lt; row;i++){
+            for(int j  = 0;j &lt; column;j++){
+                if(grid[i][j]==true){
+                    dfs_Islands(grid,i,j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    private void dfs_Islands(boolean[][] grid, int i, int j){
+        if(i&lt;0||j&lt;0||i&gt;=grid.length||j&gt;=grid[0].length)
+            return; 
+        if(grid[i][j]==true){
+            grid[i][j]=false;
+            dfs_Islands(grid, i-1, j);
+            dfs_Islands(grid, i+1, j);
+            dfs_Islands(grid, i, j-1);
+            dfs_Islands(grid, i, j+1);
+        }    
+    }
+}
+</code></pre><h2 id="有效回文串"><a href="#有效回文串" class="headerlink" title="有效回文串"></a>有效回文串</h2><p>给定一个字符串，判断其是否为一个回文串。只包含字母和数字，忽略大小写。</p>
+<p> 注意事项</p>
+<p>你是否考虑过，字符串有可能是空字符串？这是面试过程中，面试官常常会问的问题。</p>
+<p>在这个题目中，我们将空字符串判定为有效回文。</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>“A man, a plan, a canal: Panama” 是一个回文。</p>
+<p>“race a car” 不是一个回文。</p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
+/*
+ * @param s: A string
+ * @return: Whether the string is a valid palindrome
+ */
+    public static boolean isPalindrome(String s) {
+        // write your code here
+        boolean index = true;
+        if(s.length()==0)
+            return index;
+        String[] str = s。toLowerCase.split(&quot;&quot;);
+        int low = 0;
+        int high = s.length()-1;
+        while(low&lt;high){
+            if(str[low].matches(&quot;\\w&quot;)&amp;&amp;str[high].matches(&quot;\\w&quot;)){
+                if(str[low].equals(str[high])&amp;&amp;low==high-1)
+                    low = low+1;
+                else if(str[low].equals(str[high])&amp;&amp;low!=high+1){
+                    low = low+1;    
+                    high = high-1;
+                }
+                else if(!str[low].equals(str[high]))
+                    break;
+            }else{
+                if(!str[low].matches(&quot;\\w&quot;))
+                    low = low+1;
+                else if(!str[high].matches(&quot;\\w&quot;))
+                    high = high-1;
+            }
+        }
+        if(low==high)
+            index=true;
+        else
+            index=false;
+        return index;    
+    }
+}
+</code></pre><p>上面的算法完全是我凑出来的，汗颜啊。<br>下面是别人写的，给予参考：</p>
+<pre><code>public class Solution {
+/**
+ * @param s A string
+ * @return Whether the string is a valid palindrome
+ */
+    public boolean isPalindrome(String s) {
+        // Write your code here
+        if(s.equals(&quot;&quot;)) return true;
+        int len = s.length();
+        int left = 0;
+        int right = len - 1;
+        s = s.toLowerCase();
+        while(left &lt; right){
+            char leftchar = s.charAt( left );
+            char rightchar = s.charAt( right );
+            while(!isValid(leftchar)){
+                left ++;
+                leftchar = s.charAt( left );
+                if(left&gt;=right) return true;
+            }
+            while(!isValid(rightchar)){
+                right --;
+                rightchar = s.charAt( right );
+                if(right&lt;=left) return true;
+            }
+            if(leftchar != rightchar)
+                return false;
+            left ++;
+            right --;
+        }
+
+        return true;
+
+    }
+    public boolean isValid(char ch){
+        if(ch&gt;=&apos;a&apos; &amp;&amp; ch &lt;= &apos;z&apos;)
+            return true;
+        if(ch &gt;=&apos;0&apos; &amp;&amp; ch &lt;= &apos;9&apos;)
+            return true;
+        return false;
+    }
+}    
+</code></pre><h2 id="最长上升子序列"><a href="#最长上升子序列" class="headerlink" title="最长上升子序列"></a>最长上升子序列</h2><p>给定一个整数数组（下标从 0 到 n-1， n 表示整个数组的规模），请找出该数组中的最长上升连续子序列。（最长上升连续子序列可以定义为从右到左或从左到右的序列。）</p>
+<p> 注意事项</p>
+<p>time</p>
+<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 [5, 4, 2, 1, 3], 其最长上升连续子序列（LICS）为 [5, 4, 2, 1], 返回 4.</p>
+<p>给定 [5, 1, 2, 3, 4], 其最长上升连续子序列（LICS）为 [1, 2, 3, 4], 返回 4.</p>
+<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
+    /*
+     * @param A: An array of Integer
+     * @return: an integer
+     */
+    public int longestIncreasingContinuousSubsequence(int[] A) {
+        // write your code here
+        if(A.length==0)
+            return 0;
+        int up = 1;
+        int _up =1;
+        int _down=1;
+        int down=1;
+        for(int i=1;i&lt;A.length;i++){
+            if(A[i]&gt;A[i-1]){
+                _up = _up+1;
+                if(_down&gt;=down){
+                    down = _down;
+                    _down = 1;
+                }else
+                    _down =1;
+            }
+            if(A[i]&lt;A[i-1]){
+                _down = _down+1;
+                if(_up&gt;=up){
+                    up = _up;
+                    _up = 1;
+                }else
+                    _up=1;
+            }
+        }
+        if(_up&gt;=up)
+            up = _up;
+        if(_down&gt;=down)
+            down = _down;
+        if(down&gt;=up)
+            return down;
+        else
+            return up;
+    }
+}    
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-LintCode题解（一）" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1188,256 +1539,6 @@ public class Solution {
             return true;
 }
 }
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-LintCode题解（五）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/30/LintCode题解（五）/" class="article-date">
-      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
-</a>
-
- 
-    <a href="/2017/09/30/LintCode题解（五）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（五）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/30/LintCode题解（五）/">LintCode题解（五）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="岛屿个数"><a href="#岛屿个数" class="headerlink" title="岛屿个数"></a>岛屿个数</h2><p>给一个01矩阵，求不同的岛屿的个数。</p>
-<p>0代表海，1代表岛，如果两个1相邻，那么这两个1属于同一个岛。我们只考虑上下左右为相邻。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><pre><code>[
-  [1, 1, 0, 0, 0],
-  [0, 1, 0, 0, 1],
-  [0, 0, 0, 1, 1],
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1]
-]
-</code></pre><p>如上矩阵有3个岛屿。</p>
-<h3 id="算法解答"><a href="#算法解答" class="headerlink" title="算法解答"></a>算法解答</h3><p>这题比较复杂，需要使用到深度遍历，使用递归将已确定的岛屿由true转化为false。并且递归他的四周其他岛屿。</p>
-<pre><code>public class Solution {
-/**
- * @param grid a boolean 2D matrix
- * @return an integer
- */
-    public int numIslands(boolean[][] grid) {
-        // Write your code here
-        if(grid.length==0)
-            return 0;
-        int row = grid.length;
-        int column = grid[0].length;
-        int count = 0;
-
-        for(int i = 0;i &lt; row;i++){
-            for(int j  = 0;j &lt; column;j++){
-                if(grid[i][j]==true){
-                    dfs_Islands(grid,i,j);
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-    private void dfs_Islands(boolean[][] grid, int i, int j){
-        if(i&lt;0||j&lt;0||i&gt;=grid.length||j&gt;=grid[0].length)
-            return; 
-        if(grid[i][j]==true){
-            grid[i][j]=false;
-            dfs_Islands(grid, i-1, j);
-            dfs_Islands(grid, i+1, j);
-            dfs_Islands(grid, i, j-1);
-            dfs_Islands(grid, i, j+1);
-        }    
-    }
-}
-</code></pre><h2 id="有效回文串"><a href="#有效回文串" class="headerlink" title="有效回文串"></a>有效回文串</h2><p>给定一个字符串，判断其是否为一个回文串。只包含字母和数字，忽略大小写。</p>
-<p> 注意事项</p>
-<p>你是否考虑过，字符串有可能是空字符串？这是面试过程中，面试官常常会问的问题。</p>
-<p>在这个题目中，我们将空字符串判定为有效回文。</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>“A man, a plan, a canal: Panama” 是一个回文。</p>
-<p>“race a car” 不是一个回文。</p>
-<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
-/*
- * @param s: A string
- * @return: Whether the string is a valid palindrome
- */
-    public static boolean isPalindrome(String s) {
-        // write your code here
-        boolean index = true;
-        if(s.length()==0)
-            return index;
-        String[] str = s。toLowerCase.split(&quot;&quot;);
-        int low = 0;
-        int high = s.length()-1;
-        while(low&lt;high){
-            if(str[low].matches(&quot;\\w&quot;)&amp;&amp;str[high].matches(&quot;\\w&quot;)){
-                if(str[low].equals(str[high])&amp;&amp;low==high-1)
-                    low = low+1;
-                else if(str[low].equals(str[high])&amp;&amp;low!=high+1){
-                    low = low+1;    
-                    high = high-1;
-                }
-                else if(!str[low].equals(str[high]))
-                    break;
-            }else{
-                if(!str[low].matches(&quot;\\w&quot;))
-                    low = low+1;
-                else if(!str[high].matches(&quot;\\w&quot;))
-                    high = high-1;
-            }
-        }
-        if(low==high)
-            index=true;
-        else
-            index=false;
-        return index;    
-    }
-}
-</code></pre><p>上面的算法完全是我凑出来的，汗颜啊。<br>下面是别人写的，给予参考：</p>
-<pre><code>public class Solution {
-/**
- * @param s A string
- * @return Whether the string is a valid palindrome
- */
-    public boolean isPalindrome(String s) {
-        // Write your code here
-        if(s.equals(&quot;&quot;)) return true;
-        int len = s.length();
-        int left = 0;
-        int right = len - 1;
-        s = s.toLowerCase();
-        while(left &lt; right){
-            char leftchar = s.charAt( left );
-            char rightchar = s.charAt( right );
-            while(!isValid(leftchar)){
-                left ++;
-                leftchar = s.charAt( left );
-                if(left&gt;=right) return true;
-            }
-            while(!isValid(rightchar)){
-                right --;
-                rightchar = s.charAt( right );
-                if(right&lt;=left) return true;
-            }
-            if(leftchar != rightchar)
-                return false;
-            left ++;
-            right --;
-        }
-
-        return true;
-
-    }
-    public boolean isValid(char ch){
-        if(ch&gt;=&apos;a&apos; &amp;&amp; ch &lt;= &apos;z&apos;)
-            return true;
-        if(ch &gt;=&apos;0&apos; &amp;&amp; ch &lt;= &apos;9&apos;)
-            return true;
-        return false;
-    }
-}    
-</code></pre><h2 id="最长上升子序列"><a href="#最长上升子序列" class="headerlink" title="最长上升子序列"></a>最长上升子序列</h2><p>给定一个整数数组（下标从 0 到 n-1， n 表示整个数组的规模），请找出该数组中的最长上升连续子序列。（最长上升连续子序列可以定义为从右到左或从左到右的序列。）</p>
-<p> 注意事项</p>
-<p>time</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 [5, 4, 2, 1, 3], 其最长上升连续子序列（LICS）为 [5, 4, 2, 1], 返回 4.</p>
-<p>给定 [5, 1, 2, 3, 4], 其最长上升连续子序列（LICS）为 [1, 2, 3, 4], 返回 4.</p>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><pre><code>public class Solution {
-    /*
-     * @param A: An array of Integer
-     * @return: an integer
-     */
-    public int longestIncreasingContinuousSubsequence(int[] A) {
-        // write your code here
-        if(A.length==0)
-            return 0;
-        int up = 1;
-        int _up =1;
-        int _down=1;
-        int down=1;
-        for(int i=1;i&lt;A.length;i++){
-            if(A[i]&gt;A[i-1]){
-                _up = _up+1;
-                if(_down&gt;=down){
-                    down = _down;
-                    _down = 1;
-                }else
-                    _down =1;
-            }
-            if(A[i]&lt;A[i-1]){
-                _down = _down+1;
-                if(_up&gt;=up){
-                    up = _up;
-                    _up = 1;
-                }else
-                    _up=1;
-            }
-        }
-        if(_up&gt;=up)
-            up = _up;
-        if(_down&gt;=down)
-            down = _down;
-        if(down&gt;=up)
-            return down;
-        else
-            return up;
-    }
-}    
 </code></pre>
       
     </div>
@@ -2254,180 +2355,6 @@ try{
 
 
   
-    <article id="post-Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/" class="article-date">
-      <time datetime="2017-09-28T02:14:00.000Z" itemprop="datePublished">2017-09-28</time>
-</a>
-
- 
-    <a href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="Spring’s-Annotations区别"><a href="#Spring’s-Annotations区别" class="headerlink" title="Spring’s Annotations区别"></a>Spring’s Annotations区别</h2><ul>
-<li>Component泛指组件，如果组件无法分类，可以使用该组件</li>
-<li>Service用于标注业务层组件</li>
-<li>Repository用于标注持久层组件，DAO组件</li>
-<li>Controller用于标注控制层组件</li>
-</ul>
-<p>配置<br>我们需要在component-scan标签默认情况下自动扫描指定路径下的包（含所有的包），将@Component、@Service、@Repository、@Controller注入到spring容器。</p>
-<pre><code>&lt;context:component-scan base-package=&quot;com.spring.package&quot; /&gt;
-</code></pre><h2 id="Autowired和-Resource"><a href="#Autowired和-Resource" class="headerlink" title="@Autowired和@Resource"></a>@Autowired和@Resource</h2><p>我们可以通过注解@Autowired和@Resource完成注入依赖，二者具有一定的差别。</p>
-<ul>
-<li>@Resource默认是按照名称来装配注入的，只有当找不到与名称匹配的bean才会按照类型来装配注入；</li>
-<li>@Autowired默认是按照类型装配注入的，如果想按照名称来转配注入，则需要结合@Qualifier一起使用；</li>
-<li>@Resource注解是又J2EE提供，而@Autowired是由Spring提供，故减少系统对spring的依赖建议使用  @Resource的方式；</li>
-<li>@Resource和@Autowired都可以书写标注在字段或者该字段的setter方法之上</li>
-</ul>
-<p>我们可以发现我们实际开发中，使用最多的还是@Autowired</p>
-<h3 id="AutoWired"><a href="#AutoWired" class="headerlink" title="@AutoWired"></a>@AutoWired</h3><p>首先看看xml配置方式下是如何注入依赖的</p>
-<pre><code>&lt;bean id=&quot;Person&quot; class=&quot;Test.Person&quot;&gt;
-    &lt;property name=&quot;car&quot; ref=&quot;car&quot; /&gt;
-    &lt;property name=&quot;address&quot; ref=&quot;address&quot; /&gt;
-&lt;/bean&gt;
-&lt;bean id=&quot;car&quot; class=&quot;Test.Car&quot;&gt;
-    &lt;propery name=&quot;price&quot; value=&quot;30000&quot; /&gt;
-&lt;/bean&gt;
-&lt;bean id=&quot;address&quot; class=&quot;Test.Address&quot;&gt;
-    &lt;property name=&quot;street&quot; value=&quot;XianLin&quot; /&gt;
-&lt;/bean&gt;        
-</code></pre><p>一般，@AutoWired可以对类成员变量、方法和构造函数进行自动装配工作，如下所示对成员变量进行自动装配</p>
-<pre><code>import org.springframework.beans.factory.annotation.Autowired; 
-@Component
-public class Person{
-    @AutoWired
-    private Car car;
-    @AutoWired
-    private Address address;
-
-    ...
-}
-</code></pre><p>此外，还可以将@AutoWired标注在setter方法上</p>
-<pre><code>import org.springframework.beans.factory.annotation.Autowired; 
-@Component
-public class Person{
-    private Car car;
-    private Address address;
-
-    @Autowired
-    public void setCar(Car car){
-        this.car = car;
-    }
-    @Autowired
-    public void setAddress(Address address){
-        this.Address = address;
-    }
-    ...
-}        
-</code></pre><p>@AutoWired标注在构造函数上</p>
-<pre><code>import org.springframework.beans.factory.annotation.Autowired; 
-@Component
-public class Person{
-    private Car car;
-    private Address address;
-
-    @Autowired
-    public Person(Car car, Address address){
-        super();
-        this.car = car;
-        this.address = address;
-    }
-    ...
-}
-</code></pre><p>如果我们在容器中配置了两个类型相同的Bean时，我们需要加上@Qulifier进行识别具体是哪个bean被需求，比如有下面两个Bean。<br>第一个Bean：</p>
-<pre><code>@Component(&quot;car1&quot;)
-public class Car{
-    @value(&quot;${Car.price1}&quot;)
-    private double price;
-
-    ...
-}
-</code></pre><p>第二个Bean：</p>
-<pre><code>@Component(&quot;car2&quot;)
-public class Car{
-    @value(&quot;${Car.price2}&quot;)
-    private double price;
-
-    ...
-}
-</code></pre><p>此时我们需要在要使用Car这个Bean时，加上@Qulifier</p>
-<pre><code>public Class Person{
-    private Car car;
-    private Address address;
-
-
-    @AutoWired
-    public void setCar(@qulifier(&quot;car1&quot;) Car car){
-        this.car = car;
-    }
-
-    public void setAddress(Address address){
-        this.address = address;
-    }
-}
-</code></pre><p>成员变量和构造函数的注入依赖方式与setter基本相似。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -2439,7 +2366,7 @@ public class Car{
         <div id="footer-info">
             <div class="footer-left">
                 <i class="fa fa-copyright"></i> 
-                2016-2017 Sams_ara Jin
+                2016-2018 Sams_ara Jin
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>

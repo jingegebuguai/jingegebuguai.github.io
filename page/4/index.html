@@ -276,6 +276,180 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/" class="article-date">
+      <time datetime="2017-09-28T02:14:00.000Z" itemprop="datePublished">2017-09-28</time>
+</a>
+
+ 
+    <a href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/28/Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用/">Spring中@Component,@Service,@Repository,@Controller的区别以及@AutoWired的使用</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Spring’s-Annotations区别"><a href="#Spring’s-Annotations区别" class="headerlink" title="Spring’s Annotations区别"></a>Spring’s Annotations区别</h2><ul>
+<li>Component泛指组件，如果组件无法分类，可以使用该组件</li>
+<li>Service用于标注业务层组件</li>
+<li>Repository用于标注持久层组件，DAO组件</li>
+<li>Controller用于标注控制层组件</li>
+</ul>
+<p>配置<br>我们需要在component-scan标签默认情况下自动扫描指定路径下的包（含所有的包），将@Component、@Service、@Repository、@Controller注入到spring容器。</p>
+<pre><code>&lt;context:component-scan base-package=&quot;com.spring.package&quot; /&gt;
+</code></pre><h2 id="Autowired和-Resource"><a href="#Autowired和-Resource" class="headerlink" title="@Autowired和@Resource"></a>@Autowired和@Resource</h2><p>我们可以通过注解@Autowired和@Resource完成注入依赖，二者具有一定的差别。</p>
+<ul>
+<li>@Resource默认是按照名称来装配注入的，只有当找不到与名称匹配的bean才会按照类型来装配注入；</li>
+<li>@Autowired默认是按照类型装配注入的，如果想按照名称来转配注入，则需要结合@Qualifier一起使用；</li>
+<li>@Resource注解是又J2EE提供，而@Autowired是由Spring提供，故减少系统对spring的依赖建议使用  @Resource的方式；</li>
+<li>@Resource和@Autowired都可以书写标注在字段或者该字段的setter方法之上</li>
+</ul>
+<p>我们可以发现我们实际开发中，使用最多的还是@Autowired</p>
+<h3 id="AutoWired"><a href="#AutoWired" class="headerlink" title="@AutoWired"></a>@AutoWired</h3><p>首先看看xml配置方式下是如何注入依赖的</p>
+<pre><code>&lt;bean id=&quot;Person&quot; class=&quot;Test.Person&quot;&gt;
+    &lt;property name=&quot;car&quot; ref=&quot;car&quot; /&gt;
+    &lt;property name=&quot;address&quot; ref=&quot;address&quot; /&gt;
+&lt;/bean&gt;
+&lt;bean id=&quot;car&quot; class=&quot;Test.Car&quot;&gt;
+    &lt;propery name=&quot;price&quot; value=&quot;30000&quot; /&gt;
+&lt;/bean&gt;
+&lt;bean id=&quot;address&quot; class=&quot;Test.Address&quot;&gt;
+    &lt;property name=&quot;street&quot; value=&quot;XianLin&quot; /&gt;
+&lt;/bean&gt;        
+</code></pre><p>一般，@AutoWired可以对类成员变量、方法和构造函数进行自动装配工作，如下所示对成员变量进行自动装配</p>
+<pre><code>import org.springframework.beans.factory.annotation.Autowired; 
+@Component
+public class Person{
+    @AutoWired
+    private Car car;
+    @AutoWired
+    private Address address;
+
+    ...
+}
+</code></pre><p>此外，还可以将@AutoWired标注在setter方法上</p>
+<pre><code>import org.springframework.beans.factory.annotation.Autowired; 
+@Component
+public class Person{
+    private Car car;
+    private Address address;
+
+    @Autowired
+    public void setCar(Car car){
+        this.car = car;
+    }
+    @Autowired
+    public void setAddress(Address address){
+        this.Address = address;
+    }
+    ...
+}        
+</code></pre><p>@AutoWired标注在构造函数上</p>
+<pre><code>import org.springframework.beans.factory.annotation.Autowired; 
+@Component
+public class Person{
+    private Car car;
+    private Address address;
+
+    @Autowired
+    public Person(Car car, Address address){
+        super();
+        this.car = car;
+        this.address = address;
+    }
+    ...
+}
+</code></pre><p>如果我们在容器中配置了两个类型相同的Bean时，我们需要加上@Qulifier进行识别具体是哪个bean被需求，比如有下面两个Bean。<br>第一个Bean：</p>
+<pre><code>@Component(&quot;car1&quot;)
+public class Car{
+    @value(&quot;${Car.price1}&quot;)
+    private double price;
+
+    ...
+}
+</code></pre><p>第二个Bean：</p>
+<pre><code>@Component(&quot;car2&quot;)
+public class Car{
+    @value(&quot;${Car.price2}&quot;)
+    private double price;
+
+    ...
+}
+</code></pre><p>此时我们需要在要使用Car这个Bean时，加上@Qulifier</p>
+<pre><code>public Class Person{
+    private Car car;
+    private Address address;
+
+
+    @AutoWired
+    public void setCar(@qulifier(&quot;car1&quot;) Car car){
+        this.car = car;
+    }
+
+    public void setAddress(Address address){
+        this.address = address;
+    }
+}
+</code></pre><p>成员变量和构造函数的注入依赖方式与setter基本相似。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Spring属性配置细节" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -2361,103 +2535,6 @@ Vue.nextTick(function(){
 
 
   
-    <article id="post-web开发者必备http知识" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/06/22/web开发者必备http知识/" class="article-date">
-      <time datetime="2017-06-22T12:30:00.000Z" itemprop="datePublished">2017-06-22</time>
-</a>
-
- 
-    <a href="/2017/06/22/web开发者必备http知识/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/06/22/web开发者必备http知识/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/22/web开发者必备http知识/">Web开发者必备Http基础</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="HTTP基础知识"><a href="#HTTP基础知识" class="headerlink" title="HTTP基础知识"></a>HTTP基础知识</h2><p>HTTP允许各种主机和客户端之间的通信，并支持网络配置的混合。</p>
-<font style="color:red">为了实现这一点，它对于特定系统的假设很少，并且不会在不同的消息交换之间保持状态。</font>
-
-<p>这使得HTTP成为无状态协议。通信通常通过TCP / IP进行，但可以使用任何可靠的传输。TCP / IP的默认端口为80，但也可以使用其他端口。<br><img src="https://cdn.tutsplus.com/net/authors/jeremymcpeak/http1-request-response.png" alt=""></p>
-<p>通过请求/响应对发生主机和客户端之间的通信。客户端发起一个HTTP请求消息，它通过HTTP响应消息进行服务。我们将在下一节中看这个基本的消息对。</p>
-<p>当前版本的协议是HTTP / 1.1，它为之前的1.0版本增加了一些额外的功能。在我看来，最重要的是包括持久连接，分块传输编码和细粒度缓存头。本文将简要介绍这些功能; 第二部分将提供深入的报道。</p>
-<h2 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h2><p>Web通信的核心是通过统一资源定位器（URL）发送的请求消息。我相信你已经熟悉了URL，但为了完整起见，我将其包含在这里。URL具有由以下组件组成的简单结构：<br><img src="https://cdn.tutsplus.com/net/authors/jeremymcpeak/http1-url-structure.png" alt=""><br>协议通常是http，但也可以https用于安全通信。默认端口是80，但可以明确设置，如上图所示。资源路径是服务器上资源的本地路径。</p>
-<h2 id="动词"><a href="#动词" class="headerlink" title="动词"></a>动词</h2><p>还有Web调试代理，如Windows上的Fiddler和OSX的Charles Proxy。</p>
-<p>URL显示了我们想要通信的特定主机的身份，但是应该通过HTTP动词指定在主机上执行的操作。当然，客户端希望主机执行几种操作。HTTP已经形式化了一些捕获普遍适用于各种应用程序的要点。</p>
-<p>这些请求动词是：</p>
-<p>GET：获取现有资源。该URL包含服务器查找和返回资源所需的所有必要信息。<br>POST：创建一个新的资源。POST请求通常携带指定新资源的数据的有效载荷。<br>PUT：更新现有资源。有效载荷可能包含资源的更新数据。<br>删除：删除现有资源。<br>上述四个动词是最受欢迎的，大多数工具和框架明确地暴露了这些请求动词。PUT并且DELETE有时被认为是POST动词的特殊版本，并且它们可以被打包成POST具有包含确切动作的有效载荷的请求：创建，更新或删除。</p>
-<p>HTTP还支持一些较小使用的动词：</p>
-<p>HEAD：这与GET类似，但没有消息体。它用于检索特定资源的服务器头，通常通过时间戳检查资源是否已更改。<br>TRACE：用于检索请求从服务器往返的跳数。每个中间代理或网关将其IP或DNS名称注入Via到头域中。这可以用于诊断目的。<br>选项：用于检索服务器功能。在客户端，可以根据服务器支持的方式修改请求。</p>
-<h2 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h2><p>使用URL和动词，客户端可以向服务器发起请求。作为回报，服务器响应状态码和消息有效载荷。状态代码很重要，并告诉客户端如何解释服务器响应。HTTP规范为特定类型的响应定义了一些数字范围：</p>
-<h3 id="1xx：信息消息"><a href="#1xx：信息消息" class="headerlink" title="1xx：信息消息"></a>1xx：信息消息</h3><p>所有HTTP / 1.1客户端都需要接受Transfer-Encoding标头。</p>
-<p>这类代码是在HTTP / 1.1中引入的，完全是临时的。服务器可以发送Expect: 100-continue消息，告诉客户端继续发送请求的剩余部分，或者如果已经发送请求，则忽略该消息。HTTP / 1.0客户端应该忽略此头。</p>
-<h3 id="2xx：成功"><a href="#2xx：成功" class="headerlink" title="2xx：成功"></a>2xx：成功</h3><p>这告诉客户端请求已被成功处理。最常见的代码是200 OK。对于GET请求，服务器在消息正文中发送资源。还有其他较少使用的代码：</p>
-<p>202已接受：请求被接受，但可能不包括响应中的资源。这对服务器端的异步处理非常有用。服务器可以选择发送监控信息。<br>204无内容：回复中没有留言体。<br>205重置内容：指示客户端重置其文档视图。<br>206部分内容：表示响应只包含部分内容。附加标题表示确切的范围和内容过期信息。</p>
-<h3 id="3xx：重定向"><a href="#3xx：重定向" class="headerlink" title="3xx：重定向"></a>3xx：重定向</h3><p>404表示资源无效，服务器上不存在。</p>
-<p>这需要客户端采取额外的措施。最常见的用例是跳转到不同的URL以获取资源。</p>
-<p>301永久移动：资源现在位于新的URL。<br>303请参阅其他：资源暂时位于新的URL。该Location响应报头包含临时URL。<br>304未修改：服务器已确定资源未更改，客户端应使用其缓存副本。这取决于客户端发送ETag（Enttity Tag）信息是内容的哈希的事实。服务器将其与其自己计算的进行比较ETag以检查修改。</p>
-<h3 id="4xx：客户端错误"><a href="#4xx：客户端错误" class="headerlink" title="4xx：客户端错误"></a>4xx：客户端错误</h3><p>当服务器认为客户端出现故障时，会使用这些代码，无论是通过请求无效资源还是发出不良请求。这个类中最流行的代码是404 Not Found，我认为每个人都会识别。404表示资源无效，服务器上不存在。该课程中的其他代码包括：</p>
-<p>400错误请求：请求格式错误。<br>401未经授权：请求需要身份验证。客户端可以使用Authorization头重复请求。如果客户端已经包含了Authorization标题，那么凭据是错误的。<br>403禁止：服务器已拒绝对资源的访问。<br>405方法不允许：在请求行中使用无效的HTTP动词，或服务器不支持该动词。<br>409冲突：服务器无法完成请求，因为客户端正在尝试修改比客户端时间戳更新的资源。在协作编辑资源时，冲突主要出现在PUT请求中。</p>
-<h3 id="5xx：服务器错误"><a href="#5xx：服务器错误" class="headerlink" title="5xx：服务器错误"></a>5xx：服务器错误</h3><p>此类代码用于在处理请求时指示服务器故障。最常用的错误代码是500内部服务器错误。这个班的其他人是：</p>
-<p>501未实现：服务器不支持所请求的功能。<br>503服务不可用：如果服务器上的内部系统发生故障或服务器超载，可能会发生这种情况。通常，服务器甚至不会响应，请求将超时。<br>请求和响应消息格式<br>到目前为止，我们已经看到URL，动词和状态码构成了HTTP请求/响应对的基本部分。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -2469,7 +2546,7 @@ Vue.nextTick(function(){
         <div id="footer-info">
             <div class="footer-left">
                 <i class="fa fa-copyright"></i> 
-                2016-2017 Sams_ara Jin
+                2016-2018 Sams_ara Jin
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
