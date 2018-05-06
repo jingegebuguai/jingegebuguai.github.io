@@ -276,6 +276,210 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Java数据库与事务处理机制" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/29/Java数据库与事务处理机制/" class="article-date">
+      <time datetime="2017-09-29T02:14:00.000Z" itemprop="datePublished">2017-09-29</time>
+</a>
+
+ 
+    <a href="/2017/09/29/Java数据库与事务处理机制/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/29/Java数据库与事务处理机制/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/29/Java数据库与事务处理机制/">Java数据库处理与事务机制</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="数据库连接"><a href="#数据库连接" class="headerlink" title="数据库连接"></a>数据库连接</h2><p>数据库连接步骤如下：</p>
+<ul>
+<li>下载mysql-connector-java的jar包，并导入</li>
+<li>加载注册驱动程序，Class.forName(“com.mysql.jdbc.Driver”)</li>
+<li><p>连接数据库</p>
+<p>  conn = DriverManager.getCOnnection(DB_URL,USER,PASS)</p>
+</li>
+<li><p>执行sql语句</p>
+<p>  //创建用于执行sql语句的Statement对象<br>  stmt = (Stattement)conn.createStatement();<br>  //执行查询语句，返回查询结果<br>  ResultSet rs = stmt.executeQuery(“SELECT id,name FROM test”);<br>  while(rs.next()){</p>
+<pre><code>int id = rs.getInt(&quot;id&quot;);
+String name = rs.getString(&quot;name&quot;);
+out.println(&quot;...&quot;+id+&quot;...&quot;+name);
+out.println(&quot;&lt;br /&gt;&quot;)
+</code></pre><p>  }<br>  //执行插入语句，返回插入行数<br>  String 失去了= “INSERT INTO test …VALUES(…)”<br>  stmt = (Statement)conn.create.Statement();<br>  int count = stmt.executeUpdate(sql);<br>  //数据库更新(删除)和插入相似</p>
+</li>
+</ul>
+<ul>
+<li><p>关闭数据库连接</p>
+<p>  rs.close();<br>  stmt.close();<br>  conn.close();    </p>
+</li>
+<li><p>PrepareStatement<br>是Statement的子接口，可以传入带占位符的sqlyuju，提供补充占位符变量的方法</p>
+<p>  String sql = “insert into mysql_test values(?,?,?)”<br>  PrepareStatement ps = conn.preprareStatement(sql);<br>  ps.setString(1, ‘’);<br>  ps.setString(2, ‘’);<br>  ps.setString(3, ‘’);<br>  ps.execteUpdate();</p>
+</li>
+</ul>
+<h3 id="Java事务处理"><a href="#Java事务处理" class="headerlink" title="Java事务处理"></a>Java事务处理</h3><p>何为事物： 所有的操作要么同时完成，要么同时失败。在mysql中提供Commit和Rollback命令进行事务的提交与回滚。</p>
+<p>java的事务处理类型有三种，JDBC、JTA（Java Transaction API）事务、容器事务。容器事务多用于Spring中。</p>
+<h4 id="JDBC事务处理机制"><a href="#JDBC事务处理机制" class="headerlink" title="JDBC事务处理机制"></a>JDBC事务处理机制</h4><p>JDBC一切行为包括事务是基于一个connection的.<br>JDBC事务处理步骤：</p>
+<ul>
+<li><p>取消JDBC的自动提交</p>
+<p>  void setAutoCommit(bollean autoCommit)=&gt;setAutoCommit(false)</p>
+</li>
+<li><p>执行各个sql语句，加入到批处理之中    </p>
+</li>
+<li><p>如若所有语句都执行成功，则提交事务commit(),如果出现错误，则回滚：roolback()</p>
+</li>
+</ul>
+<p>基本核心如下：</p>
+<pre><code>//取消自动提交
+conn.setAutoCommit(false)
+//将sql加入到批处理
+stmt.addBatch();
+stmt.addBatch();
+//执行批处理操作
+stmt.execteBatch();
+//提交事务
+commit();
+//发生错误
+try{
+    rollback();
+}
+</code></pre><p>优缺点：</p>
+<ul>
+<li>可以将多个sql语句放到同一个事务中，保证ACID特性，API比较简单，性能好 </li>
+<li>局限是：一个JDBC事务不能跨多个数据库</li>
+</ul>
+<p>实例如下所示：</p>
+<pre><code>public static void example(){
+    Connection conn = null;
+}try{
+    Class.forName(&quot;com.mysql.jdbc.Driver&quot;);
+    conn = DreiverManager.getConnection(&quot;jdbc:ysql://localhost:3306/mysqltest&quot;, USSR, PASS);
+    conn.setAutoCommit(false);//取消自动提交，改为手动提交
+    String sql_1 = &quot;update test_table set name=&apos;...&apos; where name=&apos;...&apos;&quot;;
+    String sql_2 = &quot;insert test_table (name,url) values(&apos;...&apos;,&apos;&apos;),(&apos;&apos;,&apos;&apos;)&quot;;
+    stmt = (Statement)conn.create.Statement();
+    int count = stmt.executeUpdate(sql_1);
+    //若所有结果执行完成，则执行提交事务
+    stmt.execteUpdate(sql_2);
+    conn.commit();
+    ps.close();
+    conn.close()
+    catch(ClassNotFoundException e){
+        e.printStackTrace();
+    }catch(SQLException e){
+        e.printStackTrace();
+        try{
+            //只要有一个sql语句错误，则事务回滚
+            conn.rollback();
+        }catch(SQLException e){
+            e.printStackTrace();    
+        }    
+    }
+}    
+</code></pre><h3 id="JTA事务处理"><a href="#JTA事务处理" class="headerlink" title="JTA事务处理"></a>JTA事务处理</h3><p>JDBC事务无法满足分布式数据库的处理，所以使用JTA，JTA是一个java企业版的应用程序接口，在java中，允许完成跨越多个XA资源的分布式事务<br>XA（数据库与事务管理器的接口标准，Oracle，DB2，Sybase提供XA支持）</p>
+<p>JTA提供了java.transaction.UserTansaction,主要方法为：</p>
+<ul>
+<li>begin:开启一个事务</li>
+<li>commit：提交当前事务</li>
+<li>rollback：回滚当前事务</li>
+<li>setRollbackOnly：把当前事务标记为回滚</li>
+<li>setTransactionTimeout:设置事务的事件，就是抛出异常，回滚事务</li>
+</ul>
+<p>要想使用用 JTA 事务，那么就需要有一个实现 javax.sql.XADataSource 、 javax.sql.XAConnection 和 javax.sql.XAResource 接口的 JDBC 驱动程序。一个实现了这些接口的驱动程序将可以参与 JTA 事务。一个 XADataSource 对象就是一个 XAConnection 对象的工厂。XAConnection 是参与 JTA 事务的 JDBC 连接。</p>
+<p>要使用JTA事务，必须使用XADataSource来产生数据库连接，产生的连接为一个XA连接。</p>
+<p>XA连接（javax.sql.XAConnection）和非XA（java.sql.Connection）连接的区别在于：XA可以参与JTA的事务，而且不支持自动提交。</p>
+<pre><code>public void JtaTransfer() { 
+        javax.transaction.UserTransaction tx = null;
+        java.sql.Connection conn = null;
+         try{ 
+             tx = (javax.transaction.UserTransaction) context.lookup(&quot;java:comp/UserTransaction&quot;);  //取得JTA事务，本例中是由Jboss容器管理
+             javax.sql.DataSource ds = (javax.sql.DataSource) context.lookup(&quot;java:/XAOracleDS&quot;);  //取得数据库连接池，必须有支持XA的数据库、驱动程序  
+             tx.begin();
+            conn = ds.getConnection();
+
+             // 将自动提交设置为 false，
+             //若设置为 true 则数据库将会把每一次数据更新认定为一个事务并自动提交
+             conn.setAutoCommit(false);
+
+             stmt = conn.createStatement(); 
+             // 将 A 账户中的金额减少 500 
+             stmt.execute(&quot;\
+             update t_account set amount = amount - 500 where account_id = &apos;A&apos;&quot;);
+             // 将 B 账户中的金额增加 500 
+             stmt.execute(&quot;\
+             update t_account set amount = amount + 500 where account_id = &apos;B&apos;&quot;);
+
+             // 提交事务
+             tx.commit();
+             // 事务提交：转账的两步操作同时成功
+         } catch(SQLException sqle){            
+             try{ 
+                 // 发生异常，回滚在本事务中的操做
+              tx.rollback();
+                 // 事务回滚：转账的两步操作完全撤销
+                 stmt.close(); 
+                 conn.close(); 
+             }catch(Exception ignore){ 
+
+             } 
+             sqle.printStackTrace(); 
+         } 
+     }
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Spring@Component,@Repository,@Service,@Controller区别以及@AutoWired的使用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -2418,98 +2622,6 @@ for (let i of arr) {
       
     <div class="article-category tagcloud">
     <a class="article-category-link" href="/categories/未闻花名/">未闻花名</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS学习笔记/">JS学习笔记</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-vue仿饿了么项目的重要知识点与那些坑" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/" class="article-date">
-      <time datetime="2017-06-25T12:30:00.000Z" itemprop="datePublished">2017-06-25</time>
-</a>
-
- 
-    <a href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/06/25/vue仿饿了么项目的重要知识点与那些坑/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/25/vue仿饿了么项目的重要知识点与那些坑/">Vue仿饿了么知识点总结</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="Vue-nextTick-callback-context"><a href="#Vue-nextTick-callback-context" class="headerlink" title="Vue.nextTick([callback,context])"></a>Vue.nextTick([callback,context])</h2><h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。</p>
-<pre><code>vm.msg = &apos;Hello&apos;
-Vue.nextTick(function(){
-    // DOM更新
-</code></pre><h2 id="vm-nextTick-callback"><a href="#vm-nextTick-callback" class="headerlink" title="vm.$nextTick([callback])"></a>vm.$nextTick([callback])</h2><h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><p>{function} [callback]</p>
-<h3 id="用法-1"><a href="#用法-1" class="headerlink" title="用法"></a>用法</h3><p>将回调延迟到下次DOM更新循环后执行。在修改数据之后立即使用它，然后等待DOM更新。它跟全局方法Vue.nextTick一样，不同的是回调的this自动绑定到调用它的实例上。</p>
-<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><pre><code>new Vue({
-    // ...
-    methods: {
-        example: function () {
-            this.msg = &apos;changed&apos;
-            this.$nextTick(function() {
-                this.dosomthingElse()
-                })
-        }
-    }
-})
-</code></pre><h2 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h2><p>简单起见， v-el 和 v-ref 合并为一个 ref属性了，可以在组件实例中通过 $refs 来调用。这意味着 v-el:my-element 将写成这样： ref=”myElement”， v-ref:my-component 变成了这样： ref=”myComponent”。绑定在一般元素上时，ref 指DOM元素，绑定在组件上时，ref 为一组件实例。<br>因为 v-ref 不再是一个指令了而是一个特殊的属性，它也可以被动态定义了。这样在和v-for 结合的时候是很有用的：    </p>
-<pre><code>&lt;p v-for = &quot;item in items&quot; v-bind:ref=&quot;items&quot;&gt;&lt;/p&gt;
-</code></pre><p>和 1.x 中不同， $refs 不是响应的，因为它们在渲染过程中注册/更新。只有监听变化并重复渲染才能使它们响应。<br>另一方面，设计$refs主要是提供给 js 程序访问的，并不建议在模板中过度依赖使用它。因为这意味着在实例之外去访问实例状态，违背了 Vue 数据驱动的思想。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
     </div>
 
 

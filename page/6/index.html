@@ -276,6 +276,146 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-用IIFE与let方法改写循环闭包" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/04/10/用IIFE与let方法改写循环闭包/" class="article-date">
+      <time datetime="2017-04-10T06:25:00.000Z" itemprop="datePublished">2017-04-10</time>
+</a>
+
+ 
+    <a href="/2017/04/10/用IIFE与let方法改写循环闭包/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/04/10/用IIFE与let方法改写循环闭包/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/10/用IIFE与let方法改写循环闭包/">用IIFE与let命令改写循环闭包</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>根据阮大的解释，闭包就是能够读取其他函数内部变量的函数，闭包的作用有两个，一个是可以读取函数内部的变量，另一个就是让这些变量的值始终保持在内存中。但是有时候变量值都保存在内存中不见得都是好事，所以我们要解决一些循环闭包中变量保存在内存中的问题。主要用到的方法包括IIFE（立即执行匿名函数），ES6中的let命令。</p>
+<h2 id="前言-来自牛客的思考"><a href="#前言-来自牛客的思考" class="headerlink" title="前言-来自牛客的思考"></a>前言-来自牛客的思考</h2><p>现在给出原题（略有改动）：</p>
+<pre><code>for(var i=0;i&lt;5;i++){
+    setTimeout(function (){
+        console.log(i+&apos;&apos;);
+    },100);
+}
+for(var j=0;j&lt;5;j++)
+    console.log(j);
+</code></pre><p>这题涉及到了setTimeout以及闭包的知识，如果掌握很好的的话，一眼就能看出答案是1-&gt;2,3,4-&gt;5-&gt;5,5,5,5(注意时间顺序)。现在我希望第一个for循环按顺序输出，方法主要有立即执行匿名函数和ES6中的let。</p>
+<h2 id="ES6–let"><a href="#ES6–let" class="headerlink" title="ES6–let"></a>ES6–let</h2><p>如果有做angular2的同志对ES6的语法是了解不过了。下面内容可以带过。<br>let的用法类似于var，但是所声明的变量，只在let命令所在的块级作用域内有效。</p>
+<pre><code>function f1() {
+  let n = 5;
+  if (true) {
+      let n = 10;
+      console.log(n); //10
+  }
+  console.log(n); // 5
+}
+</code></pre><p>上面的函数有两个代码块，都声明了变量n，运行后输出5。这表示外层代码块不受内层代码块的影响。如果使用var定义变量n，最后输出的值就是10。<br>下面我们改写之前的程序：</p>
+<pre><code>for(let i=0;i&lt;5;i++){
+    setTimeout(function (){
+        console.log(i+&apos;&apos;);
+    },100);
+}
+</code></pre><p>打开谷歌的控制台会发现结果已经变为0-&gt;1,2,3,4。正是let块级作用域的作用，使每个i变量都仅在对应的作用域内有效果。相应的下面程序也是一样的道理。</p>
+<pre><code>var elems = document.getElementsByTagName(&apos;a&apos;);
+for(let i = 0;i &lt; elems.length; i++ ) {
+    elems[i].addEventListener(&apos;click&apos;,function(e){
+        e.preventDefault();
+        alert(i)
+        },false);
+}
+</code></pre><h2 id="IIFE（立即执行函数表达式）"><a href="#IIFE（立即执行函数表达式）" class="headerlink" title="IIFE（立即执行函数表达式）"></a>IIFE（立即执行函数表达式）</h2><p>由于js中，在括号中进行函数声明无效，所以被括号包起来的函数称之为函数表达式。<br>IIFE的两种形式如下：当圆括号出现在匿名函数的末尾想要调用函数时，它会默认将函数当成是函数声明。当圆括号包裹函数时，它会默认将函数作为表达式去解析，而不是函数声明。</p>
+<pre><code>(function(){}());
+(function(){})();
+</code></pre><p>下面先来用牛客的一道题目来理解一下IIFE：</p>
+<pre><code>var myObject = {   
+    foo: &quot;bar&quot;,   
+    func: function() {     
+        var self = this;     
+          console.log(this.foo);          
+        console.log(self.foo);        
+          (function() {         
+            console.log(this.foo);      
+                console.log(self.foo);        
+          }());   
+}};
+    myObject.func();
+</code></pre><p>因为this指代的是myObject对象，所以第一个肯定输出bar，而self是this的变量，等于是this，所以第二个输出的还是bar，下面出现的就是我们上文定义的第一种IIFE形式，此时必须立即执行匿名函数，它的this指向的是window，所以输出undefined,最后的self在自己的块级作用域没有定义，所以向上找到父级作用域的self，因此第四个输出的还是bar。</p>
+<p>下面我们用两种IIFE的形式来改写最初的代码。</p>
+<pre><code>for(var i=0;i&lt;5;i++){
+    (function(e){
+        setTimeout(function (){
+            console.log(e+&apos;&apos;);
+        },100*i);
+//将i值锁定到e中，再输出相关结果
+    })(i)
+}
+</code></pre><p>在IIFE中，我们想要锁定哪个值就要将该值放在函数表达式的最外面那个括号里。此时就跟正常的for循环相同了。</p>
+<p>第二种方式：</p>
+<pre><code>for(var i=0;i&lt;5;i++){
+    (function(e){
+        setTimeout(function (){
+            console.log(new Date, e+&apos;&apos;);
+        },100*i);
+    }(i))
+}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JS-ES6/">JS,ES6</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-WEB-CSS布局" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">

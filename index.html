@@ -276,6 +276,63 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-爱奇艺面试" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/03/01/爱奇艺面试/" class="article-date">
+      <time datetime="2018-03-01T03:03:35.299Z" itemprop="datePublished">2018-03-01</time>
+</a>
+
+ 
+    <a href="/2018/03/01/爱奇艺面试/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2018/03/01/爱奇艺面试/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>最近投了爱奇艺的java实习，本人是南京的一所双非院校，在途牛旅游网实习过一段时间。投完简历过了一天HR就和我约好时间远程面试，第二天等到下午四点一面开始。</p>
+<p>1、一开始自我介绍，然后问我做过哪些项目，我只介绍了其中一个。<br>2、项目里的redis处理并发问题的根据是什么？<br>3、redis知道哪些数据类型？<br>4、紧接着开始问我spring的问题，解释IOC的原理，有哪些创建Bean的方式，xml配置和java配置是否可以同时存在，为什么？<br>5、aop的原理，什么是静态织入和动态织入？<br>6、restful api了解不，说说get，put，post，delete的区别？<br>7、你的项目里为什么都用post，有什么好处，处理json字符串的jar包是什么？<br>8、用过springboot吗？（没用过）springmvc的配置，有什么好处？servlet的原理，jdbc连接数据库。<br>9、mybatis的原理，如何实现？<br>10、数据库的事务隔离级别，什么是脏读，幻读？<br>11、数据库索引的原理是什么？B树和B+树有什么区别？什么是红黑树？有哪些索引？可不可以同时在一张表设置多个索引（n个）？索引的优缺点？一张性别表和一张学号表，哪个适合建索引？为什么？<br>12、数据库事务，spring事务如何实现？<br>13、看你项目里自己写过react和vue，接着开始问我前端，（很慌）。react和vue，angular的区别是什么？什么是虚拟DOM，vue的父子组件如何联系？什么是双向绑定，react如何实现双向绑定？会不会react redux，vuex？（这里不怎么说的清楚，很乱）<br>14、知道ES6吗，var和let区别，没有let，怎么处理var的问题（闭包和IIFE）？const？箭头函数？<br>15、样式会不会？什么是flex？为什么要用？如何实现左边固定，右边自适应？如何实现垂直水平居中？<br>16、还有一些问题记不大清了，庆幸没问算法。。。</p>
+<p>过了一个小时二面的面试官打电话过来直接就说一面的面试官对我很满意，他就不问了，有点开心，然后开始询问我一些问题，最近的情况，能不能考虑转正的问题，可不可以全职？</p>
+<p>过了十多分钟，还是二面那个面试官又打电话过来跟我介绍他们部门正在做的业务，让我提前把hadoop的知识学一学，说是要用到。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-NEC自适应布局" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1932,169 +1989,6 @@ public static ExecutorService newCachedThreadPool() {
 
 
   
-    <article id="post-Java并发之线程池拓展—ExecutorService原理与静态工厂方法" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/" class="article-date">
-      <time datetime="2017-11-01T02:35:00.000Z" itemprop="datePublished">2017-11-01</time>
-</a>
-
- 
-    <a href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/">Java并发之线程池拓展—ExecutorService原理，静态工厂方法</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="Executors类"><a href="#Executors类" class="headerlink" title="Executors类"></a>Executors类</h2><p>这个类包含了所有的线程池静态工厂方法，我们一般使用工厂方法之一来创建一个线程池。</p>
-<h3 id="ExecutorService接口"><a href="#ExecutorService接口" class="headerlink" title="ExecutorService接口"></a>ExecutorService接口</h3><p>接口 java.util.concurrent.ExecutorService 表述了异步执行的机制，并且可以让任务在后台执行。一个 ExecutorService 实例因此特别像一个线程池。事实上，在 java.util.concurrent 包中的 ExecutorService 的实现就是一个线程池的实现。</p>
-<h3 id="任务委托"><a href="#任务委托" class="headerlink" title="任务委托"></a>任务委托</h3><p><img src="http://static.oschina.net/uploads/space/2013/1119/165710_YOvh_136226.png" alt=""></p>
-<p>一旦线程把任务委托给 ExecutorService，该线程就会继续执行与运行任务无关的其它任务。</p>
-<h3 id="ExecutorService的创建"><a href="#ExecutorService的创建" class="headerlink" title="ExecutorService的创建"></a>ExecutorService的创建</h3><h4 id="newFixedThreadPool"><a href="#newFixedThreadPool" class="headerlink" title="newFixedThreadPool()"></a>newFixedThreadPool()</h4><pre><code>public static ExecutorService newFixedThreadPool(int nThreads) {
-    return new ThreadPoolExecutor(nThreads, nThreads,
-                                  0L, TimeUnit.MILLISECONDS,
-                                  new LinkedBlockingQueue&lt;Runnable&gt;());
-}
-public static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory) {
-    return new ThreadPoolExecutor(nThreads, nThreads,
-                                  0L, TimeUnit.MILLISECONDS,
-                                  new LinkedBlockingQueue&lt;Runnable&gt;(),
-                                  threadFactory);
-}
-</code></pre><p>newFixedThreadPool创建一个固定长度的线程池，每当提交一个任务就创建一个线程，直到线程池的最大数量，这时线程池规模将不再变化（如果某个线程发生了未预期的Exception而结束，那么线程池会补充一个新的线程）</p>
-<h4 id="newSingleThreadExecutor"><a href="#newSingleThreadExecutor" class="headerlink" title="newSingleThreadExecutor()"></a>newSingleThreadExecutor()</h4><pre><code>public static ExecutorService newSingleThreadExecutor() {
-    return new FinalizableDelegatedExecutorService
-        (new ThreadPoolExecutor(1, 1,
-                                0L, TimeUnit.MILLISECONDS,
-                                new LinkedBlockingQueue&lt;Runnable&gt;()));
-}
-public static ExecutorService newSingleThreadExecutor(ThreadFactory threadFactory) {
-    return new FinalizableDelegatedExecutorService
-        (new ThreadPoolExecutor(1, 1,
-                                0L, TimeUnit.MILLISECONDS,
-                                new LinkedBlockingQueue&lt;Runnable&gt;(),
-                                threadFactory));
-}
-</code></pre><p>newSingleThreadExecutor是一个单线程的Executor，它创建单个工作者线程来执行任务，如果这个县城异常结束，会创建另一个线程来代替。能确保依照任务在队列中的顺序来执行任务。</p>
-<h4 id="newCachedThreadPool"><a href="#newCachedThreadPool" class="headerlink" title="newCachedThreadPool()"></a>newCachedThreadPool()</h4><pre><code>public static ExecutorService newCachedThreadPool() {
-    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
-                                  60L, TimeUnit.SECONDS,
-                                  new SynchronousQueue&lt;Runnable&gt;());
-}
-public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {
-    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
-                                  60L, TimeUnit.SECONDS,
-                                  new SynchronousQueue&lt;Runnable&gt;(),
-                                  threadFactory);
-}
-</code></pre><p>newCachedThreadPool将创建一个可缓存的线程池，这个工厂方法很重要，是个无界线程池，我们将会专门在另一篇文章讲这个方法。</p>
-<p>如果线程池当前规模超过了处理需求时，将回收空闲的线程，当需求增加时，则可以添加新的线程，规模不u你在任何限制。</p>
-<h4 id="newScheduledThreadPool"><a href="#newScheduledThreadPool" class="headerlink" title="newScheduledThreadPool()"></a>newScheduledThreadPool()</h4><pre><code>public static ScheduledExecutorService newScheduledThreadPool(int corePoolSize) {
-    return new ScheduledThreadPoolExecutor(corePoolSize);
-}
-public static ScheduledExecutorService newScheduledThreadPool(
-        int corePoolSize, ThreadFactory threadFactory) {
-    return new ScheduledThreadPoolExecutor(corePoolSize, threadFactory);
-}
-</code></pre><p>创建一个固定长度的线程池，而且以延迟或定时的方式来执行任务，类似于Timer。</p>
-<h3 id="ExecutorService使用方法"><a href="#ExecutorService使用方法" class="headerlink" title="ExecutorService使用方法"></a>ExecutorService使用方法</h3><p>主要是几个方法的使用，具体看我线程池的第一篇文章</p>
-<pre><code>void shutdown();
-List&lt;Runnable&gt; shutdownNow();
-boolean isShutdown();
-boolean isTerminated();
-boolean awaitTermination(long timeout, TimeUnit unit)
-    throws InterruptedException;
-submit();
-invokeAny();
-invokeAll();
-execute();
-</code></pre><h4 id="execute"><a href="#execute" class="headerlink" title="execute()"></a>execute()</h4><pre><code>ExecutorService executorService = Executors.newSingleThreadExecutor();
-executorService.execute(new Runnable() {
-    public void run() {
-        System.out.println(&quot;Asynchronous task&quot;);
-    }
-});
-executorService.shutdown();
-</code></pre><p>使用这种方式没有办法获取执行 Runnable 之后的结果，如果你希望获取运行之后的返回值，就必须使用 接收 Callable 参数的 execute() 方法，后者将会在下文中提到。</p>
-<h4 id="submit"><a href="#submit" class="headerlink" title="submit()"></a>submit()</h4><pre><code>Future future = executorService.submit(new Runnable() {
-public void run() {
-    System.out.println(&quot;Asynchronous task&quot;);
-}
-});
-//如果任务结束执行则返回 null
-System.out.println(&quot;future.get()=&quot; + future.get());
-</code></pre><p>方法 submit(Callable) 和方法 submit(Runnable) 比较类似，但是区别则在于它们接收不同的参数类型。Callable 的实例与 Runnable 的实例很类似，但是 Callable 的 call() 方法可以返回壹個结果。方法 Runnable.run() 则不能返回结果。</p>
-<p>Callable 的返回值可以从方法 submit(Callable) 返回的 Future 对象中获取。如下是一个 ExecutorService Callable 的样例：</p>
-<pre><code>Future future = executorService.submit(new Callable(){
-    public Object call() throws Exception {
-        System.out.println(&quot;Asynchronous Callable&quot;);
-        return &quot;Callable Result&quot;;
-    }
-});
-
-System.out.println(&quot;future.get() = &quot; + future.get());
-</code></pre><p>上述样例代码会输出如下结果：</p>
-<pre><code>Asynchronous Callable
-future.get() = Callable Result
-</code></pre><h4 id="关闭服务"><a href="#关闭服务" class="headerlink" title="关闭服务"></a>关闭服务</h4><p>当使用 ExecutorService 完毕之后，我们应该关闭它，这样才能保证线程不会继续保持运行状态。<br>举例来说，如果你的程序通过 main() 方法启动，并且主线程退出了你的程序，如果你还有一个活动的 ExecutorService 存在于你的程序中，那么程序将会继续保持运行状态。存在于 ExecutorService 中的活动线程会阻止Java虚拟机关闭。<br>为了关闭在 ExecutorService 中的线程，你需要调用 shutdown() 方法。ExecutorService 并不会马上关闭，而是不再接收新的任务，一旦所有的线程结束执行当前任务，ExecutorServie 才会真的关闭。所有在调用 shutdown() 方法之前提交到 ExecutorService 的任务都会执行。<br>如果你希望立即关闭 ExecutorService，你可以调用 shutdownNow() 方法。这个方法会尝试马上关闭所有正在执行的任务，并且跳过所有已经提交但是还没有运行的任务。但是对于正在执行的任务，是否能够成功关闭它是无法保证的，有可能他们真的被关闭掉了，也有可能它会一直执行到任务结束。这是一个最好的尝试。 </p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-Java并发之阻塞队列" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -2245,20 +2139,20 @@ public ArrayBlockingQueue(int capacity, boolean fair,
 
 
   
-    <article id="post-Java并发之线程池拓展—Callable，Future，FutureTask" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Java并发之线程池拓展—ExecutorService原理与静态工厂方法" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/" class="article-date">
+      <a href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/" class="article-date">
       <time datetime="2017-11-01T02:35:00.000Z" itemprop="datePublished">2017-11-01</time>
 </a>
 
  
-    <a href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/#comments" title="查看评论">
+    <a href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/"></span>
         
     </a>
 
@@ -2273,7 +2167,7 @@ public ArrayBlockingQueue(int capacity, boolean fair,
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/">Java并发之线程池—Callable,Future,FutureTask</a>
+      <a class="article-title" href="/2017/11/01/Java并发之线程池拓展—ExecutorService原理与静态工厂方法/">Java并发之线程池拓展—ExecutorService原理，静态工厂方法</a>
     </h1>
   
 
@@ -2283,199 +2177,97 @@ public ArrayBlockingQueue(int capacity, boolean fair,
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="AbstractExecutorService类源码分析"><a href="#AbstractExecutorService类源码分析" class="headerlink" title="AbstractExecutorService类源码分析"></a>AbstractExecutorService类源码分析</h2><p>线程池ThreadPoolExecutor继承于AbstractorExecutorService类，所以分析该类的构成很有必要。</p>
-<p>上一篇博文提到ExecutorService是JDK并发工具包提供的一个核心接口，相当于一个线程池，提供执行任务和管理生命周期的方法。AbstractExecutorService主要实现了这个接口。 处理后的源码如下：</p>
-<pre><code>public abstract class AbstractExecutorService implements ExecutorService {
-    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) {
-        return new FutureTask&lt;T&gt;(runnable, value);
+        <h2 id="Executors类"><a href="#Executors类" class="headerlink" title="Executors类"></a>Executors类</h2><p>这个类包含了所有的线程池静态工厂方法，我们一般使用工厂方法之一来创建一个线程池。</p>
+<h3 id="ExecutorService接口"><a href="#ExecutorService接口" class="headerlink" title="ExecutorService接口"></a>ExecutorService接口</h3><p>接口 java.util.concurrent.ExecutorService 表述了异步执行的机制，并且可以让任务在后台执行。一个 ExecutorService 实例因此特别像一个线程池。事实上，在 java.util.concurrent 包中的 ExecutorService 的实现就是一个线程池的实现。</p>
+<h3 id="任务委托"><a href="#任务委托" class="headerlink" title="任务委托"></a>任务委托</h3><p><img src="http://static.oschina.net/uploads/space/2013/1119/165710_YOvh_136226.png" alt=""></p>
+<p>一旦线程把任务委托给 ExecutorService，该线程就会继续执行与运行任务无关的其它任务。</p>
+<h3 id="ExecutorService的创建"><a href="#ExecutorService的创建" class="headerlink" title="ExecutorService的创建"></a>ExecutorService的创建</h3><h4 id="newFixedThreadPool"><a href="#newFixedThreadPool" class="headerlink" title="newFixedThreadPool()"></a>newFixedThreadPool()</h4><pre><code>public static ExecutorService newFixedThreadPool(int nThreads) {
+    return new ThreadPoolExecutor(nThreads, nThreads,
+                                  0L, TimeUnit.MILLISECONDS,
+                                  new LinkedBlockingQueue&lt;Runnable&gt;());
+}
+public static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory) {
+    return new ThreadPoolExecutor(nThreads, nThreads,
+                                  0L, TimeUnit.MILLISECONDS,
+                                  new LinkedBlockingQueue&lt;Runnable&gt;(),
+                                  threadFactory);
+}
+</code></pre><p>newFixedThreadPool创建一个固定长度的线程池，每当提交一个任务就创建一个线程，直到线程池的最大数量，这时线程池规模将不再变化（如果某个线程发生了未预期的Exception而结束，那么线程池会补充一个新的线程）</p>
+<h4 id="newSingleThreadExecutor"><a href="#newSingleThreadExecutor" class="headerlink" title="newSingleThreadExecutor()"></a>newSingleThreadExecutor()</h4><pre><code>public static ExecutorService newSingleThreadExecutor() {
+    return new FinalizableDelegatedExecutorService
+        (new ThreadPoolExecutor(1, 1,
+                                0L, TimeUnit.MILLISECONDS,
+                                new LinkedBlockingQueue&lt;Runnable&gt;()));
+}
+public static ExecutorService newSingleThreadExecutor(ThreadFactory threadFactory) {
+    return new FinalizableDelegatedExecutorService
+        (new ThreadPoolExecutor(1, 1,
+                                0L, TimeUnit.MILLISECONDS,
+                                new LinkedBlockingQueue&lt;Runnable&gt;(),
+                                threadFactory));
+}
+</code></pre><p>newSingleThreadExecutor是一个单线程的Executor，它创建单个工作者线程来执行任务，如果这个县城异常结束，会创建另一个线程来代替。能确保依照任务在队列中的顺序来执行任务。</p>
+<h4 id="newCachedThreadPool"><a href="#newCachedThreadPool" class="headerlink" title="newCachedThreadPool()"></a>newCachedThreadPool()</h4><pre><code>public static ExecutorService newCachedThreadPool() {
+    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                  60L, TimeUnit.SECONDS,
+                                  new SynchronousQueue&lt;Runnable&gt;());
+}
+public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {
+    return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                  60L, TimeUnit.SECONDS,
+                                  new SynchronousQueue&lt;Runnable&gt;(),
+                                  threadFactory);
+}
+</code></pre><p>newCachedThreadPool将创建一个可缓存的线程池，这个工厂方法很重要，是个无界线程池，我们将会专门在另一篇文章讲这个方法。</p>
+<p>如果线程池当前规模超过了处理需求时，将回收空闲的线程，当需求增加时，则可以添加新的线程，规模不u你在任何限制。</p>
+<h4 id="newScheduledThreadPool"><a href="#newScheduledThreadPool" class="headerlink" title="newScheduledThreadPool()"></a>newScheduledThreadPool()</h4><pre><code>public static ScheduledExecutorService newScheduledThreadPool(int corePoolSize) {
+    return new ScheduledThreadPoolExecutor(corePoolSize);
+}
+public static ScheduledExecutorService newScheduledThreadPool(
+        int corePoolSize, ThreadFactory threadFactory) {
+    return new ScheduledThreadPoolExecutor(corePoolSize, threadFactory);
+}
+</code></pre><p>创建一个固定长度的线程池，而且以延迟或定时的方式来执行任务，类似于Timer。</p>
+<h3 id="ExecutorService使用方法"><a href="#ExecutorService使用方法" class="headerlink" title="ExecutorService使用方法"></a>ExecutorService使用方法</h3><p>主要是几个方法的使用，具体看我线程池的第一篇文章</p>
+<pre><code>void shutdown();
+List&lt;Runnable&gt; shutdownNow();
+boolean isShutdown();
+boolean isTerminated();
+boolean awaitTermination(long timeout, TimeUnit unit)
+    throws InterruptedException;
+submit();
+invokeAny();
+invokeAll();
+execute();
+</code></pre><h4 id="execute"><a href="#execute" class="headerlink" title="execute()"></a>execute()</h4><pre><code>ExecutorService executorService = Executors.newSingleThreadExecutor();
+executorService.execute(new Runnable() {
+    public void run() {
+        System.out.println(&quot;Asynchronous task&quot;);
     }
-    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) {
-        return new FutureTask&lt;T&gt;(callable);
+});
+executorService.shutdown();
+</code></pre><p>使用这种方式没有办法获取执行 Runnable 之后的结果，如果你希望获取运行之后的返回值，就必须使用 接收 Callable 参数的 execute() 方法，后者将会在下文中提到。</p>
+<h4 id="submit"><a href="#submit" class="headerlink" title="submit()"></a>submit()</h4><pre><code>Future future = executorService.submit(new Runnable() {
+public void run() {
+    System.out.println(&quot;Asynchronous task&quot;);
+}
+});
+//如果任务结束执行则返回 null
+System.out.println(&quot;future.get()=&quot; + future.get());
+</code></pre><p>方法 submit(Callable) 和方法 submit(Runnable) 比较类似，但是区别则在于它们接收不同的参数类型。Callable 的实例与 Runnable 的实例很类似，但是 Callable 的 call() 方法可以返回壹個结果。方法 Runnable.run() 则不能返回结果。</p>
+<p>Callable 的返回值可以从方法 submit(Callable) 返回的 Future 对象中获取。如下是一个 ExecutorService Callable 的样例：</p>
+<pre><code>Future future = executorService.submit(new Callable(){
+    public Object call() throws Exception {
+        System.out.println(&quot;Asynchronous Callable&quot;);
+        return &quot;Callable Result&quot;;
     }
-    //submit函数1
-    public Future&lt;?&gt; submit(Runnable task) {
-        if (task == null) throw new NullPointerException();
-        RunnableFuture&lt;Void&gt; ftask = newTaskFor(task, null);
-        execute(ftask);
-        return ftask;
-    }
-    //submit函数2
-    public &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result) {
-        if (task == null) throw new NullPointerException();
-        RunnableFuture&lt;T&gt; ftask = newTaskFor(task, result);
-        execute(ftask);
-        return ftask;
-    }
-    //submit函数3
-    public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {
-        if (task == null) throw new NullPointerException();
-        RunnableFuture&lt;T&gt; ftask = newTaskFor(task);
-        execute(ftask);
-        return ftask;
-    }
-    private &lt;T&gt; T doInvokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,boolean timed, long nanos) throws InterruptedException, ExecutionException, TimeoutException {······}
-    public &lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException, ExecutionException, TimeoutException {······}
-    public &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException {
-}
-</code></pre><h3 id="submit-方法源码分析"><a href="#submit-方法源码分析" class="headerlink" title="submit()方法源码分析"></a>submit()方法源码分析</h3><p>下面三个submit()方法是ExecutorService接口中的，并且由AbstructExecutorService类具体实现。    </p>
-<pre><code>public Future&lt;?&gt; submit(Runnable task) {···}
+});
 
-public &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result) {···}
-
-public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {···}
-</code></pre><h4 id="Callable-接口源码"><a href="#Callable-接口源码" class="headerlink" title="Callable()接口源码"></a>Callable()接口源码</h4><pre><code>@FunctionalInterface
-public interface Callable&lt;V&gt; {
-    //计算结果
-    V call() throws Exception;
-}
-</code></pre><h4 id="newTaskFor-方法源码"><a href="#newTaskFor-方法源码" class="headerlink" title="newTaskFor()方法源码"></a>newTaskFor()方法源码</h4><pre><code>protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) {
-        return new FutureTask&lt;T&gt;(runnable, value);
-    }
-protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) {
-        return new FutureTask&lt;T&gt;(callable);
-    }
-</code></pre><h4 id="FutureTask类部分源码"><a href="#FutureTask类部分源码" class="headerlink" title="FutureTask类部分源码"></a>FutureTask类部分源码</h4><pre><code>public class FutureTask&lt;V&gt; implements RunnableFuture&lt;V&gt; {
-    ···
-    public FutureTask(Callable&lt;V&gt; callable) {···}
-    public FutureTask(Runnable runnable, V result) {···}
-    ···
-}
-</code></pre><h4 id="RunnableFuture接口源码"><a href="#RunnableFuture接口源码" class="headerlink" title="RunnableFuture接口源码"></a>RunnableFuture接口源码</h4><pre><code>public interface RunnableFuture&lt;V&gt; extends Runnable, Future&lt;V&gt; {
-    void run();
-}
-</code></pre><h4 id="Runnable接口源码"><a href="#Runnable接口源码" class="headerlink" title="Runnable接口源码"></a>Runnable接口源码</h4><pre><code>@FunctionalInterface
-public interface Runnable {
-    public abstract void run();
-}
-</code></pre><h4 id="Future接口源码"><a href="#Future接口源码" class="headerlink" title="Future接口源码"></a>Future接口源码</h4><pre><code>public interface Future&lt;V&gt; {
-    //试图取消对任务的执行,参数为true表示可以取消正在执行的任务
-    boolean cancel(boolean mayInterruptIfRunning);
-    //任务是否取消成功
-    boolean isCancelled();
-    //任务是否已经完成
-    boolean isDone();
-    //获取执行结果，会产生阻塞，等到任务执行完再返回结果
-    V get() throws InterruptedException, ExecutionException;
-    //在指定时间内未返回结果，则返回null
-    V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
-}
-</code></pre><p>从上述源码可知，想要分析submit()方法，转接这需要分析很多FutureTask类和若干接口。梳理一下如下所示</p>
-<pre><code>ThreadPoolExecutor--&gt;(extends)AbstractExecutorService
-AbstractExecutorService--&gt;具有三个submit()方法,参数类型包括Runnable,Callable
-submit()--&gt;返回FutureTask类对象--&gt;(implements)RunnableFuture--&gt;(extends)Runnable,Future
-</code></pre><p>我们来看Callable接口，从源码可知，这个接口只有一个call()方法，用以调用并返回结果，和Runnable相似，用以返回一个对象或异常。</p>
-<p>Call接口使用泛型定义返回类型，Executors类提供了一些有用的方法在线程池中执行Callable内的任务。由于Callable任务是并行的（并行就是整体看上去是并行的，其实在某个时间点只有一个线程在执行），我们必须等待它返回的结果。</p>
-<p>java.util.concurrent.Future对象为我们解决了这个问题。在线程池提交Callable任务后返回了一个Future对象，使用它可以知道Callable任务的状态和得到Callable返回的执行结果。Future提供了get()方法让我们可以等待Callable结束并获取它的执行结果。</p>
-<p>可以用ExecutorService接口中的submit()方法实现这个功能,submit()负责向线程池提交Callable任务,然后返回Future对象，我们在借助Future对象的get()方法获取Callable接口中call()方法的结果：</p>
-<pre><code>&lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task);
-</code></pre><h5 id="submit-具体实现源码"><a href="#submit-具体实现源码" class="headerlink" title="submit()具体实现源码"></a>submit()具体实现源码</h5><pre><code>public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {
-    //Callable任务为空，抛出无参异常
-    if (task == null) throw new NullPointerException();
-    //返回FutureTask类对象,
-    RunnableFuture&lt;T&gt; ftask = newTaskFor(task);
-    //向线程池提交一个任务
-    execute(ftask);
-    //返回处理后的任务
-    return ftask;
-}
-</code></pre><p>我们分析的是传入Callable类型参数的submit方法，其实其他两个源码都类似， 注解基本都已经备注好，第一步判断参数的有无，我们来看看第二步返回是FutureTask类的对象，注意这个类实现的是RunnableFuture接口，而这个接口继承的又是Runnable和Future接口<span style="color:red">(接口也是可以extends接口的哦！)</span>。所以它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值。来看第二步代码FutureTask类的构造函数源码：</p>
-<pre><code>public FutureTask(Callable&lt;V&gt; callable) {
-    if (callable == null)
-        throw new NullPointerException();
-    this.callable = callable;
-    this.state = NEW;      
-}
-</code></pre><p>FutureTask类实现了Future接口的一系列方法，如get()。第三步是向线程池提交任务，最后返回这个任务，下面看一个实例：</p>
-<h5 id="Callable-Future示例"><a href="#Callable-Future示例" class="headerlink" title="Callable,Future示例"></a>Callable,Future示例</h5><pre><code>public class Test {
-    public static void main(String[] args) {
-        //建议使用Executors类中的方法构建线程池，具体使用方法和源码分析看我关于线程池本主题的其他博文
-        ExecutorService executor = Executors.newCachedThreadPool();
-        Task task = new Task();
-        Future&lt;Integer&gt; result = executor.submit(task);
-        executor.shutdown();
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
-        }
-
-        System.out.println(&quot;主线程在执行任务&quot;);
-
-        try {
-            System.out.println(&quot;task运行结果&quot;+result.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(&quot;所有任务执行完毕&quot;);
-    }
-}
-class Task implements Callable&lt;Integer&gt;{
-    @Override
-    public Integer call() throws Exception {
-        System.out.println(&quot;子线程在进行计算&quot;);
-        Thread.sleep(3000);
-        int sum = 0;
-        for(int i=0;i&lt;100;i++)
-            sum += i;
-        return sum;
-    }
-}
-</code></pre><p>执行结果如下：</p>
-<pre><code>子线程在进行计算
-主线程在执行任务
-task运行结果4950
-所有任务执行完毕
-</code></pre><h5 id="Callable-FutureTask示例"><a href="#Callable-FutureTask示例" class="headerlink" title="Callable,FutureTask示例"></a>Callable,FutureTask示例</h5><pre><code>public class Test {
-    public static void main(String[] args) {
-        //第一种方式，线程池方式
-        ExecutorService executor = Executors.newCachedThreadPool();
-        Task task = new Task();
-        FutureTask&lt;Integer&gt; futureTask = new FutureTask&lt;Integer&gt;(task);
-        executor.submit(futureTask);
-        executor.shutdown();
-
-        //第二种方式，注意这种方式和第一种方式效果是类似的，只不过一个使用的是ExecutorService，一个使用的是Thread
-        /*Task task = new Task();
-        FutureTask&lt;Integer&gt; futureTask = new FutureTask&lt;Integer&gt;(task);
-        Thread thread = new Thread(futureTask);
-        thread.start();*/
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
-        }
-
-        System.out.println(&quot;主线程在执行任务&quot;);
-
-        try {
-            System.out.println(&quot;task运行结果&quot;+futureTask.get());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(&quot;所有任务执行完毕&quot;);
-    }
-}
-class Task implements Callable&lt;Integer&gt;{
-    @Override
-    public Integer call() throws Exception {
-        System.out.println(&quot;子线程在进行计算&quot;);
-        Thread.sleep(3000);
-        int sum = 0;
-        for(int i=0;i&lt;100;i++)
-            sum += i;
-        return sum;
-    }
-}
-</code></pre><p>上面一段代码是对Callable+FutureTask方法的演示，若是Runnable+FutureTask也可以用此调用方式，只是task类中的不是call方法，而是实现run方法。</p>
-<p>如果为了可取消性而使用 Future 但又不提供可用的结果，则可以声明 Future&lt;?&gt; 形式类型、并返回 null 作为底层任务的结果。</p>
+System.out.println(&quot;future.get() = &quot; + future.get());
+</code></pre><p>上述样例代码会输出如下结果：</p>
+<pre><code>Asynchronous Callable
+future.get() = Callable Result
+</code></pre><h4 id="关闭服务"><a href="#关闭服务" class="headerlink" title="关闭服务"></a>关闭服务</h4><p>当使用 ExecutorService 完毕之后，我们应该关闭它，这样才能保证线程不会继续保持运行状态。<br>举例来说，如果你的程序通过 main() 方法启动，并且主线程退出了你的程序，如果你还有一个活动的 ExecutorService 存在于你的程序中，那么程序将会继续保持运行状态。存在于 ExecutorService 中的活动线程会阻止Java虚拟机关闭。<br>为了关闭在 ExecutorService 中的线程，你需要调用 shutdown() 方法。ExecutorService 并不会马上关闭，而是不再接收新的任务，一旦所有的线程结束执行当前任务，ExecutorServie 才会真的关闭。所有在调用 shutdown() 方法之前提交到 ExecutorService 的任务都会执行。<br>如果你希望立即关闭 ExecutorService，你可以调用 shutdownNow() 方法。这个方法会尝试马上关闭所有正在执行的任务，并且跳过所有已经提交但是还没有运行的任务。但是对于正在执行的任务，是否能够成功关闭它是无法保证的，有可能他们真的被关闭掉了，也有可能它会一直执行到任务结束。这是一个最好的尝试。 </p>
 
       
     </div>

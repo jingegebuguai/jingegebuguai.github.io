@@ -276,6 +276,211 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-CentOS下nginx的安装配置" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/06/CentOS下nginx的安装配置/" class="article-date">
+      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+
+ 
+    <a href="/2017/10/06/CentOS下nginx的安装配置/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下nginx的安装配置/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Nginx是一款轻量级Web服务器，也是反向代理服务器</p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ul>
+<li>直接支持Rails和PHP的程序</li>
+<li>作为Http反向代理服务器</li>
+<li>作为负载均衡服务器</li>
+<li>作为邮件代理服务器</li>
+<li>帮助实现前端动静分离</li>
+</ul>
+<h2 id="安装Nginx依赖"><a href="#安装Nginx依赖" class="headerlink" title="安装Nginx依赖"></a>安装Nginx依赖</h2><p>1、安装cc</p>
+<pre><code># 输入gcc -v查询版本信息，看系统是否自带安装
+yum install gcc
+</code></pre><p>2、安装pcre</p>
+<pre><code>yum install pcre-devel
+</code></pre><p>3、安装zlib</p>
+<pre><code>yum install zlib zlib-devel    
+</code></pre><p>4、选择安装openssl</p>
+<pre><code>yum install openssl openssl-devel
+</code></pre><p>5、一键综合安装</p>
+<pre><code>yum -y install gcc zlib zlib-devel pcre-devel openssl openssl-devel
+</code></pre><h2 id="下载源码包解压缩"><a href="#下载源码包解压缩" class="headerlink" title="下载源码包解压缩"></a>下载源码包解压缩</h2><p><a href="http://www/nginx.org/" target="_blank" rel="external">http://www/nginx.org/</a></p>
+<pre><code>tar -zxvf nginx-*.tar.gz
+</code></pre><h2 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a>nginx安装</h2><p>进入nginx目录执行./configure</p>
+<ul>
+<li>也可以制定安装目录，增加参数–prefix=/usr/nginx</li>
+<li>如果不指定路径，也可以通过whereis nginx进行查询</li>
+<li>默认安装在/usr/local/nginx</li>
+</ul>
+<p>继续执行make，续集执行make install</p>
+<h2 id="nginx常用命令"><a href="#nginx常用命令" class="headerlink" title="nginx常用命令"></a>nginx常用命令</h2><p>测试配置文件</p>
+<pre><code>安装路径下的/nginx/sbin/nginx -t
+</code></pre><p>启动命令</p>
+<pre><code>安装路径下的/nginx/sbin/nginx
+</code></pre><p>停止命令</p>
+<pre><code>安装路径下的/nginx/sbin/nginx -s stop
+或者是 nginx -s quit
+</code></pre><p>重启命令</p>
+<pre><code>安装路径下的/nginx/sbin/nginx -s reload
+</code></pre><p>查看进程命令</p>
+<pre><code>ps -ef | grep nginx
+</code></pre><p>平滑重启</p>
+<pre><code>kill -HUP 【nginx主进程号(即查看进程命令查到的PID)】
+</code></pre><h2 id="增加防火墙访问权限"><a href="#增加防火墙访问权限" class="headerlink" title="增加防火墙访问权限"></a>增加防火墙访问权限</h2><p>1、sudo vim /etc.sysconfig/iptables-config<br>2、- A INPUT -p tcp -m state –state NEW<br>   -m tcp –dport 80 -j ACCEPT<br>3、重启防火墙</p>
+<h2 id="虚拟域名配置测试验证"><a href="#虚拟域名配置测试验证" class="headerlink" title="虚拟域名配置测试验证"></a>虚拟域名配置测试验证</h2><p>1、编辑sudo vim /usr/local/nginx/conf/nginx.conf<br>增加include vhost/*.conf<br>2、在/usr/local/nginx/conf目录创建vhost文件夹<br>3、配置<br>sudo vim /etc/hosts所对应的域名.conf<br>如：sudo vim /usr/local/nginx/conf/vhost www.huihui.com.conf<br>将如下配置写入到该文件下</p>
+<pre><code>server {
+     listen 80;
+     autoindex on;
+     server_name www.huihui.com;
+     access_log /usr/local/nginx/logs/access.log combined; 
+     index index.html index.htm index.jsp index.php; 
+     #error_page 404 /404.html;
+     if ( $query_string ~* &quot;.*[\;&apos;\&lt;\&gt;].*&quot; )
+            { 
+                    return 404;
+            }
+     location / {
+            proxy_pass http://172.0.0.1:8080;
+            add_header Access-Control-Allow-Origin *;
+            }
+ }
+</code></pre><p>4、重启验证<br>启动${nginx}/sbin/nginx<br>重启${nginx}/sbin/nginx -s reload,如sudo ./nginx -s reload<br>${nginx}为安装在系统中的路径，如/usr/local/nginx<br>5、访问验证<br>使用默认80端口访问验证<a href="http://localhost:80" target="_blank" rel="external">http://localhost:80</a></p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>可以配置域名转发，但是请一定要配置host，并且host生效之后才可以，设置完成后腰重启浏览器<br>1、linux<br>sudo vim /etc/hosts<br>添加好对应的域名及ip<br>保存退出</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-CentOS下安装配置mysql" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/06/CentOS下安装配置mysql/" class="article-date">
+      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
+</a>
+
+ 
+    <a href="/2017/10/06/CentOS下安装配置mysql/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下安装配置mysql/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-CentOS下jdk、tomcat配置" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -405,78 +610,6 @@ SELINUX=disable
 # 保存退出
 setenforce 0
 </code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-CentOS下安装配置mysql" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/06/CentOS下安装配置mysql/" class="article-date">
-      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
-</a>
-
- 
-    <a href="/2017/10/06/CentOS下安装配置mysql/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下安装配置mysql/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/06/CentOS下安装配置mysql/">CentOS下mysql的安装配置</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        
       
     </div>
     
@@ -1202,6 +1335,273 @@ public class Solution {
 
 
   
+    <article id="post-LintCode题解（六）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/30/LintCode题解（六）/" class="article-date">
+      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
+</a>
+
+ 
+    <a href="/2017/09/30/LintCode题解（六）/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（六）/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="奇偶分割数组"><a href="#奇偶分割数组" class="headerlink" title="奇偶分割数组"></a>奇偶分割数组</h2><p>分割一个整数数组，使得奇数在前偶数在后。</p>
+<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>给定 [1, 2, 3, 4]，返回 [1, 3, 2, 4]。</p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>这题还是比较简单的，方法很多很多，我们将数组循环遍历，将遍历中的偶数和奇数相互交换就ok了。</p>
+<pre><code>public class Solution {
+/*
+ * @param nums: an array of integers
+ * @return: nothing
+ */
+    public void partitionArray(int[] nums) {
+        // write your code here
+        int length = nums.length;
+        int temp = 0;
+        int index = 0;
+        if(length==0)
+            return;
+        for(int i=0;i&lt;length;i++){
+            if(nums[i]%2==0){
+                index = i;
+                while(nums[index]%2==0){
+                    if(index!=length-1)
+                        index=index+1;
+                    else
+                        break;
+                }
+                temp = nums[i];
+                nums[i] = nums[index];
+                nums[index] = temp;
+            }
+        }
+    }
+}
+</code></pre><h2 id="二进制中1个数"><a href="#二进制中1个数" class="headerlink" title="二进制中1个数"></a>二进制中1个数</h2><p>计算在一个 32 位的整数的二进制表示中有多少个 1.</p>
+<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给定 32 (100000)，返回 1</p>
+<p>给定 5 (101)，返回 2</p>
+<p>给定 1023 (111111111)，返回 9    </p>
+<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p>按与计算<br>1&amp;1==1，1&amp;0==0，0&amp;&amp;0==0；下面是很巧妙的一个方法。</p>
+<pre><code>public class Solution {
+/*
+ * @param num: An integer
+ * @return: An integer
+ */
+    public int countOnes(int num) {
+        // write your code here
+        int count = 0;
+        while(num!=0){
+            num = num &amp; (num-1);
+            count++;
+        }
+        return count;       
+    }
+}
+</code></pre><h2 id="反转整数"><a href="#反转整数" class="headerlink" title="反转整数"></a>反转整数</h2><p>将一个整数中的数字进行颠倒，当颠倒后的整数溢出时，返回 0 (标记为 32 位整数)。</p>
+<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 x = 123，返回 321</p>
+<p>给定 x = -123，返回 -321</p>
+<h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><p>反转很简单，难点在于颠倒后证书溢出判断，int32位范围是-2^31~2^31-1,这里使用temp/10与reversed_n进行判断，当temp溢出时，/10不等于reversed_n，所以可判断溢出成立。</p>
+<pre><code>public class Solution {
+    /*
+     * @param n: the integer to be reversed
+     * @return: the reversed integer
+     */
+    public int reverseInteger(int n) {
+        // Write your code here
+        int reversed_n = 0;
+
+        while (n != 0) {
+            int temp = reversed_n * 10 + n % 10;
+            n = n / 10;
+            if (temp / 10 != reversed_n) {
+                reversed_n = 0;
+                break;
+            }
+            reversed_n = temp;
+        }
+        return reversed_n;
+    }
+}
+</code></pre><h2 id="加一"><a href="#加一" class="headerlink" title="加一"></a>加一</h2><p>给定一个非负数，表示一个数字数组，在该数的基础上+1，返回一个新的数组。</p>
+<p>该数字按照大小进行排列，最大的数在列表的最前面。</p>
+<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>给定 [1,2,3] 表示 123, 返回 [1,2,4].</p>
+<p>给定 [9,9,9] 表示 999, 返回 [1,0,0,0].</p>
+<h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p>google的题，哪道没有陷阱，第一次被坑了。<br>注意不要把数组转为int型整数，因为不确定数组大小会导致溢出。<br>本题思想是，若数组值都为9，则增加数组length，首位设为1，其他位为0；否则，末位加1，结束返回。</p>
+<pre><code>public class Solution {
+    /*
+     * @param digits: a number represented as an array of digits
+     * @return: the result
+     */
+    public static int[] plusOne(int[] digits) {
+        // write your code here
+        boolean index = true;
+        for(int n=0; n&lt;digits.length;n++){
+            if(digits[n]!=9)
+                index = false;
+        }
+        if(index==true){
+            int[] num = new int[digits.length+1];
+            num[0] = 1;
+            for(int m=1;m&lt;digits.length+1;m++)
+                num[m] = 0;
+            return num;
+        }
+        for(int i=digits.length-1;i&gt;=0;i--){
+            if(digits[i]!=9){
+                digits[i] = digits[i]+1;
+                break;
+            }else{
+                digits[i] = 0;
+            }
+        }
+        return digits;
+    }
+}
+</code></pre><h2 id="把排序数组转换为高度最小的二叉搜索树"><a href="#把排序数组转换为高度最小的二叉搜索树" class="headerlink" title="把排序数组转换为高度最小的二叉搜索树"></a>把排序数组转换为高度最小的二叉搜索树</h2><p>给一个排序数组（从小到大），将其转换为一棵高度最小的排序二叉树。</p>
+<h3 id="样例-4"><a href="#样例-4" class="headerlink" title="样例"></a>样例</h3><p>给出数组 [1,2,3,4,5,6,7], 返回</p>
+<pre><code>     4
+   /   \
+  2     6
+ / \    / \
+1   3  5   7
+</code></pre><h2 id="算法-4"><a href="#算法-4" class="headerlink" title="算法"></a>算法</h2><pre><code>/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */ 
+public class Solution(){
+    /**
+     * @param nums: an integer array
+     * @return: a tree node
+     */
+    public TreeNode sortArrayToBST(int[] A){
+        if(A==null)
+            return null;
+        return bulidTree(A, 0, A.length-1);    
+    }
+
+    public void buildTree(int[] A, int start, int end){
+        if(start&gt;end)
+            return null;
+        int middle = (start+end)/2;
+        TreeNode root = new TreeNode(A[middle]);
+        A.left = buildTree(A, start, middle-1);
+        A.right = buildTree(A, middle+1, end);     
+    }
+}
+</code></pre><h2 id="二进制求和"><a href="#二进制求和" class="headerlink" title="二进制求和"></a>二进制求和</h2><p>给定两个二进制字符串，返回他们的和（用二进制表示）。</p>
+<h2 id="样例-5"><a href="#样例-5" class="headerlink" title="样例"></a>样例</h2><p>a = 11</p>
+<p>b = 1</p>
+<p>返回 100</p>
+<h2 id="算法-5"><a href="#算法-5" class="headerlink" title="算法"></a>算法</h2><p>这种题千万不要将二进制转化为整数，这样转化复杂度将提高几何倍数。<br>注意如果相应位相加结果为2（1+1），则结果设为1，这时要设一个哨兵，相应位溢出时，哨兵设为1；结果为3（1+1+哨兵）时，相同道理。</p>
+<pre><code>public class Solution {
+    /*
+     * @param a: a number
+     * @param b: a number
+     * @return: the result
+     */
+    public String addBinary(String a, String b) {
+        // write your code here
+        if(b.length()==0&amp;&amp;a.length()==0)
+            return null;
+        String str = &quot;&quot;;
+        int index = 0;
+        int i = 0;
+        int middle = 0;
+        String[] A = a.split(&quot;&quot;);
+        String[] B = b.split(&quot;&quot;);
+        while(i&lt;A.length||i&lt;B.length) {
+            if (i &gt;= A.length &amp;&amp; i &lt; B.length)
+                middle = Integer.valueOf(B[B.length-1-i]) + index;
+            else if (i &gt;= B.length &amp;&amp; i &lt; A.length)
+                middle = Integer.valueOf(A[A.length-1-i]) + index;
+            else if (i &lt; A.length &amp;&amp; i &lt; B.length)
+                middle = Integer.valueOf(A[A.length-1-i]) + Integer.valueOf(B[B.length-1-i]) + index;
+            if (middle == 3) {
+                str = 1 + str;
+                index = 1;
+                //i=i+1;
+            } else if (middle == 2) {
+                str = 0 + str;
+                index = 1;
+            } else if (middle == 0 || middle == 1) {
+                str = middle + str;
+                index = 0;
+            }
+            i = i + 1;
+        }
+        if(index==1)
+            str = index+str;
+        return str;
+    }
+}    
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-LintCode题解（一）" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1573,273 +1973,6 @@ public class Solution {
 
 
   
-    <article id="post-LintCode题解（六）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/30/LintCode题解（六）/" class="article-date">
-      <time datetime="2017-09-30T02:14:00.000Z" itemprop="datePublished">2017-09-30</time>
-</a>
-
- 
-    <a href="/2017/09/30/LintCode题解（六）/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/30/LintCode题解（六）/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/30/LintCode题解（六）/">LintCode题解（六）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="奇偶分割数组"><a href="#奇偶分割数组" class="headerlink" title="奇偶分割数组"></a>奇偶分割数组</h2><p>分割一个整数数组，使得奇数在前偶数在后。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>给定 [1, 2, 3, 4]，返回 [1, 3, 2, 4]。</p>
-<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p>这题还是比较简单的，方法很多很多，我们将数组循环遍历，将遍历中的偶数和奇数相互交换就ok了。</p>
-<pre><code>public class Solution {
-/*
- * @param nums: an array of integers
- * @return: nothing
- */
-    public void partitionArray(int[] nums) {
-        // write your code here
-        int length = nums.length;
-        int temp = 0;
-        int index = 0;
-        if(length==0)
-            return;
-        for(int i=0;i&lt;length;i++){
-            if(nums[i]%2==0){
-                index = i;
-                while(nums[index]%2==0){
-                    if(index!=length-1)
-                        index=index+1;
-                    else
-                        break;
-                }
-                temp = nums[i];
-                nums[i] = nums[index];
-                nums[index] = temp;
-            }
-        }
-    }
-}
-</code></pre><h2 id="二进制中1个数"><a href="#二进制中1个数" class="headerlink" title="二进制中1个数"></a>二进制中1个数</h2><p>计算在一个 32 位的整数的二进制表示中有多少个 1.</p>
-<h3 id="样例-1"><a href="#样例-1" class="headerlink" title="样例"></a>样例</h3><p>给定 32 (100000)，返回 1</p>
-<p>给定 5 (101)，返回 2</p>
-<p>给定 1023 (111111111)，返回 9    </p>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p>按与计算<br>1&amp;1==1，1&amp;0==0，0&amp;&amp;0==0；下面是很巧妙的一个方法。</p>
-<pre><code>public class Solution {
-/*
- * @param num: An integer
- * @return: An integer
- */
-    public int countOnes(int num) {
-        // write your code here
-        int count = 0;
-        while(num!=0){
-            num = num &amp; (num-1);
-            count++;
-        }
-        return count;       
-    }
-}
-</code></pre><h2 id="反转整数"><a href="#反转整数" class="headerlink" title="反转整数"></a>反转整数</h2><p>将一个整数中的数字进行颠倒，当颠倒后的整数溢出时，返回 0 (标记为 32 位整数)。</p>
-<h3 id="样例-2"><a href="#样例-2" class="headerlink" title="样例"></a>样例</h3><p>给定 x = 123，返回 321</p>
-<p>给定 x = -123，返回 -321</p>
-<h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><p>反转很简单，难点在于颠倒后证书溢出判断，int32位范围是-2^31~2^31-1,这里使用temp/10与reversed_n进行判断，当temp溢出时，/10不等于reversed_n，所以可判断溢出成立。</p>
-<pre><code>public class Solution {
-    /*
-     * @param n: the integer to be reversed
-     * @return: the reversed integer
-     */
-    public int reverseInteger(int n) {
-        // Write your code here
-        int reversed_n = 0;
-
-        while (n != 0) {
-            int temp = reversed_n * 10 + n % 10;
-            n = n / 10;
-            if (temp / 10 != reversed_n) {
-                reversed_n = 0;
-                break;
-            }
-            reversed_n = temp;
-        }
-        return reversed_n;
-    }
-}
-</code></pre><h2 id="加一"><a href="#加一" class="headerlink" title="加一"></a>加一</h2><p>给定一个非负数，表示一个数字数组，在该数的基础上+1，返回一个新的数组。</p>
-<p>该数字按照大小进行排列，最大的数在列表的最前面。</p>
-<h3 id="样例-3"><a href="#样例-3" class="headerlink" title="样例"></a>样例</h3><p>给定 [1,2,3] 表示 123, 返回 [1,2,4].</p>
-<p>给定 [9,9,9] 表示 999, 返回 [1,0,0,0].</p>
-<h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p>google的题，哪道没有陷阱，第一次被坑了。<br>注意不要把数组转为int型整数，因为不确定数组大小会导致溢出。<br>本题思想是，若数组值都为9，则增加数组length，首位设为1，其他位为0；否则，末位加1，结束返回。</p>
-<pre><code>public class Solution {
-    /*
-     * @param digits: a number represented as an array of digits
-     * @return: the result
-     */
-    public static int[] plusOne(int[] digits) {
-        // write your code here
-        boolean index = true;
-        for(int n=0; n&lt;digits.length;n++){
-            if(digits[n]!=9)
-                index = false;
-        }
-        if(index==true){
-            int[] num = new int[digits.length+1];
-            num[0] = 1;
-            for(int m=1;m&lt;digits.length+1;m++)
-                num[m] = 0;
-            return num;
-        }
-        for(int i=digits.length-1;i&gt;=0;i--){
-            if(digits[i]!=9){
-                digits[i] = digits[i]+1;
-                break;
-            }else{
-                digits[i] = 0;
-            }
-        }
-        return digits;
-    }
-}
-</code></pre><h2 id="把排序数组转换为高度最小的二叉搜索树"><a href="#把排序数组转换为高度最小的二叉搜索树" class="headerlink" title="把排序数组转换为高度最小的二叉搜索树"></a>把排序数组转换为高度最小的二叉搜索树</h2><p>给一个排序数组（从小到大），将其转换为一棵高度最小的排序二叉树。</p>
-<h3 id="样例-4"><a href="#样例-4" class="headerlink" title="样例"></a>样例</h3><p>给出数组 [1,2,3,4,5,6,7], 返回</p>
-<pre><code>     4
-   /   \
-  2     6
- / \    / \
-1   3  5   7
-</code></pre><h2 id="算法-4"><a href="#算法-4" class="headerlink" title="算法"></a>算法</h2><pre><code>/**
- * Definition of TreeNode:
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left, right;
- *     public TreeNode(int val) {
- *         this.val = val;
- *         this.left = this.right = null;
- *     }
- * }
- */ 
-public class Solution(){
-    /**
-     * @param nums: an integer array
-     * @return: a tree node
-     */
-    public TreeNode sortArrayToBST(int[] A){
-        if(A==null)
-            return null;
-        return bulidTree(A, 0, A.length-1);    
-    }
-
-    public void buildTree(int[] A, int start, int end){
-        if(start&gt;end)
-            return null;
-        int middle = (start+end)/2;
-        TreeNode root = new TreeNode(A[middle]);
-        A.left = buildTree(A, start, middle-1);
-        A.right = buildTree(A, middle+1, end);     
-    }
-}
-</code></pre><h2 id="二进制求和"><a href="#二进制求和" class="headerlink" title="二进制求和"></a>二进制求和</h2><p>给定两个二进制字符串，返回他们的和（用二进制表示）。</p>
-<h2 id="样例-5"><a href="#样例-5" class="headerlink" title="样例"></a>样例</h2><p>a = 11</p>
-<p>b = 1</p>
-<p>返回 100</p>
-<h2 id="算法-5"><a href="#算法-5" class="headerlink" title="算法"></a>算法</h2><p>这种题千万不要将二进制转化为整数，这样转化复杂度将提高几何倍数。<br>注意如果相应位相加结果为2（1+1），则结果设为1，这时要设一个哨兵，相应位溢出时，哨兵设为1；结果为3（1+1+哨兵）时，相同道理。</p>
-<pre><code>public class Solution {
-    /*
-     * @param a: a number
-     * @param b: a number
-     * @return: the result
-     */
-    public String addBinary(String a, String b) {
-        // write your code here
-        if(b.length()==0&amp;&amp;a.length()==0)
-            return null;
-        String str = &quot;&quot;;
-        int index = 0;
-        int i = 0;
-        int middle = 0;
-        String[] A = a.split(&quot;&quot;);
-        String[] B = b.split(&quot;&quot;);
-        while(i&lt;A.length||i&lt;B.length) {
-            if (i &gt;= A.length &amp;&amp; i &lt; B.length)
-                middle = Integer.valueOf(B[B.length-1-i]) + index;
-            else if (i &gt;= B.length &amp;&amp; i &lt; A.length)
-                middle = Integer.valueOf(A[A.length-1-i]) + index;
-            else if (i &lt; A.length &amp;&amp; i &lt; B.length)
-                middle = Integer.valueOf(A[A.length-1-i]) + Integer.valueOf(B[B.length-1-i]) + index;
-            if (middle == 3) {
-                str = 1 + str;
-                index = 1;
-                //i=i+1;
-            } else if (middle == 2) {
-                str = 0 + str;
-                index = 1;
-            } else if (middle == 0 || middle == 1) {
-                str = middle + str;
-                index = 0;
-            }
-            i = i + 1;
-        }
-        if(index==1)
-            str = index+str;
-        return str;
-    }
-}    
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LintCode/">LintCode</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-Java并发基础" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -2132,210 +2265,6 @@ public class HelloModelController{
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Java数据库与事务处理机制" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/09/29/Java数据库与事务处理机制/" class="article-date">
-      <time datetime="2017-09-29T02:14:00.000Z" itemprop="datePublished">2017-09-29</time>
-</a>
-
- 
-    <a href="/2017/09/29/Java数据库与事务处理机制/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/09/29/Java数据库与事务处理机制/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/29/Java数据库与事务处理机制/">Java数据库处理与事务机制</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="数据库连接"><a href="#数据库连接" class="headerlink" title="数据库连接"></a>数据库连接</h2><p>数据库连接步骤如下：</p>
-<ul>
-<li>下载mysql-connector-java的jar包，并导入</li>
-<li>加载注册驱动程序，Class.forName(“com.mysql.jdbc.Driver”)</li>
-<li><p>连接数据库</p>
-<p>  conn = DriverManager.getCOnnection(DB_URL,USER,PASS)</p>
-</li>
-<li><p>执行sql语句</p>
-<p>  //创建用于执行sql语句的Statement对象<br>  stmt = (Stattement)conn.createStatement();<br>  //执行查询语句，返回查询结果<br>  ResultSet rs = stmt.executeQuery(“SELECT id,name FROM test”);<br>  while(rs.next()){</p>
-<pre><code>int id = rs.getInt(&quot;id&quot;);
-String name = rs.getString(&quot;name&quot;);
-out.println(&quot;...&quot;+id+&quot;...&quot;+name);
-out.println(&quot;&lt;br /&gt;&quot;)
-</code></pre><p>  }<br>  //执行插入语句，返回插入行数<br>  String 失去了= “INSERT INTO test …VALUES(…)”<br>  stmt = (Statement)conn.create.Statement();<br>  int count = stmt.executeUpdate(sql);<br>  //数据库更新(删除)和插入相似</p>
-</li>
-</ul>
-<ul>
-<li><p>关闭数据库连接</p>
-<p>  rs.close();<br>  stmt.close();<br>  conn.close();    </p>
-</li>
-<li><p>PrepareStatement<br>是Statement的子接口，可以传入带占位符的sqlyuju，提供补充占位符变量的方法</p>
-<p>  String sql = “insert into mysql_test values(?,?,?)”<br>  PrepareStatement ps = conn.preprareStatement(sql);<br>  ps.setString(1, ‘’);<br>  ps.setString(2, ‘’);<br>  ps.setString(3, ‘’);<br>  ps.execteUpdate();</p>
-</li>
-</ul>
-<h3 id="Java事务处理"><a href="#Java事务处理" class="headerlink" title="Java事务处理"></a>Java事务处理</h3><p>何为事物： 所有的操作要么同时完成，要么同时失败。在mysql中提供Commit和Rollback命令进行事务的提交与回滚。</p>
-<p>java的事务处理类型有三种，JDBC、JTA（Java Transaction API）事务、容器事务。容器事务多用于Spring中。</p>
-<h4 id="JDBC事务处理机制"><a href="#JDBC事务处理机制" class="headerlink" title="JDBC事务处理机制"></a>JDBC事务处理机制</h4><p>JDBC一切行为包括事务是基于一个connection的.<br>JDBC事务处理步骤：</p>
-<ul>
-<li><p>取消JDBC的自动提交</p>
-<p>  void setAutoCommit(bollean autoCommit)=&gt;setAutoCommit(false)</p>
-</li>
-<li><p>执行各个sql语句，加入到批处理之中    </p>
-</li>
-<li><p>如若所有语句都执行成功，则提交事务commit(),如果出现错误，则回滚：roolback()</p>
-</li>
-</ul>
-<p>基本核心如下：</p>
-<pre><code>//取消自动提交
-conn.setAutoCommit(false)
-//将sql加入到批处理
-stmt.addBatch();
-stmt.addBatch();
-//执行批处理操作
-stmt.execteBatch();
-//提交事务
-commit();
-//发生错误
-try{
-    rollback();
-}
-</code></pre><p>优缺点：</p>
-<ul>
-<li>可以将多个sql语句放到同一个事务中，保证ACID特性，API比较简单，性能好 </li>
-<li>局限是：一个JDBC事务不能跨多个数据库</li>
-</ul>
-<p>实例如下所示：</p>
-<pre><code>public static void example(){
-    Connection conn = null;
-}try{
-    Class.forName(&quot;com.mysql.jdbc.Driver&quot;);
-    conn = DreiverManager.getConnection(&quot;jdbc:ysql://localhost:3306/mysqltest&quot;, USSR, PASS);
-    conn.setAutoCommit(false);//取消自动提交，改为手动提交
-    String sql_1 = &quot;update test_table set name=&apos;...&apos; where name=&apos;...&apos;&quot;;
-    String sql_2 = &quot;insert test_table (name,url) values(&apos;...&apos;,&apos;&apos;),(&apos;&apos;,&apos;&apos;)&quot;;
-    stmt = (Statement)conn.create.Statement();
-    int count = stmt.executeUpdate(sql_1);
-    //若所有结果执行完成，则执行提交事务
-    stmt.execteUpdate(sql_2);
-    conn.commit();
-    ps.close();
-    conn.close()
-    catch(ClassNotFoundException e){
-        e.printStackTrace();
-    }catch(SQLException e){
-        e.printStackTrace();
-        try{
-            //只要有一个sql语句错误，则事务回滚
-            conn.rollback();
-        }catch(SQLException e){
-            e.printStackTrace();    
-        }    
-    }
-}    
-</code></pre><h3 id="JTA事务处理"><a href="#JTA事务处理" class="headerlink" title="JTA事务处理"></a>JTA事务处理</h3><p>JDBC事务无法满足分布式数据库的处理，所以使用JTA，JTA是一个java企业版的应用程序接口，在java中，允许完成跨越多个XA资源的分布式事务<br>XA（数据库与事务管理器的接口标准，Oracle，DB2，Sybase提供XA支持）</p>
-<p>JTA提供了java.transaction.UserTansaction,主要方法为：</p>
-<ul>
-<li>begin:开启一个事务</li>
-<li>commit：提交当前事务</li>
-<li>rollback：回滚当前事务</li>
-<li>setRollbackOnly：把当前事务标记为回滚</li>
-<li>setTransactionTimeout:设置事务的事件，就是抛出异常，回滚事务</li>
-</ul>
-<p>要想使用用 JTA 事务，那么就需要有一个实现 javax.sql.XADataSource 、 javax.sql.XAConnection 和 javax.sql.XAResource 接口的 JDBC 驱动程序。一个实现了这些接口的驱动程序将可以参与 JTA 事务。一个 XADataSource 对象就是一个 XAConnection 对象的工厂。XAConnection 是参与 JTA 事务的 JDBC 连接。</p>
-<p>要使用JTA事务，必须使用XADataSource来产生数据库连接，产生的连接为一个XA连接。</p>
-<p>XA连接（javax.sql.XAConnection）和非XA（java.sql.Connection）连接的区别在于：XA可以参与JTA的事务，而且不支持自动提交。</p>
-<pre><code>public void JtaTransfer() { 
-        javax.transaction.UserTransaction tx = null;
-        java.sql.Connection conn = null;
-         try{ 
-             tx = (javax.transaction.UserTransaction) context.lookup(&quot;java:comp/UserTransaction&quot;);  //取得JTA事务，本例中是由Jboss容器管理
-             javax.sql.DataSource ds = (javax.sql.DataSource) context.lookup(&quot;java:/XAOracleDS&quot;);  //取得数据库连接池，必须有支持XA的数据库、驱动程序  
-             tx.begin();
-            conn = ds.getConnection();
-
-             // 将自动提交设置为 false，
-             //若设置为 true 则数据库将会把每一次数据更新认定为一个事务并自动提交
-             conn.setAutoCommit(false);
-
-             stmt = conn.createStatement(); 
-             // 将 A 账户中的金额减少 500 
-             stmt.execute(&quot;\
-             update t_account set amount = amount - 500 where account_id = &apos;A&apos;&quot;);
-             // 将 B 账户中的金额增加 500 
-             stmt.execute(&quot;\
-             update t_account set amount = amount + 500 where account_id = &apos;B&apos;&quot;);
-
-             // 提交事务
-             tx.commit();
-             // 事务提交：转账的两步操作同时成功
-         } catch(SQLException sqle){            
-             try{ 
-                 // 发生异常，回滚在本事务中的操做
-              tx.rollback();
-                 // 事务回滚：转账的两步操作完全撤销
-                 stmt.close(); 
-                 conn.close(); 
-             }catch(Exception ignore){ 
-
-             } 
-             sqle.printStackTrace(); 
-         } 
-     }
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
     </div>
 
       

@@ -276,6 +276,271 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Java并发之线程池拓展—Callable，Future，FutureTask" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/" class="article-date">
+      <time datetime="2017-11-01T02:35:00.000Z" itemprop="datePublished">2017-11-01</time>
+</a>
+
+ 
+    <a href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/01/Java并发之线程池拓展—Callable，Future，FutureTask/">Java并发之线程池—Callable,Future,FutureTask</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="AbstractExecutorService类源码分析"><a href="#AbstractExecutorService类源码分析" class="headerlink" title="AbstractExecutorService类源码分析"></a>AbstractExecutorService类源码分析</h2><p>线程池ThreadPoolExecutor继承于AbstractorExecutorService类，所以分析该类的构成很有必要。</p>
+<p>上一篇博文提到ExecutorService是JDK并发工具包提供的一个核心接口，相当于一个线程池，提供执行任务和管理生命周期的方法。AbstractExecutorService主要实现了这个接口。 处理后的源码如下：</p>
+<pre><code>public abstract class AbstractExecutorService implements ExecutorService {
+    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) {
+        return new FutureTask&lt;T&gt;(runnable, value);
+    }
+    protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) {
+        return new FutureTask&lt;T&gt;(callable);
+    }
+    //submit函数1
+    public Future&lt;?&gt; submit(Runnable task) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;Void&gt; ftask = newTaskFor(task, null);
+        execute(ftask);
+        return ftask;
+    }
+    //submit函数2
+    public &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;T&gt; ftask = newTaskFor(task, result);
+        execute(ftask);
+        return ftask;
+    }
+    //submit函数3
+    public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {
+        if (task == null) throw new NullPointerException();
+        RunnableFuture&lt;T&gt; ftask = newTaskFor(task);
+        execute(ftask);
+        return ftask;
+    }
+    private &lt;T&gt; T doInvokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,boolean timed, long nanos) throws InterruptedException, ExecutionException, TimeoutException {······}
+    public &lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException, ExecutionException, TimeoutException {······}
+    public &lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)throws InterruptedException {
+}
+</code></pre><h3 id="submit-方法源码分析"><a href="#submit-方法源码分析" class="headerlink" title="submit()方法源码分析"></a>submit()方法源码分析</h3><p>下面三个submit()方法是ExecutorService接口中的，并且由AbstructExecutorService类具体实现。    </p>
+<pre><code>public Future&lt;?&gt; submit(Runnable task) {···}
+
+public &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result) {···}
+
+public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {···}
+</code></pre><h4 id="Callable-接口源码"><a href="#Callable-接口源码" class="headerlink" title="Callable()接口源码"></a>Callable()接口源码</h4><pre><code>@FunctionalInterface
+public interface Callable&lt;V&gt; {
+    //计算结果
+    V call() throws Exception;
+}
+</code></pre><h4 id="newTaskFor-方法源码"><a href="#newTaskFor-方法源码" class="headerlink" title="newTaskFor()方法源码"></a>newTaskFor()方法源码</h4><pre><code>protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Runnable runnable, T value) {
+        return new FutureTask&lt;T&gt;(runnable, value);
+    }
+protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) {
+        return new FutureTask&lt;T&gt;(callable);
+    }
+</code></pre><h4 id="FutureTask类部分源码"><a href="#FutureTask类部分源码" class="headerlink" title="FutureTask类部分源码"></a>FutureTask类部分源码</h4><pre><code>public class FutureTask&lt;V&gt; implements RunnableFuture&lt;V&gt; {
+    ···
+    public FutureTask(Callable&lt;V&gt; callable) {···}
+    public FutureTask(Runnable runnable, V result) {···}
+    ···
+}
+</code></pre><h4 id="RunnableFuture接口源码"><a href="#RunnableFuture接口源码" class="headerlink" title="RunnableFuture接口源码"></a>RunnableFuture接口源码</h4><pre><code>public interface RunnableFuture&lt;V&gt; extends Runnable, Future&lt;V&gt; {
+    void run();
+}
+</code></pre><h4 id="Runnable接口源码"><a href="#Runnable接口源码" class="headerlink" title="Runnable接口源码"></a>Runnable接口源码</h4><pre><code>@FunctionalInterface
+public interface Runnable {
+    public abstract void run();
+}
+</code></pre><h4 id="Future接口源码"><a href="#Future接口源码" class="headerlink" title="Future接口源码"></a>Future接口源码</h4><pre><code>public interface Future&lt;V&gt; {
+    //试图取消对任务的执行,参数为true表示可以取消正在执行的任务
+    boolean cancel(boolean mayInterruptIfRunning);
+    //任务是否取消成功
+    boolean isCancelled();
+    //任务是否已经完成
+    boolean isDone();
+    //获取执行结果，会产生阻塞，等到任务执行完再返回结果
+    V get() throws InterruptedException, ExecutionException;
+    //在指定时间内未返回结果，则返回null
+    V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
+}
+</code></pre><p>从上述源码可知，想要分析submit()方法，转接这需要分析很多FutureTask类和若干接口。梳理一下如下所示</p>
+<pre><code>ThreadPoolExecutor--&gt;(extends)AbstractExecutorService
+AbstractExecutorService--&gt;具有三个submit()方法,参数类型包括Runnable,Callable
+submit()--&gt;返回FutureTask类对象--&gt;(implements)RunnableFuture--&gt;(extends)Runnable,Future
+</code></pre><p>我们来看Callable接口，从源码可知，这个接口只有一个call()方法，用以调用并返回结果，和Runnable相似，用以返回一个对象或异常。</p>
+<p>Call接口使用泛型定义返回类型，Executors类提供了一些有用的方法在线程池中执行Callable内的任务。由于Callable任务是并行的（并行就是整体看上去是并行的，其实在某个时间点只有一个线程在执行），我们必须等待它返回的结果。</p>
+<p>java.util.concurrent.Future对象为我们解决了这个问题。在线程池提交Callable任务后返回了一个Future对象，使用它可以知道Callable任务的状态和得到Callable返回的执行结果。Future提供了get()方法让我们可以等待Callable结束并获取它的执行结果。</p>
+<p>可以用ExecutorService接口中的submit()方法实现这个功能,submit()负责向线程池提交Callable任务,然后返回Future对象，我们在借助Future对象的get()方法获取Callable接口中call()方法的结果：</p>
+<pre><code>&lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task);
+</code></pre><h5 id="submit-具体实现源码"><a href="#submit-具体实现源码" class="headerlink" title="submit()具体实现源码"></a>submit()具体实现源码</h5><pre><code>public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) {
+    //Callable任务为空，抛出无参异常
+    if (task == null) throw new NullPointerException();
+    //返回FutureTask类对象,
+    RunnableFuture&lt;T&gt; ftask = newTaskFor(task);
+    //向线程池提交一个任务
+    execute(ftask);
+    //返回处理后的任务
+    return ftask;
+}
+</code></pre><p>我们分析的是传入Callable类型参数的submit方法，其实其他两个源码都类似， 注解基本都已经备注好，第一步判断参数的有无，我们来看看第二步返回是FutureTask类的对象，注意这个类实现的是RunnableFuture接口，而这个接口继承的又是Runnable和Future接口<span style="color:red">(接口也是可以extends接口的哦！)</span>。所以它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值。来看第二步代码FutureTask类的构造函数源码：</p>
+<pre><code>public FutureTask(Callable&lt;V&gt; callable) {
+    if (callable == null)
+        throw new NullPointerException();
+    this.callable = callable;
+    this.state = NEW;      
+}
+</code></pre><p>FutureTask类实现了Future接口的一系列方法，如get()。第三步是向线程池提交任务，最后返回这个任务，下面看一个实例：</p>
+<h5 id="Callable-Future示例"><a href="#Callable-Future示例" class="headerlink" title="Callable,Future示例"></a>Callable,Future示例</h5><pre><code>public class Test {
+    public static void main(String[] args) {
+        //建议使用Executors类中的方法构建线程池，具体使用方法和源码分析看我关于线程池本主题的其他博文
+        ExecutorService executor = Executors.newCachedThreadPool();
+        Task task = new Task();
+        Future&lt;Integer&gt; result = executor.submit(task);
+        executor.shutdown();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
+
+        System.out.println(&quot;主线程在执行任务&quot;);
+
+        try {
+            System.out.println(&quot;task运行结果&quot;+result.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(&quot;所有任务执行完毕&quot;);
+    }
+}
+class Task implements Callable&lt;Integer&gt;{
+    @Override
+    public Integer call() throws Exception {
+        System.out.println(&quot;子线程在进行计算&quot;);
+        Thread.sleep(3000);
+        int sum = 0;
+        for(int i=0;i&lt;100;i++)
+            sum += i;
+        return sum;
+    }
+}
+</code></pre><p>执行结果如下：</p>
+<pre><code>子线程在进行计算
+主线程在执行任务
+task运行结果4950
+所有任务执行完毕
+</code></pre><h5 id="Callable-FutureTask示例"><a href="#Callable-FutureTask示例" class="headerlink" title="Callable,FutureTask示例"></a>Callable,FutureTask示例</h5><pre><code>public class Test {
+    public static void main(String[] args) {
+        //第一种方式，线程池方式
+        ExecutorService executor = Executors.newCachedThreadPool();
+        Task task = new Task();
+        FutureTask&lt;Integer&gt; futureTask = new FutureTask&lt;Integer&gt;(task);
+        executor.submit(futureTask);
+        executor.shutdown();
+
+        //第二种方式，注意这种方式和第一种方式效果是类似的，只不过一个使用的是ExecutorService，一个使用的是Thread
+        /*Task task = new Task();
+        FutureTask&lt;Integer&gt; futureTask = new FutureTask&lt;Integer&gt;(task);
+        Thread thread = new Thread(futureTask);
+        thread.start();*/
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
+
+        System.out.println(&quot;主线程在执行任务&quot;);
+
+        try {
+            System.out.println(&quot;task运行结果&quot;+futureTask.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(&quot;所有任务执行完毕&quot;);
+    }
+}
+class Task implements Callable&lt;Integer&gt;{
+    @Override
+    public Integer call() throws Exception {
+        System.out.println(&quot;子线程在进行计算&quot;);
+        Thread.sleep(3000);
+        int sum = 0;
+        for(int i=0;i&lt;100;i++)
+            sum += i;
+        return sum;
+    }
+}
+</code></pre><p>上面一段代码是对Callable+FutureTask方法的演示，若是Runnable+FutureTask也可以用此调用方式，只是task类中的不是call方法，而是实现run方法。</p>
+<p>如果为了可取消性而使用 Future 但又不提供可用的结果，则可以声明 Future&lt;?&gt; 形式类型、并返回 null 作为底层任务的结果。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/计算机/">计算机</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-LintCode题解--中等篇(1)" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1530,139 +1795,6 @@ public class usePoint{
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-CentOS下nginx的安装配置" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/06/CentOS下nginx的安装配置/" class="article-date">
-      <time datetime="2017-10-06T02:14:00.000Z" itemprop="datePublished">2017-10-06</time>
-</a>
-
- 
-    <a href="/2017/10/06/CentOS下nginx的安装配置/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/06/CentOS下nginx的安装配置/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/06/CentOS下nginx的安装配置/">CentOS下Nginx的安装配置</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Nginx是一款轻量级Web服务器，也是反向代理服务器</p>
-<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ul>
-<li>直接支持Rails和PHP的程序</li>
-<li>作为Http反向代理服务器</li>
-<li>作为负载均衡服务器</li>
-<li>作为邮件代理服务器</li>
-<li>帮助实现前端动静分离</li>
-</ul>
-<h2 id="安装Nginx依赖"><a href="#安装Nginx依赖" class="headerlink" title="安装Nginx依赖"></a>安装Nginx依赖</h2><p>1、安装cc</p>
-<pre><code># 输入gcc -v查询版本信息，看系统是否自带安装
-yum install gcc
-</code></pre><p>2、安装pcre</p>
-<pre><code>yum install pcre-devel
-</code></pre><p>3、安装zlib</p>
-<pre><code>yum install zlib zlib-devel    
-</code></pre><p>4、选择安装openssl</p>
-<pre><code>yum install openssl openssl-devel
-</code></pre><p>5、一键综合安装</p>
-<pre><code>yum -y install gcc zlib zlib-devel pcre-devel openssl openssl-devel
-</code></pre><h2 id="下载源码包解压缩"><a href="#下载源码包解压缩" class="headerlink" title="下载源码包解压缩"></a>下载源码包解压缩</h2><p><a href="http://www/nginx.org/" target="_blank" rel="external">http://www/nginx.org/</a></p>
-<pre><code>tar -zxvf nginx-*.tar.gz
-</code></pre><h2 id="nginx安装"><a href="#nginx安装" class="headerlink" title="nginx安装"></a>nginx安装</h2><p>进入nginx目录执行./configure</p>
-<ul>
-<li>也可以制定安装目录，增加参数–prefix=/usr/nginx</li>
-<li>如果不指定路径，也可以通过whereis nginx进行查询</li>
-<li>默认安装在/usr/local/nginx</li>
-</ul>
-<p>继续执行make，续集执行make install</p>
-<h2 id="nginx常用命令"><a href="#nginx常用命令" class="headerlink" title="nginx常用命令"></a>nginx常用命令</h2><p>测试配置文件</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -t
-</code></pre><p>启动命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx
-</code></pre><p>停止命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -s stop
-或者是 nginx -s quit
-</code></pre><p>重启命令</p>
-<pre><code>安装路径下的/nginx/sbin/nginx -s reload
-</code></pre><p>查看进程命令</p>
-<pre><code>ps -ef | grep nginx
-</code></pre><p>平滑重启</p>
-<pre><code>kill -HUP 【nginx主进程号(即查看进程命令查到的PID)】
-</code></pre><h2 id="增加防火墙访问权限"><a href="#增加防火墙访问权限" class="headerlink" title="增加防火墙访问权限"></a>增加防火墙访问权限</h2><p>1、sudo vim /etc.sysconfig/iptables-config<br>2、- A INPUT -p tcp -m state –state NEW<br>   -m tcp –dport 80 -j ACCEPT<br>3、重启防火墙</p>
-<h2 id="虚拟域名配置测试验证"><a href="#虚拟域名配置测试验证" class="headerlink" title="虚拟域名配置测试验证"></a>虚拟域名配置测试验证</h2><p>1、编辑sudo vim /usr/local/nginx/conf/nginx.conf<br>增加include vhost/*.conf<br>2、在/usr/local/nginx/conf目录创建vhost文件夹<br>3、配置<br>sudo vim /etc/hosts所对应的域名.conf<br>如：sudo vim /usr/local/nginx/conf/vhost www.huihui.com.conf<br>将如下配置写入到该文件下</p>
-<pre><code>server {
-     listen 80;
-     autoindex on;
-     server_name www.huihui.com;
-     access_log /usr/local/nginx/logs/access.log combined; 
-     index index.html index.htm index.jsp index.php; 
-     #error_page 404 /404.html;
-     if ( $query_string ~* &quot;.*[\;&apos;\&lt;\&gt;].*&quot; )
-            { 
-                    return 404;
-            }
-     location / {
-            proxy_pass http://172.0.0.1:8080;
-            add_header Access-Control-Allow-Origin *;
-            }
- }
-</code></pre><p>4、重启验证<br>启动${nginx}/sbin/nginx<br>重启${nginx}/sbin/nginx -s reload,如sudo ./nginx -s reload<br>${nginx}为安装在系统中的路径，如/usr/local/nginx<br>5、访问验证<br>使用默认80端口访问验证<a href="http://localhost:80" target="_blank" rel="external">http://localhost:80</a></p>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>可以配置域名转发，但是请一定要配置host，并且host生效之后才可以，设置完成后腰重启浏览器<br>1、linux<br>sudo vim /etc/hosts<br>添加好对应的域名及ip<br>保存退出</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/计算机/">计算机</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java、linxu/">Java、linxu</a></li></ul>
     </div>
 
       
